@@ -10,7 +10,7 @@
 
 int main(int argc, char const *argv[]){
 	SdlWindow w(800, 600, false, "unaVentana");
-	SdlTexture t("../../sprites/gfx/explosion.png", w);
+	SdlTexture t("../sprites/gfx/explosion.png", w);
 	Explotion exp(t);
 
 	bool running = true;

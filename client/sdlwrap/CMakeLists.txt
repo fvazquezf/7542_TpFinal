@@ -1,4 +1,4 @@
-project(sld-demo)
+project(sdl-demo)
 
 FILE(GLOB sdlwrapper "*.cpp")
 

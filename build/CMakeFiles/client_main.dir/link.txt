@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -ggdb -DDEBUG -Wall -fno-inline -pedantic -pedantic-errors -O3 -pthread   CMakeFiles/client_main.dir/client/main.cpp.o  -o client_main client/anim/libanim.a client/sdlwrap/libsdlwrapperclasses.a -lSDL2 -lSDL2_image 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsdlwrapperclasses.a  CMakeFiles/sdlwrapperclasses.dir/Area.cpp.o CMakeFiles/sdlwrapperclasses.dir/SdlTexture.cpp.o CMakeFiles/sdlwrapperclasses.dir/SdlWindow.cpp.o
+/usr/bin/ranlib libsdlwrapperclasses.a

@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -ggdb -DDEBUG -Wall -fno-inline -pedantic -pedantic-errors -O3 -pthread   CMakeFiles/box2d_demo.dir/HelloWorld.cpp.o  -o box2d_demo libs/box2d/bin/libbox2d.a client/anim/libanim.a client/sdlwrap/libsdlwrapperclasses.a -lSDL2 -lSDL2_image 
