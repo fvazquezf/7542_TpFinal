@@ -9,7 +9,9 @@ add_subdirectory(libs/box2d)
 
 add_executable(client_main ./client/main.cpp)
 add_executable(box2d_demo HelloWorld.cpp)
+add_executable(demo_movimiento ./client/demo_movimiento.cpp)
 
 
 target_link_libraries(client_main anim sdlwrapperclasses SDL2 SDL2_image)
 target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
+target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_image)

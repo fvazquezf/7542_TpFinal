@@ -1,2 +1,0 @@
-/usr/bin/ar qc libanim.a  CMakeFiles/anim.dir/Explotion.cpp.o
-/usr/bin/ranlib libanim.a
