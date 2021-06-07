@@ -80,19 +80,19 @@ int main(int argc, char const *argv[]){
 				running = false;
 				break;
 			}
+            world.Step(timeStep, velocityIterations, positionIterations);
+            b2Vec2 position = body->GetPosition();
+            float angle = body->GetAngle();
+
+            Area src(0, 0, 32, 32);
+            Area dest(position.x + 150, position.y + 150, 64, 64);
+
+            w.fill();
+            t.render(src, dest, SDL_FLIP_NONE);
+            w.render();
+
+            printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);	
 		}
-        world.Step(timeStep, velocityIterations, positionIterations);
-        b2Vec2 position = body->GetPosition();
-        float angle = body->GetAngle();
-
-        Area src(0, 0, 64, 64);
-        Area dest(position.x + 150, position.y + 150, 64, 64);
-
-        w.fill();
-        t.render(src, dest, SDL_FLIP_NONE);
-        w.render();
-
-        printf("%4.2f %4.2f %4.2f\n", position.x, position.y, angle);	
 	}
 	SDL_Quit();
 	return 0;	
