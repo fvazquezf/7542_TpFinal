@@ -29,6 +29,7 @@ SdlWindow::~SdlWindow(){
 		SDL_DestroyWindow(this->windowPtr);
 		windowPtr = nullptr;
 	}
+	SDL_Quit();
 }
 
 void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha){

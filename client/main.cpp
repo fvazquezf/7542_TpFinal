@@ -1,54 +1,74 @@
-#include <iostream>
-#include <string>
 #include <unistd.h>
 
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
 #include "sdlwrap/Area.h"
-#include "anim/Explotion.h"
+#include <chrono>
+#include "anim/Terrorist.h"
+#include "anim/Animation.h"
 
 
 int main(int argc, char const *argv[]){
 	SdlWindow w(800, 600, false, "unaVentana");
-	SdlTexture t("../sprites/gfx/explosion.png", w);
-	Explotion exp(t);
+	SdlTexture terroristTex("../sprites/gfx/player/t1.bmp", w);
+	Terrorist terrorist(terroristTex, 200, 200);
 
 	bool running = true;
 
-	Area dest(200, 200, 64, 64);
-
 	w.fill();
+	terrorist.render();
 	w.render();
 
-	float ft = 0;
 	SDL_Event e;
 	while (running){
-		// wait event, poll event nos va a quemar la cpu
-		while (SDL_WaitEvent(&e)){
-			if (e.type == SDL_MOUSEBUTTONUP){
-				while (ft < 22 * FRAMERATE){
-					int x, y;
-					SDL_GetMouseState(&x, &y);
-					Area dest(x - 32, y - 32, 64, 64);
-					w.fill();
-					exp.render(dest, SDL_FLIP_NONE);
-					exp.update(FRAMERATE);
-					w.render();
-					ft += FRAMERATE;
-					usleep(FRAMERATE);
-				}
-				ft = 0;
-				w.fill();
-				w.render();
-			}
-			if (e.type == SDL_QUIT){
-				running = false;
-				break;
-			}
-		}
-	}
+		auto start = std::chrono::system_clock::now();
+		while (SDL_PollEvent(&e)){
+			switch(e.type){
+                case SDL_MOUSEMOTION:
+                    terrorist.scroll();
+                    break;
+			    case SDL_MOUSEBUTTONDOWN:
+                    terrorist.gunAction();
+                    break;
+			    case SDL_MOUSEBUTTONUP:
+			        terrorist.stopGunAction();
+			        break;
+				case SDL_KEYDOWN:{
+					auto& keyEvent = (SDL_KeyboardEvent&) e;
+		            switch (keyEvent.keysym.sym) {
+		                case SDLK_LEFT:
+		                    terrorist.moveLeft();
+		                    break;
+		                case SDLK_RIGHT:
+		                    terrorist.moveRight();
+		                    break;
+		                case SDLK_UP:
+		               		terrorist.moveUp(); 
+		               		break;
+		               	case SDLK_DOWN:
+		               		terrorist.moveDown();
+		               		break;
+		               	}
+	                break;
+	            } // Fin KEY_DOWN
+                case SDL_KEYUP:{
+                	terrorist.stopMoving();
+	               	break;
+ 				}
+				case SDL_QUIT:
+					running = false;
+					break;
+            }
+        }
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<float, std::micro> elapsed = (end - start);
 
-	SDL_Quit();
+		w.fill();
+        terrorist.update(FRAMERATE + elapsed.count());
+        terrorist.render();
+        w.render();
+
+        usleep(FRAMERATE + elapsed.count());
+    }
 	return 0;	
 }
-

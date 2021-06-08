@@ -8,6 +8,10 @@
 #include "SdlWindow.h"
 #include "Area.h"
 
+struct Color {
+    uint8_t r, g, b;
+};
+
 class SdlTexture {
 private:
 	SdlWindow& window;
@@ -18,6 +22,15 @@ private:
 
 public:
 	SdlTexture(const std::string& filename, SdlWindow& window);
+    SdlTexture(const std::string &filename,
+               SdlWindow& window,
+               Color key);
+
+    SdlTexture(const std::string &filename,
+               SdlWindow& window,
+               Color key,
+               SDL_BlendMode blending,
+               uint8_t alpha);
 
 	int render(const Area& src, const Area& dest, const SDL_RendererFlip& flipType) const;
     int render(const Area& src, const Area& dest, float angle, const SDL_RendererFlip& flip) const;

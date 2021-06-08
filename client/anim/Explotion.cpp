@@ -2,36 +2,25 @@
 #include <iostream>
 
 
-Explotion::Explotion(SdlTexture& texture)
-: texture(texture),
-  numFrames(23), 
-  frameSize(64), 
-  elapsed(0.0),
-  currFrame(0),
-  shouldBlow(true){
-}
+Explotion::Explotion(const SdlTexture& texture, int dstX, int dstY)
+: animation(texture, 23, 64),
+  shouldBlow(true),
+  dstX(dstX),
+  dstY(dstY){
 
-void Explotion::advanceFrame(){
-	++currFrame;	
-	currFrame %= numFrames;
 }
 
 Explotion::~Explotion(){
 }
 
-void Explotion::render(const Area& dst, const SDL_RendererFlip& flip){
+void Explotion::render(){
 	if (shouldBlow){
-		int y = 0;
-		y = (currFrame / 5) * frameSize;
-		Area src((frameSize * (currFrame % 5)), y, frameSize, frameSize);
-		texture.render(src, dst, SDL_FLIP_NONE);
-	}
-}
-
-void Explotion::update(float dt){
-	elapsed += dt;	
-	if (elapsed > FRAMERATE){
-		advanceFrame();
-		elapsed -= FRAMERATE;
+	    /*animation.render();
+		Area src((64 * (currentFrame % 5)), (currentFrame / 5) * size, size, size);
+		Area dest(dstx, dsty, size, size);
+		texture.render(src, dest, flipType);
+		if (numFrames == currentFrame){
+			shouldBlow = false;
+		}*/
 	}
 }

@@ -1,26 +1,22 @@
 #ifndef EXPLOTION_H
 #define EXPLOTION_H
 
-#define FRAMERATE 1000000.0f/60.0f
 #include <SDL2/SDL.h>
+#include "Animation.h"
 #include "../sdlwrap/Area.h"
 #include "../sdlwrap/SdlTexture.h"
+#include "../sdlwrap/SdlWindow.h"
 
-class Explotion{
+class Explotion {
 private:
-	SdlTexture& texture;
-	int numFrames;
-	int frameSize;
-	float elapsed;
-	int currFrame;
+	Animation animation;
 	bool shouldBlow;
-
-	void advanceFrame();
+	int dstX;
+	int dstY;
 public:
-	Explotion(SdlTexture& texture);
+	Explotion(const SdlTexture& texture, int dstX, int dstY);
 
-	void update(float dt);
-	void render(const Area& dst, const SDL_RendererFlip& flip);
+	void render();
 
 	~Explotion();
 };
