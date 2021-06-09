@@ -6,6 +6,7 @@ project(sdl-demo)
 
 add_subdirectory(client)
 add_subdirectory(libs/box2d)
+add_subdirectory(common)
 
 add_executable(client_main ./client/main.cpp)
 add_executable(box2d_demo HelloWorld.cpp)
