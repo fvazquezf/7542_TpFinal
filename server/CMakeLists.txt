@@ -1,0 +1,8 @@
+add_library(lib_server
+    partidas_disponibles.cpp
+    repositorio_de_tableros.cpp
+    server_main.cpp
+    server_tp.cpp
+    th_acceptor.cpp
+    th_client.cpp
+)

@@ -1,0 +1,10 @@
+add_library(lib_common
+  socket.cpp
+  lock.cpp
+  thread.cpp
+  ta_te_ti_cifrador.cpp
+  ta_te_ti_descifrador.cpp
+  ta_te_ti_logica.cpp
+  ta_te_ti_constantes.h
+  ta_te_ti_logica.cpp
+)
