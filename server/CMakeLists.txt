@@ -5,4 +5,5 @@ add_library(lib_server
     server_tp.cpp
     th_acceptor.cpp
     th_client.cpp
+    th_sender.cpp
 )
