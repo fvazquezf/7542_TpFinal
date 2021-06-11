@@ -24,6 +24,9 @@ Sender::~Sender() {
 
 void Sender::send(std::vector<unsigned char> msg) {
     // socket.send(msg.data(), msg.len());
-    std::cout << "Sending\n";
+    for (auto& it : msg){
+        printf("%02x ", it);
+    }
+    puts("");
 }
 

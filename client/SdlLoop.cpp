@@ -1,9 +1,11 @@
 #include "SdlLoop.h"
 #include <SDL2/SDL.h>
 #include "commands/Move.h"
+#include "commands/CreateGame.h"
+#include "commands/JoinGame.h"
 
-SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ)
-: done(false), commands(commandsQ){
+SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
+: done(false), commands(commandsQ), world(world){
 }
 
 void SdlLoop::run() {
@@ -27,6 +29,22 @@ void SdlLoop::run() {
                 }
                 break;
             case SDL_MOUSEMOTION:
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                try {
+                    handleMouseButtonDown(e.button);
+                } catch(const std::invalid_argument& e) {
+                    std::cout << e.what();
+                    break;
+                }
+                break;
+            case SDL_MOUSEBUTTONUP:
+                try {
+                    handleMouseButtonUp(e.button);
+                } catch(const std::invalid_argument& e) {
+                    std::cout << e.what();
+                    break;
+                }
                 break;
             case SDL_QUIT:
                 commands.signalClosed();
@@ -90,5 +108,36 @@ void SdlLoop::handleKeyUp(SDL_Keycode keyReleased) {
     }
     // se supone que si llegue hasta aca
     // el evento es valido
+    commands.push(std::move(comm));
+}
+
+// para probar a ver si funcan los comandos
+void SdlLoop::handleMouseButtonDown(SDL_MouseButtonEvent mouseEvent) {
+    std::unique_ptr<Command> comm;
+    switch (mouseEvent.button){
+        case SDL_BUTTON_LEFT:{
+            break;
+        }
+        case SDL_BUTTON_RIGHT:{
+            break;
+        }
+        default:
+            throw std::invalid_argument("Invalid mouse event\n");
+    }
+    commands.push(std::move(comm));
+}
+
+void SdlLoop::handleMouseButtonUp(SDL_MouseButtonEvent mouseEvent) {
+    std::unique_ptr<Command> comm;
+    switch (mouseEvent.button){
+        case SDL_BUTTON_LEFT:{
+            break;
+        }
+        case SDL_BUTTON_RIGHT:{
+            break;
+        }
+        default:
+            throw std::invalid_argument("Invalid mouse event\n");
+    }
     commands.push(std::move(comm));
 }

@@ -14,7 +14,7 @@ add_executable(demo_movimiento ./client/demo_movimiento.cpp)
 add_executable(commandTester ./client/commands/CommandTester.cpp)
 
 
-target_link_libraries(client_main anim sdlwrapperclasses SDL2 SDL2_image sdlloop common commands )
+target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common commands)
 target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
 target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_image)
 target_link_libraries(commandTester common commands)

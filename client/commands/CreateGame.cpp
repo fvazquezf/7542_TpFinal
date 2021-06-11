@@ -5,8 +5,8 @@ void CreateGame::serialize(std::function<void(std::vector<unsigned char>)> &call
     protocol.createGame(gameName, callback);
 }
 
-CreateGame::CreateGame(const std::string &gameName)
-: gameName(gameName){
+CreateGame::CreateGame(std::string gameName)
+: gameName(std::move(gameName)){
 }
 
 CreateGame::~CreateGame() {

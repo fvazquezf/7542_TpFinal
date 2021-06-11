@@ -5,9 +5,9 @@
 
 class JoinGame : public Command {
 private:
-    const std::string& gameName;
+    std::string gameName;
 public:
-    explicit JoinGame(const std::string& gameName);
+    explicit JoinGame(std::string gameName);
 
     void serialize(std::function<void(std::vector<unsigned char>)>& callback,
                            const Protocol& protocol) override;

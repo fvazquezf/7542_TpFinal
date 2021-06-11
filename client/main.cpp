@@ -1,28 +1,24 @@
 #include <unistd.h>
-#include "sdlwrap/SdlWindow.h"
-#include "sdlwrap/SdlTexture.h"
 #include <chrono>
-#include "anim/Terrorist.h"
 #include "anim/Animation.h"
 #include "SdlLoop.h"
 #include "commands/Command.h"
 #include "Sender.h"
+#include "WorldView.h"
 
-// main estaria siendo actualmente el drawer
+// main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, char const *argv[]){
-	SdlWindow w(800, 600, false, "unaVentana");
-	SdlTexture terroristTex("../sprites/gfx/player/t1.bmp", w);
-	Terrorist terrorist(terroristTex, 200, 200);
+	WorldView world;
 
+	world.update();
+	world.render();
+
+	world.createTerrorist();
 	bool running = true;
-
-	w.fill();
-	terrorist.render();
-	w.render();
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
 	// loop de sdl, recibe los inputs y los encola
-	SdlLoop l(comms);
+	SdlLoop l(comms, world);
 	// protocolo
 	Protocol prot;
 	// sender, popea los comandos que pushea sdl
@@ -36,10 +32,8 @@ int main(int argc, char const *argv[]){
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);
 
-		w.fill();
-        terrorist.update(FRAMERATE + elapsed.count());
-        terrorist.render();
-        w.render();
+        world.update();
+        world.render();
 
         usleep(FRAMERATE + elapsed.count());
         if (l.isDone()){
