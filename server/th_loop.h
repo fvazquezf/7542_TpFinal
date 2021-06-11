@@ -1,5 +1,5 @@
-#ifndef TH_SENDER_H_
-#define TH_SENDER_H_
+#ifndef TH_LOOP_H_
+#define TH_LOOP_H_
 
 #include "../common/thread.h"
 #include "../common/socket.h"
@@ -10,17 +10,17 @@
 #include <string>
 #include <atomic>
 
-class ThSender : public Thread {
+class ThLoop: public Thread {
  public:
-    ThSender(Socket &socket);
-    ~ThSender() override;
-    void run() override;
+    ThLoop(Games &games);
+    ~ThLoop();
+    virtual void run() override;
     void stop();
-    bool isDead();
 
  private:
+ 	 Games games;
+	 Socket peer;
     std::atomic<bool> is_running;
-    Socket peer;
 };
 
-#endif    // TH_SENDER_H_
+#endif    // TH_LOOP_H_

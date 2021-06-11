@@ -1,14 +1,12 @@
-#include "client_tp.h"
+#include "./server.h"
 #include <exception>
 #include <ostream>
 
 int main(int argc, char *argv[]) {
     try {
-        char* ip = argv[1];
-        char* port = argv[2];
-
-        ClientTp client;
-        client(ip, port);
+        char* port = argv[1];
+        Server server;
+        server(port);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {

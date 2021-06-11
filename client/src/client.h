@@ -1,16 +1,16 @@
-#ifndef CLIENT_TP_H_
-#define CLIENT_TP_H_
+#ifndef CLIENT_H_
+#define CLIENT_H_
 
 #include "../../common/ta_te_ti_cifrador.h"
 #include "../../common/ta_te_ti_descifrador.h"
 #include "../../common/socket.h"
 
 #include <string>
-class ClientTp {
+class Client {
  public:
-    ClientTp();
+    Client();
     void operator()(char* ip, char* port);
-    ~ClientTp();
+    ~Client();
 
  private:
     Socket socket;
@@ -22,4 +22,4 @@ class ClientTp {
     std::string leerComando();
 };
 
-#endif    // CLIENT_TP_H_
+#endif    // CLIENT_H_

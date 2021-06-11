@@ -1,9 +1,11 @@
 add_library(lib_server
-    partidas_disponibles.cpp
-    repositorio_de_tableros.cpp
-    server_main.cpp
-    server_tp.cpp
+    games.cpp
+    game.cpp
+    main.cpp
+    user.cpp
+    server.cpp
     th_acceptor.cpp
-    th_client.cpp
+    th_login.cpp
+    th_loop.cpp
     th_sender.cpp
 )

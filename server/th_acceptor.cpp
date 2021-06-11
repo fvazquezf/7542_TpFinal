@@ -1,9 +1,6 @@
 #include "./th_acceptor.h"
 
-#include "./partidas_disponibles.h"
-#include "./repositorio_de_tableros.h"
-
-ThAcceptor::ThAcceptor(char* port) {
+ThAcceptor::ThAcceptor(char* port, Games games) {
     this->server.bind(port);
     this->server.listen();
     this->keep_running = true;
@@ -11,7 +8,7 @@ ThAcceptor::ThAcceptor(char* port) {
 
 ThAcceptor::~ThAcceptor() {
     this->join();
-    std::list<ThClient *>::iterator it = this->clients.begin();
+    std::list<ThLogin *>::iterator it = this->clients.begin();
     while (it != this->clients.end()) {
         (*it)->stop();
         (*it)->join();
@@ -21,12 +18,10 @@ ThAcceptor::~ThAcceptor() {
 }
 
 void ThAcceptor::run() {
-    PartidasDisponibles partidasDisponibles;
-    RepositorioDeTableros tableros;
     while (keep_running) {
         try {
             Socket peer = std::move(server.accept());
-            ThClient *client = new ThClient(peer, partidasDisponibles, tableros);
+            ThLogin *client = new ThLogin(peer, games);
             clients.push_back(client);
             client->start();
             this->cleanTheads();
@@ -41,7 +36,7 @@ void ThAcceptor::run() {
 }
 
 void ThAcceptor::cleanTheads() {
-    std::list<ThClient *>::iterator it = this->clients.begin();
+    std::list<ThLogin *>::iterator it = this->clients.begin();
     while (it != this->clients.end()) {
         if ((*it)->isDead()) {
             (*it)->join();

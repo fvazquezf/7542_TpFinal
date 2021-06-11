@@ -1,18 +1,16 @@
-#include "client_tp.h"
-#include "../../common/ta_te_ti_logica.h"
+#include "client.h"
 
 #include <string>
 
 #define BUFF_SIZE 256
 
-ClientTp::ClientTp() {
+Client::Client() {
 }
 
-void ClientTp::operator()(char* ip, char* port) {
+void Client::operator()(char* ip, char* port) {
     this->socket.connect(ip, port);
     bool partidaComenzada = false;
     std::string respuesta = "";
-    TaTeTiLogica logica;
     while (true) {
         if (!partidaComenzada) {
             // Envio comando
@@ -41,14 +39,14 @@ void ClientTp::operator()(char* ip, char* port) {
 }
 
 
-std::string ClientTp::leerComando() {
+std::string Client::leerComando() {
     std::string msj_entrada;
     std::getline(std::cin, msj_entrada);
     return msj_entrada;
 }
 
 
-int ClientTp::recibirRespuesta(std::string &res) {
+int Client::recibirRespuesta(std::string &res) {
     char largo_imprimible[3];
     this->socket.recv(largo_imprimible, 2);
     int n = descifrador.descifrarLargo((unsigned char*)largo_imprimible);
@@ -61,7 +59,7 @@ int ClientTp::recibirRespuesta(std::string &res) {
     return m;
 }
 
-int ClientTp::enviarComando(std::string comando) {
+int Client::enviarComando(std::string comando) {
     char cifrado[BUFF_SIZE];
     int n = cifrador.cifrarComando(comando, (unsigned char*) cifrado);
 
@@ -69,6 +67,6 @@ int ClientTp::enviarComando(std::string comando) {
 }
 
 
-ClientTp::~ClientTp() {
+Client::~Client() {
     this->socket.close();
 }

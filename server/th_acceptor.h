@@ -1,9 +1,10 @@
-#ifndef SOCKET_ACCEPTADOR_H_
-#define SOCKET_ACCEPTADOR_H_
+#ifndef TH_ACCEPTOR_H_
+#define TH_ACCEPTOR_H_
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-#include "./th_client.h"
+#include "./th_login.h"
+#include "./games.h"
 
 #include <atomic>
 #include <list>
@@ -12,14 +13,16 @@
 class ThAcceptor : public Thread {
  private:
   Socket server;
-  std::list<ThClient *> clients;
+  Games games;
+  std::list<ThLogin *> clients;
   bool keep_running;
   void cleanTheads();
+
  public:
-  explicit ThAcceptor(char* port);
+  explicit ThAcceptor(char* port, Games games);
   ~ThAcceptor() override;
   void run() override;
   void stop();
 };
 
-#endif    // SOCKET_ACCEPTADOR_H_
+#endif    // TH_ACCEPTOR_H_
