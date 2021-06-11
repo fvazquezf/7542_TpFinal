@@ -1,0 +1,3 @@
+#!/bin/bash
+cd build
+/usr/bin/valgrind --tool=memcheck --leak-check=full --leak-resolution=med --show-reachable=yes --trace-children=yes --track-fds=yes --track-origins=no --time-stamp=yes --num-callers=20 --suppressions=minimal.supp ./client_main

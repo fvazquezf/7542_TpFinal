@@ -40,6 +40,12 @@ public:
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
 
+    std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
+                          std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
+
+    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &sendcallback);
+    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &sendCallback);
+
     // el booleano indica si el movimiento en la direccion
     // termino (true) o recien esta empezando (false)
     // de aca elegimos alguno de los dos mensajes
