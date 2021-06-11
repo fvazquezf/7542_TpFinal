@@ -19,7 +19,7 @@ private:
     std::condition_variable cv;
 public:
     BlockingQueue()
-    : closed(true){
+    : closed(false){
     }
 
     BlockingQueue(const BlockingQueue& other) = delete;
