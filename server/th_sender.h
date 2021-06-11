@@ -4,7 +4,6 @@
 #include "../common/thread.h"
 #include "../common/socket.h"
 #include "../common/protocol.h"
-#include "./games.h"
 
 #include <utility>
 #include <string>
@@ -17,6 +16,11 @@ class ThSender : public Thread {
     void run() override;
     void stop();
     bool isDead();
+   
+    ThSender(const ThSender&) = delete;
+    ThSender& operator=(const ThSender&) = delete;
+    ThSender(ThSender&& other) = delete;
+    ThSender& operator=(ThSender&& other) = delete;
 
  private:
     std::atomic<bool> is_running;

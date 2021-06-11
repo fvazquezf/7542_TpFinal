@@ -8,7 +8,6 @@
 
 #include <atomic>
 #include <list>
-#define BUFF_SIZE 64
 
 class ThAcceptor : public Thread {
  private:
@@ -23,6 +22,10 @@ class ThAcceptor : public Thread {
   ~ThAcceptor() override;
   void run() override;
   void stop();
+  ThAcceptor(const ThAcceptor&) = delete;
+  ThAcceptor& operator=(const ThAcceptor&) = delete;
+  ThAcceptor(ThAcceptor&& other) = delete;
+  ThAcceptor& operator=(ThAcceptor&& other) = delete;
 };
 
 #endif    // TH_ACCEPTOR_H_

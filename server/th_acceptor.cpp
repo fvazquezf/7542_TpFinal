@@ -1,9 +1,8 @@
 #include "./th_acceptor.h"
 
-ThAcceptor::ThAcceptor(char* port, Games games) {
+ThAcceptor::ThAcceptor(char* port, Games games): keep_running(true) {
     this->server.bind(port);
     this->server.listen();
-    this->keep_running = true;
 }
 
 ThAcceptor::~ThAcceptor() {
@@ -33,6 +32,7 @@ void ThAcceptor::run() {
             std::cerr << "Error desconocido en el hilo client\n";
         }
     }
+    keep_running = false;
 }
 
 void ThAcceptor::cleanTheads() {

@@ -1,6 +1,7 @@
 #include "th_login.h"
 
-ThLogin::ThLogin(Socket &peer, Games &games): peer(std::move(peer)), games(games) {
+ThLogin::ThLogin(Socket &peer, Games &games): games(games),
+        peer(std::move(peer)), is_logged_in(false) {
 }
 
 ThLogin::~ThLogin() {
@@ -13,27 +14,29 @@ void ThLogin::run() {
 
     while(!this->is_logged_in) {
         command = p.recibirComando();
+        std::string nickname("");
         if(p.esComandoCrear(command)) {
 
             std::string game_name = p.recibirNombrePartida();
+            p.enviarRespuesta("Partdia creada.\n");
+
+            Match* m  = new Match();
+            games.newGame(game_name, m);
+
+        } else if(p.esComandoNickname(command)) {
+
             std::string nickname = p.recibirNickName();
-            
-            Game* g  = new Game();
-            games.newGame(game_name, g);
+            p.enviarRespuesta("Nickname es " + nickname + ".\n");
 
-            User* user = new User(std::move(peer));
-            g->addUser(nickname, user);
-
-            this->is_logged_in = true;
         } else if(p.esComandoUnirse(command)) {
 
             std::string game_name = p.recibirNombrePartida();
-            std::string nickname = p.recibirNickName();
+            p.enviarRespuesta("Nombre partida es " + game_name + ".\n");
 
-            User* user = new User(std::move(peer));
-            games[game_name]->addUser(nickname, user);
-
+            User* user = new User(peer);
             this->is_logged_in = true;
+            games[game_name]->addUser(nickname, user);
+            break;
         } else if(p.esComandoListar(command)) {
             break;
         }

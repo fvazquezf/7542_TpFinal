@@ -13,6 +13,8 @@ class TaTeTiCifrador {
   bool esComandoUnirse(const std::string &comando);
   bool esComandoListar(const std::string &comando);
   bool esComandoJugar(const std::string &comando);
+  bool esComandoNickname(const std::string &comando);
+  bool esComandoX(const std::string &comando);
 
   int cifrarComando(const std::string &comando, unsigned char* cifrado);
   int cifrarRespuesta(const std::string &comando, unsigned char* cifrado);

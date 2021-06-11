@@ -19,6 +19,14 @@ bool TaTeTiCifrador::esComandoJugar(const std::string &comando) {
     return comando.substr(0, L_JUGAR) == S_JUGAR;
 }
 
+bool TaTeTiCifrador::esComandoNickname(const std::string &comando) {
+    return comando.substr(0, L_NICKNAME) == S_NICKNAME;
+}
+
+bool TaTeTiCifrador::esComandoX(const std::string &comando) {
+    return comando.substr(0, L_COMANDOX) == S_COMANDOX;
+}
+
 int TaTeTiCifrador::cifrarComando(
     const std::string &comando, unsigned char* cifrado) {
     int bytes = 0;
@@ -37,6 +45,15 @@ int TaTeTiCifrador::cifrarComando(
         cifrado[0] = C_JUGAR;
         this->cifrarPosicionAJugar(comando, cifrado);
         bytes = 2;
+    } else if (this->esComandoNickname(comando)) {
+        cifrado[0] = C_NICKNAME;
+        int largo_partida = this->cifrarNombrePartida(comando, cifrado);
+        bytes = 3 + largo_partida;
+    } else if (this->esComandoX(comando)) {
+        cifrado[0] = C_COMANDOX;
+        int largo_partida = this->cifrarNombrePartida(comando, cifrado);
+        bytes = 3 + largo_partida;  
+    } else { 
     }
     cifrado[bytes] = '\0';
     return bytes;

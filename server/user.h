@@ -1,11 +1,10 @@
 #ifndef USER_H_
 #define USER_H_
 #include "../common/socket.h"
-#include "./th_sender.h"
-
+#include "th_sender.h"
 class User {
  public:
-  User(Socket socket);
+  User(Socket &socket);
   void run();
   void start();
   void join();
@@ -13,7 +12,7 @@ class User {
   bool isDead();
   ~User();
  private:
- ThSender thSender;
+  ThSender thSender;
 };
 
 #endif    // USER_H_

@@ -19,9 +19,11 @@ class Protocol {
   std::string recibirComando();
   std::string recibirNombrePartida();
   std::string recibirNickName();
+  std::string recibirComandoX();
   bool esComandoCrear(std::string comando);
   bool esComandoUnirse(std::string comando);
-  bool esComandoListar(std::string comando);  
+  bool esComandoListar(std::string comando);
+  bool esComandoNickname(std::string comando);
   std::pair<int, int> recibirPos();
 };
 

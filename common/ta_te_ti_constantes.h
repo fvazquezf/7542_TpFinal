@@ -10,16 +10,22 @@
 #define C_UNIRSE 0x6A
 #define C_LISTAR 0x6C
 #define C_JUGAR 0x70
+#define C_NICKNAME 0x72
+#define C_COMANDOX 0x71
 
 #define S_CREAR "crear"
 #define S_UNIRSE "unirse"
 #define S_LISTAR "listar"
 #define S_JUGAR "jugar"
+#define S_NICKNAME "nickname"
+#define S_COMANDOX "comandox"
 
 #define L_CREAR 5
 #define L_UNIRSE 6
 #define L_LISTAR 6
 #define L_JUGAR 5
+#define L_NICKNAME 8
+#define L_COMANDOX 8
 
 #define C_GANADOR 'G'
 #define C_PERDEDOR 'P'

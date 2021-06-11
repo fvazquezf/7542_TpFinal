@@ -12,6 +12,6 @@ void ThLoop::run() {
     }
 }
 
-void stop() {
-
+void ThLoop::stop() {
+    this->is_running = false;
 }

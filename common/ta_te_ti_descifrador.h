@@ -14,11 +14,13 @@ class TaTeTiDescifrador {
   bool esComandoUnir(const char* comando);
   bool esComandoListar(const char* comando);
   bool esComandoJugar(const char* comando);
-
+  bool esComandoNickname(const char* comando);
+  
   bool esComandoCrear(const std::string &comando);
   bool esComandoUnir(const std::string &comando);
   bool esComandoListar(const std::string &comando);
   bool esComandoJugar(const std::string &comando);
+  bool esComandoNickname(const std::string &comando);
 
   // std::string descifrarNombrePartida(char* comando);
   std::pair<int, int> descifrarPosicionAJugar(unsigned char* comando);

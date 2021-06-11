@@ -9,6 +9,10 @@ class Lock {
 
  public:
    explicit Lock(std::mutex &m);
+   Lock(const Lock&) = delete;
+   Lock& operator=(const Lock&) = delete;
+   Lock(Lock&& other) = delete;
+   Lock& operator=(Lock&& other) = delete;
    ~Lock();
 };
 

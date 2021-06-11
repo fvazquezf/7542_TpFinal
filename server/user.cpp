@@ -1,12 +1,15 @@
 #include "user.h"
 
-User::User(Socket socket): thSender(socket) {
+User::User(Socket &socket): thSender(socket) {
 }
 
 User::~User() {
+    this->join();
+    this->stop();
 }
 
 void User::start() {
+    std::cout <<"Entro al start de thSender\n";
     this->thSender.start();
 }
 

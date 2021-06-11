@@ -1,11 +1,11 @@
 add_library(lib_server
     games.cpp
-    game.cpp
+    match.cpp
     main.cpp
-    user.cpp
     server.cpp
     th_acceptor.cpp
     th_login.cpp
     th_loop.cpp
     th_sender.cpp
+    user.cpp
 )

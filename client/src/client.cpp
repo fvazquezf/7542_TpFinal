@@ -17,23 +17,24 @@ void Client::operator()(char* ip, char* port) {
             std::string comando = leerComando();
             enviarComando(comando);
             // Analizo "crear", "unirse" y "listar"
-            if (cifrador.esComandoCrear(comando)
-            || cifrador.esComandoUnirse(comando)) {
+            if (cifrador.esComandoUnirse(comando)) {
                 partidaComenzada = true;
-            } else if (cifrador.esComandoListar(comando)) {
-                recibirRespuesta(respuesta);
-                std::cout << respuesta;
             }
+            recibirRespuesta(respuesta);
+            std::cout << respuesta;
         } else {
+            // Envio comando
+            //std::string comando = leerComando();
+            enviarComando("comandox valor1\n");
+            
             // Recibo respuesta
             int n = recibirRespuesta(respuesta);
             std::cout << respuesta;
-            if (n < 0 || n > 128) {
+            if (respuesta == "q" || n < 0) {
                 break;
             }
-            // Envio comando
-            std::string comando = leerComando();
-            enviarComando(comando);
+            
+            break;
         }
     }
 }
@@ -44,7 +45,6 @@ std::string Client::leerComando() {
     std::getline(std::cin, msj_entrada);
     return msj_entrada;
 }
-
 
 int Client::recibirRespuesta(std::string &res) {
     char largo_imprimible[3];
@@ -62,7 +62,6 @@ int Client::recibirRespuesta(std::string &res) {
 int Client::enviarComando(std::string comando) {
     char cifrado[BUFF_SIZE];
     int n = cifrador.cifrarComando(comando, (unsigned char*) cifrado);
-
     return this->socket.send(cifrado, n);
 }
 

@@ -3,13 +3,16 @@
 Games::Games() {
 }
 
-void Games::newGame(std::string name, Game* g) {
-    games[name] = g;
+void Games::newGame(std::string name, Match* m) {
+    this->matches[name] = m;
 }
 
-Game*& Games::operator[](std::string game_name) {
-    return games[game_name];
+Match*& Games::operator[](std::string game_name) {
+    return this->matches[game_name];
 }
 
 Games::~Games() {
+    for(auto match: this->matches){
+		delete match.second;
+	}
 }

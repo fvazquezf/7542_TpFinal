@@ -3,7 +3,6 @@
 
 #include "./th_acceptor.h"
 #include "./th_loop.h"
-#include "./games.h"
 
 class Server {
  public:

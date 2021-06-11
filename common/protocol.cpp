@@ -6,6 +6,12 @@ Protocol::Protocol(Socket &socket): peer(std::move(socket)) {
 Protocol::~Protocol() {
 }
 
+std::string Protocol::recibirComandoX() {
+    std::string comando = recibirComando();
+    std::string param1 = recibirNombrePartida();
+    return param1;
+}
+
 std::string Protocol::recibirComando() {
     int n = 1;
     char comando[2];
@@ -23,19 +29,13 @@ std::string Protocol::recibirNombrePartida() {
     this->peer.recv(nombre_partida, n);
     nombre_partida[n] = '\0';
 
+    std::cout << "RECIBIDO: " << nombre_partida <<".\n";
+
     return nombre_partida;
 }
 
 std::string Protocol::recibirNickName() {
-    char s_partida_longitud[3];
-    this->peer.recv(s_partida_longitud, 2);
-    int n = descifrador.descifrarLargo((unsigned char*)s_partida_longitud);
-
-    char nombre_partida[BUFF_SIZE];
-    this->peer.recv(nombre_partida, n);
-    nombre_partida[n] = '\0';
-
-    return nombre_partida;
+    return recibirNombrePartida();
 }
 
 std::pair<int, int> Protocol::recibirPos() {
@@ -60,4 +60,8 @@ bool Protocol::esComandoUnirse(std::string comando) {
 
 bool Protocol::esComandoListar(std::string comando) {
     return descifrador.esComandoListar(comando);
+}
+
+bool Protocol::esComandoNickname(std::string comando) {
+    return descifrador.esComandoNickname(comando);
 }

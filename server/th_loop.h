@@ -3,7 +3,6 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-#include "../common/protocol.h"
 #include "./games.h"
 
 #include <utility>
@@ -17,6 +16,10 @@ class ThLoop: public Thread {
     virtual void run() override;
     void stop();
 
+    ThLoop(const ThLoop&) = delete;
+    ThLoop& operator=(const ThLoop&) = delete;
+    ThLoop(ThLoop&& other) = delete;
+    ThLoop& operator=(ThLoop&& other) = delete;
  private:
  	 Games games;
 	 Socket peer;

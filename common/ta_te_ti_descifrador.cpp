@@ -19,6 +19,14 @@ bool TaTeTiDescifrador::esComandoJugar(const char* comando) {
     return comando[0] == C_JUGAR;
 }
 
+bool TaTeTiDescifrador::esComandoNickname(const char* comando) {
+    return comando[0] == C_NICKNAME;
+}
+
+bool TaTeTiDescifrador::esComandoNickname(const std::string &comando) {
+    return this->esComandoNickname(comando.c_str());
+}
+
 bool TaTeTiDescifrador::esComandoCrear(const std::string &comando) {
     return this->esComandoCrear(comando.c_str());
 }
@@ -39,13 +47,6 @@ int TaTeTiDescifrador::descifrarLargo(unsigned char* comando) {
     int largo = comando[0] << 8 | comando[1];
     return largo;
 }
-
-/*
-std::string TaTeTiDescifrador::descifrarNombrePartida(char* comando) {
-    char *res = &comando[3];
-    return res;
-}
-*/
 
 std::pair<int, int> TaTeTiDescifrador::descifrarPosicionAJugar(
     unsigned char* comando) {

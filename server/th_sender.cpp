@@ -9,11 +9,15 @@ ThSender::~ThSender() {
 }
 
 void ThSender::run() {
+
+    std::cout <<"Entro a th_sender\n";
     std::string mensaje = "";
     Protocol p(this->peer);
+        std::cout <<"Entro al while\n";
+
     while (!this->isDead()) {
-        mensaje = p.recibirComando();
-        p.enviarRespuesta("Restpuesta a comando: " + mensaje + ".");
+        mensaje = p.recibirComandoX();
+        p.enviarRespuesta("Respuesta a comando: " + mensaje + ".");
         if (mensaje == "q") {
             break;
         }
