@@ -24,8 +24,8 @@ void Client::operator()(char* ip, char* port) {
             std::cout << respuesta;
         } else {
             // Envio comando
-            //std::string comando = leerComando();
-            enviarComando("comandox valor1\n");
+            std::string comando = leerComando();
+            enviarComando(comando);
             
             // Recibo respuesta
             int n = recibirRespuesta(respuesta);
@@ -34,7 +34,6 @@ void Client::operator()(char* ip, char* port) {
                 break;
             }
             
-            break;
         }
     }
 }

@@ -1,8 +1,7 @@
 #include "./th_sender.h"
 #define BUFF_SIZE 256
 
-ThSender::ThSender(Socket &socket): peer(std::move(socket)) {
-    this->is_running = true;
+ThSender::ThSender(Socket &socket): is_running(true), peer(std::move(socket)) {
 }
 
 ThSender::~ThSender() {

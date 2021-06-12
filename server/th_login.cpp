@@ -37,10 +37,7 @@ void ThLogin::run() {
             this->is_logged_in = true;
             games[game_name]->addUser(nickname, user);
             break;
-        } else if(p.esComandoListar(command)) {
-            break;
         }
-
     }
 }
 
@@ -49,6 +46,6 @@ bool ThLogin::isDead() {
 }
 void ThLogin::stop() {
     if (this->is_logged_in) {
-        peer.close();
+        //peer.close();
     }
 }
