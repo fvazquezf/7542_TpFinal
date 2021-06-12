@@ -8,5 +8,8 @@ add_library(sdlloop
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)
+<<<<<<< HEAD
+=======
 add_subdirectory(commands)
 
+>>>>>>> Leo
