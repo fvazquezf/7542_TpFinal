@@ -1,3 +1,4 @@
+project(sdl-demo)
 add_library(lib_common
   lock.cpp
   protocol.cpp
@@ -8,7 +9,6 @@ add_library(lib_common
   ta_te_ti_descifrador.cpp
   thread.cpp
 )
-project(sdl-demo)
 
 add_library(common
         Protocol.cpp

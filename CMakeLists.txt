@@ -13,22 +13,19 @@ add_subdirectory(client)
 add_executable(client_main ./client/main.cpp)
 add_executable(box2d_demo HelloWorld.cpp)
 add_executable(demo_movimiento ./client/demo_movimiento.cpp)
-add_executable(commandTester ./client/commands/CommandTester.cpp)
+#add_executable(commandTester ./client/commands/CommandTester.cpp)
 
 # Ejecutables esqueleto cliente-servidor
-add_executable(esqueleto_server ${common_src} ${server_src} ./server/main.cpp)
-add_executable(esqueleto_client ${common_src} ${client_src} ./client/src/main.cpp)
+add_executable(esqueleto_server ./server/main.cpp)
+add_executable(esqueleto_client ./client/src/main.cpp)
 
 # Linkage demo_movimiento
-target_link_libraries(client_main anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_image)
-
-# Linkage esqueleto cliente-servidor
-target_link_libraries(esqueleto_server lib_common lib_server box2d anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(esqueleto_client lib_common box2d anim sdlwrapperclasses SDL2 SDL2_image)
-
 target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common commands)
 target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
 target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(commandTester common commands)
+#target_link_libraries(commandTester common commands)
+
+# Linkage esqueleto cliente-servidor
+target_link_libraries(esqueleto_server lib_server lib_common box2d anim sdlwrapperclasses SDL2 SDL2_image)
+target_link_libraries(esqueleto_client lib_cli lib_common box2d anim sdlwrapperclasses SDL2 SDL2_image)
+
