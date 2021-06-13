@@ -1,7 +1,7 @@
 project(sdl-demo)
 add_library(lib_common
   lock.cpp
-  protocol.cpp
+  #protocol.cpp
   socket.cpp
   thread.cpp
   ta_te_ti_cifrador.cpp

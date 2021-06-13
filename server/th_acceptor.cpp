@@ -7,7 +7,7 @@ ThAcceptor::ThAcceptor(char* port, Games games): keep_running(true) {
 
 ThAcceptor::~ThAcceptor() {
     this->join();
-    std::list<ThLogin *>::iterator it = this->clients.begin();
+    auto it = this->clients.begin();
     while (it != this->clients.end()) {
         (*it)->stop();
         (*it)->join();
@@ -20,7 +20,7 @@ void ThAcceptor::run() {
     while (keep_running) {
         try {
             Socket peer = std::move(server.accept());
-            ThLogin *client = new ThLogin(peer, games);
+            auto *client = new ThLogin(peer, games);
             clients.push_back(client);
             client->start();
             this->cleanTheads();
@@ -36,7 +36,7 @@ void ThAcceptor::run() {
 }
 
 void ThAcceptor::cleanTheads() {
-    std::list<ThLogin *>::iterator it = this->clients.begin();
+    auto it = this->clients.begin();
     while (it != this->clients.end()) {
         if ((*it)->isDead()) {
             (*it)->join();

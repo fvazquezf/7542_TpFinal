@@ -1,8 +1,8 @@
 #include "Sender.h"
 #include <functional>
 
-Sender::Sender(BlockingQueue<std::unique_ptr<Command>> &q, const Protocol& protocol)
-: commQ(q), prot(protocol){
+Sender::Sender(BlockingQueue<std::unique_ptr<Command>> &q, Socket& peer, const Protocol& protocol)
+: commQ(q), peer(peer), prot(protocol){
 }
 
 void Sender::run() {
@@ -23,10 +23,6 @@ Sender::~Sender() {
 }
 
 void Sender::send(std::vector<unsigned char> msg) {
-    // socket.send(msg.data(), msg.len());
-    for (auto& it : msg){
-        printf("%02x ", it);
-    }
-    puts("");
+    peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
 }
 

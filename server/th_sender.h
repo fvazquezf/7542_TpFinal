@@ -3,7 +3,7 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-#include "../common/protocol.h"
+//#include "../common/protocol.h"
 
 #include <utility>
 #include <string>

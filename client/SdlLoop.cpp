@@ -39,12 +39,12 @@ void SdlLoop::run() {
                 }
                 break;
             case SDL_MOUSEBUTTONUP:
-                try {
+                /*try {
                     handleMouseButtonUp(e.button);
                 } catch(const std::invalid_argument& e) {
                     std::cout << e.what();
                     break;
-                }
+                }*/
                 break;
             case SDL_QUIT:
                 commands.signalClosed();
@@ -116,6 +116,7 @@ void SdlLoop::handleMouseButtonDown(SDL_MouseButtonEvent mouseEvent) {
     std::unique_ptr<Command> comm;
     switch (mouseEvent.button){
         case SDL_BUTTON_LEFT:{
+            comm = std::unique_ptr<Command>(new CreateGame("UnaPartida"));
             break;
         }
         case SDL_BUTTON_RIGHT:{

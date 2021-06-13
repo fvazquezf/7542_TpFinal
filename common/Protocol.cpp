@@ -40,7 +40,7 @@ void Protocol::serializeGameName(std::vector<unsigned char> &msg, const std::str
 }
 
 uint16_t Protocol::deserializeGameNameSize(std::vector<unsigned char> &msg) const {
-    return ntohs((msg.at(1) << 8) | msg.at(2));
+    return ntohs((msg.at(0) << 8) | msg.at(1));
 }
 
 void Protocol::move(uint8_t dir, bool isDone,

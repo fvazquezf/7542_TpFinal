@@ -5,9 +5,12 @@
 #include "commands/Command.h"
 #include "Sender.h"
 #include "WorldView.h"
+#include "../common/socket.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
-int main(int argc, char const *argv[]){
+int main(int argc, const char *argv[]){
+    Socket cli;
+    cli.connect(argv[1], argv[2]);
 	WorldView world;
 
 	world.update();
@@ -24,7 +27,7 @@ int main(int argc, char const *argv[]){
 	// sender, popea los comandos que pushea sdl
     // y los enviara al serv
     // falta ponerle un socket
-	Sender sender(comms, prot);
+	Sender sender(comms, cli, prot);
 	sender.start();
 	l.start();
 	while (running){

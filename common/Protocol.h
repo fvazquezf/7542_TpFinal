@@ -7,6 +7,7 @@
 #define MOVE 0x70
 #define STOP_MOVE 0x7e
 
+#include <vector>
 #include <string>
 #include <functional>
 
