@@ -1,4 +1,5 @@
 #include "./server.h"
+#include "GamesMonitor.h"
 
 #include <string>
 #include <iostream>
@@ -7,7 +8,8 @@ Server::Server() {
 }
 
 void Server::operator()(char *port) {
-    Games games;
+    //Games games;
+    GamesMonitor games;
     ThAcceptor acceptor(port, games);
     //ThLoop loop(games);
     acceptor.start();

@@ -1,6 +1,6 @@
 add_library(lib_server
     games.cpp
-    #match.cpp
+    match.cpp
     main.cpp
     server.cpp
     th_acceptor.cpp
@@ -8,4 +8,4 @@ add_library(lib_server
     #th_loop.cpp
     #th_sender.cpp
     #user.cpp
-)
+    GamesMonitor.cpp)

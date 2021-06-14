@@ -5,6 +5,7 @@
 #include "../common/socket.h"
 //#include "../common/protocol.h"
 #include "../common/Protocol.h"
+#include "GamesMonitor.h"
 #include "./games.h"
 #include "./match.h"
 
@@ -17,12 +18,14 @@
 
 class ThLogin: public Thread {
 public:
-    ThLogin(Socket &peer, Games &games);
+    ThLogin(Socket peer, GamesMonitor &games);
     ~ThLogin() override;
     void run() override;
     void stop();
     bool isDead();
+
     std::vector<unsigned char> receiveMsgs(size_t msgSize);
+    bool handleLoginMessage(uint8_t msgCode, const std::vector<unsigned char>& msg);
 
     ThLogin(const ThLogin&) = delete;
     ThLogin& operator=(const ThLogin&) = delete;
@@ -30,9 +33,9 @@ public:
     ThLogin& operator=(ThLogin&& other) = delete;
 
 private:
-    Games games;
+    GamesMonitor& games;
     Socket peer;
     std::atomic<bool> is_logged_in;
 };
 
-#endif    // TH_LOGIN_H_
+#endif

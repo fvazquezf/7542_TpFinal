@@ -4,7 +4,7 @@
 #include "../common/thread.h"
 #include "../common/socket.h"
 #include "./th_login.h"
-#include "./games.h"
+#include "GamesMonitor.h"
 
 #include <atomic>
 #include <list>
@@ -12,13 +12,13 @@
 class ThAcceptor : public Thread {
  private:
   Socket server;
-  Games games;
+  GamesMonitor& games;
   std::list<ThLogin *> clients;
   bool keep_running;
   void cleanTheads();
 
  public:
-  explicit ThAcceptor(char* port, Games games);
+  explicit ThAcceptor(char* port, GamesMonitor& games);
   ~ThAcceptor() override;
   void run() override;
   void stop();
@@ -28,4 +28,4 @@ class ThAcceptor : public Thread {
   ThAcceptor& operator=(ThAcceptor&& other) = delete;
 };
 
-#endif    // TH_ACCEPTOR_H_
+#endif

@@ -1,6 +1,8 @@
 #include "./th_acceptor.h"
 
-ThAcceptor::ThAcceptor(char* port, Games games): keep_running(true) {
+ThAcceptor::ThAcceptor(char* port, GamesMonitor& games)
+: games(games),
+  keep_running(true) {
     this->server.bind(port);
     this->server.listen();
 }
@@ -20,7 +22,7 @@ void ThAcceptor::run() {
     while (keep_running) {
         try {
             Socket peer = std::move(server.accept());
-            auto *client = new ThLogin(peer, games);
+            auto *client = new ThLogin(std::move(peer), games);
             clients.push_back(client);
             client->start();
             this->cleanTheads();
