@@ -120,6 +120,7 @@ void SdlLoop::handleMouseButtonDown(SDL_MouseButtonEvent mouseEvent) {
             break;
         }
         case SDL_BUTTON_RIGHT:{
+            comm = std::unique_ptr<Command>(new JoinGame("UnaPartida"));
             break;
         }
         default:
@@ -140,5 +141,5 @@ void SdlLoop::handleMouseButtonUp(SDL_MouseButtonEvent mouseEvent) {
         default:
             throw std::invalid_argument("Invalid mouse event\n");
     }
-    commands.push(std::move(comm));
+    //commands.push(std::move(comm));
 }

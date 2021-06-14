@@ -9,7 +9,7 @@
 
 class WorldView {
 private:
-    SdlWindow window;
+    SdlWindow& window;
 
     SdlTexture terror;
     // entre las texturas estara el player (capaz es una textura aparte)
@@ -25,7 +25,7 @@ private:
     // Player player; -> lo podemos controlar, es distinto al resto
     // GameMap map; -> algo asi?
 public:
-    WorldView();
+    explicit WorldView(SdlWindow& window);
 
     WorldView(const WorldView& other) = delete;
     WorldView& operator=(const WorldView& other) = delete;

@@ -1,18 +1,35 @@
 #ifndef USER_H_
 #define USER_H_
 #include "../common/socket.h"
+#include "../common/Protocol.h"
 #include "th_sender.h"
+
+// le pasamos el socket por movimiento
+// sender/receiver tendran una referencia
+// al socket
 class User {
- public:
-  User(Socket &socket);
-  void run();
-  void start();
-  void join();
-  void stop();
-  bool isDead();
-  ~User();
- private:
-  ThSender thSender;
+private:
+    Protocol protocol;
+    Socket socket;
+    //ThSender thSender;
+public:
+    explicit User(Socket socket);
+
+    User(const User& other) = delete;
+    User& operator=(const User& other) = delete;
+
+    User(User&& other) noexcept;
+    User& operator=(User&& other) noexcept;
+
+    void run();
+
+    void start();
+    void join();
+    void stop();
+
+    bool isDead();
+
+    ~User();
 };
 
-#endif    // USER_H_
+#endif

@@ -1,6 +1,7 @@
 #include "match.h"
 
-Match::Match() {
+Match::Match()
+: currUserId(0){
 }
 
 /*void Match::addUser(const std::string &nickname, User* user) {
@@ -9,7 +10,7 @@ Match::Match() {
     //std::cout <<"llegamos aca antes del start\n";
 }*/
 
-void Match::removeUser(const std::string &nickname) {
+void Match::removeUser() {
     //this->users.erase(nickname);
 }
 
@@ -21,4 +22,24 @@ void Match::removeUsers() {
 }
 
 Match::~Match() {
+}
+
+void Match::addUser(Socket socket) {
+    users.emplace(currUserId++, std::move(socket));
+    std::cout << "User added with id: " << (int) currUserId << "\n";
+}
+
+Match::Match(Match &&other) noexcept
+: currUserId(other.currUserId),
+  users(std::move(other.users)){
+}
+
+Match &Match::operator=(Match &&other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
+
+    currUserId = other.currUserId;
+    users = std::move(other.users);
+    return *this;
 }

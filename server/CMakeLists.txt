@@ -7,5 +7,5 @@ add_library(lib_server
     th_login.cpp
     #th_loop.cpp
     #th_sender.cpp
-    #user.cpp
+    user.cpp
     GamesMonitor.cpp)

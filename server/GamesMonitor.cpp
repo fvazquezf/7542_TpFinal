@@ -17,21 +17,18 @@ GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other) noexcept {
     return *this;
 }
 
-bool GamesMonitor::createMatch(std::string gameName) {
+bool GamesMonitor::createMatch(std::string gameName, const std::function<Socket(void)>& handIn) {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
-
     // si hay un juego con ese nombre, no puedo crear partida
     if (matches.count(gameName)){
         return false;
     }
-    std::cout << "DEBUG: CREATED MATCH!\n";
-    std::cout << gameName << std::endl;
-    Match match;
-    matches.insert({std::move(gameName), match});
+    matches.emplace(gameName, Match{});
+    matches.at(gameName).addUser(handIn());
     return true;
 }
 
-bool GamesMonitor::joinMatch(std::string gameName) {
+bool GamesMonitor::joinMatch(const std::string& gameName, const std::function<Socket(void)>& handIn) {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     // si no hay un juego con ese nombre, no puedo unirme
     if (!matches.count(gameName)){
@@ -39,6 +36,7 @@ bool GamesMonitor::joinMatch(std::string gameName) {
     }
     std::cout << "DEBUG: JOINED MATCH!\n";
     std::cout << gameName << std::endl;
+    matches.at(gameName).addUser(handIn());
     return true;
 }
 

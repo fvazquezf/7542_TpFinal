@@ -26,8 +26,8 @@ public:
     GamesMonitor(GamesMonitor&& other) noexcept;
     GamesMonitor& operator=(GamesMonitor&& other) noexcept;
 
-    bool createMatch(std::string gameName);
-    bool joinMatch(std::string gameName);
+    bool createMatch(std::string gameName, const std::function<Socket(void)>& handIn);
+    bool joinMatch(const std::string& gameName, const std::function<Socket(void)>& handIn);
 
     ~GamesMonitor();
 };

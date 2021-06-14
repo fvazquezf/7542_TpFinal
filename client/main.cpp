@@ -6,12 +6,14 @@
 #include "Sender.h"
 #include "WorldView.h"
 #include "../common/socket.h"
+#include "sdlwrap/SdlWindow.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
     Socket cli;
     cli.connect(argv[1], argv[2]);
-	WorldView world;
+    SdlWindow window(800, 600, false, "unaVentana");
+	WorldView world(window);
 
 	world.update();
 	world.render();

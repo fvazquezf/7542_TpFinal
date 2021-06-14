@@ -118,3 +118,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
     }
     return msg;
 }
+
+Protocol::Protocol(Protocol &&other) noexcept {
+}
+
+Protocol &Protocol::operator=(Protocol &&other) noexcept {
+    return *this;
+}

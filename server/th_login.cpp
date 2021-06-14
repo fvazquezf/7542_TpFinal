@@ -14,7 +14,9 @@ ThLogin::~ThLogin() {
 void ThLogin::run() {
     Protocol prot;
     std::function<std::vector<unsigned char>(size_t)>
-            receiverCallback = std::bind(&ThLogin::receiveMsgs, this, std::placeholders::_1);
+            receiverCallback = std::bind(&ThLogin::receiveMsgs,
+                                         this,
+                                         std::placeholders::_1);
     while(!is_logged_in) {
         char comm;
         size_t received = peer.recv(&comm, 1);
@@ -44,12 +46,17 @@ std::vector<unsigned char> ThLogin::receiveMsgs(size_t msgSize) {
 
 bool ThLogin::handleLoginMessage(uint8_t msgCode, const std::vector<unsigned char> &msg) {
     std::string gameName(msg.begin(), msg.end());
+    std::function<Socket()> socketHander = std::bind(&ThLogin::handOver, this);
     switch (msgCode) {
         case CREATE:
-            return games.createMatch(std::move(gameName));
+            return games.createMatch(std::move(gameName), socketHander);
         case JOIN:
-            return games.joinMatch(std::move(gameName));
+            return games.joinMatch(gameName, socketHander);
         default:
             return false;
     }
+}
+
+Socket ThLogin::handOver() {
+    return std::move(peer);
 }

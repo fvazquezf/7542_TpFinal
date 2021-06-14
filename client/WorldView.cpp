@@ -1,8 +1,8 @@
 #include "WorldView.h"
 #include <random>
 
-WorldView::WorldView()
-: window(800, 600, false, "unaVentana"),
+WorldView::WorldView(SdlWindow& aWindow)
+: window(aWindow),
   terror("../sprites/gfx/player/t1.bmp", window){
 }
 

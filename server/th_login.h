@@ -27,6 +27,8 @@ public:
     std::vector<unsigned char> receiveMsgs(size_t msgSize);
     bool handleLoginMessage(uint8_t msgCode, const std::vector<unsigned char>& msg);
 
+    Socket handOver();
+
     ThLogin(const ThLogin&) = delete;
     ThLogin& operator=(const ThLogin&) = delete;
     ThLogin(ThLogin&& other) = delete;

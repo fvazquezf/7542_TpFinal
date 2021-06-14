@@ -33,9 +33,13 @@ private:
     void serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const;
     uint16_t deserializeGameNameSize(std::vector<unsigned char> &msg) const;
 public:
-
-
     Protocol();
+
+    Protocol(const Protocol& other) = delete;
+    Protocol& operator=(const Protocol& other) = delete;
+
+    Protocol(Protocol&& other) noexcept;
+    Protocol& operator=(Protocol&& other) noexcept;
 
     void createGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
