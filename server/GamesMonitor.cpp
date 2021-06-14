@@ -34,11 +34,17 @@ bool GamesMonitor::joinMatch(const std::string& gameName, const std::function<So
     if (!matches.count(gameName)){
         return false;
     }
-    std::cout << "DEBUG: JOINED MATCH!\n";
-    std::cout << gameName << std::endl;
     matches.at(gameName).addUser(handIn());
+    matches.at(gameName).startIfShould();
     return true;
 }
 
 GamesMonitor::~GamesMonitor() {
+}
+
+void GamesMonitor::stopGames() {
+    std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    for (auto& m : matches){
+        m.second.stop();
+    }
 }

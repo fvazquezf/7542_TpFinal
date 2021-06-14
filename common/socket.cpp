@@ -19,9 +19,7 @@ Socket& Socket::operator=(Socket&& other){
      if (this == &other) {
           return *this;
      }
-     if (sfd != -1) {
-          ::close(sfd);
-     }
+
      this->sfd = other.sfd;
      other.sfd = -1;
      return *this;

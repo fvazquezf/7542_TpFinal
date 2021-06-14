@@ -25,6 +25,8 @@ Match::~Match() {
 }
 
 void Match::addUser(Socket socket) {
+    //User user(std::move(socket));
+    //users.insert({currUserId++, std::move(user)});
     users.emplace(currUserId++, std::move(socket));
     std::cout << "User added with id: " << (int) currUserId << "\n";
 }
@@ -42,4 +44,18 @@ Match &Match::operator=(Match &&other) noexcept {
     currUserId = other.currUserId;
     users = std::move(other.users);
     return *this;
+}
+
+void Match::startIfShould() {
+    if (currUserId == 2){
+        for (auto& u : users) {
+            u.second.start();
+        }
+    }
+}
+
+void Match::stop() {
+    for (auto& u : users) {
+        u.second.join();
+    }
 }

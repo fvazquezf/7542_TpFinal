@@ -19,6 +19,7 @@ void Server::operator()(char *port) {
         std::cin >> input;
     }
     acceptor.stop();
+    games.stopGames();
     //loop.stop();
 }
 

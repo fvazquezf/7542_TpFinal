@@ -1,25 +1,25 @@
 #include "./th_sender.h"
+#include "../common/Protocol.h"
 #define BUFF_SIZE 256
 
-ThSender::ThSender(Socket &socket): is_running(true), peer(std::move(socket)) {
+ThSender::ThSender(Socket &socket)
+: is_running(true),
+  peer(socket) {
 }
 
 ThSender::~ThSender() {
 }
 
 void ThSender::run() {
-
     std::cout <<"Entro a th_sender\n";
     std::string mensaje = "";
-    Protocol p(this->peer);
+    Protocol p;
         std::cout <<"Entro al while\n";
 
     while (!this->isDead()) {
-        mensaje = p.recibirComandoX();
-        p.enviarRespuesta("Respuesta a comando: " + mensaje + ".");
-        if (mensaje == "q") {
-            break;
-        }
+        //char comm;
+        //peer.recv(&comm, 1);
+        //p.dispatchReceived();
     }
     this->stop();
     this->is_running = false;

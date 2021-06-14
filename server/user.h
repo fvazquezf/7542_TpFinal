@@ -3,6 +3,7 @@
 #include "../common/socket.h"
 #include "../common/Protocol.h"
 #include "th_sender.h"
+#include "ThReceiver.h"
 
 // le pasamos el socket por movimiento
 // sender/receiver tendran una referencia
@@ -11,7 +12,9 @@ class User {
 private:
     Protocol protocol;
     Socket socket;
-    //ThSender thSender;
+    //ThSender sender;
+    ThReceiver receiver;
+    bool playing;
 public:
     explicit User(Socket socket);
 

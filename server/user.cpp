@@ -1,21 +1,25 @@
 #include "user.h"
 
 User::User(Socket socket)
-: socket(std::move(socket)){
+: socket(std::move(socket)),
+  receiver(this->socket, protocol),
+  playing(false){
 }
 
 User::~User() {
-    this->join();
-    this->stop();
 }
 
 void User::start() {
     std::cout <<"Entro al start de thSender\n";
-    //this->thSender.start();
+    playing = true;
+    this->receiver.start();
 }
 
 void User::join() {
     //this->thSender.join();
+    if (playing){
+        this->receiver.join();
+    }
 }
 
 void User::run() {
@@ -32,7 +36,8 @@ void User::stop() {
 
 User::User(User &&other) noexcept
 : protocol(std::move(other.protocol)),
-  socket(std::move(other.socket)){
+  socket(std::move(other.socket)),
+  receiver(socket, protocol){
 }
 
 User &User::operator=(User &&other) noexcept {
@@ -42,5 +47,6 @@ User &User::operator=(User &&other) noexcept {
 
     protocol = std::move(other.protocol);
     socket = std::move(other.socket);
+    receiver = std::move(other.receiver);
     return *this;
 }

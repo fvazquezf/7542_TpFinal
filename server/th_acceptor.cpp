@@ -34,7 +34,6 @@ void ThAcceptor::run() {
             std::cerr << "Error desconocido en el hilo client\n";
         }
     }
-    keep_running = false;
 }
 
 void ThAcceptor::cleanTheads() {

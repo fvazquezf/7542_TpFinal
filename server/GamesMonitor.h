@@ -29,6 +29,8 @@ public:
     bool createMatch(std::string gameName, const std::function<Socket(void)>& handIn);
     bool joinMatch(const std::string& gameName, const std::function<Socket(void)>& handIn);
 
+    void stopGames();
+
     ~GamesMonitor();
 };
 

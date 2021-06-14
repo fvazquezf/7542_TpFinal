@@ -8,4 +8,5 @@ add_library(lib_server
     #th_loop.cpp
     #th_sender.cpp
     user.cpp
-    GamesMonitor.cpp)
+    GamesMonitor.cpp
+    ThReceiver.cpp)
