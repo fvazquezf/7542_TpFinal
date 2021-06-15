@@ -4,9 +4,6 @@ add_library(lib_common
   #protocol.cpp
   socket.cpp
   thread.cpp
-  ta_te_ti_cifrador.cpp
-  ta_te_ti_constantes.h
-  ta_te_ti_descifrador.cpp
   thread.cpp
 )
 

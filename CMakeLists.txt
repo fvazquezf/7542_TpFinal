@@ -17,7 +17,6 @@ add_executable(demo_movimiento ./client/demo_movimiento.cpp)
 
 # Ejecutables esqueleto cliente-servidor
 add_executable(esqueleto_server ./server/main.cpp)
-add_executable(esqueleto_client ./client/src/main.cpp)
 
 # Linkage demo_movimiento
 target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common lib_common commands)
@@ -27,5 +26,5 @@ target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_ima
 
 # Linkage esqueleto cliente-servidor
 target_link_libraries(esqueleto_server lib_server lib_common common box2d anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(esqueleto_client lib_cli lib_common box2d anim sdlwrapperclasses SDL2 SDL2_image)
+
 
