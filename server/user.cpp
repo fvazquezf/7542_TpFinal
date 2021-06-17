@@ -1,9 +1,10 @@
 #include "user.h"
 
-User::User(Socket socket)
+User::User(Socket socket, PlayerModel& modelRef)
 : socket(std::move(socket)),
   receiver(this->socket, protocol),
-  playing(false){
+  playing(false),
+  model(modelRef){
 }
 
 User::~User() {
@@ -34,19 +35,19 @@ void User::stop() {
     //this->thSender.stop();
 }
 
-User::User(User &&other) noexcept
-: protocol(std::move(other.protocol)),
-  socket(std::move(other.socket)),
-  receiver(socket, protocol){
-}
+// User::User(User &&other) noexcept
+// : protocol(std::move(other.protocol)),
+//   socket(std::move(other.socket)),
+//   receiver(socket, protocol){
+// }
 
-User &User::operator=(User &&other) noexcept {
-    if (this == &other) {
-        return *this;
-    }
+// User &User::operator=(User &&other) noexcept {
+//     if (this == &other) {
+//         return *this;
+//     }
 
-    protocol = std::move(other.protocol);
-    socket = std::move(other.socket);
-    receiver = std::move(other.receiver);
-    return *this;
-}
+//     protocol = std::move(other.protocol);
+//     socket = std::move(other.socket);
+//     receiver = std::move(other.receiver);
+//     return *this;
+// }

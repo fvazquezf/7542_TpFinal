@@ -4,6 +4,7 @@
 #include "../common/Protocol.h"
 #include "th_sender.h"
 #include "ThReceiver.h"
+#include "PlayerModel.h"
 
 // le pasamos el socket por movimiento
 // sender/receiver tendran una referencia
@@ -14,15 +15,16 @@ private:
     Socket socket;
     //ThSender sender;
     ThReceiver receiver;
+    PlayerModel& model;
     bool playing;
 public:
-    explicit User(Socket socket);
+    User(Socket socket, PlayerModel& model);
 
     User(const User& other) = delete;
     User& operator=(const User& other) = delete;
 
-    User(User&& other) noexcept;
-    User& operator=(User&& other) noexcept;
+    // User(User&& other) noexcept;
+    // User& operator=(User&& other) noexcept;
 
     void run();
 

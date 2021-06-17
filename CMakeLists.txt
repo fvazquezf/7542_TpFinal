@@ -12,7 +12,7 @@ add_subdirectory(client)
 # Ejecutables demo_movimiento
 add_executable(client_main ./client/main.cpp)
 add_executable(box2d_demo HelloWorld.cpp)
-add_executable(demo_movimiento ./client/demo_movimiento.cpp)
+add_executable(demo_movimiento demo_movimiento.cpp)
 #add_executable(commandTester ./client/commands/CommandTester.cpp)
 
 # Ejecutables esqueleto cliente-servidor
@@ -21,7 +21,7 @@ add_executable(esqueleto_server ./server/main.cpp)
 # Linkage demo_movimiento
 target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common lib_common commands)
 target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
-target_link_libraries(demo_movimiento box2d anim sdlwrapperclasses SDL2 SDL2_image)
+target_link_libraries(demo_movimiento lib_server box2d anim sdlwrapperclasses SDL2 SDL2_image )
 #target_link_libraries(commandTester common commands)
 
 # Linkage esqueleto cliente-servidor

@@ -2,7 +2,6 @@
 #define SERVER_H_
 
 #include "./th_acceptor.h"
-#include "./th_loop.h"
 
 class Server {
  public:
