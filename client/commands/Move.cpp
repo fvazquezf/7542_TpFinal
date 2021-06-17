@@ -1,7 +1,9 @@
 #include "Move.h"
+#include <iostream>
 
-Move::Move(Move::Direction dir, bool isDone)
-: dir(dir), isDoneMove(isDone){
+Move::Move(SDL_Keycode key, bool isDone)
+: isDoneMove(isDone){
+    dir = directionMap.at(key);
 }
 
 void Move::serialize(std::function<void(std::vector<unsigned char>)> &callback, const Protocol &protocol) {

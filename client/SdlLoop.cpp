@@ -3,54 +3,32 @@
 #include "commands/Move.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
+#include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
 : done(false), commands(commandsQ), world(world){
+    eventMap[SDL_KEYDOWN] = std::bind(&SdlLoop::handleKeyDown, this);
+    eventMap[SDL_KEYUP] = std::bind(&SdlLoop::handleKeyUp, this);
+    eventMap[SDL_MOUSEMOTION] = std::bind(&SdlLoop::handleMouseMotion, this);
+    eventMap[SDL_MOUSEBUTTONDOWN] = std::bind(&SdlLoop::handleMouseButtonDown, this);
+    eventMap[SDL_MOUSEBUTTONUP] = std::bind(&SdlLoop::handleMouseButtonUp, this);
+    eventMap[SDL_QUIT] = std::bind(&SdlLoop::handleQuit, this);
+
+    presses[SDLK_w] = false;
+    presses[SDLK_a] = false;
+    presses[SDLK_s] = false;
+    presses[SDLK_d] = false;
 }
 
 void SdlLoop::run() {
-    SDL_Event e;
-    while(SDL_WaitEvent(&e) && !done){
-        switch (e.type){
-            case SDL_KEYDOWN:
-                try{
-                    handleKeyDown(e.key.keysym.sym);
-                } catch (const std::invalid_argument& e){
-                    std::cout << e.what();
-                    break;
-                }
-                break;
-            case SDL_KEYUP:
-                try{
-                    handleKeyUp(e.key.keysym.sym);
-                } catch (const std::invalid_argument& e){
-                    std::cout << e.what();
-                    break;
-                }
-                break;
-            case SDL_MOUSEMOTION:
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-                try {
-                    handleMouseButtonDown(e.button);
-                } catch(const std::invalid_argument& e) {
-                    std::cout << e.what();
-                    break;
-                }
-                break;
-            case SDL_MOUSEBUTTONUP:
-                /*try {
-                    handleMouseButtonUp(e.button);
-                } catch(const std::invalid_argument& e) {
-                    std::cout << e.what();
-                    break;
-                }*/
-                break;
-            case SDL_QUIT:
-                commands.signalClosed();
-                done = true;
+    while (!done && SDL_WaitEvent(&currentEvent)){
+        try {
+            eventMap.at(currentEvent.type)();
+        } catch(const std::exception& e){
+            continue;
         }
     }
+    commands.signalClosed();
 }
 
 SdlLoop::~SdlLoop() {
@@ -61,85 +39,59 @@ bool SdlLoop::isDone() {
     return done;
 }
 
-void SdlLoop::handleKeyDown(SDL_Keycode keyPressed) {
-    std::unique_ptr<Command> comm;
-    switch (keyPressed){
-        case SDLK_w:
-            comm = std::unique_ptr<Command> (new Move(Move::UP));
-            break;
-        case SDLK_s:
-            comm = std::unique_ptr<Command> (new Move(Move::DOWN));
-            break;
-        case SDLK_a:
-            comm = std::unique_ptr<Command> (new Move(Move::LEFT));
-            break;
-        case SDLK_d:
-            comm = std::unique_ptr<Command> (new Move(Move::RIGHT));
-            break;
-        default:
-            // throw exception, key invalid
-            // deberiamos volver a leer un evento;
-            throw std::invalid_argument("Key inval excep\n");
+void SdlLoop::handleKeyDown() {
+    try {
+        handleKey(true, currentEvent.key.keysym.sym);
+    } catch(const std::exception& e){
+        return;
     }
-    // se supone que si llegue hasta aca
-    // el evento es valido
-    commands.push(std::move(comm));
 }
 
-void SdlLoop::handleKeyUp(SDL_Keycode keyReleased) {
-    std::unique_ptr<Command> comm;
-    switch (keyReleased){
-        case SDLK_w:
-            comm = std::unique_ptr<Command>(new Move(Move::UP, true));
-            break;
-        case SDLK_s:
-            comm = std::unique_ptr<Command>(new Move(Move::DOWN, true));
-            break;
-        case SDLK_a:
-            comm = std::unique_ptr<Command>(new Move(Move::LEFT, true));
-            break;
-        case SDLK_d:
-            comm = std::unique_ptr<Command>(new Move(Move::RIGHT, true));
-            break;
-        default:
-            // throw exception, key invalid
-            // deberiamos volver a leer un evento;
-            throw std::invalid_argument("Key inval excep\n");
+void SdlLoop::handleKeyUp() {
+    try {
+        handleKey(false, currentEvent.key.keysym.sym);
+    } catch(const std::exception& e){
+        return;
     }
-    // se supone que si llegue hasta aca
-    // el evento es valido
-    commands.push(std::move(comm));
 }
 
-// para probar a ver si funcan los comandos
-void SdlLoop::handleMouseButtonDown(SDL_MouseButtonEvent mouseEvent) {
-    std::unique_ptr<Command> comm;
-    switch (mouseEvent.button){
-        case SDL_BUTTON_LEFT:{
-            comm = std::unique_ptr<Command>(new CreateGame("UnaPartida"));
-            break;
-        }
-        case SDL_BUTTON_RIGHT:{
-            comm = std::unique_ptr<Command>(new JoinGame("UnaPartida"));
-            break;
-        }
-        default:
-            throw std::invalid_argument("Invalid mouse event\n");
-    }
-    commands.push(std::move(comm));
+void SdlLoop::handleMouseMotion(){
 }
 
-void SdlLoop::handleMouseButtonUp(SDL_MouseButtonEvent mouseEvent) {
-    std::unique_ptr<Command> comm;
-    switch (mouseEvent.button){
-        case SDL_BUTTON_LEFT:{
-            break;
-        }
-        case SDL_BUTTON_RIGHT:{
-            break;
-        }
-        default:
-            throw std::invalid_argument("Invalid mouse event\n");
+void SdlLoop::handleMouseButtonDown() {
+    try {
+        mouseButton(false, currentEvent.button.button);
+    } catch(const std::exception& e){
+        return;
     }
-    //commands.push(std::move(comm));
+}
+
+void SdlLoop::handleMouseButtonUp() {
+    try {
+        //handleKey(false, currentEvent.button.button);
+    } catch(const std::exception& e){
+        return;
+    }
+}
+
+void SdlLoop::handleQuit(){
+    done = true;
+}
+
+void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
+    if (pressed && !presses.at(key)){
+        presses.at(key) = true;
+        commands.push(std::unique_ptr<Command>(new Move(key)));
+    } else if (!pressed){
+        presses.at(key) = false;
+        commands.push(std::unique_ptr<Command>(new Move(key, true)));
+    }
+}
+
+void SdlLoop::mouseButton(bool pressed, uint8_t button){
+    if (button == SDL_BUTTON_LEFT){
+        commands.push(std::unique_ptr<Command>(new CreateGame("UnaPartida")));
+    } else if (button == SDL_BUTTON_RIGHT){
+        commands.push(std::unique_ptr<Command>(new JoinGame("UnaPartida")));
+    }
 }

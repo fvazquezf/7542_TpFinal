@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_keycode.h>
 #include "WorldView.h"
+#include <map>
 
 class SdlLoop : public Thread{
 private:
@@ -17,16 +18,25 @@ private:
     Protocol prot;
     BlockingQueue<std::unique_ptr<Command>>& commands;
     WorldView& world;
-public:
-    SdlLoop(BlockingQueue<std::unique_ptr<Command>>& commandsQ, WorldView& world);
+    SDL_Event currentEvent;
+
+    std::map<uint32_t, std::function<void()>> eventMap;
+    // tracks if the key has been pressed and not released
+    std::map<SDL_Keycode, bool> presses;
+
+    void handleKey(bool pressed, SDL_Keycode key);
+    void mouseButton(bool pressed, uint8_t button);
+
+    void handleKeyDown();
+    void handleKeyUp();
+    void handleMouseMotion();
+    void handleMouseButtonDown();
+    void handleMouseButtonUp();
+    void handleQuit();
 
     void run() override;
-
-    void handleKeyDown(SDL_Keycode keyPressed);
-    void handleKeyUp(SDL_Keycode keyReleased);
-
-    void handleMouseButtonDown(SDL_MouseButtonEvent mouseEvent);
-    void handleMouseButtonUp(SDL_MouseButtonEvent mouseEvent);
+public:
+    SdlLoop(BlockingQueue<std::unique_ptr<Command>>& commandsQ, WorldView& world);
 
     bool isDone();
 
