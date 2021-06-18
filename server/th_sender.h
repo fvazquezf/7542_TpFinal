@@ -3,16 +3,17 @@
 
 #include "../common/thread.h"
 #include "../common/socket.h"
-//#include "../common/protocol.h"
 #include "../common/Protocol.h"
+#include "../common/BlockingQueue.h"
 
 #include <utility>
 #include <string>
 #include <atomic>
+#include <map>
 
 class ThSender : public Thread {
 public:
-    explicit ThSender(Socket &socket);
+    ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates);
     ~ThSender() override;
     void run() override;
     void stop();
@@ -20,12 +21,15 @@ public:
    
     ThSender(const ThSender&) = delete;
     ThSender& operator=(const ThSender&) = delete;
-    ThSender(ThSender&& other) = delete;
-    ThSender& operator=(ThSender&& other) = delete;
+
+    ThSender(ThSender&& other) noexcept;
+    ThSender& operator=(ThSender&& other) noexcept;
 
 private:
     std::atomic<bool> is_running;
     Socket& peer;
+    Protocol& protocol;
+    BlockingQueue<std::map<int, std::pair<float, float>>>& updates;
 };
 
 #endif    // TH_SENDER_H_

@@ -1,8 +1,9 @@
 #include "user.h"
 
-User::User(Socket socket, PlayerModel& modelRef)
+User::User(Socket socket, PlayerModel& modelRef, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
 : socket(std::move(socket)),
   receiver(this->socket, protocol),
+  sender(this->socket, protocol, updates),
   playing(false),
   model(modelRef){
 }
@@ -35,19 +36,23 @@ void User::stop() {
     //this->thSender.stop();
 }
 
-// User::User(User &&other) noexcept
-// : protocol(std::move(other.protocol)),
-//   socket(std::move(other.socket)),
-//   receiver(socket, protocol){
-// }
+User::User(User &&other) noexcept
+: protocol(std::move(other.protocol)),
+  socket(std::move(other.socket)),
+  receiver(socket, protocol),
+  sender(std::move(other.sender)),
+  model(other.model){
+}
 
-// User &User::operator=(User &&other) noexcept {
-//     if (this == &other) {
-//         return *this;
-//     }
+User &User::operator=(User &&other) noexcept {
+    if (this == &other) {
+        return *this;
+    }
 
-//     protocol = std::move(other.protocol);
-//     socket = std::move(other.socket);
-//     receiver = std::move(other.receiver);
-//     return *this;
-// }
+    protocol = std::move(other.protocol);
+    socket = std::move(other.socket);
+    receiver = std::move(other.receiver);
+    sender = (std::move(other.sender));
+    model = other.model;
+    return *this;
+}

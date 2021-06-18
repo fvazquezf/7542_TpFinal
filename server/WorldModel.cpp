@@ -4,7 +4,9 @@
 
 #include "../libs/box2d/include/box2d/box2d.h"
 
-WorldModel::WorldModel(): world (b2Vec2(0.0f, 0.0f)){
+WorldModel::WorldModel(Broadcaster& updates): 
+						world (b2Vec2(0.0f, 0.0f)),
+						updates(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
 	this->positionIterations = 2;
@@ -14,9 +16,11 @@ WorldModel::WorldModel(): world (b2Vec2(0.0f, 0.0f)){
 	anchorDef.position.Set(0.0f, -10.0f);
 	
 	this->anchor = world.CreateBody(&anchorDef);
+
+	is_running = false;
 }
 
-PlayerModel& WorldModel::createPlayer(float x, float y, std::string clave){
+PlayerModel& WorldModel::createPlayer(float x, float y, int clave){
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(x, y);
@@ -47,7 +51,7 @@ PlayerModel& WorldModel::createPlayer(float x, float y, std::string clave){
 	return this->playerModels[clave];
 }
 
-PlayerModel& WorldModel::addPlayer(std::string clave){
+PlayerModel& WorldModel::addPlayer(int clave){
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(std::rand()%50, std::rand()%50);
@@ -113,6 +117,20 @@ void WorldModel::loadMap(){
 
 		y = y - 2;
 	}
+}
+
+void WorldModel::run(){
+	is_running = true;
+	while (is_running){
+		this->step();
+	}
+	std::map<int, std::pair<float, float>> newPos;
+	for (auto it = this->playerModels.begin(); it != this->playerModels.end(); it++){
+		int id = it->first;
+		b2Vec2 pos = it->second.getPosition();
+		newPos[id] = std::pair<float, float>(pos.x, pos.y);
+	}
+	updates.pushAll(newPos);
 }
 
 

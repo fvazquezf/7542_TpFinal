@@ -2,9 +2,11 @@
 #include "../common/Protocol.h"
 #define BUFF_SIZE 256
 
-ThSender::ThSender(Socket &socket)
+ThSender::ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
 : is_running(true),
-  peer(socket) {
+  peer(socket),
+  protocol(protocol),
+  updates(updates) {
 }
 
 ThSender::~ThSender() {
@@ -12,14 +14,9 @@ ThSender::~ThSender() {
 
 void ThSender::run() {
     std::cout <<"Entro a th_sender\n";
-    std::string mensaje = "";
-    Protocol p;
-        std::cout <<"Entro al while\n";
 
     while (!this->isDead()) {
-        //char comm;
-        //peer.recv(&comm, 1);
-        //p.dispatchReceived();
+        updates.pop();
     }
     this->stop();
     this->is_running = false;
@@ -32,4 +29,25 @@ bool ThSender::isDead() {
 void ThSender::stop() {
     this->is_running = false;
     this->peer.close();
+}
+
+ThSender::ThSender(ThSender &&other) noexcept
+: peer(other.peer),
+  is_running(other.is_running.operator bool()),
+  protocol(other.protocol),
+  updates(other.updates){
+    // no hay que hacerle stop
+    // si a other le hacemos stop matamos al peer (el rd)
+    other.is_running = false;
+}
+
+ThSender &ThSender::operator=(ThSender &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    is_running = other.is_running.operator bool();
+    other.is_running = false;
+
+    return *this;
 }

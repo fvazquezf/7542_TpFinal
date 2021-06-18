@@ -1,9 +1,10 @@
 #ifndef MATCH_H_
 #define MATCH_H_
+
 #include <map>
 #include "user.h"
 #include "WorldModel.h"
-#include "../common/BlockingQueue.h"
+#include "Broadcaster.h"
 
 class Match {
 public:
@@ -26,14 +27,13 @@ public:
 
 private:
     uint8_t maxUsers;
-    // cuantos jugadores pueden tener las partidas?
-    // no creo que mas de 256 (por eso uint8)
+    // cuantos jugadores pueden tener las partidas? 10 max
     std::map<uint8_t, User> users;
 
     WorldModel world;
     // instancia las q's necesarias
-    // BlockingQueue<algo>& primeraQ;
-    // BlockingQueue<otroAlgo>& segundaQ;
+    Broadcaster updates;
+    // Queue<otroAlgo>& events;
 };
 
 #endif

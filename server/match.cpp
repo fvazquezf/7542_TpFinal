@@ -38,16 +38,18 @@ Match &Match::operator=(Match &&other) noexcept {
 }
 
 void Match::addUser(Socket socket) {
-    //User user(std::move(socket));
     int id = this->users.size();
     id++;
-    users.emplace(id, std::move(socket), this->world.addPlayer(std::to_string(id)));
-    // this->world.addPlayer(std::to_string(id));
+    // crea el user dentro del mapa
+    users.emplace(std::piecewise_construct, std::forward_as_tuple(id), 
+                  std::forward_as_tuple(std::move(socket), 
+                                        this->world.addPlayer(id),
+                                        this->updates.addClient(id)));
     std::cout << "Users ammount: " << users.size() << "\n";
 }
 
 void Match::startIfShould() {
-    if (maxUsers == 2){
+    if (this->users.size() == this->maxUsers){
         for (auto& u : users) {
             u.second.start();
         }
