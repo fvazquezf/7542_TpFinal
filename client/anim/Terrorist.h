@@ -1,38 +1,39 @@
 #ifndef TERRORIST_H
 #define TERRORIST_H
-#include "../sdlwrap/SdlTexture.h"
-#include "Animation.h"
+#include "Renderizable.h"
 
-
-class Terrorist {
+class Terrorist : public Renderizable {
 private:
-    Animation animation;
-	int posX;
-	int posY;
-	bool movingLeft;
+    //Animation animation;
+	float posX;
+	float posY;
+    bool player;
+	/*bool movingLeft;
 	bool movingRight;
 	bool movingUp;
 	bool movingDown;
 	bool scrolling;
-	bool shooting;
+	bool shooting;*/
 	float angle;
-	float knifeAngle;
+	//float knifeAngle;
 public:
-	Terrorist(SdlTexture& texture, int posX, int posY);
+	Terrorist(SdlTexture& texture, float posX, float posY, bool player);
 
-	void moveLeft();
-	void moveRight();
-	void moveUp();
-	void moveDown();
-	void scroll();
-    void gunAction();
-	void stopMoving();
+	//void moveLeft();
+	//void moveRight();
+	//void moveUp();
+	//void moveDown();
+	//void scroll();
+    //void gunAction();
+	//void stopMoving();
 
 	void render();
-	void update(float dt);
-	~Terrorist();
+    void render(Camera& cam) override;
+	//void update(float dt);
+	void update() override;
+	~Terrorist() override;
 
-    void stopGunAction();
+    //void stopGunAction();
 };
 
 #endif

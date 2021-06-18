@@ -1,6 +1,7 @@
 project(sdl-demo)
 
-add_library(anim 
+add_library(anim
 Animation.cpp
 Terrorist.cpp
-        Explotion.cpp)
+        Explotion.cpp
+        Renderizable.cpp)

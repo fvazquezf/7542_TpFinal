@@ -3,7 +3,7 @@
 
 
 SdlTexture::SdlTexture(const std::string& filename, SdlWindow& window)
-: window(window), 
+: window(window),
   texture(nullptr){
 	SDL_Surface* tmp = IMG_Load(filename.c_str());
 	if (!tmp){

@@ -26,9 +26,14 @@ public:
 	void render();
 
 	SDL_Texture* createTexture(SDL_Surface* aSurface);
-	int handleRender(SDL_Texture* txt, const SDL_Rect& src, 
-					 const SDL_Rect& dst, float ang, 
+	int handleRender(SDL_Texture* txt, const SDL_Rect& src,
+					 const SDL_Rect& dst, float ang,
 					 SDL_RendererFlip flip);
+
+	SDL_Point getCenter();
+
+	int getWidth();
+	int getHeight();
 
 	~SdlWindow();
 };

@@ -34,9 +34,7 @@ public:
 
 	int render(const Area& src, const Area& dest, const SDL_RendererFlip& flipType) const;
     int render(const Area& src, const Area& dest, float angle, const SDL_RendererFlip& flip) const;
-    
 	~SdlTexture();
 };
-
 
 #endif

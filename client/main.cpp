@@ -18,7 +18,8 @@ int main(int argc, const char *argv[]){
 	world.update();
 	world.render();
 
-	world.createTerrorist();
+	world.createTerrorist(true, 5.0f, 5.0f);
+	world.createTerrorist(false, 3.0f, 4.0f);
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
@@ -34,12 +35,12 @@ int main(int argc, const char *argv[]){
 	l.start();
 	while (running){
 		auto start = std::chrono::system_clock::now();
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<float, std::micro> elapsed = (end - start);
 
         world.update();
         world.render();
 
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<float, std::micro> elapsed = (end - start);
         usleep(FRAMERATE + elapsed.count());
         if (l.isDone()){
             running = false;

@@ -7,7 +7,7 @@ SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
 		//handle
 	}
 
-	err = SDL_CreateWindowAndRenderer(width, height, SDL_RENDERER_ACCELERATED, 
+	err = SDL_CreateWindowAndRenderer(width, height, SDL_RENDERER_ACCELERATED,
 										  &this->windowPtr, &this->rendererPtr);
 	if (err){
 		// handle
@@ -49,10 +49,27 @@ SDL_Texture* SdlWindow::createTexture(SDL_Surface* aSurface){
 	return SDL_CreateTextureFromSurface(rendererPtr, aSurface);
 }
 
-int SdlWindow::handleRender(SDL_Texture* txt, 
-							const SDL_Rect& src, 
-							const SDL_Rect& dst, 
-							float ang, 
+int SdlWindow::handleRender(SDL_Texture* txt,
+							const SDL_Rect& src,
+							const SDL_Rect& dst,
+							float ang,
 							SDL_RendererFlip flip){
 	return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, ang, nullptr, flip);
+}
+
+SDL_Point SdlWindow::getCenter(){
+	SDL_Point p;
+	SDL_GetWindowSize(windowPtr, &p.x, &p.y);
+	p.x /= 2;
+	p.y /= 2;
+	return p;
+}
+
+
+int SdlWindow::getWidth(){
+	return width;
+}
+
+int SdlWindow::getHeight(){
+	return height;
 }

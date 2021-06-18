@@ -4,7 +4,8 @@ project(sdl-demo)
 add_library(sdlloop
         SdlLoop.cpp
         Sender.cpp
-        WorldView.cpp)
+        WorldView.cpp
+        Camera.cpp)
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)
