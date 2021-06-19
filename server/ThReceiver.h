@@ -4,19 +4,23 @@
 #include "../common/Thread.h"
 #include "../common/socket.h"
 #include "../common/Protocol.h"
+#include "events/ClientEvent.h"
+#include "../common/ProtectedQueue.h"
 
 #include <atomic>
 #include <utility>
+#include <memory>
 
 class ThReceiver : public Thread {
 private:
     Socket& peer;
     std::atomic<bool> is_running;
     Protocol& protocol;
-    // BlockingQueue<algo>& q1;
-    // BlockingQueue<algoMas>& q2;
+    ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue;
 public:
-    explicit ThReceiver(Socket& peer, Protocol& protocol);
+    explicit ThReceiver(Socket& peer,
+                        Protocol& protocol,
+                        ProtectedQueue<std::unique_ptr<ClientEvent>>& eventsQueue);
 
     ThReceiver(const ThReceiver& other) = delete;
     ThReceiver& operator=(const ThReceiver& other) = delete;

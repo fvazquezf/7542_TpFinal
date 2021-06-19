@@ -1,14 +1,18 @@
 #include "match.h"
 
 Match::Match()
-: currUserId(0){
+: maxUsers(0),
+  updates(this->updateQs)
+  //world(updates)
+{
 }
 
-/*void Match::addUser(const std::string &nickname, User* user) {
-    //this->users[nickname] = user;
-    //this->users[nickname]->start();
-    //std::cout <<"llegamos aca antes del start\n";
-}*/
+Match::Match(int playerAmount)
+//world(updates)
+: updates(this->updateQs)
+{
+    maxUsers = playerAmount;
+}
 
 void Match::removeUser() {
     //this->users.erase(nickname);
@@ -24,16 +28,14 @@ void Match::removeUsers() {
 Match::~Match() {
 }
 
-void Match::addUser(Socket socket) {
-    //User user(std::move(socket));
-    //users.insert({currUserId++, std::move(user)});
-    users.emplace(currUserId++, std::move(socket));
-    std::cout << "User added with id: " << (int) currUserId << "\n";
-}
-
 Match::Match(Match &&other) noexcept
-: currUserId(other.currUserId),
-  users(std::move(other.users)){
+: maxUsers(other.maxUsers),
+  users(std::move(other.users)),
+  updates(other.updateQs)
+  //users(std::move(other.users)),
+  //world(std::move(other.world)),
+  //updates(std::move(other.updates))
+{
 }
 
 Match &Match::operator=(Match &&other) noexcept {
@@ -41,14 +43,38 @@ Match &Match::operator=(Match &&other) noexcept {
         return *this;
     }
 
-    currUserId = other.currUserId;
+    maxUsers = other.maxUsers;
     users = std::move(other.users);
     return *this;
 }
 
+void Match::addUser(Socket socket) {
+    uint8_t id = this->users.size();
+    if (maxUsers == id){
+        return;
+    }
+    // guarda una queue de updates
+    // la usa el broadcaster y el sender del user
+
+    updateQs.emplace(std::piecewise_construct,
+                     std::forward_as_tuple(id),
+                     std::forward_as_tuple());
+
+    // crea el user dentro del mapa
+    users.emplace(std::piecewise_construct,
+                  std::forward_as_tuple(id),
+           std::forward_as_tuple(std::move(socket),
+                                        updateQs.at(id),
+                                        usersEvents,
+                                        id));
+    id++;
+    std::cout << "Users ammount: " << users.size() << "\n";
+}
+
 void Match::startIfShould() {
-    if (currUserId == 2){
+    if (this->users.size() == this->maxUsers){
         for (auto& u : users) {
+
             u.second.start();
         }
     }

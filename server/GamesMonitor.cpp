@@ -23,7 +23,9 @@ bool GamesMonitor::createMatch(std::string gameName, const std::function<Socket(
     if (matches.count(gameName)){
         return false;
     }
-    matches.emplace(gameName, Match{});
+    matches.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(gameName),
+                    std::forward_as_tuple(2));
     matches.at(gameName).addUser(handIn());
     return true;
 }

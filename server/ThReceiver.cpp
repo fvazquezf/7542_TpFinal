@@ -1,9 +1,12 @@
 #include "ThReceiver.h"
 
-ThReceiver::ThReceiver(Socket &peer, Protocol &protocol)
+ThReceiver::ThReceiver(Socket &peer,
+                       Protocol &protocol,
+                       ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue)
 : peer(peer),
   is_running(true),
-  protocol(protocol){
+  protocol(protocol),
+  eventQueue(eventQueue){
 }
 
 void ThReceiver::run() {
@@ -44,7 +47,8 @@ void ThReceiver::stop() {
 ThReceiver::ThReceiver(ThReceiver &&other) noexcept
 : peer(other.peer),
   is_running(other.is_running.operator bool()),
-  protocol(other.protocol){
+  protocol(other.protocol),
+  eventQueue(other.eventQueue){
     // no hay que hacerle stop
     // si a other le hacemos stop matamos al peer (el rd)
     other.is_running = false;

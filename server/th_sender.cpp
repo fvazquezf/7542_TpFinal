@@ -2,9 +2,18 @@
 #include "../common/Protocol.h"
 #define BUFF_SIZE 256
 
-ThSender::ThSender(Socket &socket)
+/*ThSender::ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
 : is_running(true),
-  peer(socket) {
+  peer(socket),
+  protocol(protocol),
+  updates(updates) {
+}*/
+
+ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<Update> &updates)
+: is_running(true),
+  peer(socket),
+  protocol(protocol),
+  updateQueue(updates){
 }
 
 ThSender::~ThSender() {
@@ -12,24 +21,40 @@ ThSender::~ThSender() {
 
 void ThSender::run() {
     std::cout <<"Entro a th_sender\n";
-    std::string mensaje = "";
-    Protocol p;
-        std::cout <<"Entro al while\n";
 
     while (!this->isDead()) {
-        //char comm;
-        //peer.recv(&comm, 1);
-        //p.dispatchReceived();
+        Update update = updateQueue.pop();
+        // update.serialize() -> conoce al protocol
     }
     this->stop();
     this->is_running = false;
 }
 
 bool ThSender::isDead() {
-    return is_running == false;
+    return !is_running;
 }
 
 void ThSender::stop() {
     this->is_running = false;
     this->peer.close();
+}
+
+ThSender::ThSender(ThSender &&other) noexcept
+: is_running(other.is_running.operator bool()),
+  peer(other.peer),
+  protocol(other.protocol),
+  updateQueue(other.updateQueue){
+    // no hay que hacerle stop
+    // si a other le hacemos stop matamos al peer (el rd)
+    other.is_running = false;
+}
+
+ThSender &ThSender::operator=(ThSender &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    is_running = other.is_running.operator bool();
+    other.is_running = false;
+    return *this;
 }
