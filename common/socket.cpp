@@ -123,12 +123,16 @@ Socket Socket::accept() {
 }
 
 void Socket::close() {
-    ::shutdown(this->sfd, SHUT_RDWR);
-    ::close(this->sfd);
+    if (this->sfd != -1){
+        ::shutdown(this->sfd, SHUT_RDWR);
+        ::close(this->sfd);
+    }
 }
 
 void Socket::shutdown(int channel) {
-    ::shutdown(this->sfd, channel);
+    if (this->sfd != -1){
+        ::shutdown(this->sfd, channel);
+    }
 }
 
 Socket::~Socket() {

@@ -11,6 +11,12 @@ class PlayerModel{
         PlayerModel();
         PlayerModel(b2Body* body);
 
+        PlayerModel(const PlayerModel& other) = delete;
+        PlayerModel& operator=(const PlayerModel& other) = delete;
+
+        PlayerModel(PlayerModel&& other) noexcept;
+        PlayerModel& operator=(PlayerModel&& other) noexcept;
+
         void startMove(int dir);
 
         void stopMove(int dir);

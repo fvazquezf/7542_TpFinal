@@ -5,6 +5,10 @@ class Update {
 private:
 public:
     Update();
+
+    virtual void serialize() = 0;
+
+    virtual ~Update();
 };
 
 

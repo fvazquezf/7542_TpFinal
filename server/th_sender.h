@@ -14,7 +14,7 @@
 
 class ThSender : public Thread {
 public:
-    ThSender(Socket& socket, Protocol& protocol, BlockingQueue<Update>& updates);
+    ThSender(Socket& socket, Protocol& protocol, BlockingQueue<std::shared_ptr<Update>>& updates);
     ~ThSender() override;
     void run() override;
     void stop();
@@ -30,7 +30,7 @@ private:
     std::atomic<bool> is_running;
     Socket& peer;
     Protocol& protocol;
-    BlockingQueue<Update>& updateQueue;
+    BlockingQueue<std::shared_ptr<Update>>& updateQueue;
 };
 
 #endif    // TH_SENDER_H_

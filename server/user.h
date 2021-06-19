@@ -27,7 +27,7 @@ private:
 public:
     User(Socket socket,
          ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
-         BlockingQueue<Update>& updateQueue,
+         BlockingQueue<std::shared_ptr<Update>>& updateQueue,
          uint8_t id);
 
     User(const User& other) = delete;

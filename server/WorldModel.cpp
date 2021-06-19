@@ -43,9 +43,11 @@ PlayerModel& WorldModel::createPlayer(float x, float y, int clave){
 	b2FrictionJoint* fJoint = (b2FrictionJoint*)world.CreateJoint(&fJointDef);
 	fJoint->SetMaxForce(10);
 
-    PlayerModel player(body);
+    //PlayerModel player(body);
 
-	this->playerModels[clave] = player; 
+    playerModels.emplace(std::piecewise_construct,
+                         std::forward_as_tuple(clave),
+                         std::forward_as_tuple(body));
 
 	return this->playerModels[clave];
 }
@@ -74,9 +76,14 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	b2FrictionJoint* fJoint = (b2FrictionJoint*)world.CreateJoint(&fJointDef);
 	fJoint->SetMaxForce(10);
 
-    PlayerModel player(body);
+    //PlayerModel player(body);
 
-	this->playerModels[clave] = player; 
+	//this->playerModels[clave] = player;
+
+	// crea un player model asi
+	playerModels.emplace(std::piecewise_construct,
+                         std::forward_as_tuple(clave),
+                         std::forward_as_tuple(body));
 
 	return std::ref(this->usersEvents);
 }
@@ -142,5 +149,31 @@ void WorldModel::step(){
 
 WorldModel::~WorldModel() {
 
+}
+
+WorldModel::WorldModel(WorldModel &&other) noexcept
+: world(b2Vec2(0.0f, 0.0f)),
+  playerModels(std::move(other.playerModels)),
+  usersEvents(std::move(other.usersEvents)),
+  updates(other.updates),
+  timeStep(other.timeStep),
+  velocityIterations(other.velocityIterations),
+  positionIterations(other.positionIterations),
+  is_running(other.is_running){
+    // tengo que crearlo asi pq
+    // en box2d el world
+    // no tiene construccion por movimiento
+    // ni por copia
+    b2BodyDef anchorDef;
+    anchorDef.position.Set(0.0f, -10.0f);
+    this->anchor = world.CreateBody(&anchorDef);
+}
+
+WorldModel &WorldModel::operator=(WorldModel &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    return *this;
 }
 

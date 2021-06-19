@@ -9,7 +9,7 @@
   updates(updates) {
 }*/
 
-ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<Update> &updates)
+ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<std::shared_ptr<Update>> &updates)
 : is_running(true),
   peer(socket),
   protocol(protocol),
@@ -23,7 +23,7 @@ void ThSender::run() {
     std::cout <<"Entro a th_sender\n";
 
     while (!this->isDead()) {
-        Update update = updateQueue.pop();
+        std::shared_ptr<Update> update = updateQueue.pop();
         // update.serialize() -> conoce al protocol
     }
     this->stop();

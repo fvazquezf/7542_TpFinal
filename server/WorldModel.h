@@ -39,8 +39,9 @@ class WorldModel: public Thread {
 
         WorldModel(const WorldModel&) = delete;
         WorldModel& operator=(const WorldModel&) = delete;
-        WorldModel(WorldModel&& other) = delete;
-        WorldModel& operator=(WorldModel&& other) = delete;
+
+        WorldModel(WorldModel&& other) noexcept;
+        WorldModel& operator=(WorldModel&& other) noexcept;
 
         // usar solo para probar cosas en demo_movimiento, esta se va a borrar
         PlayerModel& createPlayer(float x, float y, int clave);

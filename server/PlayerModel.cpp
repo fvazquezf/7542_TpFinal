@@ -1,3 +1,4 @@
+#include <utility>
 #include "PlayerModel.h"
 
 PlayerModel::PlayerModel(){
@@ -52,4 +53,21 @@ void PlayerModel::step(){
 
 const b2Vec2& PlayerModel::getPosition(){
     return this->model->GetPosition();
+}
+
+PlayerModel::PlayerModel(PlayerModel &&other) noexcept
+: model(other.model),
+  netForce(other.netForce){
+    other.model = nullptr;
+}
+
+PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    model = other.model;
+    netForce = other.netForce;
+    other.model = nullptr;
+    return *this;
 }
