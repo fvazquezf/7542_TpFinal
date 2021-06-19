@@ -4,9 +4,12 @@ add_library(lib_server
     server.cpp
     th_acceptor.cpp
     th_login.cpp
-    #th_sender.cpp
+    th_sender.cpp
     user.cpp
     GamesMonitor.cpp
     ThReceiver.cpp
     PlayerModel.cpp
-    WorldModel.cpp)
+    WorldModel.cpp
+        updates/Update.cpp
+        events/ClientEvent.cpp
+    Broadcaster.cpp events/MoveEvent.cpp events/MoveEvent.h)

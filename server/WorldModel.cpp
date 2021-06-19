@@ -130,7 +130,7 @@ void WorldModel::run(){
 		b2Vec2 pos = it->second.getPosition();
 		newPos[id] = std::pair<float, float>(pos.x, pos.y);
 	}
-	updates.pushAll(newPos);
+	//updates.pushAll(newPos);
 }
 
 

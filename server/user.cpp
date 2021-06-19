@@ -1,11 +1,22 @@
 #include "user.h"
+#include "events/ClientEvent.h"
 
-User::User(Socket socket, PlayerModel& modelRef, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
+/*User::User(Socket socket, PlayerModel& modelRef, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
 : socket(std::move(socket)),
   receiver(this->socket, protocol),
   sender(this->socket, protocol, updates),
   playing(false),
   model(modelRef){
+}*/
+
+User::User(Socket socket,
+           BlockingQueue<Update> &updateQueue,
+           ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
+           uint8_t id)
+: socket(std::move(socket)),
+  sender(this->socket, protocol, updateQueue),
+  receiver(this->socket, protocol, eventQueue),
+  id(id){
 }
 
 User::~User() {
@@ -30,6 +41,7 @@ void User::run() {
 
 bool User::isDead() {
     //return this->thSender.isDead();
+    return true;
 }
 
 void User::stop() {
@@ -39,9 +51,11 @@ void User::stop() {
 User::User(User &&other) noexcept
 : protocol(std::move(other.protocol)),
   socket(std::move(other.socket)),
-  receiver(socket, protocol),
   sender(std::move(other.sender)),
-  model(other.model){
+  receiver(std::move(other.receiver)),
+  id(id)
+  //model(other.model)
+{
 }
 
 User &User::operator=(User &&other) noexcept {
@@ -53,6 +67,7 @@ User &User::operator=(User &&other) noexcept {
     socket = std::move(other.socket);
     receiver = std::move(other.receiver);
     sender = (std::move(other.sender));
-    model = other.model;
+    //model = other.model;
     return *this;
 }
+

@@ -5,6 +5,10 @@
 #include "user.h"
 #include "WorldModel.h"
 #include "Broadcaster.h"
+#include "updates/Update.h"
+#include "../common/BlockingQueue.h"
+#include "../common/ProtectedQueue.h"
+#include "events/ClientEvent.h"
 
 class Match {
 public:
@@ -30,10 +34,19 @@ private:
     // cuantos jugadores pueden tener las partidas? 10 max
     std::map<uint8_t, User> users;
 
-    WorldModel world;
+    // Match es el owner de las colas de update
+    // cada SENDER popea de estas
+    // el broadcaster tiene una referencia a este mapa
+    std::map<uint8_t, BlockingQueue<Update>> updateQs;
+
+    // cola no bloqueante
+    ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
+
+    //WorldModel world;
     // instancia las q's necesarias
     Broadcaster updates;
     // Queue<otroAlgo>& events;
+    // BlockingQueue<Updates> updates;
 };
 
 #endif

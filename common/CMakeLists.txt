@@ -5,7 +5,7 @@ add_library(lib_common
   socket.cpp
   thread.cpp
   thread.cpp
-)
+        ProtectedQueue.h)
 
 add_library(common
         Protocol.cpp

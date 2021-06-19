@@ -5,6 +5,7 @@
 #include "../common/socket.h"
 #include "../common/Protocol.h"
 #include "../common/BlockingQueue.h"
+#include "updates/Update.h"
 
 #include <utility>
 #include <string>
@@ -13,7 +14,8 @@
 
 class ThSender : public Thread {
 public:
-    ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates);
+    //ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates);
+    ThSender(Socket& socket, Protocol& protocol, BlockingQueue<Update>& updates);
     ~ThSender() override;
     void run() override;
     void stop();
@@ -29,7 +31,8 @@ private:
     std::atomic<bool> is_running;
     Socket& peer;
     Protocol& protocol;
-    BlockingQueue<std::map<int, std::pair<float, float>>>& updates;
+    //BlockingQueue<std::map<int, std::pair<float, float>>>& updates;
+    BlockingQueue<Update>& updateQueue;
 };
 
 #endif    // TH_SENDER_H_
