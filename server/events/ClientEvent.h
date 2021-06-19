@@ -3,18 +3,20 @@
 
 
 #include <cstdint>
+#include <map>
 //#include "../WorldModel.h"
+#include "../PlayerModel.h"
 
 // forward declaration
-class WorldModel;
+// class WorldModel;
 
 class ClientEvent {
-private:
+protected:
     uint8_t clientId;
 public:
     ClientEvent(uint8_t clientId);
 
-    virtual void updateWorld(WorldModel& world) = 0;
+    virtual void updatePlayer(std::map<int, PlayerModel>& players) = 0;
 
     virtual ~ClientEvent();
 };
