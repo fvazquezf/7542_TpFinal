@@ -39,14 +39,12 @@ private:
     // el broadcaster tiene una referencia a este mapa
     std::map<uint8_t, BlockingQueue<Update>> updateQs;
 
-    // cola no bloqueante
+    // cola no bloqueante para eventos de los usuarios
     ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
 
-    //WorldModel world;
-    // instancia las q's necesarias
     Broadcaster updates;
-    // Queue<otroAlgo>& events;
-    // BlockingQueue<Updates> updates;
+
+    //WorldModel world;
 };
 
 #endif

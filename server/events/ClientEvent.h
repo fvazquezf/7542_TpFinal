@@ -3,7 +3,10 @@
 
 
 #include <cstdint>
-#include "../WorldModel.h"
+//#include "../WorldModel.h"
+
+// forward declaration
+class WorldModel;
 
 class ClientEvent {
 private:

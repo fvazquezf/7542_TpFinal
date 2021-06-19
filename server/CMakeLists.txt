@@ -10,6 +10,8 @@ add_library(lib_server
     ThReceiver.cpp
     PlayerModel.cpp
     WorldModel.cpp
-        updates/Update.cpp
-        events/ClientEvent.cpp
-    Broadcaster.cpp events/MoveEvent.cpp events/MoveEvent.h)
+    updates/Update.cpp
+    events/ClientEvent.cpp
+    events/ClientEvent.h
+    Broadcaster.cpp
+    events/MoveEvent.cpp updates/PositionUpdate.cpp updates/PositionUpdate.h)

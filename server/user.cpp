@@ -26,12 +26,14 @@ void User::start() {
     std::cout <<"Entro al start de thSender\n";
     playing = true;
     this->receiver.start();
+    this->sender.start();
 }
 
 void User::join() {
     //this->thSender.join();
     if (playing){
         this->receiver.join();
+        this->sender.join();
     }
 }
 
@@ -48,12 +50,14 @@ void User::stop() {
     //this->thSender.stop();
 }
 
+// solo llamado por map.emplace
+// al momento de construir al user
 User::User(User &&other) noexcept
 : protocol(std::move(other.protocol)),
   socket(std::move(other.socket)),
   sender(std::move(other.sender)),
   receiver(std::move(other.receiver)),
-  id(id)
+  id(other.id)
   //model(other.model)
 {
 }

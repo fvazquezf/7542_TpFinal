@@ -14,7 +14,6 @@
 
 class ThSender : public Thread {
 public:
-    //ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates);
     ThSender(Socket& socket, Protocol& protocol, BlockingQueue<Update>& updates);
     ~ThSender() override;
     void run() override;
@@ -31,7 +30,6 @@ private:
     std::atomic<bool> is_running;
     Socket& peer;
     Protocol& protocol;
-    //BlockingQueue<std::map<int, std::pair<float, float>>>& updates;
     BlockingQueue<Update>& updateQueue;
 };
 

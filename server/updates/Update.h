@@ -4,7 +4,7 @@
 class Update {
 private:
 public:
-
+    Update();
 };
 
 

@@ -1,11 +1,13 @@
 #include "WorldModel.h"
 #include "PlayerModel.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "../libs/box2d/include/box2d/box2d.h"
 
-WorldModel::WorldModel(Broadcaster& updates): 
+WorldModel::WorldModel(Broadcaster& updates,
+                       ProtectedQueue<std::unique_ptr<ClientEvent>>& userEvents):
 						world (b2Vec2(0.0f, 0.0f)),
+					    userEvents(userEvents),
 						updates(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
@@ -139,5 +141,9 @@ void WorldModel::step(){
 		it->second.step();
 	}
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
+}
+
+WorldModel::~WorldModel() {
+
 }
 

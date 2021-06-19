@@ -5,6 +5,9 @@
 #include "../common/thread.h"
 #include "Broadcaster.h"
 #include "PlayerModel.h"
+#include "events/ClientEvent.h"
+#include "../common/ProtectedQueue.h"
+#include <memory>
 
 #include <map>
 
@@ -12,6 +15,11 @@ class WorldModel: public Thread {
     b2World world;
     b2Body* anchor;
     std::map<int, PlayerModel> playerModels;
+
+    // ref de la cola de la cual popeamos
+    // para obtener los eventos de los clientes
+    // cada receiver pushea a esta q
+    ProtectedQueue<std::unique_ptr<ClientEvent>>& userEvents;
 
     float timeStep;
 	int32 velocityIterations;
@@ -22,7 +30,8 @@ class WorldModel: public Thread {
     Broadcaster& updates;
 
     public:
-        WorldModel(Broadcaster& updates);
+        WorldModel(Broadcaster& updates,
+                   ProtectedQueue<std::unique_ptr<ClientEvent>>& userEventsQ);
 
         ~WorldModel() override;
         void run() override;

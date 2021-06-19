@@ -10,7 +10,8 @@
 }*/
 
 ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<Update> &updates)
-: peer(socket),
+: is_running(true),
+  peer(socket),
   protocol(protocol),
   updateQueue(updates){
 }
@@ -23,16 +24,14 @@ void ThSender::run() {
 
     while (!this->isDead()) {
         Update update = updateQueue.pop();
-        // update->hacerAlgo();
-        // update tiene ref al mundo logico
-        // sender no tiene pq conocer nada del mundo!
+        // update.serialize() -> conoce al protocol
     }
     this->stop();
     this->is_running = false;
 }
 
 bool ThSender::isDead() {
-    return is_running == false;
+    return !is_running;
 }
 
 void ThSender::stop() {

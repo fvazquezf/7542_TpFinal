@@ -30,6 +30,7 @@ Match::~Match() {
 
 Match::Match(Match &&other) noexcept
 : maxUsers(other.maxUsers),
+  users(std::move(other.users)),
   updates(other.updateQs)
   //users(std::move(other.users)),
   //world(std::move(other.world)),
@@ -73,6 +74,7 @@ void Match::addUser(Socket socket) {
 void Match::startIfShould() {
     if (this->users.size() == this->maxUsers){
         for (auto& u : users) {
+
             u.second.start();
         }
     }

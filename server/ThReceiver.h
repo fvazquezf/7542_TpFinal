@@ -17,8 +17,6 @@ private:
     std::atomic<bool> is_running;
     Protocol& protocol;
     ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue;
-    // BlockingQueue<algo>& q1;
-    // BlockingQueue<algoMas>& q2;
 public:
     explicit ThReceiver(Socket& peer,
                         Protocol& protocol,
