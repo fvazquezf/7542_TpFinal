@@ -10,8 +10,8 @@
 }*/
 
 User::User(Socket socket,
-           BlockingQueue<Update> &updateQueue,
            ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
+           BlockingQueue<Update>& updateQueue,
            uint8_t id)
 : socket(std::move(socket)),
   sender(this->socket, protocol, updateQueue),

@@ -8,6 +8,7 @@
 #include "th_sender.h"
 #include "ThReceiver.h"
 //#include "PlayerModel.h"
+#include "Broadcaster.h"
 #include "updates/Update.h"
 #include <map>
 #include <memory>
@@ -21,14 +22,12 @@ private:
     Socket socket;
     ThSender sender;
     ThReceiver receiver;
-    //PlayerModel& model;
     bool playing;
     uint8_t id;
 public:
-    //User(Socket socket, PlayerModel& model, BlockingQueue<std::map<int, std::pair<float, float>>>& updates);
     User(Socket socket,
-         BlockingQueue<Update>& updateQueue,
          ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
+         BlockingQueue<Update>& updateQueue,
          uint8_t id);
 
     User(const User& other) = delete;

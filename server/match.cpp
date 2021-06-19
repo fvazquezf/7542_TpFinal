@@ -2,14 +2,12 @@
 
 Match::Match()
 : maxUsers(0),
-  updates(this->updateQs)
-  //world(updates)
+  world(updates)
 {
 }
 
 Match::Match(int playerAmount)
-//world(updates)
-: updates(this->updateQs)
+: world(updates)
 {
     maxUsers = playerAmount;
 }
@@ -30,10 +28,9 @@ Match::~Match() {
 
 Match::Match(Match &&other) noexcept
 : maxUsers(other.maxUsers),
-  users(std::move(other.users)),
-  updates(other.updateQs)
+  users(std::move(other.users))
   //users(std::move(other.users)),
-  //world(std::move(other.world)),
+//   world(std::move(other.world))
   //updates(std::move(other.updates))
 {
 }
@@ -53,19 +50,14 @@ void Match::addUser(Socket socket) {
     if (maxUsers == id){
         return;
     }
-    // guarda una queue de updates
-    // la usa el broadcaster y el sender del user
 
-    updateQs.emplace(std::piecewise_construct,
-                     std::forward_as_tuple(id),
-                     std::forward_as_tuple());
 
     // crea el user dentro del mapa
     users.emplace(std::piecewise_construct,
                   std::forward_as_tuple(id),
            std::forward_as_tuple(std::move(socket),
-                                        updateQs.at(id),
-                                        usersEvents,
+                                        updates.addPlayer(id),
+                                        world.addPlayer(id),
                                         id));
     id++;
     std::cout << "Users ammount: " << users.size() << "\n";

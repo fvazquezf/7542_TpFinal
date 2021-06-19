@@ -4,11 +4,8 @@
 
 #include "../libs/box2d/include/box2d/box2d.h"
 
-WorldModel::WorldModel(Broadcaster& updates,
-                       ProtectedQueue<std::unique_ptr<ClientEvent>>& userEvents):
-						world (b2Vec2(0.0f, 0.0f)),
-					    userEvents(userEvents),
-						updates(updates){
+WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
+updates (updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
 	this->positionIterations = 2;
@@ -53,7 +50,7 @@ PlayerModel& WorldModel::createPlayer(float x, float y, int clave){
 	return this->playerModels[clave];
 }
 
-PlayerModel& WorldModel::addPlayer(int clave){
+ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(std::rand()%50, std::rand()%50);
@@ -81,7 +78,7 @@ PlayerModel& WorldModel::addPlayer(int clave){
 
 	this->playerModels[clave] = player; 
 
-	return this->playerModels[clave];
+	return std::ref(this->usersEvents);
 }
 
 

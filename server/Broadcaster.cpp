@@ -19,7 +19,3 @@ void Broadcaster::push(Update update){
         queuePair.second.push(update);
     }
 }
-
-Broadcaster::Broadcaster(std::map<uint8_t, BlockingQueue<Update>> &clientQueueMap)
-: clientsQueues(clientQueueMap){
-}

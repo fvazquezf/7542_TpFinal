@@ -19,7 +19,9 @@ class WorldModel: public Thread {
     // ref de la cola de la cual popeamos
     // para obtener los eventos de los clientes
     // cada receiver pushea a esta q
-    ProtectedQueue<std::unique_ptr<ClientEvent>>& userEvents;
+    ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
+
+    Broadcaster& updates;
 
     float timeStep;
 	int32 velocityIterations;
@@ -27,11 +29,8 @@ class WorldModel: public Thread {
 
     bool is_running;
 
-    Broadcaster& updates;
-
     public:
-        WorldModel(Broadcaster& updates,
-                   ProtectedQueue<std::unique_ptr<ClientEvent>>& userEventsQ);
+        explicit WorldModel(Broadcaster& updates);
 
         ~WorldModel() override;
         void run() override;
@@ -47,7 +46,7 @@ class WorldModel: public Thread {
         PlayerModel& createPlayer(float x, float y, int clave);
 
 
-        PlayerModel& addPlayer(int clave);
+        ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
         void createBox(b2BodyDef& boxDef);
         void loadMap();
 

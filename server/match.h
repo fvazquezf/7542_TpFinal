@@ -34,17 +34,9 @@ private:
     // cuantos jugadores pueden tener las partidas? 10 max
     std::map<uint8_t, User> users;
 
-    // Match es el owner de las colas de update
-    // cada SENDER popea de estas
-    // el broadcaster tiene una referencia a este mapa
-    std::map<uint8_t, BlockingQueue<Update>> updateQs;
-
-    // cola no bloqueante para eventos de los usuarios
-    ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
-
     Broadcaster updates;
 
-    //WorldModel world;
+    WorldModel world;
 };
 
 #endif
