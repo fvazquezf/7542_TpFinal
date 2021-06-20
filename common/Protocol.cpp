@@ -118,6 +118,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleMoving(receiveCallback);
             break;
         }
+        case LOGIN_RESPONSE: {
+            msg = handleLoginResponse(receiveCallback);
+            break;
+        }
         case POS_UPDATE: {
             msg = handleUpdatePosition(receiveCallback);
             break;
@@ -189,4 +193,29 @@ std::map<uint8_t, std::pair<float, float>> Protocol::deserializePositions(std::v
                            deserializePosition(positionY)));
     }
     return positionMap;
+}
+
+void
+Protocol::loginResponse(uint8_t status,
+                        std::function<void(std::vector<unsigned char>)> &callback,
+                        uint8_t id) const {
+    std::vector<unsigned char> msg;
+    msg.push_back(LOGIN_RESPONSE);
+    msg.push_back(status == LOGIN_OK ? LOGIN_OK : LOGIN_BAD);
+    if (status == LOGIN_OK){
+        msg.push_back(id);
+    }
+    callback(msg);
+}
+
+std::vector<unsigned char>
+Protocol::handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    std::vector<unsigned char> status = callback(1);
+    if (status.at(0) == LOGIN_OK){
+        // devuelvo el id
+        return callback(1);
+    } else {
+        // login bad
+        return status;
+    }
 }

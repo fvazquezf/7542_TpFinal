@@ -21,13 +21,15 @@ public:
     Match(Match&& other) noexcept;
     Match& operator=(Match&& other) noexcept;
 
-    void addUser(Socket socket);
+    int8_t addUser(Socket socket);
     void removeUser();
     void removeUsers();
     ~Match();
 
     void startIfShould();
     void stop();
+
+    int8_t getCurrentPlayerId();
 
 private:
     uint8_t maxUsers;

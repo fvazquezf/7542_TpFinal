@@ -31,7 +31,15 @@ void WorldView::render() {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
-        printf("%d %f %f\n", it.first, it.second.first, it.second.second);
+        if (!entities.count(it.first)){
+            createPlayersAtReception(it.first, it.second.first, it.second.second);
+            continue;
+        }
         entities.at(it.first)->updatePosition(it.second.first, it.second.second);
     }
+}
+
+void WorldView::createPlayersAtReception(uint8_t id, float x, float y) {
+    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, x, y, false));
+    entities.insert(std::make_pair(id, std::move(terrorist)));
 }

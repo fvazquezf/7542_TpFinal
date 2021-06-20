@@ -48,10 +48,10 @@ Match &Match::operator=(Match &&other) noexcept {
     return *this;
 }
 
-void Match::addUser(Socket socket) {
+int8_t Match::addUser(Socket socket) {
     uint8_t id = this->users.size();
     if (maxUsers == id){
-        return;
+        return -1;
     }
 
     // crea el user dentro del mapa
@@ -63,8 +63,10 @@ void Match::addUser(Socket socket) {
                                         world.addPlayer(id),
                                         updates.addPlayer(id),
                                         id));
+    uint8_t userId = id;
     id++;
     std::cout << "Users ammount: " << users.size() << "\n";
+    return userId;
 }
 
 void Match::startIfShould() {
@@ -80,4 +82,8 @@ void Match::stop() {
     for (auto& u : users) {
         u.second.join();
     }
+}
+
+int8_t Match::getCurrentPlayerId() {
+    return this->users.size();
 }

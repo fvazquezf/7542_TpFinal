@@ -24,6 +24,7 @@ public:
     bool isDead();
 
     std::vector<unsigned char> receiveMsgs(size_t msgSize);
+    void sendMsgs(std::vector<unsigned char> msg);
     bool handleLoginMessage(uint8_t msgCode, const std::vector<unsigned char>& msg);
 
     Socket handOver();
@@ -34,9 +35,12 @@ public:
     ThLogin& operator=(ThLogin&& other) = delete;
 
 private:
+    Protocol prot;
     GamesMonitor& games;
     Socket peer;
     std::atomic<bool> is_logged_in;
+
+    void loginResponse(int8_t id);
 };
 
 #endif

@@ -15,10 +15,6 @@ int main(int argc, const char *argv[]){
     SdlWindow window(800, 600, false, "unaVentana");
 	WorldView world(window);
 
-	world.render();
-
-	world.createTerrorist(0, true, 5.0f, 5.0f);
-	world.createTerrorist(1, false, 3.0f, 4.0f);
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
@@ -36,7 +32,6 @@ int main(int argc, const char *argv[]){
 	while (running){
 		auto start = std::chrono::system_clock::now();
 
-		//world.updatePositions(m);
         world.render();
 
         auto end = std::chrono::system_clock::now();
@@ -44,9 +39,12 @@ int main(int argc, const char *argv[]){
         usleep(FRAMERATE + elapsed.count());
         if (l.isDone()){
             running = false;
+            receiver.stop();
+            cli.close();
         }
     }
 	l.join();
 	sender.join();
+	receiver.join();
 	return 0;
 }

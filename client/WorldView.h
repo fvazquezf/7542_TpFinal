@@ -34,6 +34,8 @@ private:
     std::mutex worldMutex;
     // Player player; -> lo podemos controlar, es distinto al resto
     // GameMap map; -> algo asi?
+
+    void createPlayersAtReception(uint8_t id, float x, float y);
 public:
     explicit WorldView(SdlWindow& window);
 

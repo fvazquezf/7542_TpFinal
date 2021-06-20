@@ -12,6 +12,12 @@
 #define POS_UPDATE 0x20
 
 // update misc
+// login response me manda
+// el id si fue buen login
+// o fail si fallo
+#define LOGIN_RESPONSE 0x60
+#define LOGIN_OK 0
+#define LOGIN_BAD 1
 
 // metros a milimetros
 #define PRECISION 1000.0f
@@ -58,13 +64,15 @@ public:
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positions,
                          std::function<void(std::vector<unsigned char>)>& callback) const;
+    void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
 
-    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &sendcallback);
-    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &sendCallback);
-    std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &sendCallback);
+    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback);
 
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
 
