@@ -4,6 +4,7 @@
 #include <vector>
 #include <mutex>
 #include <memory>
+#include <map>
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
 #include "anim/Terrorist.h"
@@ -20,7 +21,9 @@ private:
     // en realidad deberia ser un vector de cosas renderizables
     // tales que todas tengan el metodo render etc etc
     //std::vector<Terrorist> textures;
-    std::vector<std::unique_ptr<Renderizable>> entities;
+    //std::vector<std::unique_ptr<Renderizable>> entities;
+
+    std::map<uint8_t, std::unique_ptr<Renderizable>> entities;
 
     // Player player
 
@@ -40,10 +43,9 @@ public:
     WorldView(WorldView&& other) = delete;
     WorldView& operator=(WorldView&& other) = delete;
 
-    void createTerrorist(bool isPlayer);
-    void createTerrorist(bool isPlayer, int posX, int posY);
+    void createTerrorist(uint8_t id, bool isPlayer, int posX, int posY);
 
-    void update();
+    void updatePositions(std::map<uint8_t, std::pair<float, float>>& positionMap);
     void render();
 
     ~WorldView();

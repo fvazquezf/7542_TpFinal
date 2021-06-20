@@ -5,7 +5,6 @@
 #include "commands/Command.h"
 #include "Sender.h"
 #include "WorldView.h"
-#include "../common/socket.h"
 #include "sdlwrap/SdlWindow.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
@@ -15,28 +14,26 @@ int main(int argc, const char *argv[]){
     SdlWindow window(800, 600, false, "unaVentana");
 	WorldView world(window);
 
-	world.update();
 	world.render();
 
-	world.createTerrorist(true, 5.0f, 5.0f);
-	world.createTerrorist(false, 3.0f, 4.0f);
+	world.createTerrorist(1, true, 5.0f, 5.0f);
+	world.createTerrorist(2, false, 3.0f, 4.0f);
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
-	// loop de sdl, recibe los inputs y los encola
+
 	SdlLoop l(comms, world);
-	// protocolo
+
 	Protocol prot;
-	// sender, popea los comandos que pushea sdl
-    // y los enviara al serv
-    // falta ponerle un socket
+
 	Sender sender(comms, cli, prot);
 	sender.start();
+
 	l.start();
 	while (running){
 		auto start = std::chrono::system_clock::now();
 
-        world.update();
+		//world.updatePositions(m);
         world.render();
 
         auto end = std::chrono::system_clock::now();

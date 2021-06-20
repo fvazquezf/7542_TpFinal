@@ -11,30 +11,26 @@ WorldView::WorldView(SdlWindow& aWindow)
 WorldView::~WorldView() {
 }
 
-void WorldView::createTerrorist(bool isPlayer) {
-    // crea terroristas en un lugar al azar de la ventana
-    entities.push_back(std::unique_ptr<Renderizable>(new Terrorist(terror, 3, 3, isPlayer)));
-}
-
-
-void WorldView::createTerrorist(bool isPlayer, int posX, int posY) {
-    // crea terroristas en un lugar al azar de la ventana
-    entities.push_back(std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer)));
-}
-
-void WorldView::update() {
+void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    window.fill();
-    /*for (auto& it : textures){
-        it.update(0);
-    }*/
+    // crea terroristas en un lugar al azar de la ventana
+    //entities.push_back(std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer)));
+    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer));
+    entities.insert(std::make_pair(id, std::move(terrorist)));
 }
 
 void WorldView::render() {
     std::lock_guard<std::mutex> lock(worldMutex);
+    window.fill();
     for (auto& it : entities){
-        it->update();
-        camera.render(*it);
+        camera.render(*it.second);
     }
     window.render();
+}
+
+void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    for (auto& it : positionMap){
+        entities.at(it.first)->updatePosition(it.second.first, it.second.second);
+    }
 }
