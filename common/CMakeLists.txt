@@ -1,6 +1,6 @@
 project(sdl-demo)
 add_library(lib_common
-  lock.cpp
+  #lock.cpp
   #protocol.cpp
   socket.cpp
   thread.cpp

@@ -65,7 +65,7 @@ void callback(std::vector<unsigned char> msg){
         }
     }
     for (unsigned char & it : msg){
-        printf("%02x ", it);
+        printf("%x ", it);
     }
     puts("");
 }
@@ -86,7 +86,20 @@ int main(){
     auto move4stop = std::unique_ptr<Command>(new Move(Move::RIGHT, true));*/
 
     Protocol prot;
+    std::map<uint8_t, std::pair<float, float>> m {
+            {1, {1.234f, 3.678f}},
+            {2, {2.314f, 34.231f}}
+    };
+
     std::function<void(std::vector<unsigned char>)> f = &callback;
+    prot.updatePositions(m, f);
+
+    std::vector<unsigned char> positions = {1, 0x00, 0x00, 0x04, 0xd2, 0x00, 0x00, 0x0e, 0x5e,
+                                            2, 0x00, 0x00, 0x09, 0x0a, 0x00, 0x00, 0x85, 0xb7};
+    auto m2 = prot.deserializePositions(positions);
+    for (auto& it : m2){
+        printf("%d %f %f", it.first, it.second.first, it.second.second);
+    }
     /*create->serialize(f, prot);
     join->serialize(f, prot);
     list->serialize(f, prot);
@@ -99,7 +112,7 @@ int main(){
     move3stop->serialize(f, prot);
     move4stop->serialize(f, prot);*/
 
-    std::vector<unsigned char> unFloat;
+    /*std::vector<unsigned char> unFloat;
     prot.serializePosition(unFloat, 3.455413413f);
     for (auto& it : unFloat){
         printf("%d ", it);
@@ -107,5 +120,5 @@ int main(){
     puts("");
     // float 0.4
     float respuesta = prot.deserializePosition(unFloat);
-    printf("Ultimo float: %f\n", respuesta);
+    printf("Ultimo float: %f\n", respuesta);*/
 }

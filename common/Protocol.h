@@ -41,12 +41,12 @@
 class Protocol {
 private:
     void serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const;
-    uint16_t deserializeGameNameSize(std::vector<unsigned char> &msg) const;
+    uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
+    float deserializePosition(std::vector<unsigned char>& msg) const;
+    void serializePosition(std::vector<unsigned char> &msg, float position) const;
 public:
     Protocol();
 
-    float deserializePosition(std::vector<unsigned char>& msg) const;
-    void serializePosition(std::vector<unsigned char> &msg, float position) const;
     Protocol(const Protocol& other) = delete;
     Protocol& operator=(const Protocol& other) = delete;
 
@@ -64,6 +64,9 @@ public:
 
     std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &sendcallback);
     std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &sendCallback);
+    std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &sendCallback);
+
+    std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
 
     // el booleano indica si el movimiento en la direccion
     // termino (true) o recien esta empezando (false)

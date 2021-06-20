@@ -39,7 +39,7 @@ void Protocol::serializeGameName(std::vector<unsigned char> &msg, const std::str
     std::copy(gameName.begin(), gameName.end(), std::back_inserter(msg));
 }
 
-uint16_t Protocol::deserializeGameNameSize(std::vector<unsigned char> &msg) const {
+uint16_t Protocol::deserializeMsgLenShort(std::vector<unsigned char> &msg) const {
     return ntohs((msg.at(0) << 8) | msg.at(1));
 }
 
@@ -54,7 +54,7 @@ void Protocol::move(uint8_t dir, bool isDone,
 // server side
 std::vector<unsigned char> Protocol::handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback) {
     std::vector<unsigned char> received = callback(2);
-    uint16_t nameSize = deserializeGameNameSize(received);
+    uint16_t nameSize = deserializeMsgLenShort(received);
     received = callback(nameSize);
     return received; // no recibirlo por std::move() para evitar copy ellision
 }
@@ -112,6 +112,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleMoving(receiveCallback);
             break;
         }
+        case POS_UPDATE: {
+            msg = handleUpdatePosition(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -152,9 +156,31 @@ void Protocol::serializePosition(std::vector<unsigned char> &msg, float position
 }
 
 float Protocol::deserializePosition(std::vector<unsigned char> &msg) const {
-    int networkPosition = ntohl(msg.at(0) << 24) |
-                                   (msg.at(1) << 16) |
-                                   (msg.at(2) << 8) |
-                                   (msg.at(3));
+    int networkPosition = 0;
+    for (int i = 0; i != 4; ++i) {
+        networkPosition |= ((msg.at(i)) << (24 - i * 8));
+    }
     return networkPosition / PRECISION;
+}
+
+std::vector<unsigned char>
+Protocol::handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &sendCallback) {
+    std::vector<unsigned char> msg = sendCallback(2);
+    uint16_t size = deserializeMsgLenShort(msg);
+    msg = sendCallback(size);
+    return msg;
+}
+
+std::map<uint8_t, std::pair<float, float>> Protocol::deserializePositions(std::vector<unsigned char> &msg) {
+    std::map<uint8_t, std::pair<float, float>> positionMap;
+    for (size_t i = 0; i < msg.size(); i += 9){
+        std::vector<unsigned char> positionX = {msg.begin() + i + 1,
+                                                msg.begin() + i + 5};
+        std::vector<unsigned char> positionY = {msg.begin() + i + 5,
+                                                msg.begin() + i + 9};
+        positionMap.emplace(msg.at(i),
+                           std::make_pair(deserializePosition(positionX),
+                           deserializePosition(positionY)));
+    }
+    return positionMap;
 }
