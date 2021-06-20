@@ -31,6 +31,7 @@ void WorldView::render() {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
+        printf("%d %f %f\n", it.first, it.second.first, it.second.second);
         entities.at(it.first)->updatePosition(it.second.first, it.second.second);
     }
 }

@@ -2,6 +2,10 @@
 #include "PlayerModel.h"
 #include "updates/PositionUpdate.h"
 #include <cstdlib>
+#include <chrono>
+#include <unistd.h>
+
+#define FRAMERATE 1000000/60.0f
 
 #include "../libs/box2d/include/box2d/box2d.h"
 
@@ -128,7 +132,12 @@ void WorldModel::loadMap(){
 
 void WorldModel::run(){
 	is_running = true;
+	playerModels.at(0).reposition(50.0f, 50.0f);
+    playerModels.at(1).reposition(51.0f, 51.0f);
+
+
 	while (is_running){
+        auto start = std::chrono::system_clock::now();
 		for (int i = 0; i<10; i++){
 			try {
 				std::unique_ptr<ClientEvent> event = usersEvents.pop();
@@ -148,7 +157,10 @@ void WorldModel::run(){
 		}
 		std::shared_ptr<PositionUpdate> updatePtr(new PositionUpdate(newPos));
 		updates.pushAll(updatePtr);
-	}
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<float, std::micro> elapsed = (end - start);
+        usleep(FRAMERATE + elapsed.count());
+    }
 }
 
 

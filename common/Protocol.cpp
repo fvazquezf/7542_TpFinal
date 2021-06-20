@@ -71,7 +71,7 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
                                 std::function<std::vector<unsigned char>(size_t)> &receiveCallback) {
     std::vector<unsigned char> msg;
     switch (codeReceived) {
-        case CREATE:
+        case CREATE: {
             // server se encarga de crear partida
             // hasta aca lei nada mas el primer byte
             // debo leer los bytes 2 y 3 para saber el largo
@@ -82,6 +82,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             // en teoria ya lo acepto a traves del acceptor/listener
             // SACO EL BREAK PQ EL CODIGO ES IDENTICO PARA CREATE Y JOIN
             // si es CREATE, cae directamente en el scope de JOIN
+            msg = handleGameName(receiveCallback);
+            break;
+        }
         case JOIN: {
             // server se encarga de joinear al user a una partida
             // same que CREATE
@@ -96,7 +99,7 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             // llamar a un handler del servidor
             // thClient.handleListing();
             break;
-        case MOVE:
+        case MOVE: {
             // server se encarga de mover a un jugador en una direccion
             // dentro de una partida
             // si el cliente esta en una partida, el servidor lo sabe
@@ -106,6 +109,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             // handle move in direction -> funcion propia del servidor
             // thClient.move(direction);
 
+            msg = handleMoving(receiveCallback);
+            break;
+        }
             // vacio pq el codigo es identico a STOP_MOVE
         case STOP_MOVE: {
             // recibo la dir
@@ -135,7 +141,7 @@ void Protocol::updatePositions(std::map<uint8_t, std::pair<float, float>> &posit
     std::vector<unsigned char> msg;
     msg.push_back(POS_UPDATE);
     uint16_t msgSize = positions.size() * 9; // 1 uint8 (1 byte), 2 float (8 bytes)
-    htons(msgSize);
+    msgSize = htons(msgSize);
     msg.push_back((msgSize >> 8) & 0xff);
     msg.push_back(msgSize & 0xff);
     for (auto& pair : positions){
@@ -148,7 +154,7 @@ void Protocol::updatePositions(std::map<uint8_t, std::pair<float, float>> &posit
 
 void Protocol::serializePosition(std::vector<unsigned char> &msg, float position) const {
     int protocolPosition = position * PRECISION;
-    htonl(protocolPosition);
+    protocolPosition = htonl(protocolPosition);
     auto* hostOrder = reinterpret_cast<char*>(&protocolPosition);
     for (int i = 3; i >= 0; --i){
         msg.push_back(hostOrder[i]);
@@ -160,7 +166,7 @@ float Protocol::deserializePosition(std::vector<unsigned char> &msg) const {
     for (int i = 0; i != 4; ++i) {
         networkPosition |= ((msg.at(i)) << (24 - i * 8));
     }
-    return networkPosition / PRECISION;
+    return ntohl(networkPosition) / PRECISION;
 }
 
 std::vector<unsigned char>

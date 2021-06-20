@@ -45,11 +45,11 @@ void Camera::renderInSight(SdlTexture& texture, float x, float y,
 }
 
 bool Camera::isVisibleInX(float x){
-    return (x >= 0) && (x * (float)(M_TO_P) < 2 * centerPix.x);
+    return (x >= logicalCenterX - (logicalCenterX / 2)) && (x <= logicalCenterX + (logicalCenterX/2));
 }
 
 bool Camera::isVisibleInY(float y){
-    return (y >= 0) && (y * (float)(M_TO_P) < 2 * centerPix.y);
+    return (y >= logicalCenterY - (logicalCenterY/2)) && (y <= logicalCenterY + (logicalCenterY/2));
 }
 
 void Camera::setLogicalCenter(float x, float y){

@@ -72,6 +72,7 @@ void Match::startIfShould() {
         for (auto& u : users) {
             u.second.start();
         }
+        world.start();
     }
 }
 

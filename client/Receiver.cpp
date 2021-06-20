@@ -26,8 +26,7 @@ void Receiver::stop() {
 }
 
 std::vector<unsigned char> Receiver::receive(size_t size) {
-    std::vector<unsigned char> msg;
-    msg.reserve(size);
+    std::vector<unsigned char> msg(size);
     peer.recv(reinterpret_cast<char *>(msg.data()), size);
     return msg;
 }

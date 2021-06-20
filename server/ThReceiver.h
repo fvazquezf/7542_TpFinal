@@ -17,10 +17,13 @@ private:
     std::atomic<bool> is_running;
     Protocol& protocol;
     ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue;
+    uint8_t userId;
+    void handleReceived(uint8_t code, std::vector<unsigned char>& msg);
 public:
     explicit ThReceiver(Socket& peer,
                         Protocol& protocol,
-                        ProtectedQueue<std::unique_ptr<ClientEvent>>& eventsQueue);
+                        ProtectedQueue<std::unique_ptr<ClientEvent>>& eventsQueue,
+                        uint8_t userId);
 
     ThReceiver(const ThReceiver& other) = delete;
     ThReceiver& operator=(const ThReceiver& other) = delete;

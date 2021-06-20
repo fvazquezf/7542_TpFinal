@@ -6,6 +6,7 @@
 #include "Sender.h"
 #include "WorldView.h"
 #include "sdlwrap/SdlWindow.h"
+#include "Receiver.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
@@ -16,8 +17,8 @@ int main(int argc, const char *argv[]){
 
 	world.render();
 
-	world.createTerrorist(1, true, 5.0f, 5.0f);
-	world.createTerrorist(2, false, 3.0f, 4.0f);
+	world.createTerrorist(0, true, 5.0f, 5.0f);
+	world.createTerrorist(1, false, 3.0f, 4.0f);
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
@@ -28,6 +29,8 @@ int main(int argc, const char *argv[]){
 
 	Sender sender(comms, cli, prot);
 	sender.start();
+	Receiver receiver(world, cli, prot);
+	receiver.start();
 
 	l.start();
 	while (running){

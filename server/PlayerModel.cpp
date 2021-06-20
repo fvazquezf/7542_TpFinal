@@ -12,13 +12,13 @@ PlayerModel::PlayerModel(b2Body* body): model(body){
 
 void PlayerModel::startMove(int dir){
     switch (dir) {
-        case 1: this->netForce += b2Vec2(0, 15);
+        case 0: this->netForce += b2Vec2(0, 15);
                 break;
-        case 2: this->netForce += b2Vec2(0, -15);
+        case 1: this->netForce += b2Vec2(0, -15);
                 break;
-        case 3: this->netForce += b2Vec2(15, 0);
+        case 2: this->netForce += b2Vec2(15, 0);
                 break;
-        case 4: this->netForce += b2Vec2(-15, 0);
+        case 3: this->netForce += b2Vec2(-15, 0);
                 break;
         default: break;
     }
@@ -26,13 +26,13 @@ void PlayerModel::startMove(int dir){
 
 void PlayerModel::stopMove(int dir){
     switch (dir) {
-        case 1: this->netForce += b2Vec2(0, -15);
+        case 0: this->netForce += b2Vec2(0, -15);
                 break;
-        case 2: this->netForce += b2Vec2(0, 15);
+        case 1: this->netForce += b2Vec2(0, 15);
                 break;
-        case 3: this->netForce += b2Vec2(-15, 0);
+        case 2: this->netForce += b2Vec2(-15, 0);
                 break;
-        case 4: this->netForce += b2Vec2(15, 0);
+        case 3: this->netForce += b2Vec2(15, 0);
                 break;
         default: break;
     }

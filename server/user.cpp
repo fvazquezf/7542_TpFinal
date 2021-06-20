@@ -15,7 +15,7 @@ User::User(Socket socket,
            uint8_t id)
 : socket(std::move(socket)),
   sender(this->socket, protocol, updateQueue),
-  receiver(this->socket, protocol, eventQueue),
+  receiver(this->socket, protocol, eventQueue, id),
   id(id){
 }
 
@@ -26,14 +26,14 @@ void User::start() {
     std::cout <<"Entro al start de thSender\n";
     playing = true;
     this->receiver.start();
-    //this->sender.start();
+    this->sender.start();
 }
 
 void User::join() {
     //this->thSender.join();
     if (playing){
         this->receiver.join();
-        //this->sender.join();
+        this->sender.join();
     }
 }
 

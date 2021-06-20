@@ -14,4 +14,6 @@ add_library(lib_server
     events/ClientEvent.cpp
     events/ClientEvent.h
     Broadcaster.cpp
-    events/MoveEvent.cpp updates/PositionUpdate.cpp updates/PositionUpdate.h)
+    events/StartMoveEvent.cpp 
+    events/StopMoveEvent.cpp
+    updates/PositionUpdate.cpp updates/PositionUpdate.h)

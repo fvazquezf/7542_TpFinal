@@ -31,6 +31,8 @@ private:
     Socket& peer;
     Protocol& protocol;
     BlockingQueue<std::shared_ptr<Update>>& updateQueue;
+
+    void send(std::vector<unsigned char> msg);
 };
 
 #endif    // TH_SENDER_H_

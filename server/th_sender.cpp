@@ -21,10 +21,11 @@ ThSender::~ThSender() {
 
 void ThSender::run() {
     std::cout <<"Entro a th_sender\n";
-
-    while (!this->isDead()) {
+    std::function<void(std::vector<unsigned char>)> cb =
+            std::bind(&ThSender::send, this, std::placeholders::_1);
+    while (is_running) {
         std::shared_ptr<Update> update = updateQueue.pop();
-        // update.serialize() -> conoce al protocol
+        update->serialize(cb);
     }
     this->stop();
     this->is_running = false;
@@ -57,4 +58,8 @@ ThSender &ThSender::operator=(ThSender &&other) noexcept {
     is_running = other.is_running.operator bool();
     other.is_running = false;
     return *this;
+}
+
+void ThSender::send(std::vector<unsigned char> msg) {
+    peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
 }
