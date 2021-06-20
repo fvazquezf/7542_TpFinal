@@ -125,3 +125,36 @@ Protocol::Protocol(Protocol &&other) noexcept {
 Protocol &Protocol::operator=(Protocol &&other) noexcept {
     return *this;
 }
+
+void Protocol::updatePositions(std::map<uint8_t, std::pair<float, float>> &positions,
+                               std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> msg;
+    msg.push_back(POS_UPDATE);
+    uint16_t msgSize = positions.size() * 9; // 1 uint8 (1 byte), 2 float (8 bytes)
+    htons(msgSize);
+    msg.push_back((msgSize >> 8) & 0xff);
+    msg.push_back(msgSize & 0xff);
+    for (auto& pair : positions){
+        msg.push_back(pair.first);
+        serializePosition(msg, pair.second.first);
+        serializePosition(msg, pair.second.second);
+    }
+    callback(std::move(msg));
+}
+
+void Protocol::serializePosition(std::vector<unsigned char> &msg, float position) const {
+    int protocolPosition = position * PRECISION;
+    htonl(protocolPosition);
+    auto* hostOrder = reinterpret_cast<char*>(&protocolPosition);
+    for (int i = 3; i >= 0; --i){
+        msg.push_back(hostOrder[i]);
+    }
+}
+
+float Protocol::deserializePosition(std::vector<unsigned char> &msg) const {
+    int networkPosition = ntohl(msg.at(0) << 24) |
+                                   (msg.at(1) << 16) |
+                                   (msg.at(2) << 8) |
+                                   (msg.at(3));
+    return networkPosition / PRECISION;
+}

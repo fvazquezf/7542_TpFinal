@@ -73,7 +73,7 @@ void callback(std::vector<unsigned char> msg){
 
 int main(){
     std::string game = "Hola, una partidusqui";
-    auto create = std::unique_ptr<Command>(new CreateGame(game));
+    /*auto create = std::unique_ptr<Command>(new CreateGame(game));
     auto join = std::unique_ptr<Command>(new JoinGame(game));
     auto list = std::unique_ptr<Command>(new ListGame());
     auto move = std::unique_ptr<Command>(new Move(Move::UP));
@@ -83,11 +83,11 @@ int main(){
     auto movestop = std::unique_ptr<Command>(new Move(Move::UP, true));
     auto move2stop = std::unique_ptr<Command>(new Move(Move::DOWN, true));
     auto move3stop = std::unique_ptr<Command>(new Move(Move::LEFT, true));
-    auto move4stop = std::unique_ptr<Command>(new Move(Move::RIGHT, true));
+    auto move4stop = std::unique_ptr<Command>(new Move(Move::RIGHT, true));*/
 
     Protocol prot;
     std::function<void(std::vector<unsigned char>)> f = &callback;
-    create->serialize(f, prot);
+    /*create->serialize(f, prot);
     join->serialize(f, prot);
     list->serialize(f, prot);
     move->serialize(f, prot);
@@ -97,5 +97,15 @@ int main(){
     movestop->serialize(f, prot);
     move2stop->serialize(f, prot);
     move3stop->serialize(f, prot);
-    move4stop->serialize(f, prot);
+    move4stop->serialize(f, prot);*/
+
+    std::vector<unsigned char> unFloat;
+    prot.serializePosition(unFloat, 3.455413413f);
+    for (auto& it : unFloat){
+        printf("%d ", it);
+    }
+    puts("");
+    // float 0.4
+    float respuesta = prot.deserializePosition(unFloat);
+    printf("Ultimo float: %f\n", respuesta);
 }

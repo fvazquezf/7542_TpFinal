@@ -53,7 +53,6 @@ void Match::addUser(Socket socket) {
     if (maxUsers == id){
         return;
     }
-    BlockingQueue<std::shared_ptr<Update>>& playerUpdateQ = updates.addPlayer(id);
 
     // crea el user dentro del mapa
     // world le pasa la cola no bloqueante de eventos
