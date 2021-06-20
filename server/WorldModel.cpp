@@ -1,5 +1,6 @@
 #include "WorldModel.h"
 #include "PlayerModel.h"
+#include "updates/PositionUpdate.h"
 #include <cstdlib>
 
 #include "../libs/box2d/include/box2d/box2d.h"
@@ -128,15 +129,26 @@ void WorldModel::loadMap(){
 void WorldModel::run(){
 	is_running = true;
 	while (is_running){
+		for (int i = 0; i<10; i++){
+			try {
+				std::unique_ptr<ClientEvent> event = usersEvents.pop();
+				event->updatePlayer(this->playerModels);
+			}
+			catch (const std::invalid_argument& e){
+				continue;
+			}
+		}
 		this->step();
+		
+		std::map<uint8_t, std::pair<float, float>> newPos;
+		for (auto it = this->playerModels.begin(); it != this->playerModels.end(); it++){
+			int id = it->first;
+			b2Vec2 pos = it->second.getPosition();
+			newPos[id] = std::pair<float, float>(pos.x, pos.y);
+		}
+		std::shared_ptr<PositionUpdate> updatePtr(new PositionUpdate(newPos));
+		updates.pushAll(updatePtr);
 	}
-	std::map<int, std::pair<float, float>> newPos;
-	for (auto it = this->playerModels.begin(); it != this->playerModels.end(); it++){
-		int id = it->first;
-		b2Vec2 pos = it->second.getPosition();
-		newPos[id] = std::pair<float, float>(pos.x, pos.y);
-	}
-	//updates.pushAll(newPos);
 }
 
 

@@ -7,6 +7,5 @@ StopMoveEvent::StopMoveEvent(int id, int dir):
 
 
 void StopMoveEvent::updatePlayer(std::map<int, PlayerModel>& players){
-    PlayerModel player = players[this->clientId];
-    player.stopMove(this->dir);
+    players[this->clientId].stopMove(this->dir);
 }
