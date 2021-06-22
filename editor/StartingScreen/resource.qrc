@@ -2,4 +2,7 @@
     <qresource prefix="/fonts">
         <file>counter_strike.ttf</file>
     </qresource>
+    <qresource prefix="/sprites">
+        <file>img/wall.png</file>
+    </qresource>
 </RCC>

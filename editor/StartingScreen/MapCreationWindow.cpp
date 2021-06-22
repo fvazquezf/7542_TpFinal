@@ -4,7 +4,8 @@
 #include <QLineEdit>
 #include <QDebug>
 #include <QFontDatabase>
-
+#include <QMessageBox>
+#define PATH_TO_MAPS "../../maps/"
 MapCreationWindow::MapCreationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapCreationWindow)
@@ -25,6 +26,9 @@ void MapCreationWindow::on_continueButton_clicked()
     this->mapName = ui->mapNameLineEdit->text();
     this->mapSize = ui->mapSizeComboBox->itemText(ui->mapSizeComboBox->currentIndex());
     if(this->mapName == "") {
+        QMessageBox::warning(this, tr("Map creation"),
+                             tr("The map must have a name."),
+                             QMessageBox::Close);
         return;
     }
     qDebug() << "Map name: " << this->mapName;
@@ -32,7 +36,9 @@ void MapCreationWindow::on_continueButton_clicked()
 
     this->close();
     MapEditor mapEditor;
-    mapEditor.setWindowTitle("Counter Strike 2D - Map editor");
+    std::string path_to_map = PATH_TO_MAPS + this->mapName.toStdString() +".yml";
+    mapEditor.loadMap(path_to_map);
+    mapEditor.show();
     mapEditor.exec();
 
 }

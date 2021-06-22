@@ -1,0 +1,9 @@
+prueba: ana
+size:
+  - height: 200
+  - width: 320
+
+wall:
+   - [0,1]
+   - [0,0]
+   - [2,2]

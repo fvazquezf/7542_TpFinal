@@ -47,8 +47,8 @@ void MainWindow::execCreationWindow(QString &mapName, QString &mapSize) {
 void MainWindow::execEditorWindow(QString &mapName) {
     this->close();
     MapEditor mapEditor;
-    mapEditor.setWindowTitle("Counter Strike 2D - Map editor");
-    mapEditor.setLayout(mapEditor.getLayout());
+   // mapEditor.loadImage(QStringLiteral(":/sprites/img/wall.png"));
+    mapEditor.show();
     mapEditor.exec();
     this->show();
 }
