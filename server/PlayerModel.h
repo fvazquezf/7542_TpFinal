@@ -6,6 +6,7 @@
 class PlayerModel{
     b2Body* model;
     b2Vec2 netForce;
+    int16_t angle;
 
     public:
         PlayerModel();
@@ -24,6 +25,9 @@ class PlayerModel{
         void reposition(float x, float y);
 
         const b2Vec2& getPosition();
+
+        void setAngle(int16_t newAngle);
+        int16_t getAngle() const;
 
         void step();
 

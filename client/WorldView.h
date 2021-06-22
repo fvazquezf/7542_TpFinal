@@ -51,6 +51,8 @@ public:
     void render();
 
     ~WorldView();
+
+    int16_t getPlayerAngle();
 };
 
 

@@ -48,6 +48,8 @@ public:
                        int sizeX, int sizeY);
 
     ~Camera();
+
+    int16_t angleFromMouse();
 };
 
 #endif

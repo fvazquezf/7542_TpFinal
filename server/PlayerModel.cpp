@@ -4,6 +4,7 @@
 PlayerModel::PlayerModel(){
     this->model = nullptr;
     this->netForce.SetZero();
+    angle = 0;
 }
 
 PlayerModel::PlayerModel(b2Body* body): model(body){
@@ -70,4 +71,12 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
     netForce = other.netForce;
     other.model = nullptr;
     return *this;
+}
+
+int16_t PlayerModel::getAngle() const {
+    return angle;
+}
+
+void PlayerModel::setAngle(int16_t newAngle) {
+    this->angle = newAngle;
 }

@@ -2,7 +2,7 @@
 
 
 SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
-	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
 	if (err){
 		//handle
 	}

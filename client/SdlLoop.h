@@ -33,6 +33,9 @@ private:
     void handleMouseButtonDown();
     void handleMouseButtonUp();
     void handleQuit();
+    void handleRotation();
+
+    static Uint32 issueSynchronousEvent(Uint32 interval, void* param);
 
     void run() override;
 public:

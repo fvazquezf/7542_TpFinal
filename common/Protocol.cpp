@@ -34,8 +34,7 @@ Protocol::~Protocol() {
 void Protocol::serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const {
     uint16_t gameSize = gameName.size();
     gameSize = htons(gameSize);
-    msg.push_back((gameSize >> 8) & 0xff);
-    msg.push_back(gameSize & 0xff);
+    serializeMsgLenShort(msg, gameSize);
     std::copy(gameName.begin(), gameName.end(), std::back_inserter(msg));
 }
 
@@ -126,6 +125,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleUpdatePosition(receiveCallback);
             break;
         }
+        case ROTATE: {
+            msg = handleRotation(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -146,12 +149,11 @@ void Protocol::updatePositions(std::map<uint8_t, std::pair<float, float>> &posit
     msg.push_back(POS_UPDATE);
     uint16_t msgSize = positions.size() * 9; // 1 uint8 (1 byte), 2 float (8 bytes)
     msgSize = htons(msgSize);
-    msg.push_back((msgSize >> 8) & 0xff);
-    msg.push_back(msgSize & 0xff);
+    serializeMsgLenShort(msg, msgSize);
     for (auto& pair : positions){
         msg.push_back(pair.first);
-        serializePosition(msg, pair.second.first);
-        serializePosition(msg, pair.second.second);
+        serializePosition(msg, std::get<0>(pair.second));
+        serializePosition(msg, std::get<1>(pair.second));
     }
     callback(std::move(msg));
 }
@@ -218,4 +220,26 @@ Protocol::handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> 
         // login bad
         return status;
     }
+}
+
+void Protocol::rotate(int16_t angle, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> angleMsg;
+    angleMsg.push_back(ROTATE);
+    angle = htons(angle);
+    serializeMsgLenShort(angleMsg, angle);
+    callback(std::move(angleMsg));
+}
+
+void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const {
+    for (int i = 0; i != 2; ++i){
+        angleMsg.push_back((data >> (8 - i * 8)) & 0xff);
+    }
+}
+
+std::vector<unsigned char> Protocol::handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    return callback(2);
+}
+
+int Protocol::deserializeAngle(std::vector<unsigned char> &msg) {
+    return deserializeMsgLenShort(msg);
 }

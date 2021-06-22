@@ -2,6 +2,7 @@
 #include "events/ClientEvent.h"
 #include "events/StartMoveEvent.h"
 #include "events/StopMoveEvent.h"
+#include "events/RotateEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -74,6 +75,9 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         case STOP_MOVE:
             eventQueue.push(std::unique_ptr<ClientEvent>(new StopMoveEvent(userId, msg.at(0))));
+            break;
+        case ROTATE:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new RotateEvent(userId, msg.at(0))));
             break;
         default:
             break;

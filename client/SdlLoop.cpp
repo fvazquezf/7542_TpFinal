@@ -3,6 +3,7 @@
 #include "commands/Move.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
+#include "commands/Rotate.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -21,6 +22,8 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
 }
 
 void SdlLoop::run() {
+    Uint32 delay = 50;
+    SDL_TimerID my_timer_id = SDL_AddTimer(delay, SdlLoop::issueSynchronousEvent, this);
     while (!done && SDL_WaitEvent(&currentEvent)){
         try {
             eventMap.at(currentEvent.type)();
@@ -29,6 +32,7 @@ void SdlLoop::run() {
         }
     }
     commands.signalClosed();
+    SDL_RemoveTimer(my_timer_id);
 }
 
 SdlLoop::~SdlLoop() {
@@ -94,4 +98,16 @@ void SdlLoop::mouseButton(bool pressed, uint8_t button){
     } else if (button == SDL_BUTTON_RIGHT){
         commands.push(std::unique_ptr<Command>(new JoinGame("UnaPartida")));
     }
+}
+
+Uint32 SdlLoop::issueSynchronousEvent(Uint32 interval, void *param) {
+    auto loop = (SdlLoop *) (param);
+    loop->handleRotation();
+    return interval;
+}
+
+void SdlLoop::handleRotation() {
+    int16_t angle = world.getPlayerAngle();
+    printf("%d\n", angle);
+    //commands.push(std::unique_ptr<Command>(new Rotate(angle)));
 }

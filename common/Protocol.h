@@ -7,6 +7,7 @@
 #define LIST 0x6c
 #define MOVE 0x70
 #define STOP_MOVE 0x7e
+#define ROTATE 0x6d
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -64,6 +65,7 @@ public:
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positions,
                          std::function<void(std::vector<unsigned char>)>& callback) const;
+    void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
     void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
@@ -73,9 +75,10 @@ public:
     std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
-
+    int deserializeAngle(std::vector<unsigned char>& msg);
     // el booleano indica si el movimiento en la direccion
     // termino (true) o recien esta empezando (false)
     // de aca elegimos alguno de los dos mensajes
@@ -83,6 +86,8 @@ public:
     void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
 
     ~Protocol();
+
+    void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
 };
 
 

@@ -3,6 +3,7 @@
 #include "JoinGame.h"
 #include "ListGame.h"
 #include "Move.h"
+#include "Rotate.h"
 #include <arpa/inet.h>
 #include <memory>
 
@@ -63,6 +64,9 @@ void callback(std::vector<unsigned char> msg){
             }
             break;
         }
+        case ROTATE: {
+            break;
+        }
     }
     for (unsigned char & it : msg){
         printf("%x ", it);
@@ -84,7 +88,6 @@ int main(){
     auto move2stop = std::unique_ptr<Command>(new Move(Move::DOWN, true));
     auto move3stop = std::unique_ptr<Command>(new Move(Move::LEFT, true));
     auto move4stop = std::unique_ptr<Command>(new Move(Move::RIGHT, true));*/
-
     Protocol prot;
     std::map<uint8_t, std::pair<float, float>> m {
             {1, {1.234f, 3.678f}},
@@ -92,14 +95,16 @@ int main(){
     };
 
     std::function<void(std::vector<unsigned char>)> f = &callback;
-    prot.updatePositions(m, f);
+    auto rotate = std::unique_ptr<Command>(new Rotate(153));
+    rotate->serialize(f, prot);
+    //prot.updatePositions(m, f);
 
-    std::vector<unsigned char> positions = {1, 0x00, 0x00, 0x04, 0xd2, 0x00, 0x00, 0x0e, 0x5e,
-                                            2, 0x00, 0x00, 0x09, 0x0a, 0x00, 0x00, 0x85, 0xb7};
-    auto m2 = prot.deserializePositions(positions);
-    for (auto& it : m2){
-        printf("%d %f %f", it.first, it.second.first, it.second.second);
-    }
+    //std::vector<unsigned char> positions = {1, 0x00, 0x00, 0x04, 0xd2, 0x00, 0x00, 0x0e, 0x5e,
+    //                                        2, 0x00, 0x00, 0x09, 0x0a, 0x00, 0x00, 0x85, 0xb7};
+    //auto m2 = prot.deserializePositions(positions);
+    //for (auto& it : m2){
+    //    printf("%d %f %f", it.first, it.second.first, it.second.second);
+    //}
     /*create->serialize(f, prot);
     join->serialize(f, prot);
     list->serialize(f, prot);
