@@ -1,4 +1,5 @@
 #include "StopMoveEvent.h"
+#include "../WorldModel.h"
 
 StopMoveEvent::StopMoveEvent(int id, int dir):
     ClientEvent(id){
@@ -6,6 +7,6 @@ StopMoveEvent::StopMoveEvent(int id, int dir):
 }
 
 
-void StopMoveEvent::updatePlayer(std::map<int, PlayerModel>& players){
-    players[this->clientId].stopMove(this->dir);
+void StopMoveEvent::updatePlayer(WorldModel &world){
+    world.stopMovingPlayer(clientId, dir);
 }

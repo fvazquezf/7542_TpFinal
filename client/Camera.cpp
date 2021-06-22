@@ -57,12 +57,15 @@ void Camera::setLogicalCenter(float x, float y){
     logicalCenterY = y;
 }
 
-
 Camera::~Camera(){
 }
 
 int16_t Camera::angleFromMouse() {
     int x, y = 0;
     SDL_GetMouseState(&x, &y);
-    return atan2(y - centerPix.y, x - centerPix.x) * (180.0000f / PI);
+    float angle = SDL_atan2(y - centerPix.y, x - centerPix.x) * (180.000f / PI) + 90;
+    if (angle < 0){
+        angle = 360 + angle;
+    }
+    return angle;
 }

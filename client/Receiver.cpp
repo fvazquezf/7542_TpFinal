@@ -47,6 +47,11 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.updatePositions(map);
             break;
         }
+        case ANGLE_UPDATE: {
+            auto map = prot.deserializeAngles(msg);
+            world.updateAngles(map);
+            break;
+        }
         default:
             break;
     }

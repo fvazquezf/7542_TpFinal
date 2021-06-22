@@ -46,3 +46,10 @@ int16_t WorldView::getPlayerAngle() {
     std::lock_guard<std::mutex> lock(worldMutex);
     return camera.angleFromMouse();
 }
+
+void WorldView::updateAngles(std::map<uint8_t, int16_t> &angles) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    for (auto& it : angles){
+        entities.at(it.first)->updateAngle(it.second);
+    }
+}

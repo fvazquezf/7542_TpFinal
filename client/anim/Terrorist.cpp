@@ -8,7 +8,6 @@
 Terrorist::Terrorist(SdlTexture& texture, float posX, float posY, bool player)
 : Renderizable(texture, posX, posY),
   player(player){
-  	angle = 0.0;
 }
 
 void Terrorist::render(Camera& cam){

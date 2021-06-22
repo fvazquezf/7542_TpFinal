@@ -11,6 +11,7 @@
 
 // updates (server side)
 #define POS_UPDATE 0x20
+#define ANGLE_UPDATE 0x21
 
 // update misc
 // login response me manda
@@ -48,7 +49,6 @@
 class Protocol {
 private:
     void serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const;
-    uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
     float deserializePosition(std::vector<unsigned char>& msg) const;
     void serializePosition(std::vector<unsigned char> &msg, float position) const;
 public:
@@ -60,25 +60,34 @@ public:
     Protocol(Protocol&& other) noexcept;
     Protocol& operator=(Protocol&& other) noexcept;
 
+                                //---------------CLIENT---------------//
     void createGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
+    void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
+
+                                //---------------SERVER---------------//
+    void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positions,
                          std::function<void(std::vector<unsigned char>)>& callback) const;
-    void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
-    void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
+    void updateAngles(std::map<uint8_t, int16_t>& angles,
+                      std::function<void(std::vector<unsigned char>)>& callback) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
 
-    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);
-    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
+                                //---------------CLIENT---------------//
     std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleAngleUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
+    std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
+
+                                //---------------SERVER---------------//
+    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
-    std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
-    int deserializeAngle(std::vector<unsigned char>& msg);
     // el booleano indica si el movimiento en la direccion
     // termino (true) o recien esta empezando (false)
     // de aca elegimos alguno de los dos mensajes
@@ -88,6 +97,7 @@ public:
     ~Protocol();
 
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
+    uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 };
 
 

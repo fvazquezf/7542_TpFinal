@@ -22,7 +22,7 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
 }
 
 void SdlLoop::run() {
-    Uint32 delay = 50;
+    Uint32 delay = 20;
     SDL_TimerID my_timer_id = SDL_AddTimer(delay, SdlLoop::issueSynchronousEvent, this);
     while (!done && SDL_WaitEvent(&currentEvent)){
         try {
@@ -108,6 +108,5 @@ Uint32 SdlLoop::issueSynchronousEvent(Uint32 interval, void *param) {
 
 void SdlLoop::handleRotation() {
     int16_t angle = world.getPlayerAngle();
-    printf("%d\n", angle);
-    //commands.push(std::unique_ptr<Command>(new Rotate(angle)));
+    commands.push(std::unique_ptr<Command>(new Rotate(angle)));
 }

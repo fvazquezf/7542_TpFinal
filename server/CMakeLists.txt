@@ -16,4 +16,4 @@ add_library(lib_server
     Broadcaster.cpp
     events/StartMoveEvent.cpp 
     events/StopMoveEvent.cpp
-    updates/PositionUpdate.cpp updates/PositionUpdate.h events/RotateEvent.cpp events/RotateEvent.h)
+    updates/PositionUpdate.cpp updates/PositionUpdate.h events/RotateEvent.cpp events/RotateEvent.h updates/AngleUpdate.cpp updates/AngleUpdate.h)

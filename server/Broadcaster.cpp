@@ -15,7 +15,7 @@ BlockingQueue<std::map<int, std::pair<float, float>>>& Broadcaster::addClient(in
     }
 }*/
 
-void Broadcaster::pushAll(std::shared_ptr<Update> update){
+void Broadcaster::pushAll(const std::shared_ptr<Update>& update){
     for (auto& queuePair : clientsQueues) {
         queuePair.second.push(update);
     }

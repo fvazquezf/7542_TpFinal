@@ -5,7 +5,6 @@
 class Terrorist : public Renderizable {
 private:
     bool player;
-	float angle;
 public:
 	Terrorist(SdlTexture& texture, float posX, float posY, bool player);
 

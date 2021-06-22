@@ -129,6 +129,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleRotation(receiveCallback);
             break;
         }
+        case ANGLE_UPDATE: {
+            msg = handleAngleUpdate(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -240,6 +244,33 @@ std::vector<unsigned char> Protocol::handleRotation(std::function<std::vector<un
     return callback(2);
 }
 
-int Protocol::deserializeAngle(std::vector<unsigned char> &msg) {
-    return deserializeMsgLenShort(msg);
+void Protocol::updateAngles(std::map<uint8_t, int16_t> &angles,
+                            std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> msg;
+    msg.push_back(ANGLE_UPDATE);
+    uint16_t msgSize = angles.size() * 3; // 1 uint8_t (1 byte), 1 int16_t (2 bytes)
+    msgSize = htons(msgSize);
+    serializeMsgLenShort(msg, msgSize);
+    for (auto& it : angles){
+        msg.push_back(it.first);
+        int16_t angle = htons(it.second);
+        serializeMsgLenShort(msg, angle);
+    }
+    callback(std::move(msg));
+}
+
+std::vector<unsigned char> Protocol::handleAngleUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    auto v = callback(2);
+    uint16_t msgSize = deserializeMsgLenShort(v);
+    return callback(msgSize);
+}
+
+std::map<uint8_t, int16_t> Protocol::deserializeAngles(std::vector<unsigned char> &msg) {
+    std::map<uint8_t, int16_t> angleMap;
+    for (size_t i = 0; i < msg.size(); i += 3){
+        std::vector<unsigned char> angle = {msg.data()[i+1],
+                                            msg.data()[i+2]};
+        angleMap.emplace(msg.at(i), static_cast<int16_t>(deserializeMsgLenShort(angle)));
+    }
+    return angleMap;
 }

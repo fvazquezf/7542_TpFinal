@@ -21,7 +21,7 @@ public:
     Broadcaster(Broadcaster&& other) noexcept;
     Broadcaster& operator=(Broadcaster&& other) noexcept;
 
-    void pushAll(std::shared_ptr<Update> update);
+    void pushAll(const std::shared_ptr<Update>& update);
     void push(uint8_t id, std::shared_ptr<Update> update);
 
     ~Broadcaster();

@@ -8,6 +8,7 @@
 #include "events/ClientEvent.h"
 #include "../common/ProtectedQueue.h"
 #include <memory>
+#include <utility>
 
 #include <map>
 
@@ -46,12 +47,20 @@ class WorldModel: public Thread {
         // usar solo para probar cosas en demo_movimiento, esta se va a borrar
         PlayerModel& createPlayer(float x, float y, int clave);
 
-
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
+
+        void updateAngles();
+
+        void movePlayer(uint8_t id, uint8_t dir);
+        void stopMovingPlayer(uint8_t id, uint8_t dir);
+        void rotatePlayer(uint8_t id, int16_t angle);
+
         void createBox(b2BodyDef& boxDef);
         void loadMap();
 
         void step();
+
+    void updatePositions();
 };
 
 #endif

@@ -6,6 +6,6 @@ StartMoveEvent::StartMoveEvent(int id, int dir):
 }
 
 
-void StartMoveEvent::updatePlayer(std::map<int, PlayerModel>& players){
-    players[this->clientId].startMove(this->dir);
+void StartMoveEvent::updatePlayer(WorldModel &world){
+    world.movePlayer(clientId, dir);
 }

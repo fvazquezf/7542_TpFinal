@@ -4,10 +4,12 @@
 #include <cstdlib>
 #include <chrono>
 #include <unistd.h>
+#include <utility>
 
 #define FRAMERATE 1000000/60.0f
 
 #include "../libs/box2d/include/box2d/box2d.h"
+#include "updates/AngleUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
 updates (updates){
@@ -135,38 +137,42 @@ void WorldModel::run(){
 	playerModels.at(0).reposition(50.0f, 50.0f);
     playerModels.at(1).reposition(51.0f, 51.0f);
 
-
-	while (is_running){
+    updatePositions();
+    while (is_running){
         auto start = std::chrono::system_clock::now();
 		for (int i = 0; i<10; i++){
 			try {
 				std::unique_ptr<ClientEvent> event = usersEvents.pop();
-				event->updatePlayer(this->playerModels);
+				event->updatePlayer(*this);
 			}
 			catch (const std::invalid_argument& e){
 				continue;
 			}
 		}
 		this->step();
-		
-		std::map<uint8_t, std::pair<float, float>> newPos;
-		for (auto it = this->playerModels.begin(); it != this->playerModels.end(); it++){
-			int id = it->first;
-			b2Vec2 pos = it->second.getPosition();
-			newPos[id] = std::pair<float, float>(pos.x, pos.y);
-		}
-		std::shared_ptr<PositionUpdate> updatePtr(new PositionUpdate(newPos));
-		updates.pushAll(updatePtr);
+
+        updatePositions();
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);
         usleep(FRAMERATE + elapsed.count());
     }
 }
 
+void WorldModel::updatePositions() {
+    std::map<uint8_t, std::pair<float, float>> newPos;
+    for (auto & playerModel : playerModels){
+        int id = playerModel.first;
+        b2Vec2 pos = playerModel.second.getPosition();
+        newPos[id] = std::pair<float, float>(pos.x, pos.y);
+    }
+    std::shared_ptr<Update> updatePtr(new PositionUpdate(std::move(newPos)));
+    updates.pushAll(updatePtr);
+}
+
 
 void WorldModel::step(){
-	for (auto it = this->playerModels.begin(); it != this->playerModels.end(); it++){
-		it->second.step();
+	for (auto & playerModel : this->playerModels){
+		playerModel.second.step();
 	}
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
@@ -201,3 +207,23 @@ WorldModel &WorldModel::operator=(WorldModel &&other) noexcept {
     return *this;
 }
 
+void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
+    playerModels.at(id).startMove(dir);
+}
+
+void WorldModel::stopMovingPlayer(uint8_t id, uint8_t dir) {
+    playerModels.at(id).stopMove(dir);
+}
+
+void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
+    playerModels.at(id).setAngle(angle);
+}
+
+void WorldModel::updateAngles() {
+    std::map<uint8_t, int16_t> angles;
+    for (auto& it : playerModels){
+        angles.insert({it.first, it.second.getAngle()});
+    }
+    std::shared_ptr<Update> updatePtr(std::shared_ptr<Update>(new AngleUpdate(std::move(angles))));
+    updates.pushAll(updatePtr);
+}

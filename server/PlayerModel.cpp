@@ -7,7 +7,9 @@ PlayerModel::PlayerModel(){
     angle = 0;
 }
 
-PlayerModel::PlayerModel(b2Body* body): model(body){
+PlayerModel::PlayerModel(b2Body* body):
+model(body),
+angle(0){
     this->netForce.SetZero();
 }
 

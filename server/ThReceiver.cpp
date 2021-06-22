@@ -76,9 +76,11 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case STOP_MOVE:
             eventQueue.push(std::unique_ptr<ClientEvent>(new StopMoveEvent(userId, msg.at(0))));
             break;
-        case ROTATE:
-            eventQueue.push(std::unique_ptr<ClientEvent>(new RotateEvent(userId, msg.at(0))));
+        case ROTATE: {
+            auto angle = static_cast<int16_t>(protocol.deserializeMsgLenShort(msg));
+            eventQueue.push(std::unique_ptr<ClientEvent>(new RotateEvent(userId, angle)));
             break;
+        }
         default:
             break;
     }
