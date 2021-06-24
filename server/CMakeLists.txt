@@ -14,6 +14,15 @@ add_library(lib_server
     events/ClientEvent.cpp
     events/ClientEvent.h
     Broadcaster.cpp
+    Knife.cpp
     events/StartMoveEvent.cpp 
     events/StopMoveEvent.cpp
-    updates/PositionUpdate.cpp updates/PositionUpdate.h events/RotateEvent.cpp events/RotateEvent.h updates/AngleUpdate.cpp updates/AngleUpdate.h)
+    events/StopAttackEvent.cpp
+    events/StartAttackEvent.cpp
+    updates/PositionUpdate.cpp 
+    updates/PositionUpdate.h 
+    events/RotateEvent.cpp 
+    events/RotateEvent.h 
+    updates/AngleUpdate.cpp 
+    updates/AngleUpdate.h)
+

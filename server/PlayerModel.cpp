@@ -1,15 +1,20 @@
 #include <utility>
+#include <math.h>
+#include <iostream>
 #include "PlayerModel.h"
+#include "Knife.h"
 
 PlayerModel::PlayerModel(){
     this->model = nullptr;
     this->netForce.SetZero();
     angle = 0;
+    hp = 100;
 }
 
 PlayerModel::PlayerModel(b2Body* body):
 model(body),
-angle(0){
+angle(0),
+hp(100){
     this->netForce.SetZero();
 }
 
@@ -82,3 +87,25 @@ int16_t PlayerModel::getAngle() const {
 void PlayerModel::setAngle(int16_t newAngle) {
     this->angle = newAngle;
 }
+
+bool PlayerModel::attack(PlayerModel& enemy){
+    return knife.attack(model->GetPosition(), angle, enemy.getPosition());
+}
+
+Knife& PlayerModel::hit(){
+    return knife;
+}
+
+void PlayerModel::gotHit(Knife& knife){
+    hp -= knife.hit();
+    std::cout << hp << std::endl;
+}
+
+void PlayerModel::tickCooldown(){
+    knife.tickCooldown();
+}
+
+void PlayerModel::resetCooldown(){
+    knife.resetCooldown();
+}
+

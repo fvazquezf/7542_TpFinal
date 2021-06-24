@@ -26,50 +26,17 @@ updates (updates){
 	is_running = false;
 }
 
-PlayerModel& WorldModel::createPlayer(float x, float y, int clave){
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_dynamicBody;
-	bodyDef.position.Set(x, y);
-	b2Body* body = world.CreateBody(&bodyDef);
-
-	b2PolygonShape bodyBox;
-	bodyBox.SetAsBox(0.25f, 0.25f);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &bodyBox;
-	// Set the box density to be non-zero, so it will be dynamic.
-	fixtureDef.density = 1.0f;
-
-	// Add the shape to the body.
-	body->CreateFixture(&fixtureDef);
-
-	b2FrictionJointDef fJointDef;
-	fJointDef.bodyA = this->anchor;
-	fJointDef.bodyB = body;
-
-	b2FrictionJoint* fJoint = (b2FrictionJoint*)world.CreateJoint(&fJointDef);
-	fJoint->SetMaxForce(10);
-
-    //PlayerModel player(body);
-
-    playerModels.emplace(std::piecewise_construct,
-                         std::forward_as_tuple(clave),
-                         std::forward_as_tuple(body));
-
-	return this->playerModels[clave];
-}
-
 ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(std::rand()%50, std::rand()%50);
 	b2Body* body = world.CreateBody(&bodyDef);
 
-	b2PolygonShape bodyBox;
-	bodyBox.SetAsBox(0.25f, 0.25f);
+	b2CircleShape bodyCircle;
+	bodyCircle.m_radius = 0.25f;
 
 	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &bodyBox;
+	fixtureDef.shape = &bodyCircle;
 	// Set the box density to be non-zero, so it will be dynamic.
 	fixtureDef.density = 1.0f;
 
@@ -83,11 +50,6 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	b2FrictionJoint* fJoint = (b2FrictionJoint*)world.CreateJoint(&fJointDef);
 	fJoint->SetMaxForce(10);
 
-    //PlayerModel player(body);
-
-	//this->playerModels[clave] = player;
-
-	// crea un player model asi
 	playerModels.emplace(std::piecewise_construct,
                          std::forward_as_tuple(clave),
                          std::forward_as_tuple(body));
@@ -152,6 +114,7 @@ void WorldModel::run(){
 		this->step();
 
         updatePositions();
+		updateAngles();
         auto end = std::chrono::system_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);
         usleep(FRAMERATE + elapsed.count());
@@ -173,6 +136,14 @@ void WorldModel::updatePositions() {
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
 		playerModel.second.step();
+	}
+	for (auto id: attackingPlayers){
+		for (auto& it : playerModels){
+			if ( playerModels.at(id).attack(it.second) ){
+				it.second.gotHit(playerModels.at(id).hit());
+			}
+		}
+		playerModels.at(id).tickCooldown();
 	}
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
@@ -217,6 +188,15 @@ void WorldModel::stopMovingPlayer(uint8_t id, uint8_t dir) {
 
 void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
     playerModels.at(id).setAngle(angle);
+}
+
+void WorldModel::startAttack(uint8_t id){
+	attackingPlayers.insert(id);
+}
+
+void WorldModel::stopAttack(uint8_t id){
+	attackingPlayers.erase(id);
+	playerModels.at(id).resetCooldown();
 }
 
 void WorldModel::updateAngles() {

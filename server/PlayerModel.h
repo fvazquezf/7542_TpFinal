@@ -2,11 +2,16 @@
 #define PLAYERMODEL_H
 
 #include "../libs/box2d/include/box2d/box2d.h"
+#include "Knife.h"
 
 class PlayerModel{
     b2Body* model;
     b2Vec2 netForce;
     int16_t angle;
+
+    int hp;
+
+    Knife knife;
 
     public:
         PlayerModel();
@@ -23,6 +28,15 @@ class PlayerModel{
         void stopMove(int dir);
 
         void reposition(float x, float y);
+
+        bool attack(PlayerModel& enemy);
+
+        Knife& hit();
+
+        void gotHit(Knife& knife);
+
+        void tickCooldown();
+        void resetCooldown();
 
         const b2Vec2& getPosition();
 

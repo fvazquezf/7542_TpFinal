@@ -11,11 +11,14 @@
 #include <utility>
 
 #include <map>
+#include <unordered_set>
 
 class WorldModel: public Thread {
     b2World world;
     b2Body* anchor;
     std::map<int, PlayerModel> playerModels;
+
+    std::unordered_set<int> attackingPlayers;
 
     // ref de la cola de la cual popeamos
     // para obtener los eventos de los clientes
@@ -44,9 +47,6 @@ class WorldModel: public Thread {
         WorldModel(WorldModel&& other) noexcept;
         WorldModel& operator=(WorldModel&& other) noexcept;
 
-        // usar solo para probar cosas en demo_movimiento, esta se va a borrar
-        PlayerModel& createPlayer(float x, float y, int clave);
-
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void updateAngles();
@@ -54,6 +54,9 @@ class WorldModel: public Thread {
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
         void rotatePlayer(uint8_t id, int16_t angle);
+        void startAttack(uint8_t id);
+        void stopAttack(uint8_t id);
+
 
         void createBox(b2BodyDef& boxDef);
         void loadMap();

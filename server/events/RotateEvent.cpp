@@ -8,7 +8,6 @@ RotateEvent::RotateEvent(uint8_t id, int16_t angle)
 
 void RotateEvent::updatePlayer(WorldModel &world) {
     world.rotatePlayer(clientId, angle);
-    world.updateAngles();
 }
 
 RotateEvent::~RotateEvent() {
