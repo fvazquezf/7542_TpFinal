@@ -4,13 +4,13 @@
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
 #include "commands/Rotate.h"
+#include "commands/Attack.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
 : done(false), commands(commandsQ), world(world){
     eventMap[SDL_KEYDOWN] = std::bind(&SdlLoop::handleKeyDown, this);
     eventMap[SDL_KEYUP] = std::bind(&SdlLoop::handleKeyUp, this);
-    eventMap[SDL_MOUSEMOTION] = std::bind(&SdlLoop::handleMouseMotion, this);
     eventMap[SDL_MOUSEBUTTONDOWN] = std::bind(&SdlLoop::handleMouseButtonDown, this);
     eventMap[SDL_MOUSEBUTTONUP] = std::bind(&SdlLoop::handleMouseButtonUp, this);
     eventMap[SDL_QUIT] = std::bind(&SdlLoop::handleQuit, this);
@@ -19,6 +19,9 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
     presses[SDLK_a] = false;
     presses[SDLK_s] = false;
     presses[SDLK_d] = false;
+
+    mousePresses[SDL_BUTTON_LEFT] = false;
+    mousePresses[SDL_BUTTON_RIGHT] = false;
 }
 
 void SdlLoop::run() {
@@ -59,12 +62,9 @@ void SdlLoop::handleKeyUp() {
     }
 }
 
-void SdlLoop::handleMouseMotion(){
-}
-
 void SdlLoop::handleMouseButtonDown() {
     try {
-        mouseButton(false, currentEvent.button.button);
+        mouseButton(true, currentEvent.button.button);
     } catch(const std::exception& e){
         return;
     }
@@ -72,7 +72,7 @@ void SdlLoop::handleMouseButtonDown() {
 
 void SdlLoop::handleMouseButtonUp() {
     try {
-        //handleKey(false, currentEvent.button.button);
+        mouseButton(false, currentEvent.button.button);
     } catch(const std::exception& e){
         return;
     }
@@ -93,10 +93,12 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
 }
 
 void SdlLoop::mouseButton(bool pressed, uint8_t button){
-    if (button == SDL_BUTTON_LEFT){
-        commands.push(std::unique_ptr<Command>(new CreateGame("UnaPartida")));
-    } else if (button == SDL_BUTTON_RIGHT){
-        commands.push(std::unique_ptr<Command>(new JoinGame("UnaPartida")));
+    if (pressed && !mousePresses.at(button)){
+        mousePresses.at(button) = true;
+        commands.push(std::unique_ptr<Command>(new Attack()));
+    } else if (!pressed){
+        mousePresses.at(button) = false;
+        commands.push(std::unique_ptr<Command>(new Attack(true)));
     }
 }
 

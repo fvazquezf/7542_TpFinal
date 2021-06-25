@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <chrono>
+#include <sstream>
 #include "anim/Animation.h"
 #include "SdlLoop.h"
 #include "commands/Command.h"
@@ -7,19 +8,43 @@
 #include "WorldView.h"
 #include "sdlwrap/SdlWindow.h"
 #include "Receiver.h"
+#include "commands/CreateGame.h"
+#include "commands/JoinGame.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
     Socket cli;
     cli.connect(argv[1], argv[2]);
-    SdlWindow window(800, 600, false, "unaVentana");
-	WorldView world(window);
 
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
 
-	SdlLoop l(comms, world);
+	// Desde aca hasta el proximo comentario, esta seccion es temporal, hasta que tengamos qt
+	std::string s;
+    do {
+        std::cout << "Crea o unite a una partida escribiendo Crear <nombre> o Unirse <nombre>\n";
+        std::getline(std::cin, s);
+        std::cout << s;
+    }
+	while (s.find("Unirse") == std::string::npos && s.find("Crear" ) == std::string::npos);
+
+	std::stringstream stream(s);
+	std::string comando;
+	std::string nombre;
+	stream >> comando;
+    stream >> nombre;
+    if (comando == "Crear"){
+        comms.push(std::unique_ptr<Command>(new CreateGame(nombre)));
+    } else {
+        comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
+    }
+    // End seccion
+
+    SdlWindow window(800, 600, false, "unaVentana");
+    WorldView world(window);
+
+    SdlLoop l(comms, world);
 
 	Protocol prot;
 

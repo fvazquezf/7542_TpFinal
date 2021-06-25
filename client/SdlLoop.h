@@ -23,13 +23,14 @@ private:
     std::map<uint32_t, std::function<void()>> eventMap;
     // tracks if the key has been pressed and not released
     std::map<SDL_Keycode, bool> presses;
+    // tracks if the button has been pressed and not released
+    std::map<uint8_t, bool> mousePresses;
 
     void handleKey(bool pressed, SDL_Keycode key);
     void mouseButton(bool pressed, uint8_t button);
 
     void handleKeyDown();
     void handleKeyUp();
-    void handleMouseMotion();
     void handleMouseButtonDown();
     void handleMouseButtonUp();
     void handleQuit();

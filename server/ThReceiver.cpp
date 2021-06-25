@@ -3,6 +3,8 @@
 #include "events/StartMoveEvent.h"
 #include "events/StopMoveEvent.h"
 #include "events/RotateEvent.h"
+#include "events/StartAttackEvent.h"
+#include "events/StopAttackEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -81,6 +83,12 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             eventQueue.push(std::unique_ptr<ClientEvent>(new RotateEvent(userId, angle)));
             break;
         }
+        case ATTACK:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new StartAttackEvent(userId)));
+            break;
+        case STOP_ATTACK:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new StopAttackEvent(userId)));
+            break;
         default:
             break;
     }

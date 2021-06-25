@@ -133,6 +133,13 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleAngleUpdate(receiveCallback);
             break;
         }
+        case ATTACK : {
+            break;
+        }
+        case STOP_ATTACK : {
+            break;
+        }
+
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -273,4 +280,10 @@ std::map<uint8_t, int16_t> Protocol::deserializeAngles(std::vector<unsigned char
         angleMap.emplace(msg.at(i), static_cast<int16_t>(deserializeMsgLenShort(angle)));
     }
     return angleMap;
+}
+
+void Protocol::attack(bool done, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> attackMsg;
+    attackMsg.push_back(done ? STOP_ATTACK : ATTACK);
+    callback(std::move(attackMsg));
 }

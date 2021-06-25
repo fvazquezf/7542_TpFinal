@@ -2,7 +2,7 @@
 #define WORLDMODEL_H
 
 #include "../libs/box2d/include/box2d/box2d.h"
-#include "../common/thread.h"
+#include "../common/Thread.h"
 #include "Broadcaster.h"
 #include "PlayerModel.h"
 #include "events/ClientEvent.h"

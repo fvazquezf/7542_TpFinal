@@ -8,6 +8,8 @@
 #define MOVE 0x70
 #define STOP_MOVE 0x7e
 #define ROTATE 0x6d
+#define ATTACK 0x6b
+#define STOP_ATTACK 0x7b
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -65,6 +67,8 @@ public:
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
     void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
+    void attack(bool b, std::function<void(std::vector<unsigned char>)> &function) const;
+    void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
 
                                 //---------------SERVER---------------//
     void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
@@ -88,16 +92,11 @@ public:
     std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
-    // el booleano indica si el movimiento en la direccion
-    // termino (true) o recien esta empezando (false)
-    // de aca elegimos alguno de los dos mensajes
-    // STOP_MOVE o MOVE
-    void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
-
     ~Protocol();
 
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
+
 };
 
 

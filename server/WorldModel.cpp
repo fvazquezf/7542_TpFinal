@@ -191,10 +191,12 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 }
 
 void WorldModel::startAttack(uint8_t id){
+    printf("Player %u is attacking\n", id);
 	attackingPlayers.insert(id);
 }
 
 void WorldModel::stopAttack(uint8_t id){
+    printf("Player %u stopped attacking\n", id);
 	attackingPlayers.erase(id);
 	playerModels.at(id).resetCooldown();
 }
