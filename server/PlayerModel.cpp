@@ -2,7 +2,7 @@
 #include <math.h>
 #include <iostream>
 #include "PlayerModel.h"
-#include "Knife.h"
+#include "weapons/Knife.h"
 
 PlayerModel::PlayerModel(){
     this->model = nullptr;
@@ -92,17 +92,22 @@ bool PlayerModel::attack(PlayerModel& enemy){
     return knife.attack(model->GetPosition(), angle, enemy.getPosition());
 }
 
-Knife& PlayerModel::hit(){
+Weapon& PlayerModel::hit(){
     return knife;
 }
 
-void PlayerModel::gotHit(Knife& knife){
+bool PlayerModel::gotHit(Weapon& knife){
     hp -= knife.hit();
     std::cout << hp << std::endl;
+    if (hp <= 0){
+        return true;
+    } else {
+        return false;
+    }
 }
 
-void PlayerModel::tickCooldown(){
-    knife.tickCooldown();
+bool PlayerModel::tickCooldown(){
+    return knife.tickCooldown();
 }
 
 void PlayerModel::resetCooldown(){

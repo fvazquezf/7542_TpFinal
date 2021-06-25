@@ -1,6 +1,5 @@
 #include "WorldModel.h"
 #include "PlayerModel.h"
-#include "updates/PositionUpdate.h"
 #include <cstdlib>
 #include <chrono>
 #include <unistd.h>
@@ -9,7 +8,11 @@
 #define FRAMERATE 1000000/60.0f
 
 #include "../libs/box2d/include/box2d/box2d.h"
+#include "updates/PositionUpdate.h"
 #include "updates/AngleUpdate.h"
+#include "updates/AttackUpdate.h"
+#include "updates/HitUpdate.h"
+#include "updates/DeadUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
 updates (updates){
@@ -132,6 +135,21 @@ void WorldModel::updatePositions() {
     updates.pushAll(updatePtr);
 }
 
+void WorldModel::updateAttack(int id){
+	std::shared_ptr<Update> updatePtr(new AttackUpdate(id));
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateHit(int id){
+	std::shared_ptr<Update> updatePtr(new HitUpdate(id));
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateDead(int id){
+	std::shared_ptr<Update> updatePtr(new DeadUpdate(id));
+    updates.pushAll(updatePtr);
+}
+
 
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
@@ -140,10 +158,16 @@ void WorldModel::step(){
 	for (auto id: attackingPlayers){
 		for (auto& it : playerModels){
 			if ( playerModels.at(id).attack(it.second) ){
-				it.second.gotHit(playerModels.at(id).hit());
+				if (it.second.gotHit(playerModels.at(id).hit())){
+					updateDead(it.first);
+				} else {
+					updateHit(it.first);
+				}
 			}
 		}
-		playerModels.at(id).tickCooldown();
+		if (playerModels.at(id).tickCooldown()){
+			updateAttack(id);
+		}
 	}
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }

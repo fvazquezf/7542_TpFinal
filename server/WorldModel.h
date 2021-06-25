@@ -50,6 +50,9 @@ class WorldModel: public Thread {
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void updateAngles();
+        void updateAttack(int id);
+        void updateHit(int id);
+        void updateDead(int id);
 
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);

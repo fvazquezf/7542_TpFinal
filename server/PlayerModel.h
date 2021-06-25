@@ -2,7 +2,7 @@
 #define PLAYERMODEL_H
 
 #include "../libs/box2d/include/box2d/box2d.h"
-#include "Knife.h"
+#include "weapons/Knife.h"
 
 class PlayerModel{
     b2Body* model;
@@ -31,11 +31,11 @@ class PlayerModel{
 
         bool attack(PlayerModel& enemy);
 
-        Knife& hit();
+        Weapon& hit();
 
-        void gotHit(Knife& knife);
+        bool gotHit(Weapon& weapon);
 
-        void tickCooldown();
+        bool tickCooldown();
         void resetCooldown();
 
         const b2Vec2& getPosition();
