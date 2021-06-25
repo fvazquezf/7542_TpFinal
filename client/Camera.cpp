@@ -11,11 +11,11 @@ Camera::Camera(SdlWindow& window)
     centerPix = std::move(window.getCenter());
 }
 
-void Camera::render(Renderizable& renderizable){
+void Camera::render(Renderizable &renderizable, uint8_t iteration) {
     // renderizable.render(this) -> double dispatch
     // cada textura se debe renderizar segun su tipo
     // si no usamos double dispatch tenemos todos getters
-    renderizable.render(*this);
+    renderizable.render(*this, iteration);
 }
 
 // renders texture at the center of the screen
@@ -68,4 +68,23 @@ int16_t Camera::angleFromMouse() {
         angle = 360 + angle;
     }
     return angle;
+}
+
+void
+Camera::renderWeapon(float playerX,
+                     float playerY,
+                     int16_t playerAngle,
+                     int sizeX,
+                     int sizeY,
+                     SdlTexture &texture) {
+    if (isVisibleInX(playerX) && isVisibleInY(playerY)){
+        Area src(0, 0, sizeX, sizeY);
+        int newX = centerPix.x - (logicalCenterX - playerX) * M_TO_P;
+        int newY = centerPix.y - (logicalCenterY - playerY) * M_TO_P;
+        Area dst(newX - (sizeX / 2),
+                 newY - (sizeY / 2),
+                 sizeX, sizeY);
+        SDL_Point center{sizeX/2, sizeY};
+        texture.render(src, dst, playerAngle,center,SDL_FLIP_NONE);
+    }
 }

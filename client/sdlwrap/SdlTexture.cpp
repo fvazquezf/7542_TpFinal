@@ -30,7 +30,9 @@ int SdlTexture::render(const Area& src, const Area& dest, float angle, const SDL
 
 
 SdlTexture::~SdlTexture(){
-	SDL_DestroyTexture(this->texture);
+    if (this->texture != nullptr){
+        SDL_DestroyTexture(this->texture);
+    }
 }
 
 SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key)
@@ -56,4 +58,19 @@ SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key
 : SdlTexture(filename, window, key){
     SDL_SetTextureBlendMode(this->texture, blending);
     SDL_SetTextureAlphaMod(this->texture, alpha);
+}
+
+int SdlTexture::render(const Area &src, const Area &dest, float angle, SDL_Point &center,
+                       const SDL_RendererFlip &flip) const {
+    const SDL_Rect srcRect = src.buildRectangle();
+    const SDL_Rect destRect = dest.buildRectangle();
+    return window.handleRender(texture, srcRect, destRect, angle, center, flip);
+}
+
+SdlTexture::SdlTexture(SdlTexture &&other) noexcept
+: window(other.window),
+  texture(other.texture){
+    other.texture = nullptr;
+    this->width = other.width;
+    this->height = other.height;
 }

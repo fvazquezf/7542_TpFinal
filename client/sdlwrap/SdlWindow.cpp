@@ -73,3 +73,8 @@ int SdlWindow::getWidth(){
 int SdlWindow::getHeight(){
 	return height;
 }
+
+int SdlWindow::handleRender(SDL_Texture *txt, const SDL_Rect &src, const SDL_Rect &dst, float ang, SDL_Point &center,
+                            SDL_RendererFlip flip) {
+    return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, ang, &center, flip);
+}

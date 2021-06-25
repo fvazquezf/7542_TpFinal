@@ -1,17 +1,27 @@
 #ifndef WEAPON_H
 #define WEAPON_H
+
+#include <map>
 #include "../sdlwrap/SdlTexture.h"
 #include "../sdlwrap/Area.h"
+#include "../Camera.h"
 
+// clase que representa a todas las armas
+// pasamos un mapa de id de arma
+// y sus texturas
+// al cambiar de arma
+// cambiamos la textura que utiliza
+
+#define KNIFE 0
 class Weapon {
 protected:
-    SdlTexture& texture;
+    std::map<uint8_t, SdlTexture>& weaponTextureMap;
+    uint8_t currentWeapon;
 public:
-    explicit Weapon(SdlTexture& texture);
+    explicit Weapon(std::map<uint8_t, SdlTexture>& weaponTextureMap);
 
-    void draw(int posX, int posY);
-    virtual void draw(int posX, int posY, float angle) = 0;
-    virtual void makeSound() = 0;
+    void draw(float x, float y, float angle, Camera& cam);
+    void changeWeapon(uint8_t id);
 
     virtual ~Weapon();
 };

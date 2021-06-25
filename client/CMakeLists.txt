@@ -10,3 +10,4 @@ add_library(sdlloop
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)
 add_subdirectory(commands)
+add_subdirectory(weapons)

@@ -6,6 +6,10 @@ WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
   terror("../sprites/gfx/player/t1.bmp", window){
+    weapons.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(0),
+                    std::forward_as_tuple(
+                            SdlTexture("../sprites/gfx/weapons/knife.bmp", window)));
 }
 
 WorldView::~WorldView() {
@@ -13,15 +17,15 @@ WorldView::~WorldView() {
 
 void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer));
+    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer, weapons));
     entities.insert(std::make_pair(id, std::move(terrorist)));
 }
 
-void WorldView::render() {
+void WorldView::render(uint8_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
     for (auto& it : entities){
-        camera.render(*it.second);
+        camera.render(*it.second, iteration);
     }
     window.render();
 }
@@ -38,7 +42,7 @@ void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &posi
 }
 
 void WorldView::createPlayersAtReception(uint8_t id, float x, float y) {
-    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, x, y, false));
+    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, x, y, false, weapons));
     entities.insert(std::make_pair(id, std::move(terrorist)));
 }
 

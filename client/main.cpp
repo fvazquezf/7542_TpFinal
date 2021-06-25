@@ -29,14 +29,25 @@ int main(int argc, const char *argv[]){
 	receiver.start();
 
 	l.start();
+    auto start = std::chrono::steady_clock::now();
+    uint8_t it = 0;
 	while (running){
-		auto start = std::chrono::system_clock::now();
-
-        world.render();
-
-        auto end = std::chrono::system_clock::now();
+        world.render(0);
+        auto end = std::chrono::steady_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);
-        usleep(FRAMERATE + elapsed.count());
+        int rest = FRAMERATE - std::ceil(elapsed.count());
+
+        // me comi unos ricos frames
+        if (rest < 0){
+            int behind = - rest;
+            rest = FRAMERATE - behind % FRAMERATE;
+            int lost = behind + rest;
+            start += std::chrono::microseconds(lost);
+            it += lost / FRAMERATE;
+        }
+        usleep(rest);
+        start += std::chrono::microseconds(FRAMERATE);
+        ++it;
         if (l.isDone()){
             running = false;
             receiver.stop();

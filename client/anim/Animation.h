@@ -1,9 +1,10 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <vector>
 #include "../sdlwrap/SdlTexture.h"
 #include "../sdlwrap/Area.h"
-#define FRAMERATE 1000000.0f / 60.0f
+#define FRAMERATE 1000000 / 60
 
 class Animation {
 public:
@@ -40,6 +41,9 @@ protected:
 
     // cuantos frames hay en la direccion horizontal
     int numFramesW;
+
+    // vector de frames para una animacion
+    std::vector<SDL_Rect> frames;
 };
 
 

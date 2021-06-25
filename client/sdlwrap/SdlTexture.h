@@ -32,8 +32,15 @@ public:
                SDL_BlendMode blending,
                uint8_t alpha);
 
+    SdlTexture(const SdlTexture& other) = delete;
+    SdlTexture& operator=(const SdlTexture& other) = delete;
+
+    SdlTexture(SdlTexture&& other) noexcept;
+    SdlTexture& operator=(SdlTexture&& other) noexcept;
+
 	int render(const Area& src, const Area& dest, const SDL_RendererFlip& flipType) const;
     int render(const Area& src, const Area& dest, float angle, const SDL_RendererFlip& flip) const;
+    int render(const Area& src, const Area& dest, float angle, SDL_Point& center, const SDL_RendererFlip& flip) const;
 	~SdlTexture();
 };
 

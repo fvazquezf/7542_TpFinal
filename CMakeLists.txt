@@ -19,7 +19,7 @@ add_executable(commandTester ./client/commands/CommandTester.cpp)
 add_executable(esqueleto_server ./server/main.cpp)
 
 # Linkage demo_movimiento
-target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common lib_common commands)
+target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image common lib_common commands weapons)
 target_link_libraries(box2d_demo box2d anim sdlwrapperclasses SDL2 SDL2_image)
 #target_link_libraries(demo_movimiento lib_server box2d anim sdlwrapperclasses SDL2 SDL2_image )
 target_link_libraries(commandTester common commands)

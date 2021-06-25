@@ -26,7 +26,7 @@ public:
 
     // recibiria primero al player
     // luego al resto de las entidades
-    void render(Renderizable& renderizable);
+    void render(Renderizable &renderizable, uint8_t iteration);
 
     // renders texture at the center of the screen
     // only for player
@@ -50,6 +50,8 @@ public:
     ~Camera();
 
     int16_t angleFromMouse();
+
+    void renderWeapon(float playerX, float playerY, int16_t playerAngle, int sizeX, int sizeY, SdlTexture &texture);
 };
 
 #endif

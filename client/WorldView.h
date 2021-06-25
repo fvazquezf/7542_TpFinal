@@ -24,6 +24,7 @@ private:
     //std::vector<std::unique_ptr<Renderizable>> entities;
 
     std::map<uint8_t, std::unique_ptr<Renderizable>> entities;
+    std::map<uint8_t, SdlTexture> weapons;
 
     // Player player
 
@@ -49,7 +50,7 @@ public:
 
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positionMap);
     void updateAngles(std::map<uint8_t, int16_t>& angles);
-    void render();
+    void render(uint8_t iteration);
 
     ~WorldView();
 
