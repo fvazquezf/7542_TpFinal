@@ -16,6 +16,7 @@ add_library(lib_server
     Broadcaster.cpp
     weapons/Weapon.cpp
     weapons/Knife.cpp
+    weapons/Pistol.cpp
     events/StartMoveEvent.cpp 
     events/StopMoveEvent.cpp
     events/StopAttackEvent.cpp
