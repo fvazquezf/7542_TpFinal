@@ -7,11 +7,13 @@
 class Character : public Renderizable {
 private:
     bool player;
+    bool bleeding;
+    bool wasHit;
     Weapon weapon;
-    bool bleeding = false;
-    bool wasHit = false;
+    // animacion de movimiento
+    Animation movementAnimation;
+    // animacion de sangrado
     Animation bloodAnimation;
-    int currentBleedIteration;
 public:
 	Character(SdlTexture& texture,
               float posX,
@@ -27,12 +29,17 @@ public:
     Character& operator=(Character&& other) noexcept;
 
     void render(Camera &cam, uint8_t iteration) override;
-	void update() override;
+
+	void changeWeapon(uint8_t weaponCode);
 
 	void hit();
 	void die();
 
 	~Character() override;
+
+    void attack();
+
+    void pushPositionOffset(std::tuple<int, int, int> positionOffset);
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Weapon.h"
+#include "../anim/Character.h"
 
 Weapon::Weapon(std::map<uint8_t, SdlTexture> &weaponTextureMap)
 : weaponTextureMap(weaponTextureMap),
@@ -36,4 +37,19 @@ Weapon &Weapon::operator=(Weapon &&other) noexcept {
 
     currentWeapon = other.currentWeapon;
     return *this;
+}
+
+void Weapon::animate(Character &character) {
+    if (currentWeapon == KNIFE){
+        // i controla el numero de frames
+        for (int i = 0; i <= 10; ++i){
+            int16_t angle = parabolicMotion(i);
+            auto offset = std::make_tuple(0, 0, angle);
+            character.pushPositionOffset(std::move(offset));
+        }
+    }
+}
+
+int16_t Weapon::parabolicMotion(int nFrame) {
+    return ((-MAX_ROT_KNIFE)/25.0f) * nFrame*nFrame + 2.0f * MAX_ROT_KNIFE/5.0f * nFrame;
 }

@@ -30,7 +30,7 @@ public:
 
     // renders texture at the center of the screen
     // only for player
-    void renderAtCenter(SdlTexture& texture, float angle,
+    void renderAtCenter(SdlTexture& texture, Area& src, float angle,
                         int sizeX, int sizeY);
 
     void setLogicalCenter(float x, float y);
@@ -41,11 +41,14 @@ public:
     bool isVisibleInX(float x);
     bool isVisibleInY(float y);
 
+    bool isVisible(float x, float y);
+
     // logical coordinates
     // only renders if visible to player
-    void renderInSight(SdlTexture& texture, float x,
-                       float y, float angle,
-                       int sizeX, int sizeY);
+    void renderInSight(SdlTexture& texture, Area& src,
+                       float posX,
+                       float posY,
+                       float angle);
 
     void renderFromRect(SdlTexture& texture,
                         SDL_Rect& source,
@@ -54,6 +57,12 @@ public:
                         float angle,
                         int sizeX,
                         int sizeY);
+
+    void renderWithAlpha(SdlTexture& texture,
+                         Area& source,
+                         float x,
+                         float y,
+                         uint8_t alpha);
 
     ~Camera();
 

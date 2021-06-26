@@ -19,7 +19,6 @@ public:
     Renderizable(Renderizable&& other) noexcept;
     Renderizable& operator=(Renderizable&& other) noexcept;
 
-    virtual void update() = 0;
     void updatePosition(float x, float y);
     void updateAngle(int16_t newAngle);
     virtual void render(Camera &camera, uint8_t iteration) = 0;

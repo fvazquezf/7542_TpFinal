@@ -78,3 +78,8 @@ int SdlWindow::handleRender(SDL_Texture *txt, const SDL_Rect &src, const SDL_Rec
                             SDL_RendererFlip flip) {
     return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, ang, &center, flip);
 }
+
+int SdlWindow::handleRender(SDL_Texture *txt, const SDL_Rect &src, const SDL_Rect &dst, uint8_t alpha) {
+    SDL_SetTextureAlphaMod(txt, alpha);
+    return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, 0, nullptr, SDL_FLIP_NONE);
+}

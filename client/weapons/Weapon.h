@@ -5,6 +5,8 @@
 #include "../sdlwrap/SdlTexture.h"
 #include "../sdlwrap/Area.h"
 #include "../Camera.h"
+//#include "../anim/Character.h"
+#define MAX_ROT_KNIFE 90.0f
 
 // clase que representa a todas las armas
 // pasamos un mapa de id de arma
@@ -13,10 +15,19 @@
 // cambiamos la textura que utiliza
 
 #define KNIFE 0
+
+class Character;
+
 class Weapon {
-protected:
+private:
     std::map<uint8_t, SdlTexture>& weaponTextureMap;
     uint8_t currentWeapon;
+
+    // usado para la rotacion del cuchillo
+    // describe una parabola que va desde
+    // un angulo 0, hasta un maximo
+    // y de vuelta a 0
+    int16_t parabolicMotion(int nFrame);
 public:
     explicit Weapon(std::map<uint8_t, SdlTexture>& weaponTextureMap);
 
@@ -30,6 +41,8 @@ public:
     void changeWeapon(uint8_t id);
 
     virtual ~Weapon();
+
+    void animate(Character &character);
 };
 
 

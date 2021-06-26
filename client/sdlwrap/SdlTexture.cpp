@@ -94,3 +94,7 @@ SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key
     SDL_FreeSurface(tmp);
 
 }
+
+int SdlTexture::render(const Area &src, const Area &dest, uint8_t alpha) const {
+    return window.handleRender(texture, src.buildRectangle(), dest.buildRectangle(), alpha);
+}
