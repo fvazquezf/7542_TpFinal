@@ -3,6 +3,7 @@
 
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "weapons/Armory.h"
+#include <memory>
 
 class PlayerModel{
     b2Body* model;
@@ -29,8 +30,8 @@ class PlayerModel{
         void reposition(float x, float y);
 
         bool attack(PlayerModel& enemy);
-        Weapon& hit();
-        bool gotHit(Weapon& weapon);
+        std::shared_ptr<Weapon> hit();
+        bool gotHit(std::shared_ptr<Weapon> weapon);
 
         void equipKnife();
         int equipPrimary();

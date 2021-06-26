@@ -3,16 +3,17 @@
 
 #include "../../libs/box2d/include/box2d/box2d.h"
 #include <map>
-#include <Weapon.h>
-#include <Knife.h>
-#include <Pistol.h>
-#include <Shotgun.h>
-#include <Awp.h>
+#include <memory>
+#include "Weapon.h"
+#include "Knife.h"
+#include "Pistol.h"
+#include "Shotgun.h"
+#include "Awp.h"
 
 
 class Armory {
 
-    std::map<int, Weapon> arsenal;
+    std::map<int, std::shared_ptr<Weapon>> arsenal;
 
     int currentWeapon;
 
@@ -21,7 +22,7 @@ class Armory {
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy);
         
-        Weapon& hit();
+        std::shared_ptr<Weapon> hit();
 
         bool tickCooldown();
 
