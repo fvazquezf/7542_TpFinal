@@ -1,16 +1,16 @@
-#include "Pistol.h"
+#include "Awp.h"
 
-Pistol::Pistol(){
+Awp::Awp(){
     damage = 100;
     cooldown = 0;
 }
 
 
-Pistol::~Pistol(){
+Awp::~Awp(){
 
 }
 
-bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
+bool Awp::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (cooldown != 0) return false;
 
     int y = cos((angle - 90) * 180/3.14);
@@ -29,11 +29,11 @@ bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     return false;
 }
 
-int Pistol::hit(){
+int Awp::hit(){
     return damage;
 }
 
-bool Pistol::tickCooldown(){
+bool Awp::tickCooldown(){
     if (cooldown == 0) {
         // este 60 es variable, es el que determina el fireRate, se leeria del yaml de configuracion.
         cooldown = 60;
@@ -44,7 +44,6 @@ bool Pistol::tickCooldown(){
     }
 }
 
-void Pistol::resetCooldown(){
-    cooldown = 0;
+void Awp::resetCooldown(){
 }
 
