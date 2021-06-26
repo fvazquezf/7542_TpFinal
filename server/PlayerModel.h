@@ -2,7 +2,7 @@
 #define PLAYERMODEL_H
 
 #include "../libs/box2d/include/box2d/box2d.h"
-#include "weapons/Knife.h"
+#include "weapons/Armory.h"
 
 class PlayerModel{
     b2Body* model;
@@ -11,7 +11,7 @@ class PlayerModel{
 
     int hp;
 
-    Knife knife;
+    Armory armory;
 
     public:
         PlayerModel();
@@ -24,16 +24,18 @@ class PlayerModel{
         PlayerModel& operator=(PlayerModel&& other) noexcept;
 
         void startMove(int dir);
-
         void stopMove(int dir);
 
         void reposition(float x, float y);
 
         bool attack(PlayerModel& enemy);
-
         Weapon& hit();
-
         bool gotHit(Weapon& weapon);
+
+        void equipKnife();
+        int equipPrimary();
+        void equipSecondary();
+        bool equipBomb();
 
         bool tickCooldown();
         void resetCooldown();

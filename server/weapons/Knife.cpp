@@ -12,12 +12,12 @@ Knife::~Knife(){
 
 bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (cooldown != 0) return false;
-    float dist = (player - enemy).LengthSquared();
-    // 2.25 es la distancia de ataque al cuadrado, si esta mas lejos no le pega.
-    if (dist < 2.25f) {
-        double res = atan2(enemy.y - player.y, enemy.x - player.x);
+    int dist = static_cast<int>((player - enemy).LengthSquared());
+    // 2.25 es la distancia(1.5m) de ataque al cuadrado, si esta mas lejos no le pega.
+    if (dist < 2.25) {
+        int res = static_cast<int>(atan2(enemy.y - player.y, enemy.x - player.x));
         // el round creo que esta de mas
-        int enemyAngle = std::round(res * 180/3.14) + 90;
+        int enemyAngle = res * 180/3.14 + 90;
         if (enemyAngle < 0){
             enemyAngle += 360;
         }

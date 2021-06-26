@@ -1,5 +1,5 @@
-#ifndef Weapon_H
-#define Weapon_H
+#ifndef WEAPON_H
+#define WEAPON_H
 
 #include "../../libs/box2d/include/box2d/box2d.h"
 

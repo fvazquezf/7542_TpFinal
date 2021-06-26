@@ -89,15 +89,15 @@ void PlayerModel::setAngle(int16_t newAngle) {
 }
 
 bool PlayerModel::attack(PlayerModel& enemy){
-    return knife.attack(model->GetPosition(), angle, enemy.getPosition());
+    return armory.attack(model->GetPosition(), angle, enemy.getPosition());
 }
 
 Weapon& PlayerModel::hit(){
-    return knife;
+    return armory.hit();
 }
 
-bool PlayerModel::gotHit(Weapon& knife){
-    hp -= knife.hit();
+bool PlayerModel::gotHit(Weapon& weapon){
+    hp -= weapon.hit();
     std::cout << hp << std::endl;
     if (hp <= 0){
         return true;
@@ -107,10 +107,27 @@ bool PlayerModel::gotHit(Weapon& knife){
 }
 
 bool PlayerModel::tickCooldown(){
-    return knife.tickCooldown();
+    return armory.tickCooldown();
 }
 
 void PlayerModel::resetCooldown(){
-    knife.resetCooldown();
+    armory.resetCooldown();
 }
+
+void PlayerModel::equipKnife(){
+    armory.equipKnife();
+}
+
+int PlayerModel::equipPrimary(){
+    armory.equipPrimary();
+}
+
+void PlayerModel::equipSecondary(){
+    armory.equipSecondary();
+}
+
+bool PlayerModel::equipBomb(){
+    armory.equipSecondary();
+}
+
 

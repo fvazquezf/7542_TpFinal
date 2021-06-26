@@ -17,16 +17,16 @@ add_library(lib_server
     weapons/Weapon.cpp
     weapons/Knife.cpp
     weapons/Pistol.cpp
+    weapons/Awp.cpp
+    weapons/Shotgun.cpp
+    weapons/Armory.cpp
     events/StartMoveEvent.cpp 
     events/StopMoveEvent.cpp
     events/StopAttackEvent.cpp
     events/StartAttackEvent.cpp
     updates/PositionUpdate.cpp 
-    updates/PositionUpdate.h 
     events/RotateEvent.cpp 
-    events/RotateEvent.h 
     updates/AngleUpdate.cpp 
-    updates/AngleUpdate.h
     updates/AttackUpdate.cpp
     updates/HitUpdate.cpp
     updates/DeadUpdate.cpp   )
