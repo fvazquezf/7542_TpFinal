@@ -8,7 +8,7 @@ Camera::Camera(SdlWindow& window)
 : window(window),
   logicalCenterX(-100),
   logicalCenterY(-100) {
-    centerPix = std::move(window.getCenter());
+    centerPix = window.getCenter();
 }
 
 void Camera::render(Renderizable &renderizable, uint8_t iteration) {
@@ -20,9 +20,8 @@ void Camera::render(Renderizable &renderizable, uint8_t iteration) {
 
 // renders texture at the center of the screen
 // only for player
-void Camera::renderAtCenter(SdlTexture& texture, float angle,
+void Camera::renderAtCenter(SdlTexture& texture, Area& src, float angle,
                     int sizeX, int sizeY){
-    Area src(0, 0, sizeX, sizeY);
     // dibuja desde el centro!
     Area dst(centerPix.x - (sizeX / 2), centerPix.y - (sizeY / 2), sizeX, sizeY);
     texture.render(src, dst, angle, SDL_FLIP_NONE);
@@ -30,18 +29,18 @@ void Camera::renderAtCenter(SdlTexture& texture, float angle,
 
 // logical coordinates
 // only renders if visible to player
-void Camera::renderInSight(SdlTexture& texture, float x, float y,
-                           float angle, int sizeX, int sizeY){
-    if (isVisibleInX(x) && isVisibleInY(y)){
-        Area src(0, 0, sizeX, sizeY);
-        int newX = centerPix.x - (logicalCenterX - x) * M_TO_P;
-        int newY = centerPix.y - (logicalCenterY - y) * M_TO_P;
-        Area dst(newX - (sizeX / 2),
-                 newY - (sizeY / 2),
-                 sizeX, sizeY);
-        texture.render(src, dst, angle, SDL_FLIP_NONE);
-    }
-    // si no es visible no hago nada jajaja xd
+void Camera::renderInSight(SdlTexture& texture,
+                           Area& src,
+                           float posX,
+                           float posY,
+                           float angle){
+    auto rect = src.buildRectangle();
+    int newX = centerPix.x - (logicalCenterX - posX) * M_TO_P;
+    int newY = centerPix.y - (logicalCenterY - posY) * M_TO_P;
+    Area dst(newX - (rect.w / 2),
+             newY - (rect.h / 2),
+             rect.w, rect.h);
+    texture.render(src, dst, angle, SDL_FLIP_NONE);
 }
 
 bool Camera::isVisibleInX(float x){
@@ -50,6 +49,10 @@ bool Camera::isVisibleInX(float x){
 
 bool Camera::isVisibleInY(float y){
     return (y >= logicalCenterY - (logicalCenterY/2)) && (y <= logicalCenterY + (logicalCenterY/2));
+}
+
+bool Camera::isVisible(float x, float y){
+    return isVisibleInY(x) && isVisibleInY(y);
 }
 
 void Camera::setLogicalCenter(float x, float y){
@@ -106,4 +109,15 @@ Camera::renderFromRect(SdlTexture &texture,
                  sizeX, sizeY);
         texture.render(src, dst, angle, SDL_FLIP_NONE);
     }
+}
+
+void Camera::renderWithAlpha(SdlTexture &texture, Area &source, float x, float y, uint8_t alpha) {
+    auto rect = source.buildRectangle();
+    int newX = centerPix.x - (logicalCenterX - x) * M_TO_P;
+    int newY = centerPix.y - (logicalCenterY - y) * M_TO_P;
+    Area dst(newX - rect.w/2,
+             newY - rect.h/2,
+             rect.w,
+             rect.h);
+    texture.render(source, dst, alpha);
 }

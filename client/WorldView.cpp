@@ -10,7 +10,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   blood("../sprites/gfx/fragments.bmp",
         window,
         {0, 0, 0},
-        {102, 0, 0}){
+        {150, 0, 0}){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -80,4 +80,5 @@ void WorldView::kill(uint8_t id) {
 
 void WorldView::attack(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
+    entities.at(id).attack();
 }

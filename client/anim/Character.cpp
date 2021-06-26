@@ -12,44 +12,29 @@ Character::Character(SdlTexture &texture,
                      SdlTexture& blood)
 : Renderizable(texture, posX, posY),
   player(player),
+  bleeding(false),
+  wasHit(false),
   weapon(weapons),
-  bloodAnimation(blood, 16, 4, 4, 32),
-  currentBleedIteration(0){
-    bloodAnimation.stay();
-    // necesito este metodo pq
-    // el blood splatter corresponde
-    // al frame 8 en adelante de la imagen
+  movementAnimation(texture, 6, 2, 3, 32, player),
+  bloodAnimation(blood, 16, 4, 4, 32, false){
+    movementAnimation.renderFromFrame(0);
     bloodAnimation.renderFromFrame(8);
 }
 
 void Character::render(Camera &cam, uint8_t iteration) {
-    if (player){
-        cam.setLogicalCenter(posX, posY);
-        cam.renderAtCenter(texture, angle, 32, 32);
-        weapon.draw(posX, posY, angle, cam);
-    } else {
-        cam.renderInSight(texture, posX, posY, angle, 32, 32);
-        weapon.draw(posX, posY, angle, cam);
-    }
-
     if (bleeding){
-        currentBleedIteration++;
-        bloodAnimation.renderOld(cam);
-        if (currentBleedIteration == 1024){
-            bleeding = false;
-            currentBleedIteration = 0;
-            bloodAnimation.reset();
-        }
+        bleeding = bloodAnimation.renderOld(cam, 255);
     }
-
+    auto offset = movementAnimation.renderOne(cam, posX, posY, angle);
+    weapon.draw(posX + std::get<0>(offset),
+            posY + std::get<1>(offset),
+            angle + std::get<2>(offset),
+                    cam);
     if (wasHit){
-        bloodAnimation.render(cam, posX, posY, angle, iteration);
+        bloodAnimation.renderOneAndKeep(cam, posX + std::get<0>(offset), posY + std::get<0>(offset));
+        bloodAnimation.advanceFrame();
         wasHit = false;
-        bleeding = true;
     }
-}
-
-void Character::update(){
 }
 
 Character::~Character() {
@@ -59,8 +44,8 @@ Character::Character(Character &&other) noexcept
 : Renderizable(std::move(other)),
   player(other.player),
   weapon(std::move(other.weapon)),
-  bloodAnimation(other.bloodAnimation){
-
+  movementAnimation(std::move(other.movementAnimation)),
+  bloodAnimation(std::move(other.bloodAnimation)){
     other.player = false;
 }
 
@@ -83,4 +68,17 @@ void Character::die() {
 
 void Character::hit() {
     wasHit = true;
+    bleeding = true;
+}
+
+void Character::attack() {
+    weapon.animate(*this);
+}
+
+void Character::pushPositionOffset(std::tuple<int, int, int> positionOffset) {
+    movementAnimation.offsetRenderState(std::move(positionOffset));
+}
+
+void Character::changeWeapon(uint8_t weaponCode) {
+    weapon.changeWeapon(weaponCode);
 }

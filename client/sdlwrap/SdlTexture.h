@@ -45,6 +45,7 @@ public:
     SdlTexture& operator=(SdlTexture&& other) noexcept;
 
 	int render(const Area& src, const Area& dest, const SDL_RendererFlip& flipType) const;
+    int render(const Area& src, const Area& dest, uint8_t alpha) const;
     int render(const Area& src, const Area& dest, float angle, const SDL_RendererFlip& flip) const;
     int render(const Area& src, const Area& dest, float angle, SDL_Point& center, const SDL_RendererFlip& flip) const;
 	~SdlTexture();

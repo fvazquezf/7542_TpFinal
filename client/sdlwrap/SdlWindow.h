@@ -35,6 +35,11 @@ public:
                      SDL_Point& center,
                      SDL_RendererFlip flip);
 
+    int handleRender(SDL_Texture* txt,
+                     const SDL_Rect& src,
+                     const SDL_Rect& dst,
+                     uint8_t alpha);
+
 	SDL_Point getCenter();
 
 	int getWidth();
