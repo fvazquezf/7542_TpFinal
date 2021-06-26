@@ -32,6 +32,12 @@ public:
                SDL_BlendMode blending,
                uint8_t alpha);
 
+    SdlTexture(const std::string& filename,
+               SdlWindow& window,
+               Color key,
+               Color surfaceColor);
+
+
     SdlTexture(const SdlTexture& other) = delete;
     SdlTexture& operator=(const SdlTexture& other) = delete;
 

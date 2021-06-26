@@ -5,9 +5,10 @@
 #include <mutex>
 #include <memory>
 #include <map>
+#include <cstdint>
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
-#include "anim/Terrorist.h"
+#include "anim/Character.h"
 #include "anim/Renderizable.h"
 #include "Camera.h"
 
@@ -17,13 +18,14 @@ private:
     Camera camera;
 
     SdlTexture terror;
+    SdlTexture blood;
     // entre las texturas estara el player (capaz es una textura aparte)
     // en realidad deberia ser un vector de cosas renderizables
     // tales que todas tengan el metodo render etc etc
     //std::vector<Terrorist> textures;
     //std::vector<std::unique_ptr<Renderizable>> entities;
 
-    std::map<uint8_t, std::unique_ptr<Renderizable>> entities;
+    std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
 
     // Player player
@@ -55,6 +57,12 @@ public:
     ~WorldView();
 
     int16_t getPlayerAngle();
+
+    void attack(uint8_t id);
+
+    void hit(uint8_t id);
+
+    void kill(uint8_t id);
 };
 
 

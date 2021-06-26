@@ -88,3 +88,22 @@ Camera::renderWeapon(float playerX,
         texture.render(src, dst, playerAngle,center,SDL_FLIP_NONE);
     }
 }
+
+void
+Camera::renderFromRect(SdlTexture &texture,
+                       SDL_Rect &source,
+                       float x,
+                       float y,
+                       float angle,
+                       int sizeX,
+                       int sizeY) {
+    if (isVisibleInX(x) && isVisibleInY(y)){
+        int newX = centerPix.x - (logicalCenterX - x) * M_TO_P;
+        int newY = centerPix.y - (logicalCenterY - y) * M_TO_P;
+        Area src(source.x, source.y, source.w, source.h);
+        Area dst(newX - (sizeX / 2),
+                 newY - (sizeY / 2),
+                 sizeX, sizeY);
+        texture.render(src, dst, angle, SDL_FLIP_NONE);
+    }
+}

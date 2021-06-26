@@ -74,3 +74,23 @@ SdlTexture::SdlTexture(SdlTexture &&other) noexcept
     this->width = other.width;
     this->height = other.height;
 }
+
+SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key, Color surfaceColor)
+: window(window),
+  texture(nullptr){
+    SDL_Surface* tmp = IMG_Load(filename.c_str());
+    if (!tmp){
+        return;
+    }
+
+    SDL_SetSurfaceColorMod(tmp, surfaceColor.r, surfaceColor.g, surfaceColor.b);
+    SDL_SetColorKey(tmp, SDL_TRUE, SDL_MapRGB(tmp->format, key.r, key.g, key.b));
+
+    this->texture = window.createTexture(tmp);
+
+    width = tmp->w;
+    height = tmp->h;
+
+    SDL_FreeSurface(tmp);
+
+}

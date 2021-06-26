@@ -17,10 +17,12 @@ bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (dist < 2.25f) {
         double res = atan2(enemy.y - player.y, enemy.x - player.x);
         // el round creo que esta de mas
-        int enemyAngle = std::round(res * 180/3.14);
-
-        int start = (angle - 90) - 60;
-        int end = (angle - 90) + 60;
+        int enemyAngle = std::round(res * 180/3.14) + 90;
+        if (enemyAngle < 0){
+            enemyAngle += 360;
+        }
+        int start = (angle) - 60;
+        int end = (angle) + 60;
         if (start < end){
             return (start < enemyAngle && enemyAngle < end);
         } else {

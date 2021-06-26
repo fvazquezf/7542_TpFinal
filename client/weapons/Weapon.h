@@ -20,6 +20,12 @@ protected:
 public:
     explicit Weapon(std::map<uint8_t, SdlTexture>& weaponTextureMap);
 
+    Weapon(const Weapon& other) = delete;
+    Weapon& operator=(const Weapon& other) = delete;
+
+    Weapon(Weapon&& other) noexcept;
+    Weapon& operator=(Weapon&& other) noexcept;
+
     void draw(float x, float y, float angle, Camera& cam);
     void changeWeapon(uint8_t id);
 

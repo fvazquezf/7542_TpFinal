@@ -4,25 +4,34 @@
 #include <vector>
 #include "../sdlwrap/SdlTexture.h"
 #include "../sdlwrap/Area.h"
+#include "../Camera.h"
+
 #define FRAMERATE 1000000 / 60
 
 class Animation {
 public:
-    Animation(const SdlTexture &texture, int numFrames, int size);
+    Animation(SdlTexture &texture,
+              int numFrames,
+              int framesW,
+              int framesH,
+              int sizeW,
+              int sizeH);
+
+    // square frames
+    Animation(SdlTexture& texture, int numFrames, int framesW, int framesH, int size);
+
+    void render(Camera& cam, float x, float y, float angle, uint8_t iteration);
+    void stay();
+    void renderFromFrame(int nFrame);
+    void reset();
 
     ~Animation();
 
-    void update(float dt);
-
-    void render(const Area& src, const Area& dst, const SDL_RendererFlip &flipType);
-    void render(const Area& src, const Area& dst, float angle, const SDL_RendererFlip &flipType);
+    void renderOld(Camera &camera);
 
 protected:
-    // metodo que avanza el frame
-    void advanceFrame();
-
     // textura del sprite
-    const SdlTexture &texture;
+    SdlTexture &texture;
 
     // frame siendo renderizado
     int currentFrame;
@@ -30,11 +39,8 @@ protected:
     // numero de frames en el sprite
     int numFrames;
 
-    // size de un frame
-    int size;
-
-    // tiempo transcurrido desde el ultimo update
-    float elapsed;
+    int sizeW;
+    int sizeH;
 
     // cuantos frames hay en la direccion vertical
     int numFramesH;
@@ -44,6 +50,16 @@ protected:
 
     // vector de frames para una animacion
     std::vector<SDL_Rect> frames;
+
+    // posiciones para renderizar las animaciones viejas
+    // durante x tiempo
+    std::vector<std::tuple<float, float, SDL_Rect>> renderCoordinates;
+
+    bool shouldStay = false;
+
+    // en vez de animar desde el frame 0
+    // empiezo desde frameOffset
+    int frameOffset;
 };
 
 

@@ -57,7 +57,7 @@ int main(int argc, const char *argv[]){
     auto start = std::chrono::steady_clock::now();
     uint8_t it = 0;
 	while (running){
-        world.render(0);
+        world.render(it);
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);
         int rest = FRAMERATE - std::ceil(elapsed.count());

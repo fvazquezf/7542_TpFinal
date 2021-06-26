@@ -156,14 +156,19 @@ void WorldModel::step(){
 		playerModel.second.step();
 	}
 	for (auto id: attackingPlayers){
+	    // el atacante
+	    auto& attacker = playerModels.at(id);
 		for (auto& it : playerModels){
-			if ( playerModels.at(id).attack(it.second) ){
-				if (it.second.gotHit(playerModels.at(id).hit())){
-					updateDead(it.first);
-				} else {
-					updateHit(it.first);
-				}
-			}
+		    // esta condicion es para que no se ataque a si mismo
+		    if (&it.second != &attacker){
+                if ( playerModels.at(id).attack(it.second) ){
+                    if (it.second.gotHit(playerModels.at(id).hit())){
+                        updateDead(it.first);
+                    } else {
+                        updateHit(it.first);
+                    }
+                }
+		    }
 		}
 		if (playerModels.at(id).tickCooldown()){
 			updateAttack(id);

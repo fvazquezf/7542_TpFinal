@@ -13,6 +13,12 @@ protected:
 public:
     explicit Renderizable(SdlTexture& texture, float posX, float posY);
 
+    Renderizable(const Renderizable& other) = delete;
+    Renderizable& operator=(const Renderizable& other) = delete;
+
+    Renderizable(Renderizable&& other) noexcept;
+    Renderizable& operator=(Renderizable&& other) noexcept;
+
     virtual void update() = 0;
     void updatePosition(float x, float y);
     void updateAngle(int16_t newAngle);

@@ -22,7 +22,7 @@ private:
     int height;
 
 public:
-    Camera(SdlWindow& window);
+    explicit Camera(SdlWindow& window);
 
     // recibiria primero al player
     // luego al resto de las entidades
@@ -46,6 +46,14 @@ public:
     void renderInSight(SdlTexture& texture, float x,
                        float y, float angle,
                        int sizeX, int sizeY);
+
+    void renderFromRect(SdlTexture& texture,
+                        SDL_Rect& source,
+                        float x,
+                        float y,
+                        float angle,
+                        int sizeX,
+                        int sizeY);
 
     ~Camera();
 

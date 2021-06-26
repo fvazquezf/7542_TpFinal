@@ -23,3 +23,17 @@ void Weapon::draw(float playerX, float playerY, float playerAngle, Camera &cam) 
     }
     cam.renderWeapon(playerX, playerY, playerAngle, 32, 32, weaponTextureMap.at(0));
 }
+
+Weapon::Weapon(Weapon &&other) noexcept
+: weaponTextureMap(other.weaponTextureMap),
+  currentWeapon(other.currentWeapon){
+}
+
+Weapon &Weapon::operator=(Weapon &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    currentWeapon = other.currentWeapon;
+    return *this;
+}

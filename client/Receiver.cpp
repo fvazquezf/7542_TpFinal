@@ -52,6 +52,17 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.updateAngles(map);
             break;
         }
+        case ATTACK_UPDATE: {
+            world.attack(msg.at(0));
+            break;
+        }
+        case HIT_UPDATE: {
+            world.hit(msg.at(0));
+            break;
+        }
+        case DEAD_UPDATE: {
+            world.kill(msg.at(0));
+        }
         default:
             break;
     }

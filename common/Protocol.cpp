@@ -139,7 +139,18 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case STOP_ATTACK : {
             break;
         }
-
+        case ATTACK_UPDATE:{
+            msg = handleId(receiveCallback);
+            break;
+        }
+        case HIT_UPDATE:{
+            msg = handleId(receiveCallback);
+            break;
+        }
+        case DEAD_UPDATE:{
+            msg = handleId(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -286,4 +297,15 @@ void Protocol::attack(bool done, std::function<void(std::vector<unsigned char>)>
     std::vector<unsigned char> attackMsg;
     attackMsg.push_back(done ? STOP_ATTACK : ATTACK);
     callback(std::move(attackMsg));
+}
+
+void Protocol::updatePlayerState(uint8_t code, uint8_t playerId, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> update;
+    update.push_back(code);
+    update.push_back(playerId);
+    callback(std::move(update));
+}
+
+std::vector<unsigned char> Protocol::handleId(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    return callback(1);
 }

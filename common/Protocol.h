@@ -14,6 +14,9 @@
 // updates (server side)
 #define POS_UPDATE 0x20
 #define ANGLE_UPDATE 0x21
+#define HIT_UPDATE 0x22
+#define DEAD_UPDATE 0x23
+#define ATTACK_UPDATE 0x24
 
 // update misc
 // login response me manda
@@ -76,6 +79,7 @@ public:
                          std::function<void(std::vector<unsigned char>)>& callback) const;
     void updateAngles(std::map<uint8_t, int16_t>& angles,
                       std::function<void(std::vector<unsigned char>)>& callback) const;
+    void updatePlayerState(uint8_t code, uint8_t playerId, std::function<void(std::vector<unsigned char>)>& callback) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -97,6 +101,7 @@ public:
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 
+    std::vector<unsigned char> handleId(std::function<std::vector<unsigned char>(size_t)> &callback);
 };
 
 

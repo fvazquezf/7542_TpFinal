@@ -1,11 +1,16 @@
 #include "WorldView.h"
 #include <random>
 #include <iostream>
+#include <cstdint>
 
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
-  terror("../sprites/gfx/player/t1.bmp", window){
+  terror("../sprites/gfx/player/t1.bmp", window),
+  blood("../sprites/gfx/fragments.bmp",
+        window,
+        {0, 0, 0},
+        {102, 0, 0}){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -17,15 +22,16 @@ WorldView::~WorldView() {
 
 void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, posX, posY, isPlayer, weapons));
-    entities.insert(std::make_pair(id, std::move(terrorist)));
+    entities.emplace(std::piecewise_construct,
+                     std::forward_as_tuple(id),
+                     std::forward_as_tuple(terror, posX, posY, isPlayer, weapons, blood));
 }
 
 void WorldView::render(uint8_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
     for (auto& it : entities){
-        camera.render(*it.second, iteration);
+        camera.render(it.second, iteration);
     }
     window.render();
 }
@@ -37,13 +43,14 @@ void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &posi
             createPlayersAtReception(it.first, it.second.first, it.second.second);
             continue;
         }
-        entities.at(it.first)->updatePosition(it.second.first, it.second.second);
+        entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
 }
 
 void WorldView::createPlayersAtReception(uint8_t id, float x, float y) {
-    auto terrorist = std::unique_ptr<Renderizable>(new Terrorist(terror, x, y, false, weapons));
-    entities.insert(std::make_pair(id, std::move(terrorist)));
+    entities.emplace(std::piecewise_construct,
+                     std::forward_as_tuple(id),
+                     std::forward_as_tuple(terror, x, y, false, weapons, blood));
 }
 
 int16_t WorldView::getPlayerAngle() {
@@ -54,6 +61,23 @@ int16_t WorldView::getPlayerAngle() {
 void WorldView::updateAngles(std::map<uint8_t, int16_t> &angles) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : angles){
-        entities.at(it.first)->updateAngle(it.second);
+        entities.at(it.first).updateAngle(it.second);
     }
+}
+
+void WorldView::hit(uint8_t id) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    entities.at(id).hit();
+}
+
+void WorldView::kill(uint8_t id) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    entities.at(id).die();
+    // borramos el id
+    //auto it = entities.find(id);
+    //entities.erase(it);
+}
+
+void WorldView::attack(uint8_t id) {
+    std::lock_guard<std::mutex> lock(worldMutex);
 }

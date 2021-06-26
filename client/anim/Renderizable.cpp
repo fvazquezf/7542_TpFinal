@@ -18,3 +18,21 @@ void Renderizable::updatePosition(float x, float y) {
 void Renderizable::updateAngle(int16_t newAngle) {
     angle = newAngle;
 }
+
+Renderizable::Renderizable(Renderizable &&other) noexcept
+: texture(other.texture),
+  posX(other.posX),
+  posY(other.posY),
+  angle(other.angle){
+}
+
+Renderizable &Renderizable::operator=(Renderizable &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    posX = other.posX;
+    posY = other.posY;
+    angle = other.angle;
+    return *this;
+}
