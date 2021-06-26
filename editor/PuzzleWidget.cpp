@@ -6,24 +6,18 @@
 #include <QMimeData>
 #include <QPainter>
 #include <QDebug>
-PuzzleWidget::PuzzleWidget(int imageSize, QWidget *parent)
-    : QWidget(parent), m_ImageSize(imageSize)
-{
-    setAcceptDrops(true);
-    setMinimumSize(m_ImageSize, m_ImageSize);
-    setMaximumSize(m_ImageSize, m_ImageSize);
-}
+#include <QGridLayout>
 
-void PuzzleWidget::clear()
+PuzzleWidget::PuzzleWidget(QWidget *parent)
+    : QWidget(parent)
 {
-    pieces.clear();
-    highlightedRect = QRect();
-    inPlace = 0;
-    update();
+    layout = new QGridLayout();
+    setLayout(layout);
 }
 
 void PuzzleWidget::dragEnterEvent(QDragEnterEvent *event)
 {
+    layout.get
     if (event->mimeData()->hasFormat(PiecesList::puzzleMimeType()))
         event->accept();
     else
@@ -32,28 +26,21 @@ void PuzzleWidget::dragEnterEvent(QDragEnterEvent *event)
 
 void PuzzleWidget::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    QRect updateRect = highlightedRect;
-    highlightedRect = QRect();
-    update(updateRect);
-    event->accept();
+
 }
 
 void PuzzleWidget::dragMoveEvent(QDragMoveEvent *event)
 {
-    QRect updateRect = highlightedRect.united(targetSquare(event->pos()));
 
     if (event->mimeData()->hasFormat(PiecesList::puzzleMimeType())
         && findPiece(targetSquare(event->pos())) == -1) {
 
-        highlightedRect = targetSquare(event->pos());
         event->setDropAction(Qt::MoveAction);
         event->accept();
     } else {
-        highlightedRect = QRect();
         event->ignore();
     }
 
-    update(updateRect);
 }
 
 void PuzzleWidget::dropEvent(QDropEvent *event)

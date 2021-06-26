@@ -7,13 +7,14 @@
 #include <QLabel>
 #include <QListView>
 #include <QStringListModel>
+#include <QGroupBox>
 
 #include "yaml-cpp/yaml.h"
 #include <fstream>
+#include <list>
 
 #include "PiecesList.h"
-#include "PuzzleWidget.h"
-
+#include "CounterStrikeStyle.h"
 namespace Ui {
 class MapEditor;
 }
@@ -24,27 +25,28 @@ class MapEditor : public QDialog
 
 public:
     explicit MapEditor(QWidget *parent = nullptr);
-    void loadMap(const std::string &path);
+    void loadMap(const std::string &name);
     ~MapEditor();
 
 private slots:
-    void on_pushButton_3_clicked();
-    void on_pushButton_2_clicked();
+    void handleSaveButton();
+    void handleQuitButton();
     void openImage();
-    void setupPuzzle();
 
 private:
     Ui::MapEditor *ui;
     QListView* map;
     QListView* items;
-    void setupMenus();
-    void setupWidgets();
-    void setCompleted();
+    CounterStrikeStyle styler;
 
+    void setupWidgets();
+
+    std::string map_name = "map";
     YAML::Node map_config;
-    QPixmap puzzleImage;
-    PiecesList *piecesList;
-    PuzzleWidget *puzzleWidget;
+
+    PiecesList* piecesListMap;
+    QGroupBox* gridGroupBox;
+
 };
 
 #endif // MAPEDITOR_H

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(StartingScreen LANGUAGES CXX)
+project(editor LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -15,16 +15,17 @@ find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 
 qt5_add_resources(RC_SRC resource.qrc)
 
-add_executable(StartingScreen
+add_executable(editor
     main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
     MapListWindow.cpp MapListWindow.h MapListWindow.ui
     MapCreationWindow.cpp MapCreationWindow.h MapCreationWindow.ui
     MapEditor.cpp MapEditor.h MapEditor.ui
-    MapWidget.cpp MapWidget.h MapWidget.ui
     PiecesList.cpp PiecesList.h
-    PuzzleWidget.cpp PuzzleWidget.h
+    CounterStrikeStyle.cpp CounterStrikeStyle.h
+    QTile.cpp QTile.h
+    QEditorMapWidget.cpp QEditorMapWidget.h
     ${RC_SRC}
 )
 
-target_link_libraries(StartingScreen PRIVATE Qt5::Widgets Qt5::Core yaml-cpp)
+target_link_libraries(editor PRIVATE Qt5::Widgets Qt5::Core yaml-cpp)

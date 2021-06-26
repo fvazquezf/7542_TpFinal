@@ -4,14 +4,18 @@
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QGridLayout>
 
 PiecesList::PiecesList(int pieceSize, QWidget *parent)
     : QListWidget(parent), m_PieceSize(pieceSize)
 {
+    QGridLayout layout;
     setDragEnabled(true);
     setViewMode(QListView::IconMode);
     setIconSize(QSize(m_PieceSize, m_PieceSize));
-    setSpacing(10);
+    //setGridSize(QSize());
+    setAutoScroll(true);
+    setSpacing(0.0);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
 }
@@ -44,6 +48,7 @@ void PiecesList::dropEvent(QDropEvent *event)
         dataStream >> pixmap >> location;
 
         addPiece(pixmap, location);
+        highlightedRect = QRect();
 
         event->setDropAction(Qt::MoveAction);
         event->accept();
@@ -83,3 +88,11 @@ void PiecesList::startDrag(Qt::DropActions /*supportedActions*/)
     if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
         delete takeItem(row(item));
 }
+
+/*
+void PiecesList::mousePressEvent(QMouseEvent *event)
+{
+
+
+}
+*/

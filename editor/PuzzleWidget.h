@@ -17,7 +17,7 @@ class PuzzleWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit PuzzleWidget(int imageSize, QWidget *parent = nullptr);
+    explicit PuzzleWidget(QWidget *parent = nullptr);
     void clear();
 
     int pieceSize() const;
@@ -25,7 +25,6 @@ public:
     void addPiece(const QPixmap &pixmap, const QPoint &location);
 
 signals:
-    void puzzleCompleted();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -36,19 +35,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    struct Piece {
-        QPixmap pixmap;
-        QRect rect;
-        QPoint location;
-    };
-
-    int findPiece(const QRect &pieceRect) const;
-    const QRect targetSquare(const QPoint &position) const;
-
-    QList<Piece> pieces;
-    QRect highlightedRect;
-    int inPlace;
-    int m_ImageSize;
+    QGridLayout* layout;
 };
 
 #endif // PUZZLEWIDGET_H

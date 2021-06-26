@@ -5,12 +5,14 @@
 #include <QDebug>
 #include <QFontDatabase>
 #include <QMessageBox>
-#define PATH_TO_MAPS "../../maps/"
+
+#include "CounterStrikeStyle.h"
+#define PATH_TO_MAPS "../maps/"
 MapCreationWindow::MapCreationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapCreationWindow)
 {
-    QFontDatabase::addApplicationFont(":/fonts/counter_strike.ttf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/counter_strike.ttf");
     QFont CounterStrikeFont("Counter-Strike", 12, QFont::Normal);
     this->setFont(CounterStrikeFont);
     ui->setupUi(this);
@@ -36,8 +38,7 @@ void MapCreationWindow::on_continueButton_clicked()
 
     this->close();
     MapEditor mapEditor;
-    std::string path_to_map = PATH_TO_MAPS + this->mapName.toStdString() +".yml";
-    mapEditor.loadMap(path_to_map);
+    mapEditor.loadMap(this->mapName.toStdString());
     mapEditor.show();
     mapEditor.exec();
 

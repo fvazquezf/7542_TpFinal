@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <map>
-//#include <yaml.h>
+#include "yaml-cpp/yaml.h"
 
 namespace Ui {
 class MapWidget;
@@ -19,11 +19,14 @@ public:
 
 private:
     Ui::MapWidget *ui;
+
+    YAML::Node img_config;
     int height;
     int width;
     std::map<std::pair<int, int>,std::string> items_map;
     std::string file_name;
     void setValues();
+    void setWidgets();
 
 };
 

@@ -3,17 +3,13 @@
 #include "./MapEditor.h"
 #include "./MapCreationWindow.h"
 #include <QString>
-#include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     Q_INIT_RESOURCE(resource);
-    QFontDatabase::addApplicationFont(":/fonts/counter_strike.ttf");
-    QFont CounterStrikeFont("Counter-Strike", 12, QFont::Normal);
-    this->setFont(CounterStrikeFont);
-    this->setWindowTitle("Counter Strike 2D");
+    styler.setCounterStrikeFont(this, 12);
     ui->setupUi(this);
 }
 
@@ -25,9 +21,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_createButton_clicked()
 {
-    QString mapName = "nombre mapa";
-    QString mapSize = "mmm";
-    this->execCreationWindow(mapName, mapSize);
+    this->execCreationWindow();
 }
 
 void MainWindow::on_editButton_clicked()
@@ -36,7 +30,7 @@ void MainWindow::on_editButton_clicked()
     this->execEditorWindow(mapName);
 }
 
-void MainWindow::execCreationWindow(QString &mapName, QString &mapSize) {
+void MainWindow::execCreationWindow() {
     this->close();
     MapCreationWindow mapCreationWindow;
     mapCreationWindow.setWindowTitle("Counter Strike 2D - Map editor");
@@ -47,7 +41,7 @@ void MainWindow::execCreationWindow(QString &mapName, QString &mapSize) {
 void MainWindow::execEditorWindow(QString &mapName) {
     this->close();
     MapEditor mapEditor;
-   // mapEditor.loadImage(QStringLiteral(":/sprites/img/wall.png"));
+    mapEditor.loadMap(mapName.toStdString());
     mapEditor.show();
     mapEditor.exec();
     this->show();

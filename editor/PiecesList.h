@@ -18,7 +18,9 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void startDrag(Qt::DropActions supportedActions) override;
+    //void mousePressEvent(QMouseEvent *event) override;
 
+    QRect highlightedRect;
     int m_PieceSize;
 };
 
