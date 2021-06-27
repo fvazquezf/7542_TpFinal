@@ -139,3 +139,7 @@ void Animation::advanceFrame() {
         currentFrame = frameOffset;
     }
 }
+
+void Animation::setCurrentFrame(uint8_t newFrame) {
+    currentFrame = newFrame;
+}

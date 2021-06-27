@@ -10,19 +10,33 @@ Weapon::Weapon(std::map<uint8_t, SdlTexture> &weaponTextureMap)
 Weapon::~Weapon() {
 }
 
-void Weapon::changeWeapon(uint8_t id) {
+bool Weapon::changeWeapon(uint8_t id) {
     if (!weaponTextureMap.count(id)){
-        return;
+        return false;
     }
     this->currentWeapon = id;
+    return true;
 }
 
 void Weapon::draw(float playerX, float playerY, float playerAngle, Camera &cam) {
-    if (currentWeapon == 0){
+    if (currentWeapon == KNIFE){
+        playerX -= 0;
+        playerY -= 0.5;
+    } else if (currentWeapon == PISTOL){
+        playerX -= 0;
+        playerY -= 0.5;
+    } else if (currentWeapon == AK47){
+        playerX -= 0;
+        playerY -= 0.5;
+    } else if (currentWeapon == AWP){
+        playerX -= 0;
+        playerY -= 0.5;
+    } else if (currentWeapon == BOMB){
         playerX -= 0;
         playerY -= 0.5;
     }
-    cam.renderWeapon(playerX, playerY, playerAngle, 32, 32, weaponTextureMap.at(0));
+    cam.renderWeapon(playerX, playerY, playerAngle, 32, 32,
+                     weaponTextureMap.at(currentWeapon));
 }
 
 Weapon::Weapon(Weapon &&other) noexcept

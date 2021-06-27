@@ -48,6 +48,8 @@ public:
     // sirve por ej para el cuchillo
     void offsetRenderState(std::tuple<float, float, int16_t> newOffset);
 
+    void setCurrentFrame(uint8_t newFrame);
+
 protected:
     // textura del sprite
     SdlTexture &texture;

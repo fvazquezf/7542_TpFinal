@@ -15,6 +15,10 @@
 // cambiamos la textura que utiliza
 
 #define KNIFE 0
+#define PISTOL 1
+#define AK47 2
+#define AWP 3
+#define BOMB 4
 
 class Character;
 
@@ -38,7 +42,7 @@ public:
     Weapon& operator=(Weapon&& other) noexcept;
 
     void draw(float x, float y, float angle, Camera& cam);
-    void changeWeapon(uint8_t id);
+    bool changeWeapon(uint8_t id);
 
     virtual ~Weapon();
 

@@ -17,8 +17,16 @@ Character::Character(SdlTexture &texture,
   weapon(weapons),
   movementAnimation(texture, 6, 2, 3, 32, player),
   bloodAnimation(blood, 16, 4, 4, 32, false){
-    movementAnimation.renderFromFrame(0);
+    movementAnimation.renderFromFrame(4);
     bloodAnimation.renderFromFrame(8);
+    weaponCharacterFrameMap = {
+            {KNIFE, 0},
+            {PISTOL, 3},
+            {AK47, 4},
+            {AWP, 4},
+            {BOMB, 4},
+    };
+    weapon.changeWeapon(BOMB);
 }
 
 void Character::render(Camera &cam, uint8_t iteration) {
@@ -80,5 +88,7 @@ void Character::pushPositionOffset(std::tuple<int, int, int> positionOffset) {
 }
 
 void Character::changeWeapon(uint8_t weaponCode) {
-    weapon.changeWeapon(weaponCode);
+    if (weapon.changeWeapon(weaponCode)){
+        movementAnimation.setCurrentFrame(weaponCharacterFrameMap.at(weaponCode));
+    }
 }

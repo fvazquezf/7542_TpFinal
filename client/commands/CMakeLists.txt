@@ -6,4 +6,4 @@ add_library(commands
         JoinGame.cpp
         ListGame.cpp
         Move.cpp
-        CommandTester.cpp Rotate.cpp Rotate.h Attack.cpp Attack.h)
+        CommandTester.cpp Rotate.cpp Rotate.h Attack.cpp Attack.h ChangeWeapon.cpp ChangeWeapon.h)

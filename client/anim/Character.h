@@ -14,6 +14,8 @@ private:
     Animation movementAnimation;
     // animacion de sangrado
     Animation bloodAnimation;
+
+    std::map<uint8_t, uint8_t> weaponCharacterFrameMap;
 public:
 	Character(SdlTexture& texture,
               float posX,
