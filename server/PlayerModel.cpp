@@ -92,12 +92,12 @@ bool PlayerModel::attack(PlayerModel& enemy){
     return armory.attack(model->GetPosition(), angle, enemy.getPosition());
 }
 
-Weapon& PlayerModel::hit(){
+std::shared_ptr<Weapon> PlayerModel::hit(){
     return armory.hit();
 }
 
-bool PlayerModel::gotHit(Weapon& weapon){
-    hp -= weapon.hit();
+bool PlayerModel::gotHit(std::shared_ptr<Weapon> weapon){
+    hp -= weapon->hit();
     std::cout << hp << std::endl;
     if (hp <= 0){
         return true;
