@@ -13,6 +13,7 @@
 #include "updates/AttackUpdate.h"
 #include "updates/HitUpdate.h"
 #include "updates/DeadUpdate.h"
+#include "updates/WeaponUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
 updates (updates){
@@ -150,6 +151,12 @@ void WorldModel::updateDead(int id){
     updates.pushAll(updatePtr);
 }
 
+void WorldModel::updateWeapon(uint8_t id, uint8_t weaponType){
+	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponType));
+    updates.pushAll(updatePtr);
+}
+
+
 
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
@@ -228,9 +235,11 @@ void WorldModel::stopAttack(uint8_t id){
 	playerModels.at(id).resetCooldown();
 }
 
-void WorldModel::equipWeapon(uint8_t id, int weaponType){
+void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){
     printf("Player %u equiped Weapon weapon\n", id);
-	playerModels.at(id).equipWeapon(weaponType);
+	if (playerModels.at(id).equipWeapon(weaponType)){
+		updateWeapon(id, weaponType);
+	}
 }
 
 void WorldModel::updateAngles() {
