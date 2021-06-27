@@ -85,8 +85,25 @@ void MapEditor::setupWidgets()
     connect(quitPushButton, SIGNAL (released()), this, SLOT (handleQuitButton()));
 
     // items layout
-    QLabel *itemsLabel = new QLabel("Settings", this);
+    QLabel *itemsLabel = new QLabel("Settings", this);/*
+    QTreeWidget* qEditorItemsWidget = new QTreeWidget(this);
+    qEditorItemsWidget->setColumnCount(2);
+    QTreeWidgetItem* root = new QTreeWidgetItem();
+    root->setText(0, QString::fromStdString("type"));
+    root->setText(1, QString::fromStdString("icon)"));
+    qEditorItemsWidget->addTopLevelItem(root);
+    QTreeWidgetItem* child1 = new QTreeWidgetItem();
+    child1->setText(1, "hola icon");
+    child1->setText(0, "hola");
+    root->addChild(child1);
+    QTreeWidgetItem* child2 = new QTreeWidgetItem();
+    child2->setText(0, "chau");
+    child2->setText(1, "chau icon");
+    root->addChild(child2);
+    */
+    QEditorItemsWidget* qEditorItemsWidget = new QEditorItemsWidget(this);
     itemsLayout->addWidget(itemsLabel);
+    itemsLayout->addWidget(qEditorItemsWidget);
 
     // map layout
     QEditorMapWidget* qMapEditorWidget = new QEditorMapWidget(this, 10, 10, this->map_name);

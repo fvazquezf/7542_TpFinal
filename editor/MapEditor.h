@@ -13,6 +13,7 @@
 #include <fstream>
 #include <list>
 
+#include "QEditorItemsWidget.h"
 #include "PiecesList.h"
 #include "CounterStrikeStyle.h"
 namespace Ui {

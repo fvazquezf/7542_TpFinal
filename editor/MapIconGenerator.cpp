@@ -5,11 +5,27 @@ MapIconGenerator::MapIconGenerator() {
     data = YAML::LoadFile(MAP_ICON_CONFIG_PATH);
     this->setIcons();
 }
+std::vector<std::string> MapIconGenerator::getTypes() {
+    return data["types"].as<std::vector<std::string>>();
+}
+
+std::list<std::string> MapIconGenerator::getIconsNames(std::string &type) {
+    std::vector<std::vector<std::string>> iconsData;
+    iconsData = data[type].as<std::vector<std::vector<std::string>>>();
+
+    std::list<std::string> res;
+    unsigned long n = iconsData.size();
+    for(unsigned long i = 0; i < n; i++) {
+        qDebug() << QString::fromStdString(iconsData[i][0]);
+        res.push_back(iconsData[i][0]);
+    }
+    return res;
+}
+
 
 void MapIconGenerator::setIcons() {
-    std::vector<std::string> types = data["types"].as<std::vector<std::string>>();
+    std::vector<std::string> types = this->getTypes();
     for(unsigned long i = 0; i < types.size(); i++) {
-        qDebug() <<  "TYPE: " << QString::fromStdString(types[i]);
         this->setIcons(types[i]);
     }
 }
@@ -18,7 +34,6 @@ void MapIconGenerator::setIcons(std::string &type) {
     std::vector<std::vector<std::string>> iconsData;
     iconsData = data[type].as<std::vector<std::vector<std::string>>>();
     for(unsigned long i = 0; i < iconsData.size(); i++) {
-        qDebug() <<  "ICON: " << QString::fromStdString(iconsData[i][0]);
         QIcon icon(QString::fromStdString(iconsData[i][1]));
         icons[iconsData[i][0]] = icon;
     }

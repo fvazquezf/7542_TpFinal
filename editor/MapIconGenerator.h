@@ -10,6 +10,8 @@ public:
     MapIconGenerator();
     QIcon getIcon(std::string &name);
     std::vector<std::string> getIconsNames();
+    std::vector<std::string> getTypes();
+    std::list<std::string> getIconsNames(std::string &type);
     ~MapIconGenerator();
 
 private:

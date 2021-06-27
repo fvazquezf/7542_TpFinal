@@ -26,6 +26,7 @@ add_executable(editor
     QTile.cpp QTile.h
     QEditorMapWidget.cpp QEditorMapWidget.h
     MapIconGenerator.cpp MapIconGenerator.h
+    QEditorItemsWidget.cpp QEditorItemsWidget.h
     ${RC_SRC}
 )
 
