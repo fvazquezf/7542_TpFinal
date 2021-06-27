@@ -10,6 +10,7 @@
 #define ROTATE 0x6d
 #define ATTACK 0x6b
 #define STOP_ATTACK 0x7b
+#define CHANGE_WEAPON 0x6f
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -72,6 +73,7 @@ public:
     void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
     void attack(bool b, std::function<void(std::vector<unsigned char>)> &function) const;
     void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
+    void changeWeapon(uint8_t changeCode, std::function<void(std::vector<unsigned char>)> &callback) const;
 
                                 //---------------SERVER---------------//
     void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
@@ -93,15 +95,13 @@ public:
 
                                 //---------------SERVER---------------//
     std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);
-    std::vector<unsigned char> handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleByte(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
     ~Protocol();
 
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
-
-    std::vector<unsigned char> handleId(std::function<std::vector<unsigned char>(size_t)> &callback);
 };
 
 

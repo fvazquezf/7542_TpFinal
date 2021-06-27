@@ -59,7 +59,7 @@ std::vector<unsigned char> Protocol::handleGameName(std::function<std::vector<un
 }
 
 // server side
-std::vector<unsigned char> Protocol::handleMoving(std::function<std::vector<unsigned char>(size_t)> &callback) {
+std::vector<unsigned char> Protocol::handleByte(std::function<std::vector<unsigned char>(size_t)> &callback) {
     return callback(1); // direccion de movimiento
 }
 
@@ -108,13 +108,13 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             // handle move in direction -> funcion propia del servidor
             // thClient.move(direction);
 
-            msg = handleMoving(receiveCallback);
+            msg = handleByte(receiveCallback);
             break;
         }
             // vacio pq el codigo es identico a STOP_MOVE
         case STOP_MOVE: {
             // recibo la dir
-            msg = handleMoving(receiveCallback);
+            msg = handleByte(receiveCallback);
             break;
         }
         case LOGIN_RESPONSE: {
@@ -140,15 +140,19 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case ATTACK_UPDATE:{
-            msg = handleId(receiveCallback);
+            msg = handleByte(receiveCallback);
             break;
         }
         case HIT_UPDATE:{
-            msg = handleId(receiveCallback);
+            msg = handleByte(receiveCallback);
             break;
         }
         case DEAD_UPDATE:{
-            msg = handleId(receiveCallback);
+            msg = handleByte(receiveCallback);
+            break;
+        }
+        case CHANGE_WEAPON: {
+            msg = handleByte(receiveCallback);
             break;
         }
         default:
@@ -306,6 +310,9 @@ void Protocol::updatePlayerState(uint8_t code, uint8_t playerId, std::function<v
     callback(std::move(update));
 }
 
-std::vector<unsigned char> Protocol::handleId(std::function<std::vector<unsigned char>(size_t)> &callback) {
-    return callback(1);
+void Protocol::changeWeapon(uint8_t changeCode, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> changeMsg;
+    changeMsg.push_back(CHANGE_WEAPON);
+    changeMsg.push_back(changeCode);
+    callback(std::move(changeMsg));
 }

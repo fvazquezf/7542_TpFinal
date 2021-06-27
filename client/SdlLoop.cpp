@@ -5,6 +5,7 @@
 #include "commands/JoinGame.h"
 #include "commands/Rotate.h"
 #include "commands/Attack.h"
+#include "commands/ChangeWeapon.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -14,6 +15,11 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
     eventMap[SDL_MOUSEBUTTONDOWN] = std::bind(&SdlLoop::handleMouseButtonDown, this);
     eventMap[SDL_MOUSEBUTTONUP] = std::bind(&SdlLoop::handleMouseButtonUp, this);
     eventMap[SDL_QUIT] = std::bind(&SdlLoop::handleQuit, this);
+
+    numbers.insert(SDLK_1);
+    numbers.insert(SDLK_2);
+    numbers.insert(SDLK_3);
+    numbers.insert(SDLK_4);
 
     presses[SDLK_w] = false;
     presses[SDLK_a] = false;
@@ -83,6 +89,14 @@ void SdlLoop::handleQuit(){
 }
 
 void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
+    // tecla a la cual no trackeamos
+    // estos son los cambios de arma
+    if (pressed && (numbers.find(key) != numbers.end())){
+        std::cout << "Number press\n";
+        commands.push(std::unique_ptr<Command>(new ChangeWeapon(key)));
+        return;
+    }
+
     if (pressed && !presses.at(key)){
         presses.at(key) = true;
         commands.push(std::unique_ptr<Command>(new Move(key)));

@@ -1,7 +1,6 @@
 #ifndef SDLLOOP_H
 #define SDLLOOP_H
 
-#include <vector>
 #include <memory>
 #include "../common/Thread.h"
 #include "../common/Protocol.h"
@@ -11,6 +10,7 @@
 #include <SDL2/SDL_keycode.h>
 #include "WorldView.h"
 #include <map>
+#include <set>
 
 class SdlLoop : public Thread{
 private:
@@ -23,6 +23,8 @@ private:
     std::map<uint32_t, std::function<void()>> eventMap;
     // tracks if the key has been pressed and not released
     std::map<SDL_Keycode, bool> presses;
+    // keeps posible number presses
+    std::set<SDL_Keycode> numbers;
     // tracks if the button has been pressed and not released
     std::map<uint8_t, bool> mousePresses;
 

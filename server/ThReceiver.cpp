@@ -89,6 +89,9 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case STOP_ATTACK:
             eventQueue.push(std::unique_ptr<ClientEvent>(new StopAttackEvent(userId)));
             break;
+        case CHANGE_WEAPON:
+            std::cout << "Cambiando arma xD\n";
+            break;
         default:
             break;
     }
