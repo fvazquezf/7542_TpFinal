@@ -40,21 +40,24 @@ void QEditorMapWidget::loadFile() {
     }
 }
 
-void QEditorMapWidget::setTileFromFile() {
-
-    this->loadFile();
-    std::vector<std::vector<int>> pos = map_config["wall"].as<std::vector<std::vector<int>>>();
-
-    std::string text = map_config["prueba"].as<std::string>();
-    qDebug() <<  QString::fromStdString(text);
-
+void QEditorMapWidget::setTileFromFile(std::string &element) {
+    std::vector<std::vector<int>> pos = map_config[element].as<std::vector<std::vector<int>>>();
     for (unsigned long i = 0; i< pos.size(); i ++) {
         int row = pos[i][0];
         int column = pos[i][1];
-        QIcon icon(":/resources/img/wall.png");
+        QIcon icon = icons.getIcon(element);
         QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
         tiles[column][row] = tile;
         layout->addWidget(tile, row, column);
     }
 
+}
+void QEditorMapWidget::setTileFromFile() {
+
+    this->loadFile();
+    std::vector<std::string> elements = map_config["elements"].as<std::vector<std::string>>();
+    for (unsigned long i = 0; i< elements.size(); i ++) {
+        qDebug() <<  "ELEMENT: " << QString::fromStdString(elements[i]);
+        this->setTileFromFile(elements[i]);
+    }
 }

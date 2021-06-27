@@ -6,6 +6,7 @@
 #include "QTile.h"
 #include "yaml-cpp/yaml.h"
 #include <fstream>
+#include "MapIconGenerator.h"
 
 #define MAX_ROWS 1000
 #define MAX_COLUMNS 1000
@@ -24,10 +25,12 @@ private:
     QGridLayout* layout;
     std::string map_name;
     YAML::Node map_config;
+    MapIconGenerator icons;
 
     void setMapLayout();
     void setEmptyTilesLayout();
     void setTileFromFile();
+    void setTileFromFile(std::string &element);
     void loadFile();
 };
 

@@ -1,10 +1,29 @@
-prueba: ana
 size:
   - height: 200
   - width: 320
 
-wall:
+backgound: "aztec"
+
+elements: ["aztec", "zoneA", "zoneB", "zoneBomb", "bomb", "m3"]
+
+aztec:
    - [0,1]
    - [0,0]
    - [2,2]
    - [4,4]
+   
+zoneA:
+   - [3,3]
+   
+zoneB:
+   - [6,6]
+   
+zoneBomb:
+   - [1,1]
+
+bomb:
+   - [9,9]
+   
+m3:
+   - [0,0]
+   - [8,8]
