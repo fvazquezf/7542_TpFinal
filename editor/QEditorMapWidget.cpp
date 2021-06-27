@@ -7,7 +7,6 @@ QEditorMapWidget::QEditorMapWidget (QWidget* parent, int rows, int columns, std:
         QWidget (parent), rows(rows), columns(columns), map_name(map_name)
     {
         this->setMapLayout();
-        this->setEmptyTilesLayout();
         this->setTileFromFile();
     }
 
@@ -17,16 +16,8 @@ void QEditorMapWidget::setMapLayout() {
     layout->setSpacing(0);
 }
 
-void QEditorMapWidget::setEmptyTilesLayout() {
-    /*
-    for (int column = 0; column < columns; column++) {
-        for (int row = 0; row < rows; row++) {
-            QIcon icon(":/resources/img/wall.png");
-            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
-            tiles[column][row] = tile;
-            layout->addWidget(tile, row, column);
-        }
-    }*/
+void QEditorMapWidget::handleItemSelection(std::string &selectedItem) {
+    this->selectedItem = selectedItem;
 }
 
 void QEditorMapWidget::loadFile() {
@@ -60,4 +51,8 @@ void QEditorMapWidget::setTileFromFile() {
         qDebug() <<  "ELEMENT: " << QString::fromStdString(elements[i]);
         this->setTileFromFile(elements[i]);
     }
+}
+
+void QEditorMapWidget::setItem(std::string &item) {
+    this->selectedItem = item;
 }

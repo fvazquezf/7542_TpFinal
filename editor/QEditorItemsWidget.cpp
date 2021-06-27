@@ -2,7 +2,9 @@
 #include <QtDebug>
 
 #define HEADER_LABEL "Map elements"
-QEditorItemsWidget::QEditorItemsWidget(QWidget* parent): QTreeWidget (parent) {
+
+QEditorItemsWidget::QEditorItemsWidget(QWidget* parent):
+    QTreeWidget (parent) {
     this->setHeaderLabel(HEADER_LABEL);
     this->setMapItems();
 }
@@ -10,19 +12,16 @@ QEditorItemsWidget::QEditorItemsWidget(QWidget* parent): QTreeWidget (parent) {
 void QEditorItemsWidget::setMapItems() {
     std::vector<std::string> types = icons.getTypes();
     for(unsigned long i = 0; i < types.size(); i++) {
-        qDebug() << "TYPE" << QString::fromStdString(types[i]);
         QTreeWidgetItem* root = new QTreeWidgetItem();
         root->setText(0, QString::fromStdString(types[i]));
         this->addTopLevelItem(root);
         std::list<std::string> names = icons.getIconsNames(types[i]);
         std::list<std::string>::iterator it;
         for(it = names.begin(); it != names.end(); it++) {
-            qDebug() << "NAMES" << QString::fromStdString(*it);
             QTreeWidgetItem* child = new QTreeWidgetItem();
             child->setText(0, QString::fromStdString(*it));
             child->setIcon(0, icons.getIcon(*it));
             root->addChild(child);
         }
     }
-
 }

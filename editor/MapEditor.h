@@ -5,17 +5,19 @@
 #include <QWidget>
 #include <QBoxLayout>
 #include <QLabel>
-#include <QListView>
-#include <QStringListModel>
-#include <QGroupBox>
+#include <QtWidgets>
 
-#include "yaml-cpp/yaml.h"
+#include <stdlib.h>
+#include <vector>
 #include <fstream>
 #include <list>
 
+#include "yaml-cpp/yaml.h"
+
+#include "QEditorMapWidget.h"
 #include "QEditorItemsWidget.h"
-#include "PiecesList.h"
 #include "CounterStrikeStyle.h"
+
 namespace Ui {
 class MapEditor;
 }
@@ -32,21 +34,28 @@ public:
 private slots:
     void handleSaveButton();
     void handleQuitButton();
-    void openImage();
+    void treeClicked(QTreeWidgetItem* item, int column);
 
 private:
+    //Layouts
+    QHBoxLayout *mainLayout;
+    QGridLayout *mapLayout;
+    QVBoxLayout *settingsLayout;
+    QVBoxLayout *itemsLayout;
+
+    //Widgets
+    QEditorItemsWidget* qEditorItemsWidget;
+    QEditorMapWidget* qMapEditorWidget;
+
+    //Others
     Ui::MapEditor *ui;
-    QListView* map;
-    QListView* items;
     CounterStrikeStyle styler;
-
-    void setupWidgets();
-
+    std::string selectedItem = "wall";
     std::string map_name = "map";
     YAML::Node map_config;
 
-    PiecesList* piecesListMap;
-    QGroupBox* gridGroupBox;
+    // Methods
+    void setupWidgets();
 
 };
 

@@ -17,6 +17,9 @@ class QEditorMapWidget : public QWidget {
 public:
 
     QEditorMapWidget (QWidget* parent, int rows, int columns, std::string &map_name);
+    void setItem(std::string &item);
+private slots:
+    void handleItemSelection(std::string &selectedItem);
 
 private:
     const int rows;
@@ -26,9 +29,9 @@ private:
     std::string map_name;
     YAML::Node map_config;
     MapIconGenerator icons;
+    std::string selectedItem;
 
     void setMapLayout();
-    void setEmptyTilesLayout();
     void setTileFromFile();
     void setTileFromFile(std::string &element);
     void loadFile();
