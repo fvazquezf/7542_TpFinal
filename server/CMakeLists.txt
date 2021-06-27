@@ -24,10 +24,12 @@ add_library(lib_server
     events/StopMoveEvent.cpp
     events/StopAttackEvent.cpp
     events/StartAttackEvent.cpp
+    events/EquipWeaponEvent.cpp
     updates/PositionUpdate.cpp 
     events/RotateEvent.cpp 
     updates/AngleUpdate.cpp 
     updates/AttackUpdate.cpp
     updates/HitUpdate.cpp
-    updates/DeadUpdate.cpp   )
+    updates/DeadUpdate.cpp
+    updates/WeaponUpdate.cpp   )
 
