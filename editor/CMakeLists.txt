@@ -27,6 +27,8 @@ add_executable(editor
     QEditorMapWidget.cpp QEditorMapWidget.h
     MapIconGenerator.cpp MapIconGenerator.h
     QEditorItemsWidget.cpp QEditorItemsWidget.h
+    QEditorMapListWidget.cpp QEditorMapListWidget.h
+    MapConfigWindow.cpp MapConfigWindow.h MapConfigWindow.ui
     ${RC_SRC}
 )
 

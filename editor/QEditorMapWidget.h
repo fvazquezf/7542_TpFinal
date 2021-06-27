@@ -28,11 +28,18 @@ private:
     std::string selectedItem;
 
     void setMapLayout();
+    void setEmptyMap();
     void setTileFromFile();
     void setTileFromFile(std::string &element);
     void loadFile();
     void addQTile(std::string &element, int row, int column);
-    void mousePressEvent(QMouseEvent *event);
+/*
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    */
+    void mousePressEvent(QMouseEvent *event) override;
 };
 
 #endif   //QEDITOR_MAP_WIDGET_H

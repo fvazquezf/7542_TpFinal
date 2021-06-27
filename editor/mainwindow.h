@@ -1,13 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include "CounterStrikeStyle.h"
+#include "MapConfigWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+#include <QVBoxLayout>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,14 +17,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_createButton_clicked();
-
-    void on_editButton_clicked();
+    void handleStartPushButton();
 
 private:
     Ui::MainWindow *ui;
-    CounterStrikeStyle styler;
-    void execCreationWindow();
-    void execEditorWindow(QString &mapName);
+    void setStart();
+
 };
 #endif // MAINWINDOW_H
