@@ -60,6 +60,7 @@ class WorldModel: public Thread {
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
 
+        void equipWeapon(uint8_t id, int weaponType);
 
         void createBox(b2BodyDef& boxDef);
         void loadMap();

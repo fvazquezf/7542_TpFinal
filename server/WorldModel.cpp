@@ -230,6 +230,11 @@ void WorldModel::stopAttack(uint8_t id){
 	playerModels.at(id).resetCooldown();
 }
 
+void WorldModel::equipWeapon(uint8_t id, int weaponType){
+    printf("Player %u equiped Weapon weapon\n", id);
+	playerModels.at(id).equipWeapon(weaponType);
+}
+
 void WorldModel::updateAngles() {
     std::map<uint8_t, int16_t> angles;
     for (auto& it : playerModels){

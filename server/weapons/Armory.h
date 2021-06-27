@@ -27,10 +27,7 @@ class Armory {
 
         void resetCooldown();
 
-        void equipKnife();
-        int equipPrimary();
-        void equipSecondary();
-        bool equipBomb();
+        int equipWeapon(int weaponType);
 };
 
 

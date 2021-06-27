@@ -28,21 +28,9 @@ void Armory::resetCooldown(){
     arsenal[currentWeapon].resetCooldown();
 }
 
-void Armory::equipKnife(){
-    currentWeapon = 0;
+int Armory::equipWeapon(int weaponType){
+    // aca tiene que haber un chequeo para ver si es valida esa weapon
+    // si no compro una primary, deberia devolver falso, o el codigo que sea
+    currentWeapon = weaponType;
+    return 1;
 }
-
-int Armory::equipPrimary(){
-    currentWeapon = 1;
-    return true;
-}
-
-void Armory::equipSecondary(){
-    currentWeapon = 2;
-}
-
-bool Armory::equipBomb(){
-    currentWeapon = 3;
-    return true;
-}
-

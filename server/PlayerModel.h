@@ -10,6 +10,7 @@ class PlayerModel{
     int16_t angle;
 
     int hp;
+    int money;
 
     Armory armory;
 
@@ -32,10 +33,7 @@ class PlayerModel{
         Weapon& hit();
         bool gotHit(Weapon& weapon);
 
-        void equipKnife();
-        int equipPrimary();
-        void equipSecondary();
-        bool equipBomb();
+        int equipWeapon(int weaponType);
 
         bool tickCooldown();
         void resetCooldown();

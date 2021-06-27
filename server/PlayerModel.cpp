@@ -114,20 +114,8 @@ void PlayerModel::resetCooldown(){
     armory.resetCooldown();
 }
 
-void PlayerModel::equipKnife(){
-    armory.equipKnife();
-}
-
-int PlayerModel::equipPrimary(){
-    armory.equipPrimary();
-}
-
-void PlayerModel::equipSecondary(){
-    armory.equipSecondary();
-}
-
-bool PlayerModel::equipBomb(){
-    armory.equipSecondary();
+int PlayerModel::equipWeapon(int weaponType){
+    armory.equipWeapon(weaponType);
 }
 
 
