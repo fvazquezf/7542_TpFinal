@@ -12,12 +12,13 @@ class QEditorItemsWidget : public QTreeWidget {
 
 public:
     QEditorItemsWidget(QWidget* parent);
-
 private:
     MapIconGenerator icons;
     void setMapItems();
     std::string selectedItem;
     std::vector<std::string> types;
+    void handleClickedLabel();
+
 };
 
 #endif   //QEDITOR_ITEMS_WIDGET_H

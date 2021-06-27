@@ -71,7 +71,7 @@ void MapEditor::setupWidgets()
     mapLayout->addWidget(qMapEditorWidget);
 
     // connections
-    connect(qEditorItemsWidget,SIGNAL(itemClicked(QTreeWidgetItem*,int)),this,SLOT(treeClicked(QTreeWidgetItem*,int)));
+    connect(qEditorItemsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this,SLOT(treeClicked(QTreeWidgetItem*,int)));
 
     // END
     this->setLayout(mainLayout);    
@@ -84,3 +84,5 @@ void MapEditor::treeClicked(QTreeWidgetItem* item, int column) {
         qMapEditorWidget->setItem(nameItem);
     }
 }
+
+
