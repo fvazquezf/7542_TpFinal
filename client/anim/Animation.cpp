@@ -48,7 +48,7 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
     }
 }
 
-void Animation::render(Camera &cam, float posX, float posY, float angle, uint8_t iteration) {
+void Animation::render(Camera &cam, float posX, float posY, float angle, size_t iteration) {
     auto frame = frames.at(iteration % numFrames);
     Area src(frame.x, frame.y, frame.w, frame.h);
     if (center){
@@ -60,18 +60,10 @@ void Animation::render(Camera &cam, float posX, float posY, float angle, uint8_t
     advanceFrame();
 }
 
-void Animation::stay() {
-    shouldStay = true;
-}
-
 // seteo el frame desde el cual quiero renderizar
 void Animation::renderFromFrame(int nFrame) {
     currentFrame = nFrame;
     frameOffset = nFrame;
-}
-
-void Animation::reset() {
-    currentFrame = frameOffset;
 }
 
 void Animation::offsetRenderState(std::tuple<float, float, int16_t> offset) {
@@ -148,27 +140,23 @@ void Animation::setCurrentFrame(uint8_t newFrame) {
     currentFrame = newFrame;
 }
 
-void Animation::rescale(float factor) {
-    for (auto& it : frames){
-        it.w *= factor;
-        it.h *= factor;
-    }
-}
-
-void Animation::renderFor(Camera &cam, float posX, float posY, int16_t angle, uint8_t iteration) {
-    if ((iteration % ticksToChangeFrame)== 0){
-        advanceFrame();
-    }
-
+void Animation::renderFor(Camera &cam, float posX, float posY, int16_t angle, size_t iteration) {
+    currentFrame = ((iteration - startingFrom) / ticksToChangeFrame) % numFrames;
     auto frame = frames.at(currentFrame);
     Area src(frame.x, frame.y, frame.w, frame.h);
     if (center){
         cam.renderAtCenter(texture, src, angle, sizeW, sizeH);
     } else if (cam.isVisible(posX, posY)){
         cam.renderInSight(texture, src, posX, posY, angle);
+    } else {
+        std::cout << "No visible\n";
     }
 }
 
-void Animation::setTicksToChange(uint8_t ticks) {
+void Animation::setTicksToChange(size_t ticks) {
     ticksToChangeFrame = ticks;
+}
+
+void Animation::setStartingIteration(size_t iter) {
+    startingFrom = iter;
 }

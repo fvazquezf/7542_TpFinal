@@ -26,7 +26,7 @@ public:
 
     // recibiria primero al player
     // luego al resto de las entidades
-    void render(Renderizable &renderizable, uint8_t iteration);
+    void render(Renderizable &renderizable, size_t iteration);
 
     // renders texture at the center of the screen
     // only for player

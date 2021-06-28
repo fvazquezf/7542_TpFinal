@@ -22,10 +22,8 @@ public:
     // square frames
     Animation(SdlTexture& texture, int numFrames, int framesW, int framesH, int size, bool center);
 
-    void render(Camera& cam, float x, float y, float angle, uint8_t iteration);
-    void stay();
+    void render(Camera& cam, float x, float y, float angle, size_t iteration);
     void renderFromFrame(int nFrame);
-    void reset();
 
     ~Animation();
 
@@ -37,7 +35,7 @@ public:
                                                 float posY,
                                                 int16_t angle);
 
-    void renderFor(Camera& cam, float posX, float posY, int16_t angle, uint8_t iteration);
+    void renderFor(Camera& cam, float posX, float posY, int16_t angle, size_t iteration);
 
     void renderOneAndKeep(Camera& camera, float posX, float posY);
 
@@ -47,28 +45,26 @@ public:
 
     void setCurrentFrame(uint8_t newFrame);
 
-    // reescaling factor
-    void rescale(float factor);
-
-    void setTicksToChange(uint8_t ticks);
+    void setTicksToChange(size_t ticks);
+    void setStartingIteration(size_t iter);
 protected:
     // textura del sprite
     SdlTexture &texture;
 
     // frame siendo renderizado
-    int currentFrame;
+    size_t currentFrame;
 
     // numero de frames en el sprite
-    int numFrames;
+    size_t numFrames;
 
     int sizeW;
     int sizeH;
 
     // cuantos frames hay en la direccion vertical
-    int numFramesH;
+    size_t numFramesH;
 
     // cuantos frames hay en la direccion horizontal
-    int numFramesW;
+    size_t numFramesW;
 
     // vector de frames para una animacion
     std::vector<SDL_Rect> frames;
@@ -80,8 +76,6 @@ protected:
     // queue de updates de offset en el frame actual
     std::queue<std::tuple<float, float, int16_t>> modifiedState;
 
-    bool shouldStay = false;
-
     // en vez de animar desde el frame 0
     // empiezo desde frameOffset
     int frameOffset;
@@ -89,6 +83,7 @@ protected:
     bool center;
 
     int ticksToChangeFrame;
+    size_t startingFrom;
 };
 
 

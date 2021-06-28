@@ -11,7 +11,8 @@ WorldView::WorldView(SdlWindow& aWindow)
         window,
         {0, 0, 0},
         {150, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp", window){
+  legs("../sprites/gfx/player/legs.bmp",
+       window){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -44,7 +45,7 @@ void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
                      std::forward_as_tuple(terror, posX, posY, isPlayer, weapons, blood, legs));
 }
 
-void WorldView::render(uint8_t iteration) {
+void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
     for (auto& it : entities){

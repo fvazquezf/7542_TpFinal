@@ -11,7 +11,7 @@ Camera::Camera(SdlWindow& window)
     centerPix = window.getCenter();
 }
 
-void Camera::render(Renderizable &renderizable, uint8_t iteration) {
+void Camera::render(Renderizable &renderizable, size_t iteration) {
     // renderizable.render(this) -> double dispatch
     // cada textura se debe renderizar segun su tipo
     // si no usamos double dispatch tenemos todos getters
@@ -52,7 +52,7 @@ bool Camera::isVisibleInY(float y){
 }
 
 bool Camera::isVisible(float x, float y){
-    return isVisibleInY(x) && isVisibleInY(y);
+    return isVisibleInX(x) && isVisibleInY(y);
 }
 
 void Camera::setLogicalCenter(float x, float y){

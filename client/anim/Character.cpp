@@ -34,17 +34,16 @@ Character::Character(SdlTexture &texture,
             {BOMB, 4},
     };
     weapon.changeWeapon(KNIFE);
-    legAnimation.setTicksToChange(10);
+    legAnimation.setTicksToChange(15);
 }
 
-void Character::render(Camera &cam, uint8_t iteration) {
+void Character::render(Camera &cam, size_t iteration) {
     if (player){
         cam.setLogicalCenter(posX, posY);
     }
 
     if (moving){
-        uint8_t frame = iteration - animationTickStart;
-        legAnimation.renderFor(cam, posX, posY + 0.2, 0, frame);
+        legAnimation.renderFor(cam, posX, posY + 0.2, 0, iteration);
     }
 
     if (bleeding){
@@ -118,7 +117,7 @@ void Character::updatePosition(float x, float y) {
     float diffY = abs(posY - y);
     if (!moving && ((diffX > 0.005) || (diffY > 0.005))){
         moving = true;
-        animationTickStart = lastIter;
+        legAnimation.setStartingIteration(lastIter + 1);
     } else if (moving && ((diffX < 0.005) && (diffY < 0.005))){
         moving = false;
     }

@@ -13,7 +13,7 @@ private:
     bool stopping;
     uint8_t movingFrames;
     uint8_t animationTickStart;
-    uint8_t lastIter;
+    size_t lastIter;
     Weapon weapon;
     // animacion de movimiento
     Animation movementAnimation;
@@ -38,7 +38,7 @@ public:
     Character(Character&& other) noexcept;
     Character& operator=(Character&& other) noexcept;
 
-    void render(Camera &cam, uint8_t iteration) override;
+    void render(Camera &cam, size_t iteration) override;
 
     void updatePosition(float x, float y) override;
 

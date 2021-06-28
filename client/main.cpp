@@ -55,7 +55,7 @@ int main(int argc, const char *argv[]){
 
 	l.start();
     auto start = std::chrono::steady_clock::now();
-    uint8_t it = 0;
+    size_t it = 0;
 	while (running){
         world.render(it);
         auto end = std::chrono::steady_clock::now();
