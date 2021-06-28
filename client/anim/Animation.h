@@ -17,10 +17,10 @@ public:
               int framesH,
               int sizeW,
               int sizeH,
-              bool player);
+              bool center);
 
     // square frames
-    Animation(SdlTexture& texture, int numFrames, int framesW, int framesH, int size, bool player);
+    Animation(SdlTexture& texture, int numFrames, int framesW, int framesH, int size, bool center);
 
     void render(Camera& cam, float x, float y, float angle, uint8_t iteration);
     void stay();
@@ -37,19 +37,20 @@ public:
                                                 float posY,
                                                 int16_t angle);
 
+    void renderFor(Camera& cam, float posX, float posY, int16_t angle, uint8_t iteration);
+
     void renderOneAndKeep(Camera& camera, float posX, float posY);
 
     void advanceFrame();
 
-    // renderiza una animacion entera
-    // void render(Camera& camera, uint8_t iteration)
-
-    // agrega offset de posicion y angulo a la proxima iteracion
-    // sirve por ej para el cuchillo
     void offsetRenderState(std::tuple<float, float, int16_t> newOffset);
 
     void setCurrentFrame(uint8_t newFrame);
 
+    // reescaling factor
+    void rescale(float factor);
+
+    void setTicksToChange(uint8_t ticks);
 protected:
     // textura del sprite
     SdlTexture &texture;
@@ -85,7 +86,9 @@ protected:
     // empiezo desde frameOffset
     int frameOffset;
 
-    bool player;
+    bool center;
+
+    int ticksToChangeFrame;
 };
 
 

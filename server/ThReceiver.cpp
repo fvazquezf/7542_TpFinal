@@ -5,6 +5,7 @@
 #include "events/RotateEvent.h"
 #include "events/StartAttackEvent.h"
 #include "events/StopAttackEvent.h"
+#include "events/EquipWeaponEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -90,7 +91,7 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             eventQueue.push(std::unique_ptr<ClientEvent>(new StopAttackEvent(userId)));
             break;
         case CHANGE_WEAPON:
-            std::cout << "Cambiando arma xD\n";
+            eventQueue.push(std::unique_ptr<ClientEvent>(new EquipWeaponEvent(userId, msg.at(0))));
             break;
         default:
             break;

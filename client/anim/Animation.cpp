@@ -9,7 +9,7 @@ Animation::Animation(SdlTexture &texture,
                      int framesH,
                      int sizeW,
                      int sizeH,
-                     bool player)
+                     bool center)
 : texture(texture),
   currentFrame(0),
   numFrames(numFrames),
@@ -18,7 +18,8 @@ Animation::Animation(SdlTexture &texture,
   numFramesH(framesH),
   numFramesW(framesW),
   frameOffset(0),
-  player(player){
+  center(center),
+  ticksToChangeFrame(0){
     for (int i = 0; i < framesH; ++i){
         for (int j = 0; j < framesW; ++j){
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
@@ -29,7 +30,7 @@ Animation::Animation(SdlTexture &texture,
 Animation::~Animation(){
 }
 
-Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int framesH, int size, bool player)
+Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int framesH, int size, bool center)
 : texture(texture),
   currentFrame(0),
   numFrames(numFrames),
@@ -38,7 +39,8 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
   numFramesH(framesH),
   numFramesW(framesW),
   frameOffset(0),
-  player(player){
+  center(center),
+  ticksToChangeFrame(0){
     for (int i = 0; i < framesH; ++i) {
         for (int j = 0; j < framesW; ++j) {
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
@@ -47,12 +49,15 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
 }
 
 void Animation::render(Camera &cam, float posX, float posY, float angle, uint8_t iteration) {
-    if (currentFrame == numFrames){
-        currentFrame = frameOffset;
+    auto frame = frames.at(iteration % numFrames);
+    Area src(frame.x, frame.y, frame.w, frame.h);
+    if (center){
+        cam.renderAtCenter(texture, src, angle, sizeW, sizeH);
+    } else if (cam.isVisible(posX, posY)){
+        cam.renderInSight(texture, src, posX, posY, angle);
     }
-    auto frame = frames.at(currentFrame % numFrames);
-    cam.renderFromRect(texture, frame, posX, posY, angle, sizeW, sizeH);
-    ++currentFrame;
+    currentFrame = (iteration % numFrames);
+    advanceFrame();
 }
 
 void Animation::stay() {
@@ -95,8 +100,7 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
     }
 
     Area src(frame.x, frame.y, frame.w, frame.h);
-    if (player){
-        camera.setLogicalCenter(newPosX, newPosY);
+    if (center){
         camera.renderAtCenter(texture, src, newAngle, sizeW, sizeH);
     } else {
         if (camera.isVisible(newPosX, newPosY)){
@@ -142,4 +146,29 @@ void Animation::advanceFrame() {
 
 void Animation::setCurrentFrame(uint8_t newFrame) {
     currentFrame = newFrame;
+}
+
+void Animation::rescale(float factor) {
+    for (auto& it : frames){
+        it.w *= factor;
+        it.h *= factor;
+    }
+}
+
+void Animation::renderFor(Camera &cam, float posX, float posY, int16_t angle, uint8_t iteration) {
+    if ((iteration % ticksToChangeFrame)== 0){
+        advanceFrame();
+    }
+
+    auto frame = frames.at(currentFrame);
+    Area src(frame.x, frame.y, frame.w, frame.h);
+    if (center){
+        cam.renderAtCenter(texture, src, angle, sizeW, sizeH);
+    } else if (cam.isVisible(posX, posY)){
+        cam.renderInSight(texture, src, posX, posY, angle);
+    }
+}
+
+void Animation::setTicksToChange(uint8_t ticks) {
+    ticksToChangeFrame = ticks;
 }

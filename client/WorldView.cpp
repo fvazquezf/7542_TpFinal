@@ -10,7 +10,8 @@ WorldView::WorldView(SdlWindow& aWindow)
   blood("../sprites/gfx/fragments.bmp",
         window,
         {0, 0, 0},
-        {150, 0, 0}){
+        {150, 0, 0}),
+  legs("../sprites/gfx/player/legs.bmp", window){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -40,7 +41,7 @@ void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
     std::lock_guard<std::mutex> lock(worldMutex);
     entities.emplace(std::piecewise_construct,
                      std::forward_as_tuple(id),
-                     std::forward_as_tuple(terror, posX, posY, isPlayer, weapons, blood));
+                     std::forward_as_tuple(terror, posX, posY, isPlayer, weapons, blood, legs));
 }
 
 void WorldView::render(uint8_t iteration) {
@@ -49,6 +50,7 @@ void WorldView::render(uint8_t iteration) {
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
+    Area src(0, 0, 128, 64);
     window.render();
 }
 
@@ -66,7 +68,7 @@ void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &posi
 void WorldView::createPlayersAtReception(uint8_t id, float x, float y) {
     entities.emplace(std::piecewise_construct,
                      std::forward_as_tuple(id),
-                     std::forward_as_tuple(terror, x, y, false, weapons, blood));
+                     std::forward_as_tuple(terror, x, y, false, weapons, blood, legs));
 }
 
 int16_t WorldView::getPlayerAngle() {

@@ -9,15 +9,22 @@ Character::Character(SdlTexture &texture,
                      float posY,
                      bool player,
                      std::map<uint8_t, SdlTexture> &weapons,
-                     SdlTexture& blood)
+                     SdlTexture& blood,
+                     SdlTexture& legs)
 : Renderizable(texture, posX, posY),
   player(player),
   bleeding(false),
   wasHit(false),
+  moving(false),
+  stopping(false),
+  movingFrames(0),
+  animationTickStart(0),
+  lastIter(0),
   weapon(weapons),
   movementAnimation(texture, 6, 2, 3, 32, player),
-  bloodAnimation(blood, 16, 4, 4, 32, false){
-    movementAnimation.renderFromFrame(4);
+  bloodAnimation(blood, 16, 4, 4, 32, false),
+  legAnimation(legs, 6, 3, 2, 32, false){
+    movementAnimation.renderFromFrame(0);
     bloodAnimation.renderFromFrame(8);
     weaponCharacterFrameMap = {
             {KNIFE, 0},
@@ -26,13 +33,24 @@ Character::Character(SdlTexture &texture,
             {AWP, 4},
             {BOMB, 4},
     };
-    weapon.changeWeapon(BOMB);
+    weapon.changeWeapon(KNIFE);
+    legAnimation.setTicksToChange(10);
 }
 
 void Character::render(Camera &cam, uint8_t iteration) {
+    if (player){
+        cam.setLogicalCenter(posX, posY);
+    }
+
+    if (moving){
+        uint8_t frame = iteration - animationTickStart;
+        legAnimation.renderFor(cam, posX, posY + 0.2, 0, frame);
+    }
+
     if (bleeding){
         bleeding = bloodAnimation.renderOld(cam, 255);
     }
+
     auto offset = movementAnimation.renderOne(cam, posX, posY, angle);
     weapon.draw(posX + std::get<0>(offset),
             posY + std::get<1>(offset),
@@ -43,6 +61,7 @@ void Character::render(Camera &cam, uint8_t iteration) {
         bloodAnimation.advanceFrame();
         wasHit = false;
     }
+    lastIter = iteration;
 }
 
 Character::~Character() {
@@ -53,7 +72,8 @@ Character::Character(Character &&other) noexcept
   player(other.player),
   weapon(std::move(other.weapon)),
   movementAnimation(std::move(other.movementAnimation)),
-  bloodAnimation(std::move(other.bloodAnimation)){
+  bloodAnimation(std::move(other.bloodAnimation)),
+  legAnimation(std::move(other.legAnimation)){
     other.player = false;
 }
 
@@ -91,4 +111,16 @@ void Character::changeWeapon(uint8_t weaponCode) {
     if (weapon.changeWeapon(weaponCode)){
         movementAnimation.setCurrentFrame(weaponCharacterFrameMap.at(weaponCode));
     }
+}
+
+void Character::updatePosition(float x, float y) {
+    float diffX = abs(posX - x);
+    float diffY = abs(posY - y);
+    if (!moving && ((diffX > 0.005) || (diffY > 0.005))){
+        moving = true;
+        animationTickStart = lastIter;
+    } else if (moving && ((diffX < 0.005) && (diffY < 0.005))){
+        moving = false;
+    }
+    Renderizable::updatePosition(x, y);
 }

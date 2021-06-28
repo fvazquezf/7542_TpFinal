@@ -19,9 +19,7 @@ private:
 
     SdlTexture terror;
     SdlTexture blood;
-    // entre las texturas estara el player (capaz es una textura aparte)
-    // en realidad deberia ser un vector de cosas renderizables
-    // tales que todas tengan el metodo render etc etc
+    SdlTexture legs;
     //std::vector<Terrorist> textures;
     //std::vector<std::unique_ptr<Renderizable>> entities;
 

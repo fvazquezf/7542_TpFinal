@@ -9,11 +9,18 @@ private:
     bool player;
     bool bleeding;
     bool wasHit;
+    bool moving;
+    bool stopping;
+    uint8_t movingFrames;
+    uint8_t animationTickStart;
+    uint8_t lastIter;
     Weapon weapon;
     // animacion de movimiento
     Animation movementAnimation;
     // animacion de sangrado
     Animation bloodAnimation;
+    // animacion de piernas (si, de piernas)
+    Animation legAnimation;
 
     std::map<uint8_t, uint8_t> weaponCharacterFrameMap;
 public:
@@ -22,7 +29,8 @@ public:
               float posY,
               bool player,
               std::map<uint8_t, SdlTexture>& weapons,
-              SdlTexture& blood);
+              SdlTexture& blood,
+              SdlTexture& legs);
 
 	Character(const Character& other) = delete;
     Character& operator=(const Character& other) = delete;
@@ -31,6 +39,8 @@ public:
     Character& operator=(Character&& other) noexcept;
 
     void render(Camera &cam, uint8_t iteration) override;
+
+    void updatePosition(float x, float y) override;
 
 	void changeWeapon(uint8_t weaponCode);
 

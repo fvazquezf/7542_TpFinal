@@ -156,8 +156,6 @@ void WorldModel::updateWeapon(uint8_t id, uint8_t weaponType){
     updates.pushAll(updatePtr);
 }
 
-
-
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
 		playerModel.second.step();
