@@ -6,7 +6,7 @@
 
 class ChangeWeapon : public Command{
 public:
-    enum ChangeCode : uint8_t {PRI, SEC, KNF, BMB};
+    enum ChangeCode : uint8_t {PRI = 1, GLK = 2, KNF = 0, BMB = 3};
 
     explicit ChangeWeapon(SDL_Keycode changeCode);
 
@@ -17,7 +17,7 @@ private:
     uint8_t code;
     std::map<SDL_Keycode, ChangeWeapon::ChangeCode> changeMap{
             {SDLK_1, ChangeCode::PRI},
-            {SDLK_2, ChangeCode::SEC},
+            {SDLK_2, ChangeCode::GLK},
             {SDLK_3, ChangeCode::KNF},
             {SDLK_4, ChangeCode::BMB}
     };

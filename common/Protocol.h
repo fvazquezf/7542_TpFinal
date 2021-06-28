@@ -18,6 +18,7 @@
 #define HIT_UPDATE 0x22
 #define DEAD_UPDATE 0x23
 #define ATTACK_UPDATE 0x24
+#define WEAPON_UPDATE 0x25
 
 // update misc
 // login response me manda
@@ -82,6 +83,9 @@ public:
     void updateAngles(std::map<uint8_t, int16_t>& angles,
                       std::function<void(std::vector<unsigned char>)>& callback) const;
     void updatePlayerState(uint8_t code, uint8_t playerId, std::function<void(std::vector<unsigned char>)>& callback) const;
+    void updatePlayerWeapon(uint8_t weaponCode,
+                            uint8_t playerId,
+                            std::function<void(std::vector<unsigned char>)>& callback) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -90,6 +94,7 @@ public:
     std::vector<unsigned char> handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleAngleUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleUpdateWeapon(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
 
@@ -102,6 +107,7 @@ public:
 
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
+
 };
 
 

@@ -155,6 +155,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleByte(receiveCallback);
             break;
         }
+        case WEAPON_UPDATE: {
+            msg = handleUpdateWeapon(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -315,4 +319,18 @@ void Protocol::changeWeapon(uint8_t changeCode, std::function<void(std::vector<u
     changeMsg.push_back(CHANGE_WEAPON);
     changeMsg.push_back(changeCode);
     callback(std::move(changeMsg));
+}
+
+void Protocol::updatePlayerWeapon(uint8_t weaponCode, uint8_t playerId,
+                                  std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> update;
+    update.push_back(WEAPON_UPDATE);
+    update.push_back(weaponCode);
+    update.push_back(playerId);
+    callback(std::move(update));
+}
+
+std::vector<unsigned char> Protocol::handleUpdateWeapon(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    // weapon id y player id
+    return callback(2);
 }

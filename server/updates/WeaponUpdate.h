@@ -5,10 +5,10 @@
 
 class WeaponUpdate : public Update{
 private:
-    int id;
-    int weaponId;
+    uint8_t id;
+    uint8_t weaponId;
 public:
-    explicit WeaponUpdate(int id, int weaponId);
+    explicit WeaponUpdate(uint8_t id, uint8_t weaponId);
 
     void serialize(std::function<void(std::vector<unsigned char>)>& callback) override;
 

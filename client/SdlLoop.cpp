@@ -92,7 +92,6 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
     // tecla a la cual no trackeamos
     // estos son los cambios de arma
     if (pressed && (numbers.find(key) != numbers.end())){
-        std::cout << "Number press\n";
         commands.push(std::unique_ptr<Command>(new ChangeWeapon(key)));
         return;
     }

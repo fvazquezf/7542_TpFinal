@@ -62,6 +62,11 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         }
         case DEAD_UPDATE: {
             world.kill(msg.at(0));
+            break;
+        }
+        case WEAPON_UPDATE: {
+            world.changeWeapon(msg.at(0), msg.at(1));
+            break;
         }
         default:
             break;

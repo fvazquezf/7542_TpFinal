@@ -20,11 +20,11 @@ WorldView::WorldView(SdlWindow& aWindow)
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(2),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(3),
                     std::forward_as_tuple(
@@ -100,4 +100,9 @@ void WorldView::kill(uint8_t id) {
 void WorldView::attack(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
     entities.at(id).attack();
+}
+
+void WorldView::changeWeapon(uint8_t weaponCode, uint8_t playerId) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    entities.at(playerId).changeWeapon(weaponCode);
 }

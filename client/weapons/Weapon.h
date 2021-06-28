@@ -15,8 +15,8 @@
 // cambiamos la textura que utiliza
 
 #define KNIFE 0
-#define PISTOL 1
-#define AK47 2
+#define AK47 1
+#define PISTOL 2
 #define AWP 3
 #define BOMB 4
 

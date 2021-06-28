@@ -47,6 +47,7 @@ public:
     WorldView& operator=(WorldView&& other) = delete;
 
     void createTerrorist(uint8_t id, bool isPlayer, int posX, int posY);
+    void changeWeapon(uint8_t weaponCode, uint8_t playerId);
 
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positionMap);
     void updateAngles(std::map<uint8_t, int16_t>& angles);
