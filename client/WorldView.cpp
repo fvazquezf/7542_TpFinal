@@ -10,7 +10,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   blood("../sprites/gfx/fragments.bmp",
         window,
         {0, 0, 0},
-        {150, 0, 0}),
+        {200, 0, 0}),
   legs("../sprites/gfx/player/legs.bmp",
        window){
     weapons.emplace(std::piecewise_construct,
