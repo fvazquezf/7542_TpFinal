@@ -3,6 +3,7 @@
 
 #include "../../libs/box2d/include/box2d/box2d.h"
 #include "Weapon.h"
+#include <random>
 
 class Knife: public Weapon {
     private:

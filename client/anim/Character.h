@@ -10,9 +10,6 @@ private:
     bool bleeding;
     bool wasHit;
     bool moving;
-    bool stopping;
-    uint8_t movingFrames;
-    uint8_t animationTickStart;
     size_t lastIter;
     Weapon weapon;
     // animacion de movimiento
@@ -51,7 +48,7 @@ public:
 
     void attack();
 
-    void pushPositionOffset(std::tuple<int, int, int> positionOffset);
+    void pushPositionOffset(std::tuple<float, float, int> positionOffset);
 };
 
 #endif

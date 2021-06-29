@@ -14,7 +14,8 @@ PlayerModel::PlayerModel(){
 PlayerModel::PlayerModel(b2Body* body):
 model(body),
 angle(0),
-hp(100){
+hp(100),
+isAlive(true){
     this->netForce.SetZero();
 }
 
@@ -85,10 +86,16 @@ int16_t PlayerModel::getAngle() const {
 }
 
 void PlayerModel::setAngle(int16_t newAngle) {
+    if (!isAlive){
+        return;
+    }
     this->angle = newAngle;
 }
 
 bool PlayerModel::attack(PlayerModel& enemy){
+    if (!isAlive){
+        return false;
+    }
     return armory.attack(model->GetPosition(), angle, enemy.getPosition());
 }
 
@@ -116,6 +123,10 @@ void PlayerModel::resetCooldown(){
 
 int PlayerModel::equipWeapon(int weaponType){
     armory.equipWeapon(weaponType);
+}
+
+void PlayerModel::die() {
+    isAlive = false;
 }
 
 

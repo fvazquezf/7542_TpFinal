@@ -9,6 +9,8 @@ class Pistol: public Weapon {
         int damage;
         int cooldown;
 
+        // distancia maxima de "viaje" de la bala
+        double maxHittingDistance;
     public:
         Pistol();
         ~Pistol() override;

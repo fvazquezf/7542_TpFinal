@@ -51,9 +51,7 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
 void Animation::render(Camera &cam, float posX, float posY, float angle, size_t iteration) {
     auto frame = frames.at(iteration % numFrames);
     Area src(frame.x, frame.y, frame.w, frame.h);
-    if (center){
-        cam.renderAtCenter(texture, src, angle, sizeW, sizeH);
-    } else if (cam.isVisible(posX, posY)){
+    if (cam.isVisible(posX, posY)){
         cam.renderInSight(texture, src, posX, posY, angle);
     }
     currentFrame = (iteration % numFrames);
@@ -92,12 +90,8 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
     }
 
     Area src(frame.x, frame.y, frame.w, frame.h);
-    if (center){
-        camera.renderAtCenter(texture, src, newAngle, sizeW, sizeH);
-    } else {
-        if (camera.isVisible(newPosX, newPosY)){
-            camera.renderInSight(texture, src, newPosX, newPosY, newAngle);
-        }
+    if (camera.isVisible(newPosX, newPosY)){
+        camera.renderInSight(texture, src, newPosX, newPosY, newAngle);
     }
 
     return std::make_tuple(newPosX - posX, newPosY - posY, newAngle - angle);
@@ -144,12 +138,8 @@ void Animation::renderFor(Camera &cam, float posX, float posY, int16_t angle, si
     currentFrame = ((iteration - startingFrom) / ticksToChangeFrame) % numFrames;
     auto frame = frames.at(currentFrame);
     Area src(frame.x, frame.y, frame.w, frame.h);
-    if (center){
-        cam.renderAtCenter(texture, src, angle, sizeW, sizeH);
-    } else if (cam.isVisible(posX, posY)){
+    if (cam.isVisible(posX, posY)) {
         cam.renderInSight(texture, src, posX, posY, angle);
-    } else {
-        std::cout << "No visible\n";
     }
 }
 

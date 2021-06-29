@@ -41,7 +41,7 @@ int main(int argc, const char *argv[]){
     }
     // End seccion
 
-    SdlWindow window(800, 600, false, "unaVentana");
+    SdlWindow window(1280, 720, false, "unaVentana");
     WorldView world(window);
 
     SdlLoop l(comms, world);

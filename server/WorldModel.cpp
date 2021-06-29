@@ -168,6 +168,7 @@ void WorldModel::step(){
 		    if (&it.second != &attacker){
                 if ( playerModels.at(id).attack(it.second) ){
                     if (it.second.gotHit(playerModels.at(id).hit())){
+                        it.second.die();
                         updateDead(it.first);
                     } else {
                         updateHit(it.first);
@@ -234,7 +235,6 @@ void WorldModel::stopAttack(uint8_t id){
 }
 
 void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){
-    printf("Player %u equiped Weapon weapon\n", id);
 	if (playerModels.at(id).equipWeapon(weaponType)){
 		updateWeapon(id, weaponType);
 	}

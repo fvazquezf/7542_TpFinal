@@ -4,6 +4,7 @@
 Pistol::Pistol(){
     damage = 20;
     cooldown = 0;
+    maxHittingDistance = 50;
 }
 
 
@@ -15,11 +16,16 @@ bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (cooldown != 0) return false;
     double dist = static_cast<double>((player - enemy).LengthSquared());
     // 2500 es la distancia(50m) de ataque al cuadrado, si esta mas lejos no le pega.
-    std::cout << "absDist: " << dist << std::endl;
-    if (dist < 2500) {
+    //std::cout << "absDist: " << dist << std::endl;
 
-        std::cout << "angle: " << angle << std::endl;
+    b2Vec2 bulletPosition(player);
 
+    b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
+    double oldDist = INFINITY;
+    double currDist = 0;
+    double bulletTravelledDistance = 0;
+
+    while (bulletTravelledDistance < maxHittingDistance){
         //double y = sin((angle) * 180/3.14) + player.y;
         //double x = cos((angle) * 180/3.14)+ player.x;
 
@@ -27,36 +33,19 @@ bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
         // usar los angulos 0 90 180 270 para ver que las dirreciones
         // coinciden con los ejes estilo sdl2
 
-        // direcciones en x y en y del vector de la bala
-        b2Vec2 bulletDirectionVector(sin(angle * 3.14/180.0f), -cos(angle * 3.14/180.0f));
-        std::cout << bulletDirectionVector.x << " " << bulletDirectionVector.y << "\n";
 
-        double bulletX = player.x;
-        double bulletY = player.y;
-
-        b2Vec2 bulletPosition(bulletX, bulletY);
-
-        // se podria calcular una sola vez
-        // despues iterar por todos los players
-        // ver cual esta mas cerca y ademas si esta en distancia de hit
-        // y pegarle a ese
-        double oldDist = INFINITY;
-        double currDist = 0;
-        for (size_t i = 0; i < 100; ++i){
-            // trayectoria de una recta con origen en la posicion del jugador
-            // viaja en la direccion de disparo
-            bulletPosition.operator+=(bulletDirectionVector);
-            // hitbox
-            if ((currDist = (bulletPosition - enemy).Length()) < 0.5) {
-                return true;
-            }
-            // si me aleje, entonces no le voy a pegar
-            if (oldDist < currDist){
-                return false;
-            }
-            oldDist = currDist;
+        // trayectoria de una recta con origen en la posicion del jugador
+        // viaja en la direccion de disparo
+        bulletPosition.operator+=(bulletDirection);
+        bulletTravelledDistance += bulletDirection.Length();
+        if ((currDist = (bulletPosition - enemy).Length()) < 0.5) {
+            return true;
         }
-        return false;
+        if (oldDist < currDist){
+            return false;
+        }
+        oldDist = currDist;
+    }
         /*double x = sin(angle / 3.14) + player.x;
         double y = -cos(angle / 3.14) + player.y;
 
@@ -95,7 +84,6 @@ bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
         //     if (start < enemyAngle) return true;
         //     if (end > enemyAngle) return true;
         // }*/
-    }
     return false;
 }
 

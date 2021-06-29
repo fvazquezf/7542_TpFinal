@@ -27,11 +27,12 @@ private:
     std::map<uint8_t, SdlTexture>& weaponTextureMap;
     uint8_t currentWeapon;
 
-    // usado para la rotacion del cuchillo
+    // usado para animacion de recoil
+    // y rotacion del cuchillo
     // describe una parabola que va desde
     // un angulo 0, hasta un maximo
     // y de vuelta a 0
-    int16_t parabolicMotion(int nFrame);
+    float parabolicMotion(int nFrame);
 public:
     explicit Weapon(std::map<uint8_t, SdlTexture>& weaponTextureMap);
 
@@ -46,7 +47,7 @@ public:
 
     virtual ~Weapon();
 
-    void animate(Character &character);
+    void animate(Character &character, float posX, float posY, float angle);
 };
 
 

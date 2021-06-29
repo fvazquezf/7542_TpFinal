@@ -12,6 +12,7 @@ class PlayerModel{
 
     int hp;
     int money;
+    bool isAlive;
 
     Armory armory;
 
@@ -46,6 +47,7 @@ class PlayerModel{
 
         void step();
 
+    void die();
 };
 
 #endif

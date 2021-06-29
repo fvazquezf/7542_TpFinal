@@ -16,9 +16,6 @@ Character::Character(SdlTexture &texture,
   bleeding(false),
   wasHit(false),
   moving(false),
-  stopping(false),
-  movingFrames(0),
-  animationTickStart(0),
   lastIter(0),
   weapon(weapons),
   movementAnimation(texture, 6, 2, 3, 32, player),
@@ -99,10 +96,10 @@ void Character::hit() {
 }
 
 void Character::attack() {
-    weapon.animate(*this);
+    weapon.animate(*this, posX, posY, angle);
 }
 
-void Character::pushPositionOffset(std::tuple<int, int, int> positionOffset) {
+void Character::pushPositionOffset(std::tuple<float, float, int> positionOffset) {
     movementAnimation.offsetRenderState(std::move(positionOffset));
 }
 

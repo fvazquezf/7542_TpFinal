@@ -33,8 +33,14 @@ bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     return false;
 }
 
+// cuchillo
+// produce daño random entre min y max damage
+// distribucion uniforme
 int Knife::hit(){
-    return damage;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dmgDist(0, damage);
+    return dmgDist(gen);
 }
 
 bool Knife::tickCooldown(){
