@@ -28,6 +28,7 @@ class MapEditor : public QDialog
 
 public:
     explicit MapEditor(QWidget *parent, const std::string &name);
+    explicit MapEditor(QWidget *parent, const std::string &name, int row, int column);
     ~MapEditor();
 
 private slots:

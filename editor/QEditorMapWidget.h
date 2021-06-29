@@ -13,25 +13,29 @@ class QEditorMapWidget : public QWidget {
     Q_OBJECT
 
 public:
-    QEditorMapWidget (QWidget* parent, int rows, int columns, std::string &map_name);
+    QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns);
+    QEditorMapWidget (QWidget* parent, std::string &map_name);
     void setItem(std::string &item);
-    void updateFile();
+    void updateMapLFile();
 
 private:
-    const int rows;
-    const int columns;
-    std::vector<std::vector<std::string>> tiles;
     QGridLayout* layout;
+    std::map<std::string, std::list<std::list<int>>> tiles;
+    std::map<std::string, int> size;
+    std::vector<std::string> elements = {"aztec", "zoneA", "zoneB", "zoneBomb", "bomb", "m3"};
+
     std::string map_name;
-    YAML::Node map_config;
     MapIconGenerator icons;
     std::string selectedItem;
 
     void setMapLayout();
-    void setEmptyMap();
-    void setTileFromFile();
-    void setTileFromFile(std::string &element);
-    void loadFile();
+
+    void setTilesFromOldFile();
+    void setTilesFromNewFile();
+
+    void loadNewFile(int rows, int columns);
+    void loadOldFile();
+
     void addQTile(std::string &element, int row, int column);
 /*
 protected:

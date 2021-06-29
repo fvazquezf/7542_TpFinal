@@ -12,15 +12,24 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name) :
     QDialog(parent),
     ui(new Ui::MapEditor)
 {
-
     styler.setCounterStrikeFont(this, 12);
-
     ui->setupUi(this);
-
     this->map_name = name;
-
+    this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name);
     setupWidgets();
+    setWindowTitle(tr("Counter Strike 2D - Map editor"));
+}
 
+
+MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int column) :
+    QDialog(parent),
+    ui(new Ui::MapEditor)
+{
+    styler.setCounterStrikeFont(this, 12);
+    ui->setupUi(this);
+    this->map_name = name;
+    this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name, row, column);
+    setupWidgets();
     setWindowTitle(tr("Counter Strike 2D - Map editor"));
 }
 
@@ -31,6 +40,7 @@ MapEditor::~MapEditor()
 
 void MapEditor::handleSaveButton()
 {
+    qMapEditorWidget->updateMapLFile();
     this->close();
 }
 
@@ -74,7 +84,6 @@ void MapEditor::setupWidgets()
     itemsLayout->addWidget(posts);
 
     // map layout
-    qMapEditorWidget = new QEditorMapWidget(this, WIDTH, HEIGHT, this->map_name);
     mapLayout->addWidget(qMapEditorWidget);
 
     // connections

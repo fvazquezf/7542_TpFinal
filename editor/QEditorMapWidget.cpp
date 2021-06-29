@@ -5,12 +5,21 @@
 #include <exception>
 #include<QScrollArea>
 
-QEditorMapWidget::QEditorMapWidget (QWidget* parent, int rows, int columns, std::string &map_name) :
-        QWidget (parent), rows(rows), columns(columns), map_name(map_name) {
-        this->setAcceptDrops(true);
-        this->setMapLayout();
-        this->setEmptyMap();
-        this->setTileFromFile();
+#define ROWS "size_rows"
+#define COLUMNS "size_columns"
+
+QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
+        QWidget (parent), map_name(map_name) {
+    this->setAcceptDrops(true);
+    this->setMapLayout();
+    this->loadNewFile(rows, columns);
+}
+
+QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name) :
+        QWidget (parent), map_name(map_name) {
+    this->setAcceptDrops(true);
+    this->setMapLayout();
+    this->loadOldFile();
 }
 
 void QEditorMapWidget::setMapLayout() {
@@ -20,53 +29,81 @@ void QEditorMapWidget::setMapLayout() {
     this->setLayout(layout);
 }
 
-void QEditorMapWidget::setEmptyMap() {
-    for(int i = 0; i<rows; i++){
-        for(int j = 0; j<columns; j++){
+void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
+    QIcon icon = icons.getIcon(element);
+    QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
+    std::list<int> pos = {row, column};
+    tiles[element].push_back(pos);
+    layout->addWidget(tile, row, column);
+}
+
+void QEditorMapWidget::loadNewFile(int rows, int columns) {
+    size[COLUMNS] = columns;
+    size[ROWS] = rows;
+    this->setTilesFromNewFile();
+
+}
+
+void QEditorMapWidget::setTilesFromNewFile() {
+    for(int i = 0; i<  size[ROWS]; i++){
+        for(int j = 0; j < size[COLUMNS]; j++){
             std::string s = "aztec";
             this->addQTile(s, i, j);
         }
     }
 }
 
-void QEditorMapWidget::loadFile() {
-    std::string path = PATH_TO_MAPS + map_name + ".yml";
-    std::ofstream outfile;
-    outfile.open(path, std::ios_base::app);
-    outfile << "size:\n  - height: 200\n  - width: 320\nbackgound: \"\"\nelements: []";
-    outfile.close();
-    map_config = YAML::LoadFile(path);
+void QEditorMapWidget::loadOldFile() {
+    this->setTilesFromOldFile();
 }
 
-void QEditorMapWidget::updateFile() {
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; i < columns; j++) {
-            // TO-DO
+void QEditorMapWidget::setTilesFromOldFile() {
+
+    std::string path = PATH_TO_MAPS + map_name + ".yml";
+    YAML::Node map_config = YAML::LoadFile(path);
+
+    this->size[COLUMNS] = map_config[COLUMNS].as<int>();
+    this->size[ROWS] = map_config[ROWS].as<int>();
+
+    for (unsigned long i = 0; i< elements.size(); i ++) {
+        try {
+            std::list<std::list<int>> pos = map_config[elements[i]].as<std::list<std::list<int>>>();
+            std::list<std::list<int>> ::iterator it;
+            for (it = pos.begin(); it != pos.end(); ++it) {
+                std::list<int> ::iterator it2 = (*it).begin();
+                this->addQTile(elements[i], *(it2), *(it2++));
+            }
+        } catch(YAML::BadConversion ex) {
+
         }
     }
 }
 
-void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
-    QIcon icon = icons.getIcon(element);
-    QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
-    //tiles[column][row] = element;
-    layout->addWidget(tile, row, column);
-}
+void QEditorMapWidget::updateMapLFile() {
+    std::string path = PATH_TO_MAPS + map_name + ".yml";
+    std::ofstream outfile;
+    outfile.open(path);
 
-void QEditorMapWidget::setTileFromFile(std::string &element) {
-    std::vector<std::vector<int>> pos = map_config[element].as<std::vector<std::vector<int>>>();
-    for (unsigned long i = 0; i< pos.size(); i ++) {
-        this->addQTile(element, pos[i][0], pos[i][1]);
+    YAML::Emitter out;
+    out << size;
+
+    std::string res = "";
+    for (unsigned long i = 0; i < elements.size(); i ++) {
+        if(tiles[elements[i]].size() == 0) {
+            continue;
+        }
+        res += elements[i] + ":\n";
+        std::list<std::list<int>> ::iterator it;
+        for (it = tiles[elements[i]].begin(); it != tiles[elements[i]].end(); ++it) {
+            std::list<int> ::iterator it2 = (*it).begin();
+            res += "  - [" + std::to_string(*(it2)) + "," + std::to_string(*(it2++)) + "]\n";
+        }
+        res += "\n";
     }
-}
 
-void QEditorMapWidget::setTileFromFile() {
-
-    this->loadFile();
-    std::vector<std::string> elements = map_config["elements"].as<std::vector<std::string>>();
-    for (unsigned long i = 0; i< elements.size(); i ++) {
-        this->setTileFromFile(elements[i]);
-    }
+    outfile << out.c_str();
+    outfile << "\n" << res;
+    outfile.close();
 }
 
 void QEditorMapWidget::setItem(std::string &item) {

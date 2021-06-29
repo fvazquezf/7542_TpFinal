@@ -35,7 +35,7 @@ void MapCreationWindow::on_continueButton_clicked()
     qDebug() << "Map size: " << this->mapSize;
 
     this->close();
-    MapEditor mapEditor(this, this->mapName.toStdString());
+    MapEditor mapEditor(this, this->mapName.toStdString(), 15, 15);
     mapEditor.exec();
 }
 

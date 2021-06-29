@@ -16,7 +16,6 @@ std::list<std::string> MapIconGenerator::getIconsNames(std::string &type) {
     std::list<std::string> res;
     unsigned long n = iconsData.size();
     for(unsigned long i = 0; i < n; i++) {
-        qDebug() << QString::fromStdString(iconsData[i][0]);
         res.push_back(iconsData[i][0]);
     }
     return res;

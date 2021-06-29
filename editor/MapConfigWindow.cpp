@@ -1,6 +1,6 @@
 #include "MapConfigWindow.h"
 #include "ui_MapConfigWindow.h"
-
+#include "QEditorMapWidget.h"
 MapConfigWindow::MapConfigWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapConfigWindow)
@@ -30,7 +30,10 @@ void MapConfigWindow::handleCreatePushButton()
 
 void MapConfigWindow::handleEditPushButton()
 {
-    this->execEditorWindow(this->selectedMap);
+    this->close();
+    MapEditor mapEditor(this, this->selectedMap.toStdString());
+    mapEditor.exec();
+    this->show();
 }
 
 void MapConfigWindow::handleClickMouse(QListWidgetItem* item) {
@@ -42,13 +45,6 @@ void MapConfigWindow::execCreationWindow() {
     MapCreationWindow mapCreationWindow;
     mapCreationWindow.setWindowTitle("Counter Strike 2D - Map editor");
     mapCreationWindow.exec();
-    this->show();
-}
-
-void MapConfigWindow::execEditorWindow(QString &mapName) {
-    this->close();
-    MapEditor mapEditor(this, mapName.toStdString());
-    mapEditor.exec();
     this->show();
 }
 
