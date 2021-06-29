@@ -1,15 +1,13 @@
 #include "MapListWindow.h"
 #include "ui_MapListWindow.h"
-#include <QFontDatabase>
 
 MapListWindow::MapListWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapListWindow)
 {
-    QFontDatabase::addApplicationFont(":resources/fonts/counter_strike.ttf");
-    QFont CounterStrikeFont("Counter-Strike", 12, QFont::Normal);
-    this->setFont(CounterStrikeFont);
-   ui->setupUi(this);
+    styler.setCounterStrikeFont(this, 14);
+    this->setWindowTitle("Counter Strike 2D");
+    ui->setupUi(this);
 }
 
 

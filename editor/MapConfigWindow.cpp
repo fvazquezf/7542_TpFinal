@@ -7,6 +7,7 @@ MapConfigWindow::MapConfigWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     styler.setCounterStrikeFont(this, 14);
+    this->setWindowTitle("Counter Strike 2D - Configuration");
     setMainLayout();
 }
 

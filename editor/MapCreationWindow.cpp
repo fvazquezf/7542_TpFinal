@@ -3,7 +3,6 @@
 #include "ui_MapCreationWindow.h"
 #include <QLineEdit>
 #include <QDebug>
-#include <QFontDatabase>
 #include <QMessageBox>
 
 #include "CounterStrikeStyle.h"
@@ -12,9 +11,8 @@ MapCreationWindow::MapCreationWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MapCreationWindow)
 {
-    QFontDatabase::addApplicationFont(":/resources/fonts/counter_strike.ttf");
-    QFont CounterStrikeFont("Counter-Strike", 12, QFont::Normal);
-    this->setFont(CounterStrikeFont);
+    styler.setCounterStrikeFont(this, 14);
+    this->setWindowTitle("Counter Strike 2D - Configuration");
     ui->setupUi(this);
 }
 

@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QWidget>
-
+#include "CounterStrikeStyle.h"
 namespace Ui {
 class MapListWindow;
 }
@@ -18,6 +18,7 @@ public:
 
 private:
     Ui::MapListWindow *ui;
+    CounterStrikeStyle styler;
 };
 
 #endif // MAPLISTWINDOW_H

@@ -2,6 +2,7 @@
 #define MAPCREATIONWINDOW_H
 
 #include <QDialog>
+#include "./CounterStrikeStyle.h"
 
 namespace Ui {
 class MapCreationWindow;
@@ -22,6 +23,7 @@ private slots:
 
 private:
     Ui::MapCreationWindow *ui;
+    CounterStrikeStyle styler;
     QString mapName;
     QString mapSize;
 };
