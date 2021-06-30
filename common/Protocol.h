@@ -11,6 +11,7 @@
 #define ATTACK 0x6b
 #define STOP_ATTACK 0x7b
 #define CHANGE_WEAPON 0x6f
+#define BUY 0x7a
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -75,6 +76,7 @@ public:
     void attack(bool b, std::function<void(std::vector<unsigned char>)> &function) const;
     void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
     void changeWeapon(uint8_t changeCode, std::function<void(std::vector<unsigned char>)> &callback) const;
+    void buy(uint8_t weaponCode, std::function<void(std::vector<unsigned char>)> &callback) const;
 
                                 //---------------SERVER---------------//
     void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;

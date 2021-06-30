@@ -93,6 +93,9 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case CHANGE_WEAPON:
             eventQueue.push(std::unique_ptr<ClientEvent>(new EquipWeaponEvent(userId, msg.at(0))));
             break;
+        case BUY:
+            std::cout << "Buying\n";
+            break;
         default:
             break;
     }

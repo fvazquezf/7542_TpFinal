@@ -7,6 +7,8 @@ WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
   stencil(window, 45, 0, 0),
+  menu(window),
+  menuTime(true),
   terror("../sprites/gfx/player/t1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
         window,
@@ -57,6 +59,9 @@ void WorldView::render(size_t iteration) {
     }
     for (auto& it : entities){
         camera.render(it.second, iteration);
+    }
+    if (menuTime){
+        menu.showMenu();
     }
     //stencil.applyFilter(camera.angleFromMouse());
     window.render();
@@ -113,3 +118,17 @@ void WorldView::changeWeapon(uint8_t weaponCode, uint8_t playerId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     entities.at(playerId).changeWeapon(weaponCode);
 }
+
+bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    if (!menuTime){
+        return false;
+    }
+    return menu.isButtonPressed(mouseX, mouseY);
+}
+
+uint8_t WorldView::getPressedButtonCode() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    return menu.getPressedButtonCode();
+}
+

@@ -6,6 +6,7 @@
 #include "commands/Rotate.h"
 #include "commands/Attack.h"
 #include "commands/ChangeWeapon.h"
+#include "commands/Buy.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -106,7 +107,12 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
 }
 
 void SdlLoop::mouseButton(bool pressed, uint8_t button){
-    if (pressed && !mousePresses.at(button)){
+    int mouseX, mouseY = 0;
+    SDL_GetMouseState(&mouseX, &mouseY);
+    if (pressed && world.menuButtonPressed(mouseX, mouseY)){
+        commands.push(std::unique_ptr<Command>(new Buy(world.getPressedButtonCode())));
+        return;
+    } else if (pressed && !mousePresses.at(button)){
         mousePresses.at(button) = true;
         commands.push(std::unique_ptr<Command>(new Attack()));
     } else if (!pressed){

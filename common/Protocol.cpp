@@ -2,6 +2,7 @@
 #include "Protocol.h"
 #include <arpa/inet.h>
 #include <stdexcept>
+#include <iostream>
 
 Protocol::Protocol() {
 }
@@ -158,6 +159,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         }
         case WEAPON_UPDATE: {
             msg = handleUpdateWeapon(receiveCallback);
+            break;
+        }
+        case BUY: {
+            msg = handleByte(receiveCallback);
             break;
         }
         default:
@@ -334,4 +339,11 @@ void Protocol::updatePlayerWeapon(uint8_t weaponCode, uint8_t playerId,
 std::vector<unsigned char> Protocol::handleUpdateWeapon(std::function<std::vector<unsigned char>(size_t)> &callback) {
     // weapon id y player id
     return callback(2);
+}
+
+void Protocol::buy(uint8_t weaponCode, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> buyingMsg;
+    buyingMsg.push_back(BUY);
+    buyingMsg.push_back(weaponCode);
+    callback(std::move(buyingMsg));
 }

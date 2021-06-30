@@ -13,12 +13,17 @@
 #include "Camera.h"
 #include "Stencil.h"
 #include "anim/Tile.h"
+#include "BuyingMenu.h"
 
 class WorldView {
 private:
     SdlWindow& window;
     Camera camera;
     Stencil stencil;
+    BuyingMenu menu;
+
+    bool menuTime;
+    uint16_t menuTicks;
 
     SdlTexture terror;
     //SdlTexture counterTerrorist;
@@ -44,6 +49,9 @@ public:
 
     WorldView(WorldView&& other) = delete;
     WorldView& operator=(WorldView&& other) = delete;
+
+    bool menuButtonPressed(int mouseX, int mouseY);
+    uint8_t getPressedButtonCode();
 
     void createTerrorist(uint8_t id, bool isPlayer, int posX, int posY);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);
