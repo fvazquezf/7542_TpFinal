@@ -22,6 +22,7 @@
 #define DEAD_UPDATE 0x23
 #define ATTACK_UPDATE 0x24
 #define WEAPON_UPDATE 0x25
+#define BUYING_UPDATE 0x26
 
 // update misc
 // login response me manda
@@ -30,6 +31,9 @@
 #define LOGIN_RESPONSE 0x60
 #define LOGIN_OK 0
 #define LOGIN_BAD 1
+
+#define BUY_START 0
+#define BUY_END 1
 
 // metros a milimetros
 #define PRECISION 1000.0f
@@ -94,6 +98,7 @@ public:
     void updatePlayerWeapon(uint8_t weaponCode,
                             uint8_t playerId,
                             std::function<void(std::vector<unsigned char>)>& callback) const;
+    void updateBuyingTime(bool buyingTime, std::function<void(std::vector<unsigned char>)>& callback) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);

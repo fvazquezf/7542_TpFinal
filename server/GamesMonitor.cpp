@@ -28,7 +28,7 @@ bool GamesMonitor::createMatch(std::string gameName,
     }
     matches.emplace(std::piecewise_construct,
                     std::forward_as_tuple(gameName),
-                    std::forward_as_tuple(5));
+                    std::forward_as_tuple(2));
     // si creo el jeugo es id 0
     response(0);
     matches.at(gameName).addUser(handIn());

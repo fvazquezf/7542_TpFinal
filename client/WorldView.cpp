@@ -8,7 +8,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   camera(window),
   stencil(window, 45, 0, 0),
   menu(window),
-  menuTime(true),
+  menuTime(false),
   terror("../sprites/gfx/player/t1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
         window,
@@ -40,8 +40,8 @@ WorldView::WorldView(SdlWindow& aWindow)
                     std::forward_as_tuple(5),
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
-    for (size_t i = 30; i < 50; ++i)
-        for (size_t j = 30; j < 50; ++j)
+    for (size_t i = 40; i < 70; ++i)
+        for (size_t j = 40; j < 70; ++j)
             tiles.emplace_back(backgroundTiles, i, j);
 }
 
@@ -134,5 +134,13 @@ bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
 uint8_t WorldView::getPressedButtonCode() {
     std::lock_guard<std::mutex> lock(worldMutex);
     return menu.getPressedButtonCode();
+}
+
+void WorldView::setMenu(bool isIt) {
+    menuTime = isIt;
+}
+
+bool WorldView::isMenuTime() const {
+    return menuTime;
 }
 

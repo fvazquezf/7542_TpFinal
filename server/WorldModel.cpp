@@ -14,6 +14,7 @@
 #include "updates/HitUpdate.h"
 #include "updates/DeadUpdate.h"
 #include "updates/WeaponUpdate.h"
+#include "updates/BuyTimeUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
 updates (updates){
@@ -104,6 +105,7 @@ void WorldModel::run(){
     playerModels.at(1).reposition(51.0f, 51.0f);
 
     updatePositions();
+    roundBegin();
     while (is_running){
         auto start = std::chrono::system_clock::now();
 		for (int i = 0; i<10; i++){
@@ -268,4 +270,35 @@ void WorldModel::disconnectPlayer(uint8_t id) {
 
 void WorldModel::stop() {
     is_running = false;
+}
+
+void WorldModel::roundBegin() {
+    // 600 ticks, 10 segundos a 60 ticks cada segundo
+    updateBuying(true);
+    // sleep ? esperamos un poquitito antes de contar
+    usleep(FRAMERATE);
+    for (size_t i = 0; i < 600; ++i){
+        auto start = std::chrono::system_clock::now();
+        for (size_t j = 0; j < 10; ++j){
+            try {
+                std::unique_ptr<ClientEvent> event = usersEvents.pop();
+                event->updatePlayer(*this);
+            }
+            catch (const std::invalid_argument& e){
+                continue;
+            }
+        }
+	updatePositions();
+	updateAngles();
+	step();
+        auto end = std::chrono::system_clock::now();
+        std::chrono::duration<float, std::micro> elapsed = (end - start);
+        usleep(FRAMERATE + elapsed.count());
+    }
+    usleep(FRAMERATE);
+    updateBuying(false);
+}
+
+void WorldModel::updateBuying(bool buying) {
+    updates.pushAll(std::shared_ptr<Update>(new BuyTimeUpdate(buying)));
 }

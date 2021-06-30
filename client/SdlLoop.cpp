@@ -97,6 +97,10 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
         return;
     }
 
+    if (world.isMenuTime()){
+        return;
+    }
+
     if (pressed && !presses.at(key)){
         presses.at(key) = true;
         commands.push(std::unique_ptr<Command>(new Move(key)));

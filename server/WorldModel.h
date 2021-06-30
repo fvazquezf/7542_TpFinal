@@ -54,6 +54,7 @@ class WorldModel: public Thread {
         void updateHit(int id);
         void updateDead(int id);
         void updateWeapon(uint8_t id, uint8_t code);
+        void updateBuying(bool buying);
 
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
@@ -63,6 +64,9 @@ class WorldModel: public Thread {
 
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
+
+        void roundBegin();
+        void roundPlay();
 
         void createBox(b2BodyDef& boxDef);
         void loadMap();

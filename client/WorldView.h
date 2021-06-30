@@ -6,6 +6,7 @@
 #include <memory>
 #include <map>
 #include <cstdint>
+#include <atomic>
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
 #include "anim/Character.h"
@@ -22,7 +23,7 @@ private:
     Stencil stencil;
     BuyingMenu menu;
 
-    bool menuTime;
+    std::atomic_bool menuTime;
     uint16_t menuTicks;
 
     SdlTexture terror;
@@ -52,6 +53,8 @@ public:
 
     bool menuButtonPressed(int mouseX, int mouseY);
     uint8_t getPressedButtonCode();
+    void setMenu(bool isIt);
+    bool isMenuTime() const;
 
     void createTerrorist(uint8_t id, bool isPlayer, int posX, int posY);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);

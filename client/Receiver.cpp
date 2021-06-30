@@ -68,6 +68,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.changeWeapon(msg.at(0), msg.at(1));
             break;
         }
+        case BUYING_UPDATE: {
+            world.setMenu(msg.at(0) == BUY_START);
+            break;
+        }
         default:
             break;
     }

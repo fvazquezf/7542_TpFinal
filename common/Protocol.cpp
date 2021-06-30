@@ -165,6 +165,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleByte(receiveCallback);
             break;
         }
+        case BUYING_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -346,4 +350,11 @@ void Protocol::buy(uint8_t weaponCode, std::function<void(std::vector<unsigned c
     buyingMsg.push_back(BUY);
     buyingMsg.push_back(weaponCode);
     callback(std::move(buyingMsg));
+}
+
+void Protocol::updateBuyingTime(bool buyingTime, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> buyMsg;
+    buyMsg.push_back(BUYING_UPDATE);
+    buyMsg.push_back(buyingTime ? BUY_START : BUY_END);
+    callback(std::move(buyMsg));
 }
