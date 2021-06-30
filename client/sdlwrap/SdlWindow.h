@@ -6,6 +6,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_audio.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 
 class SdlWindow {
 private:
@@ -39,6 +40,16 @@ public:
                      const SDL_Rect& src,
                      const SDL_Rect& dst,
                      uint8_t alpha);
+
+    //int drawCircle(std::pair<int16_t, int16_t> x1, );
+    int drawCenteredTriangle(int16_t x2,
+                             int16_t y2,
+                             int16_t x3,
+                             int16_t y3,
+                             uint8_t r,
+                             uint8_t g,
+                             uint8_t b,
+                             uint8_t alpha);
 
 	SDL_Point getCenter();
 

@@ -6,13 +6,14 @@
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
+  stencil(window, 45, 0, 0),
   terror("../sprites/gfx/player/t1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
         window,
         {0, 0, 0},
         {200, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp",
-       window){
+  legs("../sprites/gfx/player/legs.bmp",window),
+  backgroundTiles("../sprites/gfx/backgrounds/aztec.png", window){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -33,6 +34,9 @@ WorldView::WorldView(SdlWindow& aWindow)
                     std::forward_as_tuple(4),
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
+    for (size_t i = 0; i < 100; ++i)
+        for (size_t j = 0; j < 100; ++j)
+            tiles.emplace_back(backgroundTiles, i, j);
 }
 
 WorldView::~WorldView() {
@@ -48,10 +52,13 @@ void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
+    for (auto& tile : tiles){
+        camera.render(tile, iteration);
+    }
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
-    Area src(0, 0, 128, 64);
+    //stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }
 

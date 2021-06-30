@@ -1,6 +1,7 @@
 #include <vector>
 #include "Protocol.h"
 #include <arpa/inet.h>
+#include <stdexcept>
 
 Protocol::Protocol() {
 }

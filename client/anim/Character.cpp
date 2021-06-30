@@ -37,6 +37,10 @@ Character::Character(SdlTexture &texture,
 void Character::render(Camera &cam, size_t iteration) {
     if (player){
         cam.setLogicalCenter(posX, posY);
+    } else {
+        if (!cam.isVisible(posX, posY)){
+            return;
+        }
     }
 
     if (moving){

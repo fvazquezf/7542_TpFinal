@@ -9,6 +9,8 @@ Camera::Camera(SdlWindow& window)
   logicalCenterX(-100),
   logicalCenterY(-100) {
     centerPix = window.getCenter();
+    width = 2*centerPix.x;
+    height = 2*centerPix.y;
 }
 
 void Camera::render(Renderizable &renderizable, size_t iteration) {
@@ -18,17 +20,8 @@ void Camera::render(Renderizable &renderizable, size_t iteration) {
     renderizable.render(*this, iteration);
 }
 
-// renders texture at the center of the screen
-// only for player
-void Camera::renderAtCenter(SdlTexture& texture, Area& src, float angle,
-                    int sizeX, int sizeY){
-    // dibuja desde el centro!
-    Area dst(centerPix.x - (sizeX / 2), centerPix.y - (sizeY / 2), sizeX, sizeY);
-    texture.render(src, dst, angle, SDL_FLIP_NONE);
-}
-
 // logical coordinates
-// only renders if visible to player
+// should only render if visible to player
 void Camera::renderInSight(SdlTexture& texture,
                            Area& src,
                            float posX,
@@ -44,11 +37,13 @@ void Camera::renderInSight(SdlTexture& texture,
 }
 
 bool Camera::isVisibleInX(float x){
-    return (x >= logicalCenterX - (logicalCenterX / 2)) && (x <= logicalCenterX + (logicalCenterX/2));
+    auto pixelX = abs(logicalCenterX - x) / M_TO_P;
+    return (pixelX >= 0 && pixelX <= width);
 }
 
 bool Camera::isVisibleInY(float y){
-    return (y >= logicalCenterY - (logicalCenterY/2)) && (y <= logicalCenterY + (logicalCenterY/2));
+    auto pixelY = abs(logicalCenterY - y) / M_TO_P;
+    return (pixelY >= 0 && pixelY <= height);
 }
 
 bool Camera::isVisible(float x, float y){
@@ -89,25 +84,6 @@ Camera::renderWeapon(float playerX,
                  sizeX, sizeY);
         SDL_Point center{sizeX/2, sizeY};
         texture.render(src, dst, playerAngle,center,SDL_FLIP_NONE);
-    }
-}
-
-void
-Camera::renderFromRect(SdlTexture &texture,
-                       SDL_Rect &source,
-                       float x,
-                       float y,
-                       float angle,
-                       int sizeX,
-                       int sizeY) {
-    if (isVisibleInX(x) && isVisibleInY(y)){
-        int newX = centerPix.x - (logicalCenterX - x) * M_TO_P;
-        int newY = centerPix.y - (logicalCenterY - y) * M_TO_P;
-        Area src(source.x, source.y, source.w, source.h);
-        Area dst(newX - (sizeX / 2),
-                 newY - (sizeY / 2),
-                 sizeX, sizeY);
-        texture.render(src, dst, angle, SDL_FLIP_NONE);
     }
 }
 

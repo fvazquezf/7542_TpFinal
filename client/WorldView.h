@@ -11,31 +11,30 @@
 #include "anim/Character.h"
 #include "anim/Renderizable.h"
 #include "Camera.h"
+#include "Stencil.h"
+#include "anim/Tile.h"
 
 class WorldView {
 private:
     SdlWindow& window;
     Camera camera;
+    Stencil stencil;
 
     SdlTexture terror;
+    //SdlTexture counterTerrorist;
     SdlTexture blood;
     SdlTexture legs;
-    //std::vector<Terrorist> textures;
-    //std::vector<std::unique_ptr<Renderizable>> entities;
+    SdlTexture backgroundTiles;
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
-
-    // Player player
+    std::vector<Tile> tiles;
 
     // varios hilos acceden de manera concurrente a la view
     // SDL, Drawer, Receiver
     // funciona como monitor
 
     std::mutex worldMutex;
-    // Player player; -> lo podemos controlar, es distinto al resto
-    // GameMap map; -> algo asi?
-
     void createPlayersAtReception(uint8_t id, float x, float y);
 public:
     explicit WorldView(SdlWindow& window);

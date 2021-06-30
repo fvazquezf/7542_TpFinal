@@ -21,6 +21,12 @@ private:
     int width;
     int height;
 
+
+    // checks if the given logical coordinate pair
+    // is in sight of the player
+    // should render only if both shield true
+    bool isVisibleInX(float x);
+    bool isVisibleInY(float y);
 public:
     explicit Camera(SdlWindow& window);
 
@@ -28,18 +34,8 @@ public:
     // luego al resto de las entidades
     void render(Renderizable &renderizable, size_t iteration);
 
-    // renders texture at the center of the screen
-    // only for player
-    void renderAtCenter(SdlTexture& texture, Area& src, float angle,
-                        int sizeX, int sizeY);
-
     void setLogicalCenter(float x, float y);
 
-    // checks if the given logical coordinate pair
-    // is in sight of the player
-    // should render only if both shield true
-    bool isVisibleInX(float x);
-    bool isVisibleInY(float y);
 
     bool isVisible(float x, float y);
 
@@ -49,14 +45,6 @@ public:
                        float posX,
                        float posY,
                        float angle);
-
-    void renderFromRect(SdlTexture& texture,
-                        SDL_Rect& source,
-                        float x,
-                        float y,
-                        float angle,
-                        int sizeX,
-                        int sizeY);
 
     void renderWithAlpha(SdlTexture& texture,
                          Area& source,
