@@ -64,9 +64,9 @@ void WorldView::render(size_t iteration) {
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
-    /*if (menuTime){
+    if (menuTime){
         menu.showMenu();
-    }*/
+    }
     //stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }
