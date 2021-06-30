@@ -19,6 +19,9 @@ public:
     Client& operator=(Client&& other) noexcept;
 
     void launch(const char* host, const char* serv);
+    void login(std::stringstream& stream);
+
+    void play();
 
     ~Client();
 };

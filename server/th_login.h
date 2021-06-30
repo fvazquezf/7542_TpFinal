@@ -1,7 +1,7 @@
 #ifndef TH_LOGIN_H_
 #define TH_LOGIN_H_
 
-#include "../common/thread.h"
+#include "../common/Thread.h"
 #include "../common/socket.h"
 //#include "../common/protocol.h"
 #include "../common/Protocol.h"

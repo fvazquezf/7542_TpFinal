@@ -179,7 +179,7 @@ Protocol &Protocol::operator=(Protocol &&other) noexcept {
     return *this;
 }
 
-void Protocol::updatePositions(std::map<uint8_t, std::pair<float, float>> &positions,
+void Protocol::updatePositions(const std::map<uint8_t, std::pair<float, float>> &positions,
                                std::function<void(std::vector<unsigned char>)> &callback) const {
     std::vector<unsigned char> msg;
     msg.push_back(POS_UPDATE);
@@ -276,7 +276,7 @@ std::vector<unsigned char> Protocol::handleRotation(std::function<std::vector<un
     return callback(2);
 }
 
-void Protocol::updateAngles(std::map<uint8_t, int16_t> &angles,
+void Protocol::updateAngles(const std::map<uint8_t, int16_t> &angles,
                             std::function<void(std::vector<unsigned char>)> &callback) const {
     std::vector<unsigned char> msg;
     msg.push_back(ANGLE_UPDATE);

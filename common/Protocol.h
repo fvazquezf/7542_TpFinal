@@ -1,6 +1,8 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+// TODO: CALLBACK QUE RECIBA UNA REFERENCIA Y NO UN PASAJE POR MOVIMIENTO, DONDE SEA POSIBLE
+
 // comandos (client side)
 #define CREATE 0x6e
 #define JOIN 0x6a
@@ -79,10 +81,14 @@ public:
     void buy(uint8_t weaponCode, std::function<void(std::vector<unsigned char>)> &callback) const;
 
                                 //---------------SERVER---------------//
+    // dato clave, los updates son serializados en paralelo
+    // por lo cual, todos los contenedores se pasan por referencia constante
+    // segun cppreference el acceso es thread safe si no hay ningun write (y const asegura que no lo haya)
+    // en cuanto al contenido de estos, nunca se modifica, de modo que sigue siendo safe
     void loginResponse(uint8_t status, std::function<void(std::vector<unsigned char>)>& callback, uint8_t id = -1) const;
-    void updatePositions(std::map<uint8_t, std::pair<float, float>>& positions,
+    void updatePositions(const std::map<uint8_t, std::pair<float, float>>& positions,
                          std::function<void(std::vector<unsigned char>)>& callback) const;
-    void updateAngles(std::map<uint8_t, int16_t>& angles,
+    void updateAngles(const std::map<uint8_t, int16_t>& angles,
                       std::function<void(std::vector<unsigned char>)>& callback) const;
     void updatePlayerState(uint8_t code, uint8_t playerId, std::function<void(std::vector<unsigned char>)>& callback) const;
     void updatePlayerWeapon(uint8_t weaponCode,

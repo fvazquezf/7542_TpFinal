@@ -1,7 +1,7 @@
 #ifndef TH_ACCEPTOR_H_
 #define TH_ACCEPTOR_H_
 
-#include "../common/thread.h"
+#include "../common/Thread.h"
 #include "../common/socket.h"
 #include "./th_login.h"
 #include "GamesMonitor.h"
