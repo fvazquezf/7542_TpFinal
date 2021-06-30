@@ -1,20 +1,23 @@
+#include <stdexcept>
 #include "Armory.h"
 
 
 Armory::Armory(){
     arsenal.emplace(std::piecewise_construct,
-                        std::forward_as_tuple(0),
-                        std::forward_as_tuple(new Knife()));
-
-    arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
-                    std::forward_as_tuple(new Awp()));
+                    std::forward_as_tuple(new Pistol()));
 
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(2),
-                    std::forward_as_tuple(new Pistol()));
+                    std::forward_as_tuple(new Knife()));
 
-    currentWeapon = 0;
+    // precios originales del juego, ver https://www.cs2d.com/weapons.php
+    // igualmente esto debe ser configurable
+    prices.emplace(AK47, 2500);
+    prices.emplace(M3, 1700);
+    prices.emplace(AWP, 4750);
+
+    currentWeapon = 2;
 }
 
 
@@ -37,6 +40,26 @@ void Armory::resetCooldown(){
 int Armory::equipWeapon(int weaponType){
     // aca tiene que haber un chequeo para ver si es valida esa weapon
     // si no compro una primary, deberia devolver falso, o el codigo que sea
-    currentWeapon = weaponType;
-    return 1;
+    if (arsenal.count(weaponType) != 0)
+        currentWeapon = weaponType;
+    else {
+        return -1;
+    }
+    return arsenal.at(currentWeapon)->getWeaponCode();
+}
+
+bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney) {
+    int weaponPrice = prices.at(weaponCode);
+    if (playerMoney >= weaponPrice){
+        playerMoney -= weaponPrice;
+        // aca hay que fijarse si ya tenia un arma primaria
+        // en ese caso hay que dropear
+        try {
+            arsenal.emplace(0, Weapon::getArmoryWeapon(weaponCode));
+        } catch(const std::invalid_argument& e){
+            return false;
+        }
+        return true;
+    }
+    return false;
 }

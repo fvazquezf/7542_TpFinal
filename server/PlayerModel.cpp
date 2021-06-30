@@ -15,6 +15,7 @@ PlayerModel::PlayerModel(b2Body* body):
 model(body),
 angle(0),
 hp(100),
+money(10000),
 isAlive(true){
     this->netForce.SetZero();
 }
@@ -122,11 +123,15 @@ void PlayerModel::resetCooldown(){
 }
 
 int PlayerModel::equipWeapon(int weaponType){
-    armory.equipWeapon(weaponType);
+    return armory.equipWeapon(weaponType);
 }
 
 void PlayerModel::die() {
     isAlive = false;
+}
+
+bool PlayerModel::buyWeapon(uint8_t weaponCode) {
+    return armory.tryBuying(weaponCode, money);
 }
 
 

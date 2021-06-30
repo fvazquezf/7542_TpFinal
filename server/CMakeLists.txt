@@ -31,5 +31,5 @@ add_library(lib_server
     updates/AttackUpdate.cpp
     updates/HitUpdate.cpp
     updates/DeadUpdate.cpp
-    updates/WeaponUpdate.cpp   )
+    updates/WeaponUpdate.cpp events/BuyEvent.cpp events/BuyEvent.h)
 

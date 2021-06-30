@@ -6,7 +6,7 @@
 
 class ChangeWeapon : public Command{
 public:
-    enum ChangeCode : uint8_t {PRI = 1, GLK = 2, KNF = 0, BMB = 3};
+    enum ChangeCode : uint8_t {PRI, GLK, KNF, BMB};
 
     explicit ChangeWeapon(SDL_Keycode changeCode);
 

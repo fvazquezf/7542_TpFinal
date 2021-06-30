@@ -19,22 +19,8 @@ bool Weapon::changeWeapon(uint8_t id) {
 }
 
 void Weapon::draw(float playerX, float playerY, float playerAngle, Camera &cam) {
-    if (currentWeapon == KNIFE){
-        playerX -= 0;
-        playerY -= 0.5;
-    } else if (currentWeapon == PISTOL){
-        playerX -= 0;
-        playerY -= 0.5;
-    } else if (currentWeapon == AK47){
-        playerX -= 0;
-        playerY -= 0.5;
-    } else if (currentWeapon == AWP){
-        playerX -= 0;
-        playerY -= 0.5;
-    } else if (currentWeapon == BOMB){
-        playerX -= 0;
-        playerY -= 0.5;
-    }
+    playerX -= 0; // offsets a mano para posicionar bien las armas
+    playerY -= 0.5;
     cam.renderWeapon(playerX, playerY, playerAngle, 32, 32,
                      weaponTextureMap.at(currentWeapon));
 }

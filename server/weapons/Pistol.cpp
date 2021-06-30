@@ -1,7 +1,8 @@
 #include "Pistol.h"
 #include <iostream>
 
-Pistol::Pistol(){
+Pistol::Pistol()
+: Weapon(PISTOL){
     damage = 20;
     cooldown = 0;
     maxHittingDistance = 50;

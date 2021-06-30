@@ -1,7 +1,8 @@
 #include <iostream>
 #include "Awp.h"
 
-Awp::Awp(){
+Awp::Awp()
+: Weapon(AWP){
     damage = 100;
     cooldown = 0;
     precision = 1;

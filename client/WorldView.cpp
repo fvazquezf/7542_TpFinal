@@ -19,21 +19,25 @@ WorldView::WorldView(SdlWindow& aWindow)
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/knife.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/m3.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(2),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/awp.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(3),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/awp.bmp", window)));
+                            SdlTexture("../sprites/gfx/weapons/knife.bmp", window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(4),
+                    std::forward_as_tuple(
+                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
+    weapons.emplace(std::piecewise_construct,
+                    std::forward_as_tuple(5),
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
     for (size_t i = 0; i < 100; ++i)

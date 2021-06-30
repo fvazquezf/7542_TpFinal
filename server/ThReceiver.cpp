@@ -6,6 +6,7 @@
 #include "events/StartAttackEvent.h"
 #include "events/StopAttackEvent.h"
 #include "events/EquipWeaponEvent.h"
+#include "events/BuyEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -94,7 +95,7 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             eventQueue.push(std::unique_ptr<ClientEvent>(new EquipWeaponEvent(userId, msg.at(0))));
             break;
         case BUY:
-            std::cout << "Buying\n";
+            eventQueue.push(std::unique_ptr<ClientEvent>(new BuyEvent(userId, msg.at(0))));
             break;
         default:
             break;

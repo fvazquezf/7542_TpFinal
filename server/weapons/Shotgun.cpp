@@ -1,6 +1,7 @@
 #include "Shotgun.h"
 
-Shotgun::Shotgun(){
+Shotgun::Shotgun()
+: Weapon(M3){
     damage = 0;
     cooldown = 0;
 }

@@ -235,8 +235,9 @@ void WorldModel::stopAttack(uint8_t id){
 }
 
 void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){
-	if (playerModels.at(id).equipWeapon(weaponType)){
-		updateWeapon(id, weaponType);
+    int weaponId = -1;
+	if ((weaponId = playerModels.at(id).equipWeapon(weaponType)) != -1){
+		updateWeapon(id, weaponId);
 	}
 }
 
@@ -247,4 +248,9 @@ void WorldModel::updateAngles() {
     }
     std::shared_ptr<Update> updatePtr(std::shared_ptr<Update>(new AngleUpdate(std::move(angles))));
     updates.pushAll(updatePtr);
+}
+
+void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
+    if (playerModels.at(id).buyWeapon(weaponCode)){
+    }
 }

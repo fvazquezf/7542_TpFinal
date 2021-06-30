@@ -47,7 +47,9 @@ class PlayerModel{
 
         void step();
 
-    void die();
+        void die();
+
+        bool buyWeapon(uint8_t weaponCode);
 };
 
 #endif

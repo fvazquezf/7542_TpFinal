@@ -1,6 +1,7 @@
 #include "Knife.h"
 
-Knife::Knife(){
+Knife::Knife()
+: Weapon(KNIFE){
     damage = 40;
     cooldown = 0;
 }

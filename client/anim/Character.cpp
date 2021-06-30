@@ -27,6 +27,7 @@ Character::Character(SdlTexture &texture,
             {KNIFE, 0},
             {PISTOL, 3},
             {AK47, 4},
+            {M3, 4},
             {AWP, 4},
             {BOMB, 4},
     };

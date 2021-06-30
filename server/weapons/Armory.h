@@ -14,6 +14,7 @@
 class Armory {
 
     std::map<int, std::shared_ptr<Weapon>> arsenal;
+    std::map<uint8_t, int> prices;
 
     int currentWeapon;
 
@@ -29,6 +30,8 @@ class Armory {
         void resetCooldown();
 
         int equipWeapon(int weaponType);
+
+        bool tryBuying(uint8_t weaponCode, int& playerMoney);
 };
 
 

@@ -14,11 +14,12 @@
 // al cambiar de arma
 // cambiamos la textura que utiliza
 
-#define KNIFE 0
-#define AK47 1
-#define PISTOL 2
-#define AWP 3
-#define BOMB 4
+#define AK47 0
+#define M3 1
+#define AWP 2
+#define KNIFE 3
+#define PISTOL 4
+#define BOMB 5
 
 class Character;
 
