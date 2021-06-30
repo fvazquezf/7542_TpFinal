@@ -7,6 +7,7 @@
 #include "events/StopAttackEvent.h"
 #include "events/EquipWeaponEvent.h"
 #include "events/BuyEvent.h"
+#include "events/DisconnectEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -34,7 +35,8 @@ void ThReceiver::run() {
         msg = protocol.dispatchReceived(comm, receiverCallback);
         handleReceived(comm, msg);
     }
-    is_running = false;
+    stop();
+    eventQueue.push(std::unique_ptr<ClientEvent>(new DisconnectEvent(userId)));
 }
 
 ThReceiver::~ThReceiver() {
@@ -46,6 +48,12 @@ std::vector<unsigned char> ThReceiver::receive(size_t size) {
     return msg;
 }
 
+// si un user se desconecta
+// recv deja de estar bloqueada
+// en ese caso, cerramos el reading
+// luego, para terminar la conexion
+// resta matar la q del sender
+// desde el broadcaster
 void ThReceiver::stop() {
     peer.shutdown(SHUT_RD);
     is_running = false;

@@ -40,8 +40,8 @@ WorldView::WorldView(SdlWindow& aWindow)
                     std::forward_as_tuple(5),
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
-    for (size_t i = 0; i < 100; ++i)
-        for (size_t j = 0; j < 100; ++j)
+    for (size_t i = 30; i < 50; ++i)
+        for (size_t j = 30; j < 50; ++j)
             tiles.emplace_back(backgroundTiles, i, j);
 }
 
@@ -64,9 +64,9 @@ void WorldView::render(size_t iteration) {
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
-    if (menuTime){
+    /*if (menuTime){
         menu.showMenu();
-    }
+    }*/
     //stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }

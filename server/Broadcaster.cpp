@@ -39,3 +39,7 @@ Broadcaster::Broadcaster() {
 Broadcaster::~Broadcaster() {
 
 }
+
+void Broadcaster::closePlayerQueue(uint8_t id) {
+    clientsQueues.at(id).signalClosed();
+}

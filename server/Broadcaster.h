@@ -26,6 +26,7 @@ public:
 
     ~Broadcaster();
 
+    void closePlayerQueue(uint8_t id);
 };
 
 #endif

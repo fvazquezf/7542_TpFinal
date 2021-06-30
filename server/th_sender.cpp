@@ -20,15 +20,17 @@ ThSender::~ThSender() {
 }
 
 void ThSender::run() {
-    std::cout <<"Entro a th_sender\n";
     std::function<void(std::vector<unsigned char>)> cb =
             std::bind(&ThSender::send, this, std::placeholders::_1);
-    while (is_running) {
-        std::shared_ptr<Update> update = updateQueue.pop();
-        update->serialize(cb);
+    while (updateQueue.isNotClosedOrNotEmpty()) {
+        try {
+            std::shared_ptr<Update> update = updateQueue.pop();
+            update->serialize(cb);
+        } catch (const std::invalid_argument& e){
+            break;
+        }
     }
     this->stop();
-    this->is_running = false;
 }
 
 bool ThSender::isDead() {

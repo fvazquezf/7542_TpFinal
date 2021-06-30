@@ -70,6 +70,8 @@ class WorldModel: public Thread {
         void step();
 
     void updatePositions();
+
+    void disconnectPlayer(uint8_t id);
 };
 
 #endif

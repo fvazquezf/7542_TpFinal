@@ -36,8 +36,6 @@ public:
     User(User&& other) noexcept;
     User& operator=(User&& other) noexcept;
 
-    void run();
-
     void start();
     void join();
     void stop();

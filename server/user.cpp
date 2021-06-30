@@ -1,14 +1,6 @@
 #include "user.h"
 #include "events/ClientEvent.h"
 
-/*User::User(Socket socket, PlayerModel& modelRef, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
-: socket(std::move(socket)),
-  receiver(this->socket, protocol),
-  sender(this->socket, protocol, updates),
-  playing(false),
-  model(modelRef){
-}*/
-
 User::User(Socket socket,
            ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
            BlockingQueue<std::shared_ptr<Update>>& updateQueue,
@@ -23,22 +15,16 @@ User::~User() {
 }
 
 void User::start() {
-    std::cout <<"Entro al start de thSender\n";
     playing = true;
     this->receiver.start();
     this->sender.start();
 }
 
 void User::join() {
-    //this->thSender.join();
     if (playing){
         this->receiver.join();
         this->sender.join();
     }
-}
-
-void User::run() {
-    //this->thSender.run();
 }
 
 bool User::isDead() {

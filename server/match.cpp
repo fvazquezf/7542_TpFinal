@@ -82,6 +82,8 @@ void Match::stop() {
     for (auto& u : users) {
         u.second.join();
     }
+    world.stop();
+    world.join();
 }
 
 int8_t Match::getCurrentPlayerId() {

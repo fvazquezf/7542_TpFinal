@@ -254,3 +254,18 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
     if (playerModels.at(id).buyWeapon(weaponCode)){
     }
 }
+
+void WorldModel::disconnectPlayer(uint8_t id) {
+    // primero, hacemos que haga drop de todas sus armas
+    // aca vendria el drop si estuviese implementado
+    // luego, le decimos al broadcaster que cierre su q
+    // de esa manera mata al sender
+    // hasta este punto del recorrido, receiver murio, sender esta vivo
+    updates.closePlayerQueue(id);
+    // una vez cerrado, se lo borra de aca
+    // deberia mandarse un update al resto de los jugadores
+}
+
+void WorldModel::stop() {
+    is_running = false;
+}
