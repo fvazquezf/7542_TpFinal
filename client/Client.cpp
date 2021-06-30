@@ -18,7 +18,7 @@ void Client::launch(const char *host, const char *serv) {
     // ahi empieza a renderizar y comienza la partida
     // los botones de qt deben despachar en 2 comandos
     // create y join
-    
+
     // Desde aca hasta el proximo comentario, esta seccion es temporal, hasta que tengamos qt
     std::string s;
     do {
@@ -31,7 +31,6 @@ void Client::launch(const char *host, const char *serv) {
     std::stringstream stream(s);
     std::string comando;
     std::string nombre;
-}
     // End seccion
 }
 
@@ -48,12 +47,3 @@ Client &Client::operator=(Client &&other) noexcept {
     clientSocket = std::move(other.clientSocket);
     return *this;
 }
-
-void Client::login(std::stringstream &stream) {
-    stream >> comando;
-    stream >> nombre;
-    if (comando == "Crear"){
-        comms.push(std::unique_ptr<Command>(new CreateGame(nombre)));
-    } else {
-        comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
-    }
