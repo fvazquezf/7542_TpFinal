@@ -8,6 +8,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   camera(window),
   stencil(window, 45, 0, 0),
   menu(window),
+  hud(window),
   menuTime(false),
   terror("../sprites/gfx/player/t1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
@@ -67,6 +68,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    //hud.show();
     //stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }

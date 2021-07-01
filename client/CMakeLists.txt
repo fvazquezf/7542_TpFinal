@@ -16,7 +16,7 @@ add_library(sdlloop
         BuyingMenu.h
         Drawer.cpp
         Drawer.h
-        Client.cpp)
+        Client.cpp Hud.cpp Hud.h)
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)

@@ -4,19 +4,21 @@
 #include "PlayerModel.h"
 #include "weapons/Knife.h"
 
-PlayerModel::PlayerModel(){
+PlayerModel::PlayerModel(DroppedWeapons& dropped)
+: armory(dropped){
     this->model = nullptr;
     this->netForce.SetZero();
     angle = 0;
     hp = 100;
 }
 
-PlayerModel::PlayerModel(b2Body* body):
+PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped):
 model(body),
 angle(0),
 hp(100),
-money(10000),
-isAlive(true){
+money(100000),
+isAlive(true),
+armory(dropped){
     this->netForce.SetZero();
 }
 
@@ -67,7 +69,8 @@ const b2Vec2& PlayerModel::getPosition(){
 
 PlayerModel::PlayerModel(PlayerModel &&other) noexcept
 : model(other.model),
-  netForce(other.netForce){
+  netForce(other.netForce),
+  armory(std::move(other.armory)){
     other.model = nullptr;
 }
 
@@ -130,8 +133,9 @@ void PlayerModel::die() {
     isAlive = false;
 }
 
+// si tenia un arma, la va a droppear en su lugar
 bool PlayerModel::buyWeapon(uint8_t weaponCode) {
-    return armory.tryBuying(weaponCode, money);
+    return armory.tryBuying(weaponCode, money, model->GetPosition());
 }
 
 

@@ -2,7 +2,8 @@
 #include "Armory.h"
 
 
-Armory::Armory(){
+Armory::Armory(DroppedWeapons& droppedWeapons)
+: dropped(droppedWeapons){
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
                     std::forward_as_tuple(new Pistol()));
@@ -48,18 +49,37 @@ int Armory::equipWeapon(int weaponType){
     return arsenal.at(currentWeapon)->getWeaponCode();
 }
 
-bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney) {
+bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
     int weaponPrice = prices.at(weaponCode);
     if (playerMoney >= weaponPrice){
         playerMoney -= weaponPrice;
-        // aca hay que fijarse si ya tenia un arma primaria
-        // en ese caso hay que dropear
         try {
-            arsenal.emplace(0, Weapon::getArmoryWeapon(weaponCode));
+            // aca hay que fijarse si ya tenia un arma primaria
+            // en ese caso hay que dropear
+            if (arsenal.count(0) > 0){
+                dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
+            }
+            // pisamos el viejo puntero (smart pointer, se deletea solo)
+            arsenal[0] = Weapon::getArmoryWeapon(weaponCode);
         } catch(const std::invalid_argument& e){
             return false;
         }
         return true;
     }
     return false;
+}
+
+Armory::Armory(Armory &&other) noexcept
+: arsenal(std::move(other.arsenal)),
+  prices(std::move(other.prices)),
+  dropped(other.dropped){
+}
+
+Armory &Armory::operator=(Armory &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+    arsenal = std::move(other.arsenal);
+    prices = std::move(other.prices);
+    return *this;
 }

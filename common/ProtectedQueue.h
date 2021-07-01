@@ -44,6 +44,12 @@ public:
         std::unique_lock<std::mutex> lock1(queueMutex);
         q.push(std::move(queueElement));
     }
+
+    void clear(){
+        std::unique_lock<std::mutex> lock1(queueMutex);
+        std::queue<T> empty;
+        std::swap(q, empty);
+    }
 };
 
 #endif

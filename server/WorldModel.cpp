@@ -17,7 +17,8 @@
 #include "updates/BuyTimeUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
-updates (updates){
+updates (updates),
+droppedWeapons(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
 	this->positionIterations = 2;
@@ -57,7 +58,7 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 
 	playerModels.emplace(std::piecewise_construct,
                          std::forward_as_tuple(clave),
-                         std::forward_as_tuple(body));
+                         std::forward_as_tuple(body, droppedWeapons));
 
 	return std::ref(this->usersEvents);
 }
@@ -105,26 +106,12 @@ void WorldModel::run(){
     playerModels.at(1).reposition(51.0f, 51.0f);
 
     updatePositions();
-    roundBegin();
     while (is_running){
-        auto start = std::chrono::system_clock::now();
-		for (int i = 0; i<10; i++){
-			try {
-				std::unique_ptr<ClientEvent> event = usersEvents.pop();
-				event->updatePlayer(*this);
-			}
-			catch (const std::invalid_argument& e){
-				continue;
-			}
-		}
-		this->step();
-
-        updatePositions();
-		updateAngles();
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<float, std::micro> elapsed = (end - start);
-        usleep(FRAMERATE + elapsed.count());
+        roundBegin();
+        roundPlay();
+        // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
+    // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
 }
 
 void WorldModel::updatePositions() {
@@ -194,6 +181,7 @@ WorldModel::WorldModel(WorldModel &&other) noexcept
   playerModels(std::move(other.playerModels)),
   usersEvents(std::move(other.usersEvents)),
   updates(other.updates),
+  droppedWeapons(std::move(other.droppedWeapons)),
   timeStep(other.timeStep),
   velocityIterations(other.velocityIterations),
   positionIterations(other.positionIterations),
@@ -278,27 +266,54 @@ void WorldModel::roundBegin() {
     // sleep ? esperamos un poquitito antes de contar
     usleep(FRAMERATE);
     for (size_t i = 0; i < 600; ++i){
-        auto start = std::chrono::system_clock::now();
-        for (size_t j = 0; j < 10; ++j){
-            try {
-                std::unique_ptr<ClientEvent> event = usersEvents.pop();
-                event->updatePlayer(*this);
-            }
-            catch (const std::invalid_argument& e){
-                continue;
-            }
-        }
-	updatePositions();
-	updateAngles();
-	step();
-        auto end = std::chrono::system_clock::now();
-        std::chrono::duration<float, std::micro> elapsed = (end - start);
-        usleep(FRAMERATE + elapsed.count());
+        roundCommon(false);
     }
-    usleep(FRAMERATE);
     updateBuying(false);
+    // no queremos ningun evento residual
+    usersEvents.clear();
 }
 
 void WorldModel::updateBuying(bool buying) {
     updates.pushAll(std::shared_ptr<Update>(new BuyTimeUpdate(buying)));
+}
+
+void WorldModel::roundPlay() {
+    for (size_t i = 0; i < 3600 && !roundDone(); ++i){
+        roundCommon(true);
+    }
+}
+
+void WorldModel::roundCommon(bool updPositions) {
+    auto start = std::chrono::system_clock::now();
+    for (int j = 0; j < 10; ++j){
+        try {
+            std::unique_ptr<ClientEvent> event = usersEvents.pop();
+            event->updatePlayer(*this);
+        }
+        catch (const std::invalid_argument& e){
+            continue;
+        }
+    }
+    this->step();
+    if (updPositions){
+        updatePositions();
+    }
+    updateAngles();
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<float, std::micro> elapsed = (end - start);
+    usleep(FRAMERATE + elapsed.count());
+}
+
+// checkea si termino la ronda
+// x casos:
+// 1 - murieron todos los cts -> ganan tts
+// 2 - murieron todos los tts (y no plantaron) -> ganan cts
+// 3 - se termino el tiempo (ganan los cts pq es de plantar la bomba)
+// 4 - exploto la bomba -> ganan tts
+// 5 - defusearon la bomba -> ganan cts
+bool WorldModel::roundDone() {
+    return false;
+}
+
+void WorldModel::updateDropped() {
 }

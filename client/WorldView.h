@@ -15,6 +15,7 @@
 #include "Stencil.h"
 #include "anim/Tile.h"
 #include "BuyingMenu.h"
+#include "Hud.h"
 
 class WorldView {
 private:
@@ -22,6 +23,7 @@ private:
     Camera camera;
     Stencil stencil;
     BuyingMenu menu;
+    Hud hud;
 
     std::atomic_bool menuTime;
     uint16_t menuTicks;

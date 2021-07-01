@@ -17,8 +17,8 @@ class PlayerModel{
     Armory armory;
 
     public:
-        PlayerModel();
-        PlayerModel(b2Body* body);
+        PlayerModel(DroppedWeapons& dropped);
+        PlayerModel(b2Body* body, DroppedWeapons& dropped);
 
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;

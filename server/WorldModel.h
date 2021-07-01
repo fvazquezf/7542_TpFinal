@@ -26,12 +26,16 @@ class WorldModel: public Thread {
     ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
 
     Broadcaster& updates;
+    DroppedWeapons droppedWeapons;
 
     float timeStep;
 	int32 velocityIterations;
 	int32 positionIterations;
 
     bool is_running;
+    void roundBegin();
+    void roundCommon(bool updPositions);
+    void roundPlay();
 
     public:
         explicit WorldModel(Broadcaster& updates);
@@ -49,12 +53,14 @@ class WorldModel: public Thread {
 
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
+        void updatePositions();
         void updateAngles();
         void updateAttack(int id);
         void updateHit(int id);
         void updateDead(int id);
         void updateWeapon(uint8_t id, uint8_t code);
         void updateBuying(bool buying);
+        void updateDropped();
 
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
@@ -65,17 +71,16 @@ class WorldModel: public Thread {
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
 
-        void roundBegin();
-        void roundPlay();
 
         void createBox(b2BodyDef& boxDef);
         void loadMap();
 
         void step();
 
-    void updatePositions();
 
     void disconnectPlayer(uint8_t id);
+
+    bool roundDone();
 };
 
 #endif

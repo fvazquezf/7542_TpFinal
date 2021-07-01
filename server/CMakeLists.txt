@@ -31,5 +31,5 @@ add_library(lib_server
     updates/AttackUpdate.cpp
     updates/HitUpdate.cpp
     updates/DeadUpdate.cpp
-    updates/WeaponUpdate.cpp events/BuyEvent.cpp events/BuyEvent.h events/DisconnectEvent.cpp events/DisconnectEvent.h weapons/Rifle.cpp weapons/Rifle.h updates/BuyTimeUpdate.cpp updates/BuyTimeUpdate.h)
+    updates/WeaponUpdate.cpp events/BuyEvent.cpp events/BuyEvent.h events/DisconnectEvent.cpp events/DisconnectEvent.h weapons/Rifle.cpp weapons/Rifle.h updates/BuyTimeUpdate.cpp updates/BuyTimeUpdate.h weapons/DroppedWeapons.cpp weapons/DroppedWeapons.h updates/WeaponDropUpdate.cpp updates/WeaponDropUpdate.h)
 

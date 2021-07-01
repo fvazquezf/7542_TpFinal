@@ -54,6 +54,9 @@ bool SdlLoop::isDone() {
 }
 
 void SdlLoop::handleKeyDown() {
+    if (world.isMenuTime()){
+        return;
+    }
     try {
         handleKey(true, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){
@@ -62,6 +65,9 @@ void SdlLoop::handleKeyDown() {
 }
 
 void SdlLoop::handleKeyUp() {
+    if (world.isMenuTime()){
+        return;
+    }
     try {
         handleKey(false, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){
@@ -94,10 +100,6 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
     // estos son los cambios de arma
     if (pressed && (numbers.find(key) != numbers.end())){
         commands.push(std::unique_ptr<Command>(new ChangeWeapon(key)));
-        return;
-    }
-
-    if (world.isMenuTime()){
         return;
     }
 
