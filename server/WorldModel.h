@@ -32,10 +32,14 @@ class WorldModel: public Thread {
 	int32 velocityIterations;
 	int32 positionIterations;
 
+    bool purchaseFase;
     bool is_running;
+
     void roundBegin();
-    void roundCommon(bool updPositions);
+    void roundCommon();
     void roundPlay();
+
+    void stopAllPlayers();
 
     public:
         explicit WorldModel(Broadcaster& updates);

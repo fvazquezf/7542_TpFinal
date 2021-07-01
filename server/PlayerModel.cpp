@@ -46,6 +46,8 @@ void PlayerModel::stopMove(int dir){
                 break;
         case 3: this->netForce += b2Vec2(-15, 0);
                 break;
+        case 5: this->netForce = b2Vec2(0, 0);
+                break;
         default: break;
     }
 }

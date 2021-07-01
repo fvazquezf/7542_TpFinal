@@ -30,6 +30,7 @@ droppedWeapons(updates){
 	this->anchor = world.CreateBody(&anchorDef);
 
 	is_running = false;
+	purchaseFase = true;
 }
 
 ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
@@ -107,8 +108,12 @@ void WorldModel::run(){
 
     updatePositions();
     while (is_running){
+		purchaseFase = true;
         roundBegin();
+		stopAllPlayers();
+		purchaseFase = false;
         roundPlay();
+		stopAllPlayers();
         // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
     // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
@@ -204,10 +209,12 @@ WorldModel &WorldModel::operator=(WorldModel &&other) noexcept {
 }
 
 void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
+	if (purchaseFase) return;
     playerModels.at(id).startMove(dir);
 }
 
 void WorldModel::stopMovingPlayer(uint8_t id, uint8_t dir) {
+	if (purchaseFase) return;
     playerModels.at(id).stopMove(dir);
 }
 
@@ -216,10 +223,12 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 }
 
 void WorldModel::startAttack(uint8_t id){
+	if (purchaseFase) return;
 	attackingPlayers.insert(id);
 }
 
 void WorldModel::stopAttack(uint8_t id){
+	if (purchaseFase) return;
 	attackingPlayers.erase(id);
 	playerModels.at(id).resetCooldown();
 }
@@ -277,11 +286,18 @@ void WorldModel::roundBegin() {
     // sleep ? esperamos un poquitito antes de contar
     usleep(FRAMERATE);
     for (size_t i = 0; i < 600; ++i){
-        roundCommon(false);
+        roundCommon();
     }
     updateBuying(false);
     // no queremos ningun evento residual
     usersEvents.clear();
+}
+
+void WorldModel::stopAllPlayers(){
+	for (auto& it : playerModels){
+        it.second.stopMove(5);
+    }
+	attackingPlayers.clear();
 }
 
 void WorldModel::updateBuying(bool buying) {
@@ -290,11 +306,11 @@ void WorldModel::updateBuying(bool buying) {
 
 void WorldModel::roundPlay() {
     for (size_t i = 0; i < 3600 && !roundDone(); ++i){
-        roundCommon(true);
+        roundCommon();
     }
 }
 
-void WorldModel::roundCommon(bool updPositions) {
+void WorldModel::roundCommon() {
     auto start = std::chrono::system_clock::now();
     for (int j = 0; j < 10; ++j){
         try {
@@ -306,9 +322,9 @@ void WorldModel::roundCommon(bool updPositions) {
         }
     }
     this->step();
-    if (updPositions){
-        updatePositions();
-    }
+    
+    updatePositions();
+    
     updateAngles();
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<float, std::micro> elapsed = (end - start);
