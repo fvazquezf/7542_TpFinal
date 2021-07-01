@@ -41,6 +41,18 @@ WorldView::WorldView(SdlWindow& aWindow)
                     std::forward_as_tuple(5),
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
+
+    drops.emplace(std::piecewise_construct,
+                  std::forward_as_tuple(0),
+                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/ak47_d.bmp", window)));
+
+    drops.emplace(std::piecewise_construct,
+                  std::forward_as_tuple(1),
+                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/m3_d.bmp", window)));
+
+    drops.emplace(std::piecewise_construct,
+                  std::forward_as_tuple(5),
+                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
     for (size_t i = 40; i < 70; ++i)
         for (size_t j = 40; j < 70; ++j)
             tiles.emplace_back(backgroundTiles, i, j);
@@ -144,5 +156,13 @@ void WorldView::setMenu(bool isIt) {
 
 bool WorldView::isMenuTime() const {
     return menuTime;
+}
+
+void WorldView::dropWeapon(std::tuple<uint8_t, float, float> weaponAndPosition) {
+
+}
+
+void WorldView::pickupWeapon(std::tuple<uint8_t, float, float> weaponAndPosition) {
+
 }
 

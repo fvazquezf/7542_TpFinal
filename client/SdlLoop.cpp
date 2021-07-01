@@ -7,6 +7,7 @@
 #include "commands/Attack.h"
 #include "commands/ChangeWeapon.h"
 #include "commands/Buy.h"
+#include "commands/Pickup.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -98,6 +99,15 @@ void SdlLoop::handleQuit(){
 void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
     // tecla a la cual no trackeamos
     // estos son los cambios de arma
+    if (key == SDLK_e){
+        if (pressed){
+            commands.push(std::unique_ptr<Command>(new Pickup()));
+        }
+        else {
+            return;
+        }
+    }
+
     if (pressed && (numbers.find(key) != numbers.end())){
         commands.push(std::unique_ptr<Command>(new ChangeWeapon(key)));
         return;

@@ -72,6 +72,11 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.setMenu(msg.at(0) == BUY_START);
             break;
         }
+        case WEAPON_DROP_UPDATE: {
+            auto tuple = prot.deserializeDrop(msg);
+            msg.at(1) == DROP_UPDATE ? world.dropWeapon(tuple) : world.pickupWeapon(tuple);
+            break;
+        }
         default:
             break;
     }

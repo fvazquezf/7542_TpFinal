@@ -8,6 +8,7 @@
 #include "events/EquipWeaponEvent.h"
 #include "events/BuyEvent.h"
 #include "events/DisconnectEvent.h"
+#include "events/PickUpEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -104,6 +105,9 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         case BUY:
             eventQueue.push(std::unique_ptr<ClientEvent>(new BuyEvent(userId, msg.at(0))));
+            break;
+        case PICKUP:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new PickUpEvent(userId)));
             break;
         default:
             break;

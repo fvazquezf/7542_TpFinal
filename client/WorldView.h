@@ -36,6 +36,7 @@ private:
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
+    std::map<uint8_t, SdlTexture> drops;
     std::vector<Tile> tiles;
 
     // varios hilos acceden de manera concurrente a la view
@@ -74,6 +75,10 @@ public:
     void hit(uint8_t id);
 
     void kill(uint8_t id);
+
+    void dropWeapon(std::tuple<uint8_t, float, float> weaponAndPosition);
+
+    void pickupWeapon(std::tuple<uint8_t, float, float> weaponAndPosition);
 };
 
 

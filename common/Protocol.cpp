@@ -169,6 +169,13 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleByte(receiveCallback);
             break;
         }
+        case WEAPON_DROP_UPDATE: {
+            msg = handleDropUpdate(receiveCallback);
+            break;
+        }
+        case PICKUP: {
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -357,4 +364,35 @@ void Protocol::updateBuyingTime(bool buyingTime, std::function<void(std::vector<
     buyMsg.push_back(BUYING_UPDATE);
     buyMsg.push_back(buyingTime ? BUY_START : BUY_END);
     callback(std::move(buyMsg));
+}
+
+void Protocol::handleByte(uint8_t byte, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> msg;
+    msg.push_back(byte);
+    callback(std::move(msg));
+}
+
+std::vector<unsigned char> Protocol::handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    return callback(6);
+}
+
+void Protocol::updateDrop(bool dropped, uint8_t weaponCode, float posX, float posY,
+                          std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> droppedMsg;
+    // 3 chars + 2 * 2 bytes = 7 bytes
+    droppedMsg.push_back(WEAPON_DROP_UPDATE);
+    droppedMsg.push_back(dropped ? DROP_UPDATE : PICKUP_UPDATE);
+    droppedMsg.push_back(weaponCode);
+    int16_t posXFixedPoint = posX * PRECISION;
+    int16_t posYFixedPoint = posY * PRECISION;
+    serializeMsgLenShort(droppedMsg, posXFixedPoint);
+    serializeMsgLenShort(droppedMsg, posYFixedPoint);
+    callback(std::move(droppedMsg));
+}
+
+std::tuple<uint8_t, float, float> Protocol::deserializeDrop(std::vector<unsigned char> &msg) {
+    uint8_t weaponCode = msg.at(0);
+    float posX = ntohs(msg.at(1) << 8 | msg.at(2)) / PRECISION;
+    float posY = ntohs(msg.at(3) << 8 | msg.at(4)) / PRECISION;
+    return std::make_tuple(weaponCode, posX, posY);
 }
