@@ -242,6 +242,17 @@ void WorldModel::updateAngles() {
 
 void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
     if (playerModels.at(id).buyWeapon(weaponCode)){
+		// el weaponType = 0 es el de arma primaria
+		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
+		equipWeapon(id, 0);
+    }
+}
+
+void WorldModel::pickUpWeapon(uint8_t id){
+	if (playerModels.at(id).pickUpWeapon()){
+		// el weaponType = 0 es el de arma primaria
+		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
+		equipWeapon(id, 0);
     }
 }
 

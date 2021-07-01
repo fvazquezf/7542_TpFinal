@@ -69,6 +69,19 @@ bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playe
     return false;
 }
 
+bool Armory::pickUpWeapon(const b2Vec2& position){
+    int8_t pickedWeapon = dropped.pickUpAnyIfClose(position);
+    if (pickedWeapon == -1){
+        return false;
+    } else {
+       if (arsenal.count(0) > 0){
+           dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), position);
+       }
+       arsenal[0] = Weapon::getArmoryWeapon(pickedWeapon);
+       return true;
+    }
+}
+
 Armory::Armory(Armory &&other) noexcept
 : arsenal(std::move(other.arsenal)),
   prices(std::move(other.prices)),

@@ -70,6 +70,7 @@ class WorldModel: public Thread {
 
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
+        void pickUpWeapon(uint8_t id);
 
 
         void createBox(b2BodyDef& boxDef);

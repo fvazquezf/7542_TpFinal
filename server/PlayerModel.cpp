@@ -129,13 +129,18 @@ int PlayerModel::equipWeapon(int weaponType){
     return armory.equipWeapon(weaponType);
 }
 
-void PlayerModel::die() {
-    isAlive = false;
-}
-
 // si tenia un arma, la va a droppear en su lugar
 bool PlayerModel::buyWeapon(uint8_t weaponCode) {
     return armory.tryBuying(weaponCode, money, model->GetPosition());
 }
 
+bool PlayerModel::pickUpWeapon(){
+    return armory.pickUpWeapon(model->GetPosition());
+}
+
+
+
+void PlayerModel::die() {
+    isAlive = false;
+}
 

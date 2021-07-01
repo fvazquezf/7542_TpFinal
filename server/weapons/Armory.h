@@ -34,6 +34,8 @@ class Armory {
 
         bool tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition);
 
+        bool pickUpWeapon(const b2Vec2& position);
+
         Armory(const Armory& other) = delete;
         Armory& operator=(const Armory& other) = delete;
 

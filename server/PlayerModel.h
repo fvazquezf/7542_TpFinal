@@ -36,6 +36,8 @@ class PlayerModel{
         bool gotHit(std::shared_ptr<Weapon> weapon);
 
         int equipWeapon(int weaponType);
+        bool buyWeapon(uint8_t weaponCode);
+        bool pickUpWeapon();
 
         bool tickCooldown();
         void resetCooldown();
@@ -48,8 +50,6 @@ class PlayerModel{
         void step();
 
         void die();
-
-        bool buyWeapon(uint8_t weaponCode);
 };
 
 #endif
