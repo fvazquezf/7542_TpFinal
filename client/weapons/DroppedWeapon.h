@@ -19,6 +19,7 @@ private:
     NonMovable droppedDrawable;
     int16_t posXmm;
     int16_t posYmm;
+    bool show;
 public:
     DroppedWeapon(SdlTexture& texture, uint8_t weaponType, size_t uniqueId, int16_t posX, int16_t posY);
 
@@ -33,6 +34,8 @@ public:
     void draw(Camera& cam);
 
     ~DroppedWeapon();
+
+    void doNotShow();
 };
 
 

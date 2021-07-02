@@ -180,9 +180,11 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     std::lock_guard<std::mutex> lock(worldMutex);
     uint8_t weaponType = std::get<0>(weaponId);
     size_t uniqueIdentifier = std::get<1>(weaponId);
-    droppedWeapons.erase(std::remove_if(droppedWeapons.begin(),
-                                        droppedWeapons.end(), [&](DroppedWeapon& weapon){
-        return weapon.isWeaponTypeAndId(weaponType, uniqueIdentifier);
-    }));
+    for (auto& it : droppedWeapons){
+        if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
+            it.doNotShow();
+            break;
+        }
+    }
 }
 

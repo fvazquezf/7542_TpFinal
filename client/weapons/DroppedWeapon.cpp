@@ -1,4 +1,5 @@
 #include "DroppedWeapon.h"
+#include "../Camera.h"
 
 DroppedWeapon::DroppedWeapon(SdlTexture &texture, uint8_t weaponType, size_t uniqueId, int16_t posX, int16_t posY)
 : weaponTypeId(weaponType),
@@ -9,7 +10,8 @@ DroppedWeapon::DroppedWeapon(SdlTexture &texture, uint8_t weaponType, size_t uni
                   posX / 100,
                   posY / 100),
   posXmm(posX),
-  posYmm(posY){
+  posYmm(posY),
+  show(true){
 }
 
 bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifier) {
@@ -17,7 +19,9 @@ bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifie
 }
 
 void DroppedWeapon::draw(Camera& cam) {
-    droppedDrawable.render(cam, 0);
+    if (show && cam.isVisible(posXmm / 100, posYmm / 100)){
+        droppedDrawable.render(cam, 0);
+    }
 }
 
 DroppedWeapon::DroppedWeapon(DroppedWeapon &&other) noexcept
@@ -25,7 +29,8 @@ DroppedWeapon::DroppedWeapon(DroppedWeapon &&other) noexcept
   uniqueId(other.uniqueId),
   droppedDrawable(std::move(other.droppedDrawable)),
   posXmm(other.posXmm),
-  posYmm(other.posYmm){
+  posYmm(other.posYmm),
+  show(other.show){
 }
 
 DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other) noexcept {
@@ -37,10 +42,15 @@ DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other) noexcept {
     uniqueId = other.uniqueId;
     posXmm = other.posXmm;
     posYmm = other.posYmm;
+    show = other.show;
 
     return *this;
 }
 
 DroppedWeapon::~DroppedWeapon() {
 
+}
+
+void DroppedWeapon::doNotShow() {
+    show = false;
 }
