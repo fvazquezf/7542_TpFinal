@@ -6,7 +6,7 @@
 class Server {
  public:
   Server();
-  void operator()(char *port);
+  void operator()(char *port, char *configPath);
   ~Server();
 };
 

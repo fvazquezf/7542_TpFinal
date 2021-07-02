@@ -19,6 +19,11 @@ public:
     // avisa si hay una nueva weapon tirada
     explicit DroppedWeapons(Broadcaster& updates);
 
+    DroppedWeapons(const DroppedWeapons& other) = delete;
+    DroppedWeapons& operator=(const DroppedWeapons& other) = delete;
+
+    DroppedWeapons(DroppedWeapons&& other) noexcept;
+    DroppedWeapons& operator=(DroppedWeapons&& other) noexcept;
 
     void dropWeapon(uint8_t weaponCode, const b2Vec2& position);
     int8_t pickUpAnyIfClose(const b2Vec2& playerPosition);

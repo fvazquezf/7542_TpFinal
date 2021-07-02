@@ -4,4 +4,4 @@ add_library(lib_common
             Thread.cpp
             ProtectedQueue.h
             BlockingQueue.h
-            Protocol.cpp)
+            Protocol.cpp ConfigVariables.h)

@@ -16,9 +16,11 @@
 #include "updates/WeaponUpdate.h"
 #include "updates/BuyTimeUpdate.h"
 
-WorldModel::WorldModel(Broadcaster& updates): world (b2Vec2(0.0f, 0.0f)),
-updates (updates),
-droppedWeapons(updates){
+WorldModel::WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig)
+: world (b2Vec2(0.0f, 0.0f)),
+  matchConfig(matchConfig),
+  updates (updates),
+  droppedWeapons(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
 	this->positionIterations = 2;
@@ -183,6 +185,7 @@ WorldModel::~WorldModel() {
 
 WorldModel::WorldModel(WorldModel &&other) noexcept
 : world(b2Vec2(0.0f, 0.0f)),
+  matchConfig(other.matchConfig),
   playerModels(std::move(other.playerModels)),
   usersEvents(std::move(other.usersEvents)),
   updates(other.updates),

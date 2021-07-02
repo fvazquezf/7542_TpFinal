@@ -3,6 +3,7 @@
 
 #include <map>
 #include <mutex>
+#include <yaml-cpp/node/node.h>
 #include "match.h"
 
 /*
@@ -16,9 +17,10 @@
 class GamesMonitor {
 private:
     std::map<std::string, Match> matches;
+    std::map<int, float> matchesConfig; // config de partidas
     std::mutex gamesMonitorLock;
 public:
-    GamesMonitor();
+    explicit GamesMonitor(YAML::Node& config);
 
     GamesMonitor(const GamesMonitor& other) = delete;
     GamesMonitor& operator=(const GamesMonitor& other) = delete;

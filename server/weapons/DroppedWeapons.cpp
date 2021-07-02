@@ -17,7 +17,7 @@ int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
     int8_t code = -1;
     auto weapon = droppedWeapons.begin();
     while (weapon != droppedWeapons.end()){
-        if ((std::get<2>(*weapon) - playerPosition).LengthSquared() < 0.1){
+        if ((std::get<2>(*weapon) - playerPosition).LengthSquared() < 1){
             broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(std::get<0>(*weapon),
                                                                              std::get<1>(*weapon),
                                                                              std::get<2>(*weapon).x,
@@ -34,4 +34,18 @@ int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
 }
 
 DroppedWeapons::~DroppedWeapons() {
+}
+
+DroppedWeapons::DroppedWeapons(DroppedWeapons &&other) noexcept
+: uniquifier(other.uniquifier),
+  broadcaster(other.broadcaster),
+  droppedWeapons(std::move(other.droppedWeapons)){
+}
+
+DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    return *this;
 }

@@ -28,6 +28,6 @@ target_link_libraries(client_main sdlloop anim sdlwrapperclasses SDL2 SDL2_image
 #target_link_libraries(commandTester lib_common commands)
 
 # Linkage esqueleto cliente-servidor
-target_link_libraries(esqueleto_server lib_server lib_common box2d)
+target_link_libraries(esqueleto_server lib_server lib_common box2d yaml-cpp)
 
 

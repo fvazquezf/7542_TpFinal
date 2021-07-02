@@ -16,6 +16,7 @@
 class WorldModel: public Thread {
     b2World world;
     b2Body* anchor;
+    const std::map<int, float>& matchConfig;
     std::map<int, PlayerModel> playerModels;
 
     std::unordered_set<int> attackingPlayers;
@@ -42,7 +43,7 @@ class WorldModel: public Thread {
     void stopAllPlayers();
 
     public:
-        explicit WorldModel(Broadcaster& updates);
+        WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig);
 
         ~WorldModel() override;
         void run() override;

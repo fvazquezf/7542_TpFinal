@@ -1,0 +1,34 @@
+#ifndef CONFIGVARIABLES_H
+#define CONFIGVARIABLES_H
+
+
+enum ConfigVariables {
+    VIDA_JUGADORES,
+    DINERO_INICIAL,
+    MAX_JUGADORES,
+    GLOCK_BULLETS,
+    AK47_BULLETS,
+    M3_BULLETS,
+    AWP_BULLETS,
+    MONEY_KILL_ENEMY,
+    MONEY_ROUND_WON,
+    MONEY_ROUND_LOST,
+    MIN_DMG_KNF,
+    MAX_DMG_KNF,
+    MIN_DMG_GLK,
+    MAX_DMG_GLK,
+    MIN_DMG_AK,
+    MAX_DMG_AK,
+    MIN_DMG_M3,
+    MAX_DMG_M3,
+    MIN_DMG_AWP,
+    MAX_DMG_AWP,
+    FR_KNF,
+    FR_AWP,
+    FR_AK47,
+    FR_GLK,
+    FR_M3
+};
+
+
+#endif

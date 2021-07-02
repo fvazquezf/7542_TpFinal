@@ -97,15 +97,18 @@ void SdlLoop::handleQuit(){
 }
 
 void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
-    // tecla a la cual no trackeamos
-    // estos son los cambios de arma
     if (world.isMenuTime()){
-        menuPresses[key] = pressed;
+        if (menuPresses.count(key)){
+            menuPresses.erase(key);
+        } else {
+            menuPresses.emplace(key, pressed);
+        }
         return;
     }
 
     // bug de movimiento infinito despues del tiempo de menu
-    if (!world.isMenuTime() && menuPresses.empty() != 0 ){
+    // es tan solo un hotfix
+    if (!menuPresses.empty()){
         try {
             bool wasPressed = menuPresses.at(key);
             if (wasPressed != pressed){
@@ -113,10 +116,12 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
                 return;
             }
         } catch (const std::exception& e){
-
+            return;
         }
     }
 
+    // tecla a la cual no trackeamos
+    // estos son los cambios de arma
     if (key == SDLK_e){
         if (pressed){
             commands.push(std::unique_ptr<Command>(new Pickup()));

@@ -14,7 +14,15 @@
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
     Socket cli;
-    cli.connect(argv[1], argv[2]);
+    try {
+        cli.connect(argv[1], argv[2]);
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    } catch (...) {
+        std::cerr << "Error desconocido en el hilo main" << std::endl;
+        return -1;
+    }
 
 	bool running = true;
 

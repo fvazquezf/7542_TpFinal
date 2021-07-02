@@ -1,41 +1,27 @@
 #include "match.h"
+#include "../common/ConfigVariables.h"
 
-Match::Match()
-: maxUsers(0),
-  updates(),
-  world(updates)
-{
-}
-
-Match::Match(int playerAmount)
-: maxUsers(playerAmount),
-  world(updates)
-{
+Match::Match(const std::map<int, float>& matchConfig)
+: matchConfig(matchConfig),
+  maxUsers(matchConfig.at(ConfigVariables::MAX_JUGADORES)),
+  world(updates, matchConfig){
 }
 
 void Match::removeUser() {
-    //this->users.erase(nickname);
 }
 
 void Match::removeUsers() {
-    /*for(auto user : this->users){
-        user.second->stop();
-		delete user.second;
-	}*/
 }
 
 Match::~Match() {
 }
 
 Match::Match(Match &&other) noexcept
-: maxUsers(other.maxUsers),
-  users(std::move(other.users)),
+: users(std::move(other.users)),
+  matchConfig(other.matchConfig),
+  maxUsers(other.maxUsers),
   updates(std::move(other.updates)),
-  world(std::move(other.world))
-  //users(std::move(other.users)),
-//   world(std::move(other.world))
-  //updates(std::move(other.updates))
-{
+  world(std::move(other.world)){
 }
 
 Match &Match::operator=(Match &&other) noexcept {

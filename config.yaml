@@ -1,0 +1,30 @@
+vida_jugadores: 100 # vida maxima
+dinero_inicial: 2000
+
+match_max_players: 2
+
+glock_max_bullets: 20
+ak47_max_bullets: 30
+m3_max_bullets: 10
+awp_max_bullets: 5
+
+money_kill_enemy: 500
+money_round_won: 1000
+money_round_lost: 500
+
+min_dmg_knife: 0
+max_dmg_knife: 40
+min_dmg_glock: 20
+max_dmg_glock: 40
+min_dmg_ak47: 20
+max_dmg_ak47: 40
+min_dmg_m3: 40
+max_dmg_m3: 60
+min_dmg_awp: 100
+max_dmg_awp: 100
+
+fire_rate_knife: 0.5 # 1/2 puntada per sec
+fire_rate_awp: 1.0 # 1 bullet per second
+fire_rate_ak47: 0.4
+fire_rate_glock: 0.0
+fire_rate_m3: 0.0
