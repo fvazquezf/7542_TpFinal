@@ -14,6 +14,8 @@ add_library(lib_server
     events/ClientEvent.cpp
     events/ClientEvent.h
     Broadcaster.cpp
+    MapLayout.cpp
+    Tally.cpp
     weapons/Weapon.cpp
     weapons/Knife.cpp
     weapons/Pistol.cpp
@@ -38,6 +40,7 @@ add_library(lib_server
     weapons/Rifle.cpp
     updates/BuyTimeUpdate.cpp     
     weapons/DroppedWeapons.cpp
-    updates/WeaponDropUpdate.cpp)
+    updates/WeaponDropUpdate.cpp
+    updates/TeamsUpdate.cpp)
 
 

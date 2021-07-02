@@ -21,7 +21,27 @@ isAlive(true),
 armory(dropped){
     this->netForce.SetZero();
     dirAmount = 0;
+    isCt = false;
 }
+
+PlayerModel::PlayerModel(PlayerModel &&other) noexcept
+: model(other.model),
+  netForce(other.netForce),
+  armory(std::move(other.armory)){
+    other.model = nullptr;
+}
+
+PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    model = other.model;
+    netForce = other.netForce;
+    other.model = nullptr;
+    return *this;
+}
+
 
 void PlayerModel::startMove(int dir){
     dirAmount++;
@@ -56,12 +76,6 @@ void PlayerModel::stopMove(int dir){
     }
 }
 
-void PlayerModel::reposition(float x, float y){
-    b2Vec2 newPos(x, y);
-    this->model->SetTransform(newPos, 0);
-}
-
-
 void PlayerModel::step(){
     float vel = this->model->GetLinearVelocity().Length();
     if (vel < 12){
@@ -69,30 +83,18 @@ void PlayerModel::step(){
     }
 }
 
+void PlayerModel::reposition(MapLayout& mapLayout){
+    b2Vec2 newPos;
+    if(isCt){
+        newPos = mapLayout.placeCt();
+    } else {
+        newPos = mapLayout.placeTt();
+    }
+    this->model->SetTransform(newPos, 0);
+}
+
 const b2Vec2& PlayerModel::getPosition(){
     return this->model->GetPosition();
-}
-
-PlayerModel::PlayerModel(PlayerModel &&other) noexcept
-: model(other.model),
-  netForce(other.netForce),
-  armory(std::move(other.armory)){
-    other.model = nullptr;
-}
-
-PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
-    if (this == &other){
-        return *this;
-    }
-
-    model = other.model;
-    netForce = other.netForce;
-    other.model = nullptr;
-    return *this;
-}
-
-int16_t PlayerModel::getAngle() const {
-    return angle;
 }
 
 void PlayerModel::setAngle(int16_t newAngle) {
@@ -100,6 +102,10 @@ void PlayerModel::setAngle(int16_t newAngle) {
         return;
     }
     this->angle = newAngle;
+}
+
+int16_t PlayerModel::getAngle() const {
+    return angle;
 }
 
 bool PlayerModel::attack(PlayerModel& enemy){
@@ -144,9 +150,14 @@ bool PlayerModel::pickUpWeapon(){
     return armory.pickUpWeapon(model->GetPosition());
 }
 
-
-
 void PlayerModel::die() {
     isAlive = false;
 }
 
+void PlayerModel::changeSide(){
+    isCt = !isCt;
+}
+
+bool PlayerModel::getSide(){
+    return isCt;
+}

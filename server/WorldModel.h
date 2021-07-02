@@ -5,6 +5,8 @@
 #include "../common/Thread.h"
 #include "Broadcaster.h"
 #include "PlayerModel.h"
+#include "MapLayout.h"
+#include "Tally.h"
 #include "events/ClientEvent.h"
 #include "../common/ProtectedQueue.h"
 #include <memory>
@@ -18,6 +20,9 @@ class WorldModel: public Thread {
     b2Body* anchor;
     const std::map<int, float>& matchConfig;
     std::map<int, PlayerModel> playerModels;
+
+    MapLayout mapLayout;
+    Tally tally;
 
     std::unordered_set<int> attackingPlayers;
 
@@ -35,13 +40,7 @@ class WorldModel: public Thread {
 
     bool purchaseFase;
     bool is_running;
-
-    void roundBegin();
-    void roundCommon();
-    void roundPlay();
-
-    void stopAllPlayers();
-
+    
     public:
         WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig);
 
@@ -58,6 +57,9 @@ class WorldModel: public Thread {
 
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
+        void createBox(b2BodyDef& boxDef);
+        void loadMap();
+
         void updatePositions();
         void updateAngles();
         void updateAttack(int id);
@@ -65,10 +67,11 @@ class WorldModel: public Thread {
         void updateDead(int id);
         void updateWeapon(uint8_t id, uint8_t code);
         void updateBuying(bool buying);
-        void updateDropped();
-
+        void updateTeams();
+        
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
+        void stopAllPlayers();
         void rotatePlayer(uint8_t id, int16_t angle);
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
@@ -77,16 +80,15 @@ class WorldModel: public Thread {
         void equipWeapon(uint8_t id, uint8_t weaponType);
         void pickUpWeapon(uint8_t id);
 
-
-        void createBox(b2BodyDef& boxDef);
-        void loadMap();
+        void roundBegin();
+        void roundCommon();
+        void roundPlay();
+        bool roundDone();
 
         void step();
 
 
     void disconnectPlayer(uint8_t id);
-
-    bool roundDone();
 };
 
 #endif

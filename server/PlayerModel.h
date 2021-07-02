@@ -3,6 +3,7 @@
 
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "weapons/Armory.h"
+#include "MapLayout.h"
 #include <memory>
 
 class PlayerModel{
@@ -11,6 +12,8 @@ class PlayerModel{
     int16_t angle;
 
     int dirAmount;
+
+    bool isCt;
 
     int hp;
     int money;
@@ -31,27 +34,29 @@ class PlayerModel{
         void startMove(int dir);
         void stopMove(int dir);
 
-        void reposition(float x, float y);
+        void step();
 
-        bool attack(PlayerModel& enemy);
-        std::shared_ptr<Weapon> hit();
-        bool gotHit(std::shared_ptr<Weapon> weapon);
-
-        int equipWeapon(int weaponType);
-        bool buyWeapon(uint8_t weaponCode);
-        bool pickUpWeapon();
-
-        bool tickCooldown();
-        void resetCooldown();
-
+        void reposition(MapLayout& mapLayout);
         const b2Vec2& getPosition();
 
         void setAngle(int16_t newAngle);
         int16_t getAngle() const;
 
-        void step();
+        bool attack(PlayerModel& enemy);
+        std::shared_ptr<Weapon> hit();
+        bool gotHit(std::shared_ptr<Weapon> weapon);
+
+        bool tickCooldown();
+        void resetCooldown();
+
+        int equipWeapon(int weaponType);
+        bool buyWeapon(uint8_t weaponCode);
+        bool pickUpWeapon();
 
         void die();
+
+        void changeSide();
+        bool getSide();
 };
 
 #endif
