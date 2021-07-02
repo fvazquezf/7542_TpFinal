@@ -25,14 +25,18 @@
 #define WEAPON_UPDATE 0x25
 #define BUYING_UPDATE 0x26
 #define WEAPON_DROP_UPDATE 0x27
+#define MAP_INFO_UPDATE 0x28
 
 // update misc
 // login response me manda
 // el id si fue buen login
 // o fail si fallo
+// al loggear, mandamos GAME_INFO
+// puede tener el nombre de las partidas
 #define LOGIN_RESPONSE 0x60
 #define LOGIN_OK 0
 #define LOGIN_BAD 1
+#define GAME_INFO
 
 #define BUY_START 0
 #define BUY_END 1
@@ -66,7 +70,7 @@
 
 class Protocol {
 private:
-    void serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const;
+    void serializeStringMessage(std::vector<unsigned char> &msg, const std::string& gameName) const;
     float deserializePosition(std::vector<unsigned char>& msg) const;
     void serializePosition(std::vector<unsigned char> &msg, float position) const;
 public:
@@ -109,6 +113,7 @@ public:
                     float posX,
                     float posY,
                     std::function<void(std::vector<unsigned char>)> &callback) const;
+    void updateMapInformation(const std::string& serializedMap, std::function<void(std::vector<unsigned char>)> &callback) const;
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);

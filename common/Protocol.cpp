@@ -2,7 +2,6 @@
 #include "Protocol.h"
 #include <arpa/inet.h>
 #include <stdexcept>
-#include <iostream>
 
 Protocol::Protocol() {
 }
@@ -11,7 +10,7 @@ void Protocol::createGame(const std::string& gameName,
                           std::function<void(std::vector<unsigned char>)>&callback) const {
     std::vector<unsigned char> msg;
     msg.push_back(CREATE);
-    serializeGameName(msg, gameName);
+    serializeStringMessage(msg, gameName);
     callback(std::move(msg));
 }
 
@@ -19,7 +18,7 @@ void Protocol::joinGame(const std::string &gameName,
                         std::function<void(std::vector<unsigned char>)>&callback) const {
     std::vector<unsigned char> msg;
     msg.push_back(JOIN);
-    serializeGameName(msg, gameName);
+    serializeStringMessage(msg, gameName);
     callback(std::move(msg));
 }
 
@@ -32,8 +31,7 @@ void Protocol::listGames(std::function<void(std::vector<unsigned char>)>&callbac
 Protocol::~Protocol() {
 }
 
-// client side
-void Protocol::serializeGameName(std::vector<unsigned char> &msg, const std::string& gameName) const {
+void Protocol::serializeStringMessage(std::vector<unsigned char> &msg, const std::string& gameName) const {
     uint16_t gameSize = gameName.size();
     gameSize = htons(gameSize);
     serializeMsgLenShort(msg, gameSize);
@@ -425,4 +423,12 @@ std::tuple<uint8_t, size_t, int16_t, int16_t> Protocol::deserializeDrop(std::vec
         posY = ntohs(msg.at(7) << 8 | msg.at(8));
     }
     return std::make_tuple(weaponCode, dropIdentifier, posX, posY);
+}
+
+void Protocol::updateMapInformation(const std::string &serializedMap,
+                                    std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> msg;
+    msg.push_back(MAP_INFO_UPDATE);
+    serializeStringMessage(msg, serializedMap);
+    callback(std::move(msg));
 }
