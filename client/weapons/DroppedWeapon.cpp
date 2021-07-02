@@ -1,0 +1,46 @@
+#include "DroppedWeapon.h"
+
+DroppedWeapon::DroppedWeapon(SdlTexture &texture, uint8_t weaponType, size_t uniqueId, int16_t posX, int16_t posY)
+: weaponTypeId(weaponType),
+  uniqueId(uniqueId),
+  droppedDrawable(texture,
+                  droppedSizes.at(weaponTypeId).first,
+                  droppedSizes.at(weaponTypeId).second,
+                  posX / 100,
+                  posY / 100),
+  posXmm(posX),
+  posYmm(posY){
+}
+
+bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifier) {
+    return weaponTypeId == weaponType && this->uniqueId == uniqueIdentifier;
+}
+
+void DroppedWeapon::draw(Camera& cam) {
+    droppedDrawable.render(cam, 0);
+}
+
+DroppedWeapon::DroppedWeapon(DroppedWeapon &&other) noexcept
+: weaponTypeId(other.weaponTypeId),
+  uniqueId(other.uniqueId),
+  droppedDrawable(std::move(other.droppedDrawable)),
+  posXmm(other.posXmm),
+  posYmm(other.posYmm){
+}
+
+DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    weaponTypeId = other.weaponTypeId;
+    uniqueId = other.uniqueId;
+    posXmm = other.posXmm;
+    posYmm = other.posYmm;
+
+    return *this;
+}
+
+DroppedWeapon::~DroppedWeapon() {
+
+}

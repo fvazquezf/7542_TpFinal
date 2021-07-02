@@ -10,12 +10,13 @@
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
 #include "anim/Character.h"
-#include "anim/Renderizable.h"
+#include "Renderizable.h"
 #include "Camera.h"
 #include "Stencil.h"
-#include "anim/Tile.h"
+#include "NonMovable.h"
 #include "BuyingMenu.h"
 #include "Hud.h"
+#include "weapons/DroppedWeapon.h"
 
 class WorldView {
 private:
@@ -36,8 +37,10 @@ private:
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
-    std::map<uint8_t, SdlTexture> drops;
-    std::vector<Tile> tiles;
+    std::map<uint8_t, SdlTexture> dropTextures;
+
+    std::vector<DroppedWeapon> droppedWeapons;
+    std::vector<NonMovable> tiles;
 
     // varios hilos acceden de manera concurrente a la view
     // SDL, Drawer, Receiver
@@ -76,9 +79,9 @@ public:
 
     void kill(uint8_t id);
 
-    void dropWeapon(std::tuple<uint8_t, float, float> weaponAndPosition);
+    void dropWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponIdentification);
 
-    void pickupWeapon(std::tuple<uint8_t, float, float> weaponAndPosition);
+    void pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponIdentification);
 };
 
 

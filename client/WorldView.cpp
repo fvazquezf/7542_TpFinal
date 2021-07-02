@@ -2,6 +2,7 @@
 #include <random>
 #include <iostream>
 #include <cstdint>
+#include <algorithm>
 
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
@@ -42,20 +43,24 @@ WorldView::WorldView(SdlWindow& aWindow)
                     std::forward_as_tuple(
                             SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
 
-    drops.emplace(std::piecewise_construct,
+    dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(0),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/ak47_d.bmp", window)));
 
-    drops.emplace(std::piecewise_construct,
+    dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(1),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/m3_d.bmp", window)));
 
-    drops.emplace(std::piecewise_construct,
+    dropTextures.emplace(std::piecewise_construct,
+                         std::forward_as_tuple(2),
+                         std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/awp_d.bmp", window)));
+
+    dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(5),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
     for (size_t i = 40; i < 70; ++i)
         for (size_t j = 40; j < 70; ++j)
-            tiles.emplace_back(backgroundTiles, i, j);
+            tiles.emplace_back(backgroundTiles, 32, 32, i, j);
 }
 
 WorldView::~WorldView() {
@@ -73,6 +78,9 @@ void WorldView::render(size_t iteration) {
     window.fill();
     for (auto& tile : tiles){
         camera.render(tile, iteration);
+    }
+    for (auto& weapon : droppedWeapons){
+        weapon.draw(camera);
     }
     for (auto& it : entities){
         camera.render(it.second, iteration);
@@ -158,11 +166,23 @@ bool WorldView::isMenuTime() const {
     return menuTime;
 }
 
-void WorldView::dropWeapon(std::tuple<uint8_t, float, float> weaponAndPosition) {
-
+void WorldView::dropWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponId) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    uint8_t id = std::get<0>(weaponId);
+    size_t uniqueIdentifier = std::get<1>(weaponId);
+    int16_t posX = std::get<2>(weaponId);
+    int16_t posY = std::get<3>(weaponId);
+    auto& texture = dropTextures.at(id);
+    droppedWeapons.emplace_back(texture, id, uniqueIdentifier, posX, posY);
 }
 
-void WorldView::pickupWeapon(std::tuple<uint8_t, float, float> weaponAndPosition) {
-
+void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponId) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    uint8_t weaponType = std::get<0>(weaponId);
+    size_t uniqueIdentifier = std::get<1>(weaponId);
+    droppedWeapons.erase(std::remove_if(droppedWeapons.begin(),
+                                        droppedWeapons.end(), [&](DroppedWeapon& weapon){
+        return weapon.isWeaponTypeAndId(weaponType, uniqueIdentifier);
+    }));
 }
 

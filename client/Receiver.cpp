@@ -73,8 +73,12 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         }
         case WEAPON_DROP_UPDATE: {
-            auto tuple = prot.deserializeDrop(msg);
-            msg.at(1) == DROP_UPDATE ? world.dropWeapon(tuple) : world.pickupWeapon(tuple);
+            auto tuple = prot.deserializeDrop(msg, msg.back());
+            if (msg.back() == DROP_UPDATE){
+                world.dropWeapon(tuple);
+            } else if (msg.back() == PICKUP_UPDATE){
+                world.pickupWeapon(tuple);
+            }
             break;
         }
         default:

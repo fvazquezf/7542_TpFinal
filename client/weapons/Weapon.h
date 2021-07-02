@@ -21,6 +21,9 @@
 #define PISTOL 4
 #define BOMB 5
 
+#define WEAPON_WIDTH 32
+#define WEAPON_HEIGHT 32
+
 class Character;
 
 class Weapon {

@@ -372,27 +372,58 @@ void Protocol::handleByte(uint8_t byte, std::function<void(std::vector<unsigned 
     callback(std::move(msg));
 }
 
-std::vector<unsigned char> Protocol::handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
-    return callback(6);
+std::vector<unsigned char> Protocol::
+handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    std::vector<unsigned char> msg = callback(1); // es drop o es pickup?
+    if (msg.at(0) == DROP_UPDATE){
+        auto vec = callback(9);
+        vec.push_back(msg.at(0));
+        return vec;
+    } else {
+        auto vec = callback(5);
+        vec.push_back(msg.at(0));
+        return vec;
+    }
 }
 
-void Protocol::updateDrop(bool dropped, uint8_t weaponCode, float posX, float posY,
+void Protocol::updateDrop(bool dropped, size_t dropIdentifier,
+                          uint8_t weaponCode, float posX, float posY,
                           std::function<void(std::vector<unsigned char>)> &callback) const {
     std::vector<unsigned char> droppedMsg;
-    // 3 chars + 2 * 2 bytes = 7 bytes
     droppedMsg.push_back(WEAPON_DROP_UPDATE);
     droppedMsg.push_back(dropped ? DROP_UPDATE : PICKUP_UPDATE);
     droppedMsg.push_back(weaponCode);
-    int16_t posXFixedPoint = posX * PRECISION;
-    int16_t posYFixedPoint = posY * PRECISION;
-    serializeMsgLenShort(droppedMsg, posXFixedPoint);
-    serializeMsgLenShort(droppedMsg, posYFixedPoint);
+    dropIdentifier = htonl(dropIdentifier);
+    droppedMsg.push_back(dropIdentifier >> 24 & 0xff);
+    droppedMsg.push_back(dropIdentifier >> 16 & 0xff);
+    droppedMsg.push_back(dropIdentifier >> 8 & 0xff);
+    droppedMsg.push_back(dropIdentifier & 0xff);
+    if (dropped){
+        int pX = posX * PRECISION;
+        int pY = posY * PRECISION;
+        int16_t posXmm = htons(pX);
+        int16_t posYmm = htons(pY);
+        droppedMsg.push_back(posXmm >> 8 & 0xff);
+        droppedMsg.push_back(posXmm & 0xff);
+        droppedMsg.push_back(posYmm >> 8 & 0xff);
+        droppedMsg.push_back(posYmm & 0xff);
+    }
     callback(std::move(droppedMsg));
 }
 
-std::tuple<uint8_t, float, float> Protocol::deserializeDrop(std::vector<unsigned char> &msg) {
+std::tuple<uint8_t, size_t, int16_t, int16_t> Protocol::deserializeDrop(std::vector<unsigned char> &msg, uint8_t dropType) {
     uint8_t weaponCode = msg.at(0);
-    float posX = ntohs(msg.at(1) << 8 | msg.at(2)) / PRECISION;
-    float posY = ntohs(msg.at(3) << 8 | msg.at(4)) / PRECISION;
-    return std::make_tuple(weaponCode, posX, posY);
+    size_t dropIdentifier = 0;
+    int16_t posX = 0;
+    int16_t posY = 0;
+    for (int i = 1; i <= 4; ++i) {
+        dropIdentifier |= msg.at(i) << (24 - 8*(i - 1));
+    }
+    dropIdentifier = ntohl(dropIdentifier);
+    if (dropType == DROP_UPDATE){
+        posX = ntohs(msg.at(5) << 8 | msg.at(6));
+        posY = ntohs(msg.at(7) << 8 | msg.at(8));
+    }
+    printf("%d %d\n", posX, posY);
+    return std::make_tuple(weaponCode, dropIdentifier, posX, posY);
 }

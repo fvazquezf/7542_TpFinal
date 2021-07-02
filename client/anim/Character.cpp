@@ -11,7 +11,7 @@ Character::Character(SdlTexture &texture,
                      std::map<uint8_t, SdlTexture> &weapons,
                      SdlTexture& blood,
                      SdlTexture& legs)
-: Renderizable(texture, posX, posY),
+: Renderizable(texture, 32, 32, posX, posY),
   player(player),
   bleeding(false),
   wasHit(false),

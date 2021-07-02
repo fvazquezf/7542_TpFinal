@@ -1,6 +1,6 @@
 #ifndef TERRORIST_H
 #define TERRORIST_H
-#include "Renderizable.h"
+#include "../Renderizable.h"
 #include "../weapons/Weapon.h"
 #include "Animation.h"
 

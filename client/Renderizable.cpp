@@ -1,7 +1,13 @@
 #include "Renderizable.h"
 
-Renderizable::Renderizable(SdlTexture& texture, float posX, float posY)
+Renderizable::Renderizable(SdlTexture& texture,
+                           int sizeW,
+                           int sizeH,
+                           float posX,
+                           float posY)
 : texture(texture),
+  sizeW(sizeW),
+  sizeH(sizeH),
   posX(posX),
   posY(posY),
   angle(0){
@@ -21,6 +27,8 @@ void Renderizable::updateAngle(int16_t newAngle) {
 
 Renderizable::Renderizable(Renderizable &&other) noexcept
 : texture(other.texture),
+  sizeW(other.sizeW),
+  sizeH(other.sizeH),
   posX(other.posX),
   posY(other.posY),
   angle(other.angle){

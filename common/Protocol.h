@@ -39,8 +39,8 @@
 #define PICKUP_UPDATE 0
 #define DROP_UPDATE 1
 
-// metros a milimetros
-#define PRECISION 1000.0f
+// metros a centimetros
+#define PRECISION 100.0f
 
 #include <vector>
 #include <string>
@@ -104,6 +104,7 @@ public:
                             std::function<void(std::vector<unsigned char>)>& callback) const;
     void updateBuyingTime(bool buyingTime, std::function<void(std::vector<unsigned char>)>& callback) const;
     void updateDrop(bool dropped,
+                    size_t dropIdentifier,
                     uint8_t weaponCode,
                     float posX,
                     float posY,
@@ -120,7 +121,7 @@ public:
     std::vector<unsigned char> handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
-    std::tuple<uint8_t, float, float> deserializeDrop(std::vector<unsigned char>& msg);
+    std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
 
                                 //---------------SERVER---------------//
     std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);

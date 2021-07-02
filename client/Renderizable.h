@@ -1,17 +1,23 @@
 #ifndef RENDERIZABLE_H
 #define RENDERIZABLE_H
-#include "../sdlwrap/SdlTexture.h"
+#include "sdlwrap/SdlTexture.h"
 
 class Camera;
 
 class Renderizable {
 protected:
     SdlTexture& texture;
+    int sizeW;
+    int sizeH;
     float posX;
     float posY;
     int16_t angle;
 public:
-    explicit Renderizable(SdlTexture& texture, float posX, float posY);
+    explicit Renderizable(SdlTexture& texture,
+                          int sizeW,
+                          int sizeH,
+                          float posX,
+                          float posY);
 
     Renderizable(const Renderizable& other) = delete;
     Renderizable& operator=(const Renderizable& other) = delete;

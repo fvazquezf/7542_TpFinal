@@ -55,9 +55,9 @@ bool SdlLoop::isDone() {
 }
 
 void SdlLoop::handleKeyDown() {
-    if (world.isMenuTime()){
+    /*if (world.isMenuTime()){
         return;
-    }
+    }*/
     try {
         handleKey(true, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){
@@ -66,9 +66,9 @@ void SdlLoop::handleKeyDown() {
 }
 
 void SdlLoop::handleKeyUp() {
-    if (world.isMenuTime()){
+    /*if (world.isMenuTime()){
         return;
-    }
+    }*/
     try {
         handleKey(false, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){

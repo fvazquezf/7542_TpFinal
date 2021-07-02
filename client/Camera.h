@@ -3,7 +3,7 @@
 
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
-#include "anim/Renderizable.h"
+#include "Renderizable.h"
 
 // 32 pixeles (tamaño de tile) <-> 1 metro logico (server)
 #define M_TO_P 32

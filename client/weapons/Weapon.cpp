@@ -18,10 +18,10 @@ bool Weapon::changeWeapon(uint8_t id) {
     return true;
 }
 
-void Weapon::draw(float playerX, float playerY, float playerAngle, Camera &cam) {
-    playerX -= 0; // offsets a mano para posicionar bien las armas
-    playerY -= 0.5;
-    cam.renderWeapon(playerX, playerY, playerAngle, 32, 32,
+void Weapon::draw(float x, float y, float angle, Camera &cam) {
+    x -= 0; // offsets a mano para posicionar bien las armas
+    y -= 0.5;
+    cam.renderWeapon(x, y, angle, WEAPON_WIDTH, WEAPON_HEIGHT,
                      weaponTextureMap.at(currentWeapon));
 }
 

@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include <iostream>
-#include "anim/Renderizable.h"
+#include "Renderizable.h"
 #include <cmath>
 #define PI 3.141593f
 
