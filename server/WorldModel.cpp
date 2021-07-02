@@ -289,8 +289,7 @@ void WorldModel::roundBegin() {
         roundCommon();
     }
     updateBuying(false);
-    // no queremos ningun evento residual
-    usersEvents.clear();
+
 }
 
 void WorldModel::stopAllPlayers(){
@@ -305,6 +304,8 @@ void WorldModel::updateBuying(bool buying) {
 }
 
 void WorldModel::roundPlay() {
+    // no queremos ningun evento residual
+    usersEvents.clear();
     for (size_t i = 0; i < 3600 && !roundDone(); ++i){
         roundCommon();
     }

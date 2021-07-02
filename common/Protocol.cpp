@@ -424,6 +424,5 @@ std::tuple<uint8_t, size_t, int16_t, int16_t> Protocol::deserializeDrop(std::vec
         posX = ntohs(msg.at(5) << 8 | msg.at(6));
         posY = ntohs(msg.at(7) << 8 | msg.at(8));
     }
-    printf("%d %d\n", posX, posY);
     return std::make_tuple(weaponCode, dropIdentifier, posX, posY);
 }

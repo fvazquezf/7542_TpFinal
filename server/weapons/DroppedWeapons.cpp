@@ -9,13 +9,6 @@ DroppedWeapons::DroppedWeapons(Broadcaster &updates)
 void DroppedWeapons::dropWeapon(uint8_t weaponCode, const b2Vec2 &position) {
     auto pos = position;
     droppedWeapons.emplace_back(weaponCode, uniquifier, pos);
-    for (int i = 0; i < droppedWeapons.size(); ++i){
-        auto weapon = droppedWeapons[i];
-        printf("Arma %u, %lu, %f %f\n", std::get<0>(weapon),
-               std::get<1>(weapon),
-                       std::get<2>(weapon).x,
-                       std::get<2>(weapon).y);
-    }
     broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(weaponCode, uniquifier, pos.x, pos.y)));
     ++uniquifier;
 }

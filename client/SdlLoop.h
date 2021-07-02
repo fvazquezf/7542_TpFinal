@@ -27,6 +27,8 @@ private:
     std::set<SDL_Keycode> numbers;
     // tracks if the button has been pressed and not released
     std::map<uint8_t, bool> mousePresses;
+    // tracks menu button/mouse presses to hunt for menu to game transition bugs
+    std::map<uint8_t, bool> menuPresses;
 
     void handleKey(bool pressed, SDL_Keycode key);
     void mouseButton(bool pressed, uint8_t button);

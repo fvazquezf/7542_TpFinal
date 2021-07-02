@@ -180,6 +180,12 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     std::lock_guard<std::mutex> lock(worldMutex);
     uint8_t weaponType = std::get<0>(weaponId);
     size_t uniqueIdentifier = std::get<1>(weaponId);
+    // por que no lo borro?
+    // porque los iteradores serian invalidados por el receiver
+    // y puede que el drawer este descheduled en draw, justamente dibujando las armas
+    // al suceder el context switch...
+    // va a levantar iteradores con "basura" (invalidos al fin)
+    // por ende, no los puedo eliminar aqui
     for (auto& it : droppedWeapons){
         if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
             it.doNotShow();
