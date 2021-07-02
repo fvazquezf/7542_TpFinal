@@ -10,6 +10,8 @@ class PlayerModel{
     b2Vec2 netForce;
     int16_t angle;
 
+    int dirAmount;
+
     int hp;
     int money;
     bool isAlive;

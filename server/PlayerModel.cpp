@@ -20,9 +20,11 @@ money(100000),
 isAlive(true),
 armory(dropped){
     this->netForce.SetZero();
+    dirAmount = 0;
 }
 
 void PlayerModel::startMove(int dir){
+    dirAmount++;
     switch (dir) {
         case 0: this->netForce += b2Vec2(0, -15);
                 break;
@@ -37,6 +39,8 @@ void PlayerModel::startMove(int dir){
 }
 
 void PlayerModel::stopMove(int dir){
+    if (dirAmount == 0) return;
+    dirAmount--;
     switch (dir) {
         case 0: this->netForce += b2Vec2(0, 15);
                 break;
@@ -46,7 +50,7 @@ void PlayerModel::stopMove(int dir){
                 break;
         case 3: this->netForce += b2Vec2(-15, 0);
                 break;
-        case 5: this->netForce = b2Vec2(0, 0);
+        case 5: this->netForce.SetZero();
                 break;
         default: break;
     }
