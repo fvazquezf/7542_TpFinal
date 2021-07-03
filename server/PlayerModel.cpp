@@ -123,10 +123,19 @@ bool PlayerModel::gotHit(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
     std::cout << hp << std::endl;
     if (hp <= 0){
+        hp = 0;
         return true;
     } else {
         return false;
     }
+}
+
+int PlayerModel::getHp(){
+    return hp;
+}
+
+int PlayerModel::getMoney(){
+    return money;
 }
 
 bool PlayerModel::tickCooldown(){

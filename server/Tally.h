@@ -10,12 +10,20 @@ class Tally {
     std::map<int, std::pair<int, int>> ttSide;
     std::unordered_set<int> deaths;
 
+    int time;
+
 public:
     Tally();
 
     void placeInTeam(int id, bool team);
     void swapTeams();
+    
     void playerKilledOther(int id, int other);
+
+    void tickTime();
+    int getTime();
+    void resetTime();
+
     bool isRoundOver();
     bool ctWon();
     bool ttWon();

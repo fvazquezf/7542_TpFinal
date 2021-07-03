@@ -45,6 +45,8 @@ class PlayerModel{
         bool attack(PlayerModel& enemy);
         std::shared_ptr<Weapon> hit();
         bool gotHit(std::shared_ptr<Weapon> weapon);
+        int getHp();
+        int getMoney();
 
         bool tickCooldown();
         void resetCooldown();

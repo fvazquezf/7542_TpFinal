@@ -68,6 +68,10 @@ class WorldModel: public Thread {
         void updateWeapon(uint8_t id, uint8_t code);
         void updateBuying(bool buying);
         void updateTeams();
+        void updateHp(int id);
+        void updateMoney(int id);
+        void updateTime();
+
         
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);

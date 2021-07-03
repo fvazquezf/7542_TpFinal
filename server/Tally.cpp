@@ -1,7 +1,7 @@
 #include "Tally.h"
 
 Tally::Tally(){
-    
+    time = 130;
 }
 
 void Tally::placeInTeam(int id, bool team){
@@ -32,6 +32,17 @@ void Tally::playerKilledOther(int id, int other){
     }
 }
 
+void Tally::tickTime(){
+    time--;
+}
+
+int Tally::getTime(){
+    return time;
+}
+
+void Tally::resetTime(){
+    time = 130;
+}
 
 // checkea si termino la ronda
 // x casos:

@@ -41,6 +41,9 @@ add_library(lib_server
     updates/BuyTimeUpdate.cpp     
     weapons/DroppedWeapons.cpp
     updates/WeaponDropUpdate.cpp
+    updates/TimeUpdate.cpp
+    updates/MoneyUpdate.cpp
+    updates/HpUpdate.cpp
     updates/TeamsUpdate.cpp)
 
 

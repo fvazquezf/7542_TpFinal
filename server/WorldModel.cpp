@@ -15,6 +15,9 @@
 #include "updates/DeadUpdate.h"
 #include "updates/WeaponUpdate.h"
 #include "updates/BuyTimeUpdate.h"
+#include "updates/HpUpdate.h"
+#include "updates/MoneyUpdate.h"
+#include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
 
 WorldModel::WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig)
@@ -145,9 +148,12 @@ void WorldModel::run(){
     for (int i = 0; i < (int)playerModels.size()/2; i++){
         playerModels.at(i).changeSide();
     }
-    updateTeams();
+    updateTeams();  
     for (auto & playerModel : this->playerModels){
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
+        updateMoney(playerModel.first);
+        updateHp(playerModel.first);
+        updateTime();
 	}
     for (int i = 0; i < 10 && is_running; i++){
 		if (i == 5) swapTeams();
@@ -172,6 +178,10 @@ void WorldModel::roundPurchase() {
     updatePositions();
     usleep(FRAMERATE);
     for (size_t i = 0; i < 600; ++i){
+        if ((i % 60) == 0) {
+            tally.tickTime();
+            updateTime();
+        }
         roundCommon();
     }
     updateBuying(false);
@@ -225,6 +235,7 @@ void WorldModel::step(){
                     } else {
                         updateHit(it.first);
                     }
+                    updateHp(it.first);
                 }
 		    }
 		}
@@ -290,6 +301,24 @@ void WorldModel::updateTeams(){
     updates.pushAll(updatePtr);
 }
 
+void WorldModel::updateHp(int id){
+    int hp = playerModels[id].getHp();
+    std::shared_ptr<Update> updatePtr(new HpUpdate(hp));
+    updates.push(id, updatePtr);
+}
+
+void WorldModel::updateMoney(int id){
+    int money = playerModels[id].getMoney();
+    std::shared_ptr<Update> updatePtr(new MoneyUpdate(money));
+    updates.push(id, updatePtr);
+}
+
+void WorldModel::updateTime(){
+    int time = tally.getTime();
+    std::shared_ptr<Update> updatePtr(new TimeUpdate(time));
+    updates.pushAll(updatePtr);
+}
+
 void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
 	if (purchaseFase) return;
     playerModels.at(id).startMove(dir);
@@ -334,6 +363,7 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
 		// el weaponType = 0 es el de arma primaria
 		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
 		equipWeapon(id, 0);
+        updateMoney(id);
     }
 }
 
@@ -367,5 +397,6 @@ void WorldModel::swapTeams(){
 void WorldModel::reviveAll(){
     for (auto& it : playerModels){
         it.second.revive();
+        updateHp(it.first);
     }
 }
