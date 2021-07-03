@@ -152,7 +152,7 @@ bool PlayerModel::pickUpWeapon(){
 
 void PlayerModel::die() {
     isAlive = false;
-    armory.dropPrimary();
+    armory.dropPrimary(model->GetPosition());
 }
 
 void PlayerModel::revive() {
