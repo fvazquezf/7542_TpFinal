@@ -87,11 +87,11 @@ int SdlWindow::handleRender(SDL_Texture *txt, const SDL_Rect &src, const SDL_Rec
     return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, 0, nullptr, SDL_FLIP_NONE);
 }
 
-int SdlWindow::drawCenteredTriangle(int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t r, uint8_t g, uint8_t b,
+int SdlWindow::drawCenteredTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t x3, int16_t y3, uint8_t r, uint8_t g, uint8_t b,
                                     uint8_t alpha) {
     return filledTrigonRGBA(rendererPtr,
-                            width/2,
-                            height/2,
+                            x1,
+                            y1,
                             x2,
                             y2,
                             x3, y3, 0xff, 0xff, 0xff, 25);

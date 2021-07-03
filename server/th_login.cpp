@@ -50,10 +50,10 @@ bool ThLogin::handleLoginMessage(uint8_t msgCode, const std::vector<unsigned cha
                                                         this,
                                                         std::placeholders::_1);
     switch (msgCode) {
-        case CREATE:
-            return games.createMatch(std::move(gameName),
-                                     socketHander,
-                                     response);
+        case CREATE: {
+            std::pair<std::string, std::string> gamePair = prot.deserializeCreateGame(msg);
+            return games.createMatch(std::move(gamePair.first), gamePair.second, socketHander, response);
+        }
         case JOIN:
             return games.joinMatch(gameName,
                                    socketHander,

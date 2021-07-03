@@ -43,7 +43,7 @@ int main(int argc, const char *argv[]){
 	stream >> comando;
     stream >> nombre;
     if (comando == "Crear"){
-        comms.push(std::unique_ptr<Command>(new CreateGame(nombre)));
+        comms.push(std::unique_ptr<Command>(new CreateGame(nombre, "mapa")));
     } else {
         comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
     }

@@ -5,6 +5,8 @@
 #include <mutex>
 #include <yaml-cpp/node/node.h>
 #include "match.h"
+#define MAP_PATH_PREFIX "../maps/"
+#define MAP_EXTENSION ".yaml"
 
 /*
  * contenedor de juegos
@@ -29,6 +31,7 @@ public:
     GamesMonitor& operator=(GamesMonitor&& other) noexcept;
 
     bool createMatch(std::string gameName,
+                     const std::string& mapName,
                      const std::function<Socket(void)> &handIn,
                      const std::function<void(int8_t)>& response);
     bool joinMatch(const std::string &gameName,

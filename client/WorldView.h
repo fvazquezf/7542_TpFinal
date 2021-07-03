@@ -27,7 +27,6 @@ private:
     Hud hud;
 
     std::atomic_bool menuTime;
-    uint16_t menuTicks;
 
     SdlTexture terror;
     SdlTexture counterTerrorist;
@@ -48,8 +47,6 @@ private:
 
     std::mutex worldMutex;
     uint8_t playerId;
-
-    void createPlayersAtReception(uint8_t id, float x, float y);
 public:
     explicit WorldView(SdlWindow& window);
 

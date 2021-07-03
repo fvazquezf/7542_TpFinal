@@ -42,7 +42,9 @@ public:
                      uint8_t alpha);
 
     //int drawCircle(std::pair<int16_t, int16_t> x1, );
-    int drawCenteredTriangle(int16_t x2,
+    int drawCenteredTriangle(int16_t x1,
+                             int16_t y1,
+                             int16_t x2,
                              int16_t y2,
                              int16_t x3,
                              int16_t y3,

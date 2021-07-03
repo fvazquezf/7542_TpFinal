@@ -43,18 +43,30 @@ GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other) noexcept {
 }
 
 bool GamesMonitor::createMatch(std::string gameName,
+                               const std::string& mapName,
                                const std::function<Socket(void)> &handIn,
                                const std::function<void(int8_t)>& response) {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    std::string mapPath = MAP_PATH_PREFIX + mapName + MAP_EXTENSION;
+    YAML::Node map;
+
     // si hay un juego con ese nombre, no puedo crear partida
     if (matches.count(gameName)){
         response(-1);
         return false;
     }
-    matches.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(gameName),
-                    std::forward_as_tuple(matchesConfig));
-    // si creo el jeugo es id 0
+
+    // si el nombre del mapa es invalido, matches tira runtimeException
+    try {
+        matches.emplace(std::piecewise_construct,
+                        std::forward_as_tuple(gameName),
+                        std::forward_as_tuple(matchesConfig, mapPath));
+    } catch(const std::exception& e){
+        response(-1); // agregar al callback un codigo de tipo de error, bad file, game exists etc etc
+        return false;
+    }
+
+    // si creo el juego es id 0
     response(0);
     matches.at(gameName).addUser(handIn());
     return true;

@@ -1,0 +1,3 @@
+#!bin/bash
+
+cppcheck --enable=all -f --std=c++11 --platform=unix64 -v -i libs/box2d .

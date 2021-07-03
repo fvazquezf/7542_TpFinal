@@ -197,7 +197,7 @@ void WorldModel::roundPlay() {
 
 void WorldModel::roundCommon() {
     auto start = std::chrono::system_clock::now();
-    for (int j = 0; j < 10; ++j){
+    for (int j = 0; j < 50; ++j){
         try {
             std::unique_ptr<ClientEvent> event = usersEvents.pop();
             event->updatePlayer(*this);

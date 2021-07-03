@@ -84,7 +84,9 @@ public:
     Protocol& operator=(Protocol&& other) noexcept;
 
                                 //---------------CLIENT---------------//
-    void createGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
+    void createGame(const std::string& gameName,
+                    const std::string& mapName,
+                    std::function<void(std::vector<unsigned char>)>& callback) const;
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
     void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
     void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
@@ -128,6 +130,7 @@ public:
     std::vector<unsigned char> handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleTeamUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
 
+    std::pair<std::string, std::string> deserializeCreateGame(const std::vector<unsigned char>& msg);
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);

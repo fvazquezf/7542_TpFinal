@@ -1,6 +1,4 @@
 #include "WorldView.h"
-#include <random>
-#include <iostream>
 #include <cstdint>
 #include <algorithm>
 
@@ -91,25 +89,15 @@ void WorldView::render(size_t iteration) {
         menu.showMenu();
     }
     //hud.show();
-    //stencil.applyFilter(camera.angleFromMouse());
+    stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }
 
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
-        if (!entities.count(it.first)){
-            createPlayersAtReception(it.first, it.second.first, it.second.second);
-            continue;
-        }
         entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
-}
-
-void WorldView::createPlayersAtReception(uint8_t id, float x, float y) {
-    entities.emplace(std::piecewise_construct,
-                     std::forward_as_tuple(id),
-                     std::forward_as_tuple(terror, x, y, false, weapons, blood, legs));
 }
 
 int16_t WorldView::getPlayerAngle() {
@@ -132,9 +120,6 @@ void WorldView::hit(uint8_t id) {
 void WorldView::kill(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
     entities.at(id).die();
-    // borramos el id
-    //auto it = entities.find(id);
-    //entities.erase(it);
 }
 
 void WorldView::attack(uint8_t id) {
@@ -142,9 +127,9 @@ void WorldView::attack(uint8_t id) {
     entities.at(id).attack();
 }
 
-void WorldView::changeWeapon(uint8_t weaponCode, uint8_t playerId) {
+void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(playerId).changeWeapon(weaponCode);
+    entities.at(characterId).changeWeapon(weaponCode);
 }
 
 bool WorldView::menuButtonPressed(int mouseX, int mouseY) {

@@ -1,10 +1,16 @@
+#include "yaml-cpp/yaml.h"
 #include "match.h"
 #include "../common/ConfigVariables.h"
 
-Match::Match(const std::map<int, float>& matchConfig)
+Match::Match(const std::map<int, float>& matchConfig, const std::string& mapName)
 : matchConfig(matchConfig),
   maxUsers(matchConfig.at(ConfigVariables::MAX_JUGADORES)),
   world(updates, matchConfig){
+    try {
+        mapInfo = YAML::LoadFile(mapName);
+    } catch(const std::exception& e){
+        throw e;
+    }
 }
 
 void Match::removeUser() {

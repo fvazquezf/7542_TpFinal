@@ -12,7 +12,8 @@
 
 class Match {
 public:
-    explicit Match(const std::map<int, float>& matchConfig);
+    explicit Match(const std::map<int, float>& matchConfig,
+                   const std::string& mapName);
 
     Match(const Match& other) = delete;
     Match& operator=(const Match& other) = delete;
@@ -39,6 +40,7 @@ private:
     Broadcaster updates;
 
     WorldModel world;
+    YAML::Node mapInfo;
 };
 
 #endif

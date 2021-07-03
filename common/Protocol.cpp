@@ -7,10 +7,12 @@ Protocol::Protocol() {
 }
 
 void Protocol::createGame(const std::string& gameName,
+                          const std::string& mapName,
                           std::function<void(std::vector<unsigned char>)>&callback) const {
     std::vector<unsigned char> msg;
     msg.push_back(CREATE);
     serializeStringMessage(msg, gameName);
+    serializeStringMessage(msg, mapName);
     callback(std::move(msg));
 }
 
@@ -52,10 +54,20 @@ void Protocol::move(uint8_t dir, bool isDone,
 
 // server side
 std::vector<unsigned char> Protocol::handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback) {
-    std::vector<unsigned char> received = callback(2);
-    uint16_t nameSize = deserializeMsgLenShort(received);
-    received = callback(nameSize);
-    return received; // no recibirlo por std::move() para evitar copy ellision
+    std::vector<unsigned char> nameSizeReceived = callback(2);
+    uint16_t nameSize = deserializeMsgLenShort(nameSizeReceived);
+    std::vector<unsigned char> gameName = callback(nameSize);
+    std::vector<unsigned char> mapSizeReceived = callback(2);
+    uint16_t mapSize = deserializeMsgLenShort(mapSizeReceived);
+    std::vector<unsigned char> mapName = callback(mapSize);
+    std::vector<unsigned char> finalMsg;
+    finalMsg.push_back((nameSize >> 8) & 0xff);
+    finalMsg.push_back(nameSize & 0xff);
+    finalMsg.insert(finalMsg.end(), gameName.begin(), gameName.end());
+    finalMsg.push_back((mapSize >> 8) & 0xff);
+    finalMsg.push_back(mapSize & 0xff);
+    finalMsg.insert(finalMsg.end(), mapName.begin(), mapName.end());
+    return finalMsg;
 }
 
 // server side
@@ -280,8 +292,10 @@ void Protocol::rotate(int16_t angle, std::function<void(std::vector<unsigned cha
 }
 
 void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const {
-    for (int i = 0; i != 2; ++i){
-        angleMsg.push_back((data >> (8 - i * 8)) & 0xff);
+    int i = 0;
+    while (i != 2){
+        angleMsg.push_back(data >> (8 - i * 8) & 0xff);
+        ++i;
     }
 }
 
@@ -443,8 +457,7 @@ Protocol::updateTeams(const std::map<uint8_t, bool> &teamMap,
     std::vector<unsigned char> teamsMsg;
     teamsMsg.push_back(TEAM_UPDATE);
     uint16_t msgSize = htons(teamMap.size() * 2);
-    teamsMsg.push_back((msgSize >> 8) & 0xff);
-    teamsMsg.push_back(msgSize & 0xff);
+    serializeMsgLenShort(teamsMsg, msgSize);
     for (auto& it : teamMap){
         teamsMsg.push_back(it.first);
         teamsMsg.push_back(it.second ? 1 : 0); // isCt = true -> 1 else 0
@@ -463,4 +476,18 @@ std::map<uint8_t, bool> Protocol::deserializeTeams(std::vector<unsigned char> &m
         teamsById.emplace(msg.at(i), msg.at(i + 1));
     }
     return teamsById;
+}
+
+std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::vector<unsigned char> &msg) {
+    uint16_t gameNameSize = msg.at(0) << 8 | msg.at(1);
+    std::string gameName;
+    for (uint16_t i = 2; i < 2 + gameNameSize; ++i){
+        gameName.push_back(msg.at(i));
+    }
+    uint16_t mapNameSize = msg.at(2 + gameNameSize) << 8 | msg.at(3 + gameNameSize);
+    std::string mapName;
+    for (uint16_t i = gameNameSize + 4; i < gameNameSize + 4 + mapNameSize; ++i){
+        mapName.push_back(msg.at(i));
+    }
+    return std::make_pair(gameName, mapName);
 }
