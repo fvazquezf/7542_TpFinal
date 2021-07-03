@@ -12,6 +12,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   hud(window),
   menuTime(false),
   terror("../sprites/gfx/player/t1.bmp", window),
+  counterTerrorist("../sprites/gfx/player/ct1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
         window,
         {0, 0, 0},
@@ -66,11 +67,12 @@ WorldView::WorldView(SdlWindow& aWindow)
 WorldView::~WorldView() {
 }
 
-void WorldView::createTerrorist(uint8_t id, bool isPlayer, int posX, int posY) {
+void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
     std::lock_guard<std::mutex> lock(worldMutex);
     entities.emplace(std::piecewise_construct,
                      std::forward_as_tuple(id),
-                     std::forward_as_tuple(terror, posX, posY, isPlayer, weapons, blood, legs));
+                     std::forward_as_tuple(isCt ? counterTerrorist : terror, 0, 0, isPlayer,
+                                                   weapons, blood, legs));
 }
 
 void WorldView::render(size_t iteration) {
@@ -192,5 +194,20 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
             break;
         }
     }
+}
+
+void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {
+    for (auto& it : teamMap){
+        uint8_t characterId = it.first;
+        bool isCt = it.second;
+        // si no existe el jugador, debo crearlo
+        if (!entities.count(characterId)){
+            characterEntityCreate(characterId, characterId == playerId, isCt);
+        }
+    }
+}
+
+void WorldView::assignPlayer(uint8_t aPlayerId) {
+    playerId = aPlayerId;
 }
 

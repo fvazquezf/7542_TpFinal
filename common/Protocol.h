@@ -26,6 +26,7 @@
 #define BUYING_UPDATE 0x26
 #define WEAPON_DROP_UPDATE 0x27
 #define MAP_INFO_UPDATE 0x28
+#define TEAM_UPDATE 0x29
 
 // update misc
 // login response me manda
@@ -114,6 +115,7 @@ public:
                     float posY,
                     std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateMapInformation(const std::string& serializedMap, std::function<void(std::vector<unsigned char>)> &callback) const;
+    void updateTeams(const std::map<uint8_t, bool> &map, std::function<void(std::vector<unsigned char>)> &callback);
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -124,9 +126,12 @@ public:
     std::vector<unsigned char> handleAngleUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleUpdateWeapon(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleTeamUpdate(std::function<std::vector<unsigned char>(size_t)> &callback);
+
     std::map<uint8_t, std::pair<float, float>> deserializePositions(std::vector<unsigned char>& msg);
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
+    std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
 
                                 //---------------SERVER---------------//
     std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);

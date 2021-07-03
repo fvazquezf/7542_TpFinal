@@ -7,8 +7,8 @@ TeamsUpdate::TeamsUpdate(std::map<uint8_t, bool> teamsUpdates)
 void TeamsUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {
     // superProtocolo
     // protocol.updatePositions(positionUpdates, callback);
+    protocol.updateTeams(teamsUpdates, callback);
 }
 
 TeamsUpdate::~TeamsUpdate() {
-
 }

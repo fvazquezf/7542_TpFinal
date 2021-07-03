@@ -10,6 +10,7 @@ private:
     bool bleeding;
     bool wasHit;
     bool moving;
+    bool isCt;
     size_t lastIter;
     Weapon weapon;
     // animacion de movimiento

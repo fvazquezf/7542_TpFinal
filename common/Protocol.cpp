@@ -174,6 +174,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case PICKUP: {
             break;
         }
+        case TEAM_UPDATE: {
+            msg = handleTeamUpdate(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -431,4 +435,32 @@ void Protocol::updateMapInformation(const std::string &serializedMap,
     msg.push_back(MAP_INFO_UPDATE);
     serializeStringMessage(msg, serializedMap);
     callback(std::move(msg));
+}
+
+void
+Protocol::updateTeams(const std::map<uint8_t, bool> &teamMap,
+                      std::function<void(std::vector<unsigned char>)> &callback) {
+    std::vector<unsigned char> teamsMsg;
+    teamsMsg.push_back(TEAM_UPDATE);
+    uint16_t msgSize = htons(teamMap.size() * 2);
+    teamsMsg.push_back((msgSize >> 8) & 0xff);
+    teamsMsg.push_back(msgSize & 0xff);
+    for (auto& it : teamMap){
+        teamsMsg.push_back(it.first);
+        teamsMsg.push_back(it.second ? 1 : 0); // isCt = true -> 1 else 0
+    }
+    callback(std::move(teamsMsg));
+}
+
+std::vector<unsigned char> Protocol::handleTeamUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    std::vector<unsigned char> msg = callback(2);
+    return callback(deserializeMsgLenShort(msg));
+}
+
+std::map<uint8_t, bool> Protocol::deserializeTeams(std::vector<unsigned char> &msg) {
+    std::map<uint8_t, bool> teamsById;
+    for (size_t i = 0; i < msg.size(); i += 2){
+        teamsById.emplace(msg.at(i), msg.at(i + 1));
+    }
+    return teamsById;
 }

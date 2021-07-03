@@ -37,8 +37,11 @@ std::vector<unsigned char> Receiver::receive(size_t size) {
 void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
     switch (code) {
         case LOGIN_RESPONSE:{
+            /*if (msg.at(0) != 255){
+                world.characterEntityCreate(msg.at(0), true, 0, 0);
+            }*/
             if (msg.at(0) != 255){
-                world.createTerrorist(msg.at(0), true, 0, 0);
+                world.assignPlayer(msg.at(0));
             }
             break;
         }
@@ -80,6 +83,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
                 world.pickupWeapon(tuple);
             }
             break;
+        }
+        case TEAM_UPDATE: {
+            auto teamMap = prot.deserializeTeams(msg);
+            world.buildTeams(teamMap);
         }
         default:
             break;
