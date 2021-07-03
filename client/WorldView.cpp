@@ -88,7 +88,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
-    //hud.show();
+    hud.show();
     stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }

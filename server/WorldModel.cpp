@@ -302,13 +302,13 @@ void WorldModel::updateTeams(){
 }
 
 void WorldModel::updateHp(int id){
-    int hp = playerModels[id].getHp();
+    int hp = playerModels.at(id).getHp();
     std::shared_ptr<Update> updatePtr(new HpUpdate(hp));
     updates.push(id, updatePtr);
 }
 
 void WorldModel::updateMoney(int id){
-    int money = playerModels[id].getMoney();
+    int money = playerModels.at(id).getMoney();
     std::shared_ptr<Update> updatePtr(new MoneyUpdate(money));
     updates.push(id, updatePtr);
 }

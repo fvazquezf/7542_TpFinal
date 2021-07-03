@@ -22,14 +22,21 @@ private:
     SdlTexture symbols;
     SdlTexture numbers;
     std::vector<std::tuple<Area, Area, Area>> clock;
+    std::vector<std::tuple<Area, Area, Area>> life;
+    Color numberColors;
+    uint8_t health;
     uint8_t currentClockTick;
     int w;
     int h;
     void showClock();
+    void showLife();
+    void setNumberColors(Color colors);
 public:
     explicit Hud(SdlWindow& window);
 
     void show();
+    void updateLife(uint8_t healthPoints);
+    void updateClock();
 
     void timerTick();
 
