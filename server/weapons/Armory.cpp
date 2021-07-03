@@ -54,6 +54,7 @@ void Armory::dropPrimary(const b2Vec2& playerPosition){
         dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
         arsenal.erase(0);
     }
+    currentWeapon = 2;
 }
 
 bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
