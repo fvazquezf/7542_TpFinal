@@ -78,6 +78,7 @@ bool GamesMonitor::joinMatch(const std::string &gameName,
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     // si no hay un juego con ese nombre, no puedo unirme
     if (!matches.count(gameName)){
+        std::cout << "No hay nada\n";
         response(-1);
         return false;
     }

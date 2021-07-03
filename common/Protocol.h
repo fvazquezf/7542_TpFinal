@@ -137,7 +137,7 @@ public:
     std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
 
                                 //---------------SERVER---------------//
-    std::vector<unsigned char> handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleByte(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
@@ -147,6 +147,7 @@ public:
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 
+    std::vector<unsigned char> handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback);
 };
 
 

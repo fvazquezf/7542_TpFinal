@@ -53,7 +53,7 @@ void Protocol::move(uint8_t dir, bool isDone,
 }
 
 // server side
-std::vector<unsigned char> Protocol::handleGameName(std::function<std::vector<unsigned char>(size_t)> &callback) {
+std::vector<unsigned char> Protocol::handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback) {
     std::vector<unsigned char> nameSizeReceived = callback(2);
     uint16_t nameSize = deserializeMsgLenShort(nameSizeReceived);
     std::vector<unsigned char> gameName = callback(nameSize);
@@ -83,25 +83,11 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
     std::vector<unsigned char> msg;
     switch (codeReceived) {
         case CREATE: {
-            // server se encarga de crear partida
-            // hasta aca lei nada mas el primer byte
-            // debo leer los bytes 2 y 3 para saber el largo
-            // y los bytes restantes para recibir el nombre
-            // llamar a un handler del servidor
-            // thClient.handleCreateGame(gameName);
-            // es un thClient pq el servidor
-            // en teoria ya lo acepto a traves del acceptor/listener
-            // SACO EL BREAK PQ EL CODIGO ES IDENTICO PARA CREATE Y JOIN
-            // si es CREATE, cae directamente en el scope de JOIN
-            msg = handleGameName(receiveCallback);
+            msg = handleCreateGame(receiveCallback);
             break;
         }
         case JOIN: {
-            // server se encarga de joinear al user a una partida
-            // same que CREATE
-            msg = handleGameName(receiveCallback);
-            // llamar a un handler del servidor
-            // thClient.handleJoinGame(gameName);
+            msg = handleJoinGame(receiveCallback);
             break;
         }
         case LIST:
@@ -490,4 +476,9 @@ std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::v
         mapName.push_back(msg.at(i));
     }
     return std::make_pair(gameName, mapName);
+}
+
+std::vector<unsigned char> Protocol::handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    auto gameNameSize = callback(2);
+    return callback(deserializeMsgLenShort(gameNameSize));
 }
