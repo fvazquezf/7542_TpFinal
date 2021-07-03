@@ -1,28 +1,28 @@
-#include "Knife.h"
+#include "Bomb.h"
 
-Knife::Knife()
-: Weapon(KNIFE){
-    damage = 40;
+Bomb::Bomb()
+: Weapon(BOMB){
+    damage = 10;
     cooldown = 0;
 }
 
 
-Knife::~Knife(){
+Bomb::~Bomb(){
 
 }
 
-bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
+bool Bomb::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (cooldown != 0) return false;
     double dist = static_cast<double>((player - enemy).LengthSquared());
     // 1.25 es la distancia(1.11m) de ataque al cuadrado, si esta mas lejos no le pega.
-    if (dist < 1.25) {
+    if (dist < 1.15) {
         int res = static_cast<int>(atan2(enemy.y - player.y, enemy.x - player.x));
         int enemyAngle = res * 180/3.14 + 90;
         if (enemyAngle < 0){
             enemyAngle += 360;
         }
-        int start = (angle) - 60;
-        int end = (angle) + 60;
+        int start = (angle) - 45;
+        int end = (angle) + 45;
         if (start < end){
             return (start < enemyAngle && enemyAngle < end);
         } else {
@@ -33,19 +33,13 @@ bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     return false;
 }
 
-// cuchillo
-// produce daño random entre min y max damage
-// distribucion uniforme
-int Knife::hit(){
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dmgDist(0, damage);
-    return dmgDist(gen);
+
+int Bomb::hit(){
+    return damage;
 }
 
-bool Knife::tickCooldown(){
+bool Bomb::tickCooldown(){
     if (cooldown == 0) {
-        // este 30 es variable, es el que determina el fireRate, se leeria del yaml de configuracion.
         cooldown = 30;
         return true;
     } else {
@@ -54,7 +48,7 @@ bool Knife::tickCooldown(){
     }
 }
 
-void Knife::resetCooldown(){
+void Bomb::resetCooldown(){
     cooldown = 0;
 }
 

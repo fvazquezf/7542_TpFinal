@@ -9,6 +9,7 @@
 #define AWP 2
 #define KNIFE 3
 #define PISTOL 4
+#define BOMB 5
 
 class Weapon {
 protected:
