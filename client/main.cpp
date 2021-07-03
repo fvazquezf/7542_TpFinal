@@ -10,14 +10,14 @@
 #include "Receiver.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
-#include "editor/Editor.h"
+//#include "editor/Editor.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
 
     //Editor in QT
-    Editor editor;
-    editor.run(argc, argv);
+    //Editor editor;
+    //editor.run(argc, argv);
 
     Socket cli;
     try {

@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
+project(editor)
 
-project(editor LANGUAGES CXX)
+find_package(Qt5Widgets) 
+find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets) 
+qt5_wrap_ui(ui_wrap ${EDITORUI}) 
+qt5_wrap_cpp(moc_sources ${EDITOR_HEADERS}) 
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -11,13 +14,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
-
 qt5_add_resources(RC_SRC resource.qrc)
 
 add_executable(editor
-    ../client/main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
+    Editor.cpp
     MapListWindow.cpp MapListWindow.h MapListWindow.ui
     MapCreationWindow.cpp MapCreationWindow.h MapCreationWindow.ui
     MapEditor.cpp MapEditor.h MapEditor.ui
@@ -32,4 +33,4 @@ add_executable(editor
     ${RC_SRC}
 )
 
-target_link_libraries(editor PRIVATE Qt5::Widgets Qt5::Core yaml-cpp)
+target_link_libraries(editor Qt5::Widgets Qt5::Core Qt5::Gui yaml-cpp)
