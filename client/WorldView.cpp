@@ -65,8 +65,8 @@ WorldView::WorldView(SdlWindow& aWindow)
 WorldView::~WorldView() {
 }
 
+// SOLO ACCEDIDO POR RECEIVER DESDE BUILD TEAMS (CON EL LOCK)
 void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
-    std::lock_guard<std::mutex> lock(worldMutex);
     entities.emplace(std::piecewise_construct,
                      std::forward_as_tuple(id),
                      std::forward_as_tuple(isCt ? counterTerrorist : terror, 0, 0, isPlayer,
@@ -182,11 +182,15 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
 }
 
 void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {
+    std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : teamMap){
         uint8_t characterId = it.first;
         bool isCt = it.second;
         // si no existe el jugador, debo crearlo
         if (!entities.count(characterId)){
+            characterEntityCreate(characterId, characterId == playerId, isCt);
+        } else { // si existe, significa que estamos cambiando de bando
+            entities.erase(characterId);
             characterEntityCreate(characterId, characterId == playerId, isCt);
         }
     }

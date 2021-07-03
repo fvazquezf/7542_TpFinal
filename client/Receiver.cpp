@@ -87,6 +87,7 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case TEAM_UPDATE: {
             auto teamMap = prot.deserializeTeams(msg);
             world.buildTeams(teamMap);
+            break;
         }
         default:
             break;
