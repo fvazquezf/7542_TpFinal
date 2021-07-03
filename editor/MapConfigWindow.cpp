@@ -11,12 +11,6 @@ MapConfigWindow::MapConfigWindow(QWidget *parent) :
     setMainLayout();
 }
 
-MapConfigWindow::~MapConfigWindow()
-{
-    delete ui;
-}
-
-
 void MapConfigWindow::handleJoinPushButton()
 {
 }
@@ -73,4 +67,9 @@ void MapConfigWindow::setMainLayout() {
     mainLayout->addLayout(bottonLayout);
     this->setLayout(mainLayout);
 }
+
+MapConfigWindow::~MapConfigWindow() {
+    delete ui;
+}
+
 

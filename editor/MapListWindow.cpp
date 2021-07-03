@@ -11,7 +11,6 @@ MapListWindow::MapListWindow(QWidget *parent) :
 }
 
 
-MapListWindow::~MapListWindow()
-{
+MapListWindow::~MapListWindow() {
     delete ui;
 }

@@ -16,7 +16,7 @@ find_package(Qt5 COMPONENTS Widgets Core REQUIRED)
 qt5_add_resources(RC_SRC resource.qrc)
 
 add_executable(editor
-    main.cpp
+    ../client/main.cpp
     mainwindow.cpp mainwindow.h mainwindow.ui
     MapListWindow.cpp MapListWindow.h MapListWindow.ui
     MapCreationWindow.cpp MapCreationWindow.h MapCreationWindow.ui

@@ -1,11 +1,11 @@
 #ifndef MAPEDITOR_H
 #define MAPEDITOR_H
 
+#include <QtWidgets>
 #include <QDialog>
 #include <QWidget>
 #include <QBoxLayout>
 #include <QLabel>
-#include <QtWidgets>
 
 #include <stdlib.h>
 #include <vector>
