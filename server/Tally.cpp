@@ -43,8 +43,14 @@ void Tally::playerKilledOther(int id, int other){
 
 
 bool Tally::isRoundOver(){
-    if (ctWon()) return true;
-    if (ttWon()) return true;
+    if (ctWon()){
+        deaths.clear();
+        return true;
+    } 
+    if (ttWon()){
+        deaths.clear();
+        return true;   
+    }
     return false;
 }
 

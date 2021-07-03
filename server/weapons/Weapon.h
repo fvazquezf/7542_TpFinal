@@ -4,7 +4,7 @@
 #include <memory>
 #include "../../libs/box2d/include/box2d/box2d.h"
 
-#define AK47 0
+#define RIFLE 0
 #define M3 1
 #define AWP 2
 #define KNIFE 3

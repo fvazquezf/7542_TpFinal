@@ -54,6 +54,7 @@ class PlayerModel{
         bool pickUpWeapon();
 
         void die();
+        void revive();
 
         void changeSide();
         bool getSide();

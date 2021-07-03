@@ -85,6 +85,7 @@ class WorldModel: public Thread {
         void roundPlay();
 
         void swapTeams();
+        void reviveAll();
 
         void step();
 

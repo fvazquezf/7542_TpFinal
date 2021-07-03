@@ -164,6 +164,7 @@ void WorldModel::run(){
 void WorldModel::roundPurchase() {
     // 600 ticks, 10 segundos a 60 ticks cada segundo
     updateBuying(true);
+    reviveAll();
     // sleep ? esperamos un poquitito antes de contar
     for (auto & playerModel : this->playerModels){
 		playerModel.second.reposition(mapLayout);
@@ -361,4 +362,10 @@ void WorldModel::swapTeams(){
     }
     tally.swapTeams();
     updateTeams();
+}
+
+void WorldModel::reviveAll(){
+    for (auto& it : playerModels){
+        it.second.revive();
+    }
 }

@@ -14,7 +14,7 @@ Armory::Armory(DroppedWeapons& droppedWeapons)
 
     // precios originales del juego, ver https://www.cs2d.com/weapons.php
     // igualmente esto debe ser configurable
-    prices.emplace(AK47, 2500);
+    prices.emplace(RIFLE, 2500);
     prices.emplace(M3, 1700);
     prices.emplace(AWP, 4750);
 
@@ -49,21 +49,21 @@ int Armory::equipWeapon(int weaponType){
     return arsenal.at(currentWeapon)->getWeaponCode();
 }
 
+void Armory::dropPrimary(const b2Vec2& playerPosition){
+    if (arsenal.count(0) > 0){
+        dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
+        arsenal.erase(0);
+    }
+}
+
 bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
     int weaponPrice = prices.at(weaponCode);
     if (playerMoney >= weaponPrice){
         playerMoney -= weaponPrice;
-        try {
-            // aca hay que fijarse si ya tenia un arma primaria
-            // en ese caso hay que dropear
-            if (arsenal.count(0) > 0){
-                dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
-            }
-            // pisamos el viejo puntero (smart pointer, se deletea solo)
-            arsenal[0] = Weapon::getArmoryWeapon(weaponCode);
-        } catch(const std::invalid_argument& e){
-            return false;
+        if (arsenal.count(0) > 0){
+            dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
         }
+        arsenal[0] = Weapon::getArmoryWeapon(weaponCode);
         return true;
     }
     return false;

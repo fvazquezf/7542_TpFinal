@@ -32,6 +32,8 @@ class Armory {
 
         int equipWeapon(int weaponType);
 
+        void dropPrimary(const b2Vec2& playerPosition);
+
         bool tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition);
 
         bool pickUpWeapon(const b2Vec2& position);

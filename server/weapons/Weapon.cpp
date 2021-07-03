@@ -3,6 +3,7 @@
 #include "Weapon.h"
 #include "Shotgun.h"
 #include "Awp.h"
+#include "Rifle.h"
 
 Weapon::Weapon(uint8_t weaponCode) {
     damage = 1;
@@ -16,8 +17,8 @@ Weapon::~Weapon() {
 
 std::shared_ptr<Weapon> Weapon::getArmoryWeapon(uint8_t weaponCode) {
     switch (weaponCode) {
-        case AK47:
-            throw std::invalid_argument("Invalid weapon code\n");
+        case RIFLE:
+            return std::shared_ptr<Weapon>(new Rifle());
         case M3:
             return std::shared_ptr<Weapon>(new Shotgun());
         case AWP:
