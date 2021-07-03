@@ -80,10 +80,11 @@ class WorldModel: public Thread {
         void equipWeapon(uint8_t id, uint8_t weaponType);
         void pickUpWeapon(uint8_t id);
 
-        void roundBegin();
+        void roundPurchase();
         void roundCommon();
         void roundPlay();
-        bool roundDone();
+
+        void swapTeams();
 
         void step();
 
