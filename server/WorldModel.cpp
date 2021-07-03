@@ -149,9 +149,10 @@ void WorldModel::run(){
     for (auto & playerModel : this->playerModels){
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
 	}
-    while (is_running){
-		purchaseFase = true;
-        roundBegin();
+    for (int i = 0; i < 10 && is_running; i++){
+		if (i == 5) swapTeams();
+        purchaseFase = true;
+        roundPurchase();
 		purchaseFase = false;
         roundPlay();
 		stopAllPlayers();
@@ -160,7 +161,7 @@ void WorldModel::run(){
     // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
 }
 
-void WorldModel::roundBegin() {
+void WorldModel::roundPurchase() {
     // 600 ticks, 10 segundos a 60 ticks cada segundo
     updateBuying(true);
     // sleep ? esperamos un poquitito antes de contar
@@ -176,21 +177,10 @@ void WorldModel::roundBegin() {
 
 }
 
-// checkea si termino la ronda
-// x casos:
-// 1 - murieron todos los cts -> ganan tts
-// 2 - murieron todos los tts (y no plantaron) -> ganan cts
-// 3 - se termino el tiempo (ganan los cts pq es de plantar la bomba)
-// 4 - exploto la bomba -> ganan tts
-// 5 - defusearon la bomba -> ganan cts
-bool WorldModel::roundDone() {
-    return false;
-}
-
 void WorldModel::roundPlay() {
     // no queremos ningun evento residual
     usersEvents.clear();
-    for (size_t i = 0; i < 3600 && !roundDone(); ++i){
+    for (size_t i = 0; i < 3600 && !tally.isRoundOver(); ++i){
         roundCommon();
     }
 }
@@ -229,6 +219,7 @@ void WorldModel::step(){
                 if ( playerModels.at(id).attack(it.second) ){
                     if (it.second.gotHit(playerModels.at(id).hit())){
                         it.second.die();
+                        tally.playerKilledOther(id, it.first);
                         updateDead(it.first);
                     } else {
                         updateHit(it.first);
@@ -362,4 +353,12 @@ void WorldModel::disconnectPlayer(uint8_t id) {
     updates.closePlayerQueue(id);
     // una vez cerrado, se lo borra de aca
     // deberia mandarse un update al resto de los jugadores
+}
+
+void WorldModel::swapTeams(){
+    for (auto & playerModel : this->playerModels){
+        playerModel.second.changeSide();
+    }
+    tally.swapTeams();
+    updateTeams();
 }
