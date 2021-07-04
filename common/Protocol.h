@@ -15,6 +15,7 @@
 #define CHANGE_WEAPON 0x6f
 #define BUY 0x7a
 #define PICKUP 0x7c
+#define RELOAD 0x7d
 
 // updates (server side)
 #define POS_UPDATE 0x20

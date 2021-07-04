@@ -8,6 +8,7 @@
 #include "commands/ChangeWeapon.h"
 #include "commands/Buy.h"
 #include "commands/Pickup.h"
+#include "commands/Reload.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -125,8 +126,15 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
     if (key == SDLK_e){
         if (pressed){
             commands.push(std::unique_ptr<Command>(new Pickup()));
+        } else {
+            return;
         }
-        else {
+    }
+
+    if (key == SDLK_r){
+        if (pressed){
+            commands.push(std::unique_ptr<Command>(new Reload()));
+        } else {
             return;
         }
     }

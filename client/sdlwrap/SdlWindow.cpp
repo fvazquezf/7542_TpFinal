@@ -41,7 +41,7 @@ void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha){
 }
 
 void SdlWindow::fill(){
-	fill(0x33, 0x33, 0x33, 0);
+	fill(0, 0, 0, 0);
 }
 
 void SdlWindow::render(){
