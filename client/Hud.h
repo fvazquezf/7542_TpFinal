@@ -23,6 +23,7 @@ private:
     SdlTexture numbers;
     std::vector<std::tuple<Area, Area, Area>> clock;
     std::vector<std::tuple<Area, Area, Area>> life;
+    std::vector<Area> numberSelector;
     Color numberColors;
     uint8_t health;
     uint8_t currentClockTick;
@@ -31,6 +32,8 @@ private:
     void showClock();
     void showLife();
     void setNumberColors(Color colors);
+    Area areaFromIdxPosition(uint8_t idx) const; // los bmp son horizontales, solo me muevo en "x"
+    void loadNumberVector(int number);
 public:
     explicit Hud(SdlWindow& window);
 
