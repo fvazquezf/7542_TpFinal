@@ -145,16 +145,20 @@ void WorldModel::loadMap(){
 
 void WorldModel::run(){
 	is_running = true;
+    // division en equipos
     for (int i = 0; i < (int)playerModels.size()/2; i++){
         playerModels.at(i).changeSide();
     }
     updateTeams();  
+    // Setup inicial
     for (auto & playerModel : this->playerModels){
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
         updateMoney(playerModel.first);
         updateHp(playerModel.first);
         updateTime();
+        updateWeapon(playerModel.first, KNIFE);
 	}
+    // Ciclo de juego, 10 rondas
     for (int i = 0; i < 10 && is_running; i++){
 		if (i == 5) swapTeams();
         purchaseFase = true;
@@ -162,40 +166,31 @@ void WorldModel::run(){
 		purchaseFase = false;
         roundPlay();
 		stopAllPlayers();
+        tally.resetTime();
         // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
     // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
 }
 
 void WorldModel::roundPurchase() {
-    // 600 ticks, 10 segundos a 60 ticks cada segundo
+    // 600 ticks, 10 segundos
     updateBuying(true);
     reviveAll();
-    // sleep ? esperamos un poquitito antes de contar
     for (auto & playerModel : this->playerModels){
 		playerModel.second.reposition(mapLayout);
 	}
     updatePositions();
     usleep(FRAMERATE);
     for (size_t i = 0; i < 600; ++i){
-        if ((i % 60) == 0) {
-            tally.tickTime();
-            updateTime();
-        }
         roundCommon();
     }
     updateBuying(false);
-
 }
 
 void WorldModel::roundPlay() {
     // no queremos ningun evento residual
     usersEvents.clear();
-    for (size_t i = 0; i < 3600 && !tally.isRoundOver(); ++i){
-        if ((i % 60) == 0) {
-            tally.tickTime();
-            updateTime();
-        }
+    while (!tally.isRoundOver()){
         roundCommon();
     }
 }
@@ -212,10 +207,13 @@ void WorldModel::roundCommon() {
         }
     }
     this->step();
-    
+
+    if (tally.tickTime()){
+        updateTime();
+    }
     updatePositions();
-    
     updateAngles();
+
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<float, std::micro> elapsed = (end - start);
     usleep(FRAMERATE + elapsed.count());
