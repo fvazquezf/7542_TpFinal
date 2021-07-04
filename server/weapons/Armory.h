@@ -9,6 +9,7 @@
 #include "Pistol.h"
 #include "Shotgun.h"
 #include "Awp.h"
+#include "Rifle.h"
 #include "DroppedWeapons.h"
 
 
@@ -17,12 +18,19 @@ class Armory {
     std::map<uint8_t, int> prices;
     DroppedWeapons& dropped;
 
+    std::shared_ptr<Weapon> awp;
+    std::shared_ptr<Weapon> rifle;
+    std::shared_ptr<Weapon> shotgun;
+
     int currentWeapon;
 
+    std::shared_ptr<Weapon> selectWeapon(uint8_t weaponCode);
     public:
-        explicit Armory(DroppedWeapons& dropped);
+        Armory(DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy);
+
+        void reload();
         
         std::shared_ptr<Weapon> hit();
 

@@ -20,7 +20,7 @@
 #include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
 
-WorldModel::WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig)
+WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig)
 : world (b2Vec2(0.0f, 0.0f)),
   matchConfig(matchConfig),
   updates (updates),
@@ -101,7 +101,7 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 
 	playerModels.emplace(std::piecewise_construct,
                          std::forward_as_tuple(clave),
-                         std::forward_as_tuple(body, droppedWeapons));
+                         std::forward_as_tuple(body, droppedWeapons, matchConfig));
 
 	return std::ref(this->usersEvents);
 }
@@ -376,6 +376,10 @@ void WorldModel::pickUpWeapon(uint8_t id){
 		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
 		equipWeapon(id, 0);
     }
+}
+
+void WorldModel::reloadWeapon(uint8_t id){
+    playerModels.at(id);
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {

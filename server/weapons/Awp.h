@@ -6,17 +6,12 @@
 
 class Awp: public Weapon {
     private:
-        int damage;
-        int cooldown;
-        // probabilidad de que el disparo sea o no hit
-        // depende de la distancia al enemigo
-        double precision;
         // distancia al hit, sirve para ajustar la precision
         double hitDistance;
-        // distancia maxima de "viaje" de la bala
-        double maxHittingDistance;
+        
+        int firerate;
     public:
-        Awp();
+        Awp(int ammo, int range, int accuracy, int damage, int firerate);
         ~Awp() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;

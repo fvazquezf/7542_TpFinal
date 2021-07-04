@@ -7,8 +7,6 @@
 
 class Bomb: public Weapon {
     private:
-        int damage;
-        int cooldown;
         bool isActive;
         bool exploded;
 

@@ -4,6 +4,8 @@ Bomb::Bomb()
 : Weapon(BOMB){
     damage = 10;
     cooldown = 0;
+    ammo = 0;
+    clip = 0;
 }
 
 
@@ -32,7 +34,6 @@ bool Bomb::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     }
     return false;
 }
-
 
 int Bomb::hit(){
     return damage;

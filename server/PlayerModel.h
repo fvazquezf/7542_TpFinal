@@ -22,8 +22,7 @@ class PlayerModel{
     Armory armory;
 
     public:
-        PlayerModel(DroppedWeapons& dropped);
-        PlayerModel(b2Body* body, DroppedWeapons& dropped);
+        PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;
@@ -43,6 +42,7 @@ class PlayerModel{
         int16_t getAngle() const;
 
         bool attack(PlayerModel& enemy);
+        void reload();
         std::shared_ptr<Weapon> hit();
         bool gotHit(std::shared_ptr<Weapon> weapon);
         int getHp();
