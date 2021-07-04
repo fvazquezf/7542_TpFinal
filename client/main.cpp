@@ -10,7 +10,9 @@
 #include "Receiver.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
+#include "sdlwrap/SdlSound.h"
 //#include "editor/Editor.h"
+#define SOUND_PATH "../sprites/sfx/"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
@@ -56,6 +58,10 @@ int main(int argc, const char *argv[]){
     // End seccion
 
     SdlWindow window(800, 600, false, "unaVentana");
+    std::string sound = "menu.wav";
+    std::string x(SOUND_PATH);
+    SdlSound aSound(x + sound);
+    aSound.play(10);
     WorldView world(window);
 
     SdlLoop l(comms, world);

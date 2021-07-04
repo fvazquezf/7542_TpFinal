@@ -35,7 +35,7 @@ add_executable(client_main ./client/main.cpp)
 add_executable(esqueleto_server ./server/main.cpp)
 
 # Linkage demo_movimiento
-target_link_libraries(client_main Qt5::Widgets Qt5::Core sdlloop anim sdlwrapperclasses SDL2 SDL2_image lib_common commands weapons SDL2_gfx)
+target_link_libraries(client_main Qt5::Widgets Qt5::Core sdlloop anim sdlwrapperclasses SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx)
 #target_link_libraries(editor lib_editor Qt5::Widgets Qt5::Core Qt5::Gui)
 
 # Linkage esqueleto cliente-servidor

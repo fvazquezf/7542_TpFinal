@@ -8,11 +8,18 @@ SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
 		//handle
 	}
 
+    err = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	if (err){
+	    // handle
+	}
+
 	err = SDL_CreateWindowAndRenderer(width, height, SDL_RENDERER_ACCELERATED,
 										  &this->windowPtr, &this->rendererPtr);
 	if (err){
 		// handle
 	}
+
 	SDL_SetWindowTitle(this->windowPtr, title.c_str());
 
 	if (full){
@@ -32,6 +39,7 @@ SdlWindow::~SdlWindow(){
 		SDL_DestroyWindow(this->windowPtr);
 		windowPtr = nullptr;
 	}
+    Mix_Quit();
 	SDL_Quit();
 }
 
