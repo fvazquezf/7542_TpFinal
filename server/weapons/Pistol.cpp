@@ -2,8 +2,8 @@
 #include <iostream>
 
 Pistol::Pistol(int ammo, int range, int accuracy, int damage)
-: Weapon(PISTOL, ammo, range, accuracy, damage){
-
+: Weapon(PISTOL, ammo, range, damage){
+    this->accuracy = static_cast<double>(accuracy)/100;
 }
 
 

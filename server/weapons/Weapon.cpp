@@ -5,13 +5,12 @@
 #include "Awp.h"
 #include "Rifle.h"
 
-Weapon::Weapon(uint8_t weaponCode, int ammo, int range, int accuracy, int damage):
+Weapon::Weapon(uint8_t weaponCode, int ammo, int range, int damage):
     weaponCode(weaponCode),
     ammo(ammo),
-    range(range),
-    accuracy(accuracy),
     damage(damage),
     clip(ammo){
+    this->range = static_cast<double>(range)/100;
     cooldown = 0;
 }
 

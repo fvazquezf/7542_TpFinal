@@ -7,6 +7,7 @@
 class Rifle: public Weapon {
     private:
         double hitDistance;
+        double accuracy;
         int firerate;
     public:
         Rifle(int ammo, int range, int accuracy, int damage, int firerate);

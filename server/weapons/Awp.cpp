@@ -2,9 +2,10 @@
 #include "Awp.h"
 
 Awp::Awp(int ammo, int range, int accuracy, int damage, int firerate): 
- Weapon(AWP, ammo, range, accuracy, damage),
+ Weapon(AWP, ammo, range, damage),
  firerate(firerate) {
     hitDistance = 0;
+    this->accuracy = static_cast<double>(accuracy)/100;
 }
 
 

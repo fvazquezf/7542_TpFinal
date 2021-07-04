@@ -2,8 +2,9 @@
 #include "Rifle.h"
 
 Rifle::Rifle(int ammo, int range, int accuracy, int damage, int firerate)
-: Weapon(RIFLE, ammo, range, accuracy, damage){
+: Weapon(RIFLE, ammo, range, damage){
     hitDistance = 0;
+    this->accuracy = static_cast<double>(accuracy)/100;
 }
 
 

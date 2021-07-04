@@ -15,13 +15,13 @@ class Weapon {
 protected:
     int ammo;
     int clip;
-    int range;
+    double range;
     int accuracy;
     int damage;
     int cooldown;
     uint8_t weaponCode;
 public:
-    Weapon(uint8_t weaponCode, int ammo, int range, int accuracy, int damage);
+    Weapon(uint8_t weaponCode, int ammo, int range, int damage);
 
     virtual bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) = 0;
     

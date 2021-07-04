@@ -6,7 +6,7 @@
 
 class Pistol: public Weapon {
     private:
-
+    double accuracy;
     public:
         Pistol(int ammo, int range, int accuracy, int damage);
         ~Pistol() override;

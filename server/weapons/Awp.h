@@ -8,7 +8,7 @@ class Awp: public Weapon {
     private:
         // distancia al hit, sirve para ajustar la precision
         double hitDistance;
-        
+        double accuracy;
         int firerate;
     public:
         Awp(int ammo, int range, int accuracy, int damage, int firerate);

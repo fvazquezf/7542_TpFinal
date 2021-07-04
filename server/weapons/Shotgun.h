@@ -8,8 +8,9 @@ class Shotgun: public Weapon {
     protected:
         void calcDamage(float dist);
         int damageOutput;
+        int spread;
     public:
-        Shotgun(int ammo, int range, int accuracy, int damage);
+        Shotgun(int ammo, int range, int spread, int damage);
         ~Shotgun() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;

@@ -10,32 +10,32 @@ match_max_players: 2
 # accuracy en shorgun/knife determina el spread
 # las armas sin firerate disparan nuevamente cuando se hace click
 
-pistol_ammo: 13 
-pistol_range: 5000
+pistol_ammo: 100
+pistol_range: 1000
 pistol_accuracy: 25
 pistol_damage: 40
 
-awp_price: 4750
-awp_ammo: 10 
+awp_price: 500
+awp_ammo: 100
 awp_range: 50000
 awp_accuracy: 25
 awp_damage: 100
 awp_firerate: 60
 
-rifle_price: 2700
-rifle_ammo: 30 
+rifle_price: 500
+rifle_ammo: 300
 rifle_range: 10000
 rifle_accuracy: 25
 rifle_damage: 20
 rifle_firerate: 60
 
-shotgun_price: 1000
-shotgun_ammo: 2 
-shotgun_range: 6000
+shotgun_price: 500
+shotgun_ammo: 200
+shotgun_range: 900
 shotgun_accuracy: 30
 shotgun_damage: 100
- 
-knife_range: 6000
+
+knife_range: 300
 knife_accuracy: 60
 knife_damage: 20
 knife_firerate: 30
