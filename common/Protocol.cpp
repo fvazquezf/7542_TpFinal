@@ -176,6 +176,14 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleTeamUpdate(receiveCallback);
             break;
         }
+        case TIMER_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
+        case HEALTH_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");

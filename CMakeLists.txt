@@ -6,9 +6,9 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -ggdb -DDEBUG -Wall -fno-inl
 project(sdl-demo)
 
 #Including QT
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#set(CMAKE_AUTOMOC ON)
+#set(CMAKE_AUTORCC ON)
+#set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Widgets)
 find_package(Qt5 COMPONENTS REQUIRED Core Gui Widgets)
 qt5_wrap_ui(ui_wrap ${EDITORUI})

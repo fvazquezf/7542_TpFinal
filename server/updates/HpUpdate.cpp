@@ -5,7 +5,7 @@ HpUpdate::HpUpdate(uint8_t hp)
 }
 
 void HpUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {
-    // protocol.updatePlayerHp(Hp, id, callback);
+    protocol.updatePlayerState(HEALTH_UPDATE, hp, callback);
 }
 
 HpUpdate::~HpUpdate() {

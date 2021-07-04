@@ -89,6 +89,14 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.buildTeams(teamMap);
             break;
         }
+        case TIMER_UPDATE: {
+            world.updateHudTime(msg.at(0));
+            break;
+        }
+        case HEALTH_UPDATE: {
+            world.updateHudHealth(msg.at(0));
+            break;
+        }
         default:
             break;
     }

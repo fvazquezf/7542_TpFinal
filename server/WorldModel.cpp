@@ -192,6 +192,10 @@ void WorldModel::roundPlay() {
     // no queremos ningun evento residual
     usersEvents.clear();
     for (size_t i = 0; i < 3600 && !tally.isRoundOver(); ++i){
+        if ((i % 60) == 0) {
+            tally.tickTime();
+            updateTime();
+        }
         roundCommon();
     }
 }
@@ -232,6 +236,7 @@ void WorldModel::step(){
                         it.second.die();
                         tally.playerKilledOther(id, it.first);
                         updateDead(it.first);
+                        updateWeapon(it.first, KNIFE);
                     } else {
                         updateHit(it.first);
                     }

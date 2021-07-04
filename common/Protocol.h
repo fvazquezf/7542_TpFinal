@@ -27,6 +27,8 @@
 #define WEAPON_DROP_UPDATE 0x27
 #define MAP_INFO_UPDATE 0x28
 #define TEAM_UPDATE 0x29
+#define TIMER_UPDATE 0x2a
+#define HEALTH_UPDATE 0x2b
 
 // update misc
 // login response me manda

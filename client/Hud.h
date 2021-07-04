@@ -35,10 +35,8 @@ public:
     explicit Hud(SdlWindow& window);
 
     void show();
-    void updateLife(uint8_t healthPoints);
-    void updateClock();
-
-    void timerTick();
+    void updateHealth(uint8_t healthPoints);
+    void updateTime(uint8_t clockTick);
 
     ~Hud();
 };

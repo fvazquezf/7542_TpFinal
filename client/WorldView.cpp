@@ -200,3 +200,13 @@ void WorldView::assignPlayer(uint8_t aPlayerId) {
     playerId = aPlayerId;
 }
 
+void WorldView::updateHudTime(uint8_t time) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateTime(time);
+}
+
+void WorldView::updateHudHealth(uint8_t health) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateHealth(health);
+}
+

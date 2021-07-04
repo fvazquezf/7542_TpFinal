@@ -67,12 +67,12 @@ void Hud::showClock() {
     numbers.render(std::get<2>(clockTuple), dst3, SDL_FLIP_NONE);
 }
 
-void Hud::updateLife(uint8_t healthPoints) {
+void Hud::updateHealth(uint8_t healthPoints) {
     health = healthPoints;
 }
 
-void Hud::updateClock() {
-    ++currentClockTick;
+void Hud::updateTime(uint8_t clockTick) {
+    currentClockTick = clockTick;
 }
 
 void Hud::showLife() {
