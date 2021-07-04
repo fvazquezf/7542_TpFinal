@@ -131,15 +131,20 @@ Armory &Armory::operator=(Armory &&other) noexcept {
     return *this;
 }
 
-std::shared_ptr<Weapon> Armory::selectWeapon(uint8_t weaponCode){
+void Armory::selectWeapon(uint8_t weaponCode){
     switch (weaponCode) {
         case RIFLE:
             arsenal[0] = rifle;
+            break;
         case M3:
             arsenal[0] = shotgun;
+            break;
         case AWP:
             arsenal[0] = awp;
-        default:
-            throw std::invalid_argument("Invalid weapon code\n");
+            break;
+        // default:
+        //     // throw std::invalid_argument("Invalid weapon code\n");
     }
 }
+
+ 

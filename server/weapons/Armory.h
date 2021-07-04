@@ -24,7 +24,7 @@ class Armory {
 
     int currentWeapon;
 
-    std::shared_ptr<Weapon> selectWeapon(uint8_t weaponCode);
+    void selectWeapon(uint8_t weaponCode);
     public:
         Armory(DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
