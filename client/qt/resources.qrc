@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/fonts/counter_strike.ttf</file>
+        <file>resources/intro.mp4</file>
+    </qresource>
+</RCC>
