@@ -3,22 +3,15 @@
 #include <iostream>
 #include "PlayerModel.h"
 #include "weapons/Knife.h"
+#include "../common/ConfigVariables.h"
 
-PlayerModel::PlayerModel(DroppedWeapons& dropped)
-: armory(dropped){
-    this->model = nullptr;
-    this->netForce.SetZero();
-    angle = 0;
-    hp = 100;
-}
-
-PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped):
+PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
 model(body),
 angle(0),
-hp(100),
-money(100000),
+hp(matchConfig.at(PLAYER_HP)),
+money(matchConfig.at(STARTING_MONEY)),
 isAlive(true),
-armory(dropped){
+armory(dropped, matchConfig){
     this->netForce.SetZero();
     dirAmount = 0;
     isCt = false;
@@ -113,6 +106,10 @@ bool PlayerModel::attack(PlayerModel& enemy){
         return false;
     }
     return armory.attack(model->GetPosition(), angle, enemy.getPosition());
+}
+
+void PlayerModel::reload(){
+    armory.reload();
 }
 
 std::shared_ptr<Weapon> PlayerModel::hit(){

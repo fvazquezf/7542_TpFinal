@@ -12,7 +12,7 @@
 
 class Match {
 public:
-    explicit Match(const std::map<int, float>& matchConfig,
+    explicit Match(const std::map<int, int>& matchConfig,
                    const std::string& mapName);
 
     Match(const Match& other) = delete;
@@ -34,7 +34,7 @@ public:
 private:
     // cuantos jugadores pueden tener las partidas? 10 max
     std::map<uint8_t, User> users;
-    const std::map<int, float>& matchConfig;
+    const std::map<int, int>& matchConfig;
     uint8_t maxUsers;
 
     Broadcaster updates;

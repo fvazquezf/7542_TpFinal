@@ -13,11 +13,15 @@
 
 class Weapon {
 protected:
+    int ammo;
+    int clip;
+    int range;
+    int accuracy;
     int damage;
     int cooldown;
     uint8_t weaponCode;
 public:
-    explicit Weapon(uint8_t weaponCode);
+    Weapon(uint8_t weaponCode, int ammo, int range, int accuracy, int damage);
 
     virtual bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) = 0;
     
@@ -25,13 +29,15 @@ public:
 
     virtual void resetCooldown() = 0;
 
+    void reload();
+
     virtual int hit() = 0;
 
     virtual ~Weapon();
 
-    static std::shared_ptr<Weapon> getArmoryWeapon(uint8_t weaponCode);
-
     uint8_t getWeaponCode();
+
+    int getAmmo();
 };
 
 

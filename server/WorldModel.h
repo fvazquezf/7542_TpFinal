@@ -18,7 +18,7 @@
 class WorldModel: public Thread {
     b2World world;
     b2Body* anchor;
-    const std::map<int, float>& matchConfig;
+    const std::map<int, int>& matchConfig;
     std::map<int, PlayerModel> playerModels;
 
     MapLayout mapLayout;
@@ -42,7 +42,7 @@ class WorldModel: public Thread {
     bool is_running;
     
     public:
-        WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig);
+        WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig);
 
         ~WorldModel() override;
         void run() override;
@@ -83,6 +83,7 @@ class WorldModel: public Thread {
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
         void pickUpWeapon(uint8_t id);
+        void reloadWeapon(uint8_t id);
 
         void roundPurchase();
         void roundCommon();

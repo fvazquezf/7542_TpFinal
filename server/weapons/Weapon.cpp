@@ -5,29 +5,29 @@
 #include "Awp.h"
 #include "Rifle.h"
 
-Weapon::Weapon(uint8_t weaponCode) {
-    damage = 1;
-    cooldown = 1;
-    this->weaponCode = weaponCode;
+Weapon::Weapon(uint8_t weaponCode, int ammo, int range, int accuracy, int damage):
+    weaponCode(weaponCode),
+    ammo(ammo),
+    range(range),
+    accuracy(accuracy),
+    damage(damage),
+    clip(ammo){
+    cooldown = 0;
 }
 
 Weapon::~Weapon() {
 
 }
 
-std::shared_ptr<Weapon> Weapon::getArmoryWeapon(uint8_t weaponCode) {
-    switch (weaponCode) {
-        case RIFLE:
-            return std::shared_ptr<Weapon>(new Rifle());
-        case M3:
-            return std::shared_ptr<Weapon>(new Shotgun());
-        case AWP:
-            return std::shared_ptr<Weapon>(new Awp());
-        default:
-            throw std::invalid_argument("Invalid weapon code\n");
-    }
+void Weapon::reload(){
+    clip = ammo;
 }
 
 uint8_t Weapon::getWeaponCode(){
     return weaponCode;
 }
+
+int Weapon::getAmmo(){
+    return ammo;
+}
+

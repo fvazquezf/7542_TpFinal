@@ -1,30 +1,45 @@
-vida_jugadores: 100 # vida maxima
-dinero_inicial: 2000
+# distancias en centimetros
+# tiempo en ticks
+
+player_hp: 100 # vida maxima
+starting_money: 2000
 
 match_max_players: 2
 
-glock_max_bullets: 20
-ak47_max_bullets: 30
-m3_max_bullets: 10
-awp_max_bullets: 5
+# accuracy en pistol/awp/rifle determina la distancia macima de la trayectoria al enemigo 
+# accuracy en shorgun/knife determina el spread
+# las armas sin firerate disparan nuevamente cuando se hace click
+
+pistol_ammo: 13 
+pistol_range: 5000
+pistol_accuracy: 25
+pistol_damage: 40
+
+awp_price: 4750
+awp_ammo: 10 
+awp_range: 50000
+awp_accuracy: 25
+awp_damage: 100
+awp_firerate: 60
+
+rifle_price: 2700
+rifle_ammo: 30 
+rifle_range: 10000
+rifle_accuracy: 25
+rifle_damage: 20
+rifle_firerate: 60
+
+shotgun_price: 1000
+shotgun_ammo: 2 
+shotgun_range: 6000
+shotgun_accuracy: 30
+shotgun_damage: 100
+ 
+knife_range: 6000
+knife_accuracy: 60
+knife_damage: 20
+knife_firerate: 30
 
 money_kill_enemy: 500
 money_round_won: 1000
 money_round_lost: 500
-
-min_dmg_knife: 0
-max_dmg_knife: 40
-min_dmg_glock: 20
-max_dmg_glock: 40
-min_dmg_ak47: 20
-max_dmg_ak47: 40
-min_dmg_m3: 40
-max_dmg_m3: 60
-min_dmg_awp: 100
-max_dmg_awp: 100
-
-fire_rate_knife: 0.5 # 1/2 puntada per sec
-fire_rate_awp: 1.0 # 1 bullet per second
-fire_rate_ak47: 0.4
-fire_rate_glock: 0.0
-fire_rate_m3: 0.0
