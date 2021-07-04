@@ -91,21 +91,8 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case LIST:
-            // server se encarga de mandarle al user la lista de partidas
-            // solo un byte, mando la lista
-            // llamar a un handler del servidor
-            // thClient.handleListing();
             break;
         case MOVE: {
-            // server se encarga de mover a un jugador en una direccion
-            // dentro de una partida
-            // si el cliente esta en una partida, el servidor lo sabe
-            // (lo tienen en mem, puede ser un mapa de partidas)
-            // el cliente no necesita pasarle ningun id
-            // solo la direccion (up down left right)
-            // handle move in direction -> funcion propia del servidor
-            // thClient.move(direction);
-
             msg = handleByte(receiveCallback);
             break;
         }
@@ -182,6 +169,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         }
         case HEALTH_UPDATE: {
             msg = handleByte(receiveCallback);
+            break;
+        }
+        case MONEY_UPDATE: {
+            msg = handleShort(receiveCallback);
             break;
         }
         default:
@@ -489,4 +480,14 @@ std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::v
 std::vector<unsigned char> Protocol::handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback) {
     auto gameNameSize = callback(2);
     return callback(deserializeMsgLenShort(gameNameSize));
+}
+
+std::vector<unsigned char> Protocol::handleShort(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    return callback(2);
+}
+
+void Protocol::updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback) {
+    std::vector<unsigned char> moneyVec;
+    serializeMsgLenShort(moneyVec, money);
+    callback(std::move(moneyVec));
 }

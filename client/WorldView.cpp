@@ -210,3 +210,8 @@ void WorldView::updateHudHealth(uint8_t health) {
     hud.updateHealth(health);
 }
 
+void WorldView::updateHudMoney(uint16_t money) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateMoney(money);
+}
+

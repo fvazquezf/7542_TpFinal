@@ -30,6 +30,7 @@
 #define TEAM_UPDATE 0x29
 #define TIMER_UPDATE 0x2a
 #define HEALTH_UPDATE 0x2b
+#define MONEY_UPDATE 0x2c
 
 // update misc
 // login response me manda
@@ -121,6 +122,7 @@ public:
                     std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateMapInformation(const std::string& serializedMap, std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateTeams(const std::map<uint8_t, bool> &map, std::function<void(std::vector<unsigned char>)> &callback);
+    void updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback);
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -139,9 +141,10 @@ public:
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
     std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
 
-                                //---------------SERVER---------------//
+
     std::vector<unsigned char> handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleByte(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleShort(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
     ~Protocol();

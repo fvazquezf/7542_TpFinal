@@ -89,6 +89,8 @@ public:
     void updateHudTime(uint8_t time);
 
     void updateHudHealth(uint8_t health);
+
+    void updateHudMoney(uint16_t money);
 };
 
 

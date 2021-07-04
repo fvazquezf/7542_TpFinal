@@ -84,3 +84,7 @@ void Hud::loadNumberVector(int number) {
         numberSelector.emplace_back(areaFromIdxPosition(it - '0'));
     }
 }
+
+void Hud::updateMoney(uint16_t money) {
+    // do stuff
+}

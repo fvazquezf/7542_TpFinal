@@ -42,6 +42,8 @@ public:
     void updateTime(uint8_t clockTick);
 
     ~Hud();
+
+    void updateMoney(uint16_t money);
 };
 
 
