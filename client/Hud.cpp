@@ -39,24 +39,6 @@ void Hud::showClock() {
         numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
     }
     numberSelector.clear();
-
-    /*auto clockTuple = clock.at(currentClockTick);
-    if (currentClockTick == TICKS + 1){
-        currentClockTick = 0;
-    }
-    Area srcClock(2 * HUD_SYMBOL_W / HUD_SYMBOLS, 0, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H);
-    Area dstClock(w/2 - 2*64, h - HUD_SYMBOL_H + 20, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H * 2/3);
-    Area dst(w/2 -48 + 0, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H * 2/3);
-    Area src1(480,0, HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H* 2/3);
-    Area dst1(w/2 -48 + 48, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS* 2/3, HUD_NUM_H* 2/3);
-    Area dst2(w/2 -48 + 65, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS* 2/3, HUD_NUM_H* 2/3);
-    Area dst3(w/2 -48 + 111, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS* 2/3, HUD_NUM_H* 2/3);
-    symbols.render(srcClock, dstClock, SDL_FLIP_NONE);
-    setNumberColors({255, 0, 0});
-    numbers.render(std::get<0>(clockTuple), dst, SDL_FLIP_NONE);
-    numbers.render(src1, dst1, SDL_FLIP_NONE);
-    numbers.render(std::get<1>(clockTuple), dst2, SDL_FLIP_NONE);
-    numbers.render(std::get<2>(clockTuple), dst3, SDL_FLIP_NONE);*/
 }
 
 void Hud::updateHealth(uint8_t healthPoints) {
