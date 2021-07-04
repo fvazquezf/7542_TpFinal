@@ -5,9 +5,9 @@
 
 class MoneyUpdate : public Update{
 private:
-    uint8_t money;
+    uint16_t money;
 public:
-    explicit MoneyUpdate(uint8_t money);
+    explicit MoneyUpdate(uint16_t money);
 
     void serialize(std::function<void(std::vector<unsigned char>)>& callback) override;
 

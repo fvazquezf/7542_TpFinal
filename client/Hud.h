@@ -27,10 +27,12 @@ private:
     Color numberColors;
     uint8_t health;
     uint8_t currentClockTick;
+    uint16_t money;
     int w;
     int h;
     void showClock();
     void showLife();
+    void showMoney();
     void setNumberColors(Color colors);
     Area areaFromIdxPosition(uint8_t idx) const; // los bmp son horizontales, solo me muevo en "x"
     void loadNumberVector(int number);
@@ -40,10 +42,10 @@ public:
     void show();
     void updateHealth(uint8_t healthPoints);
     void updateTime(uint8_t clockTick);
+    void updateMoney(uint16_t money);
 
     ~Hud();
 
-    void updateMoney(uint16_t money);
 };
 
 

@@ -276,7 +276,7 @@ void Protocol::rotate(int16_t angle, std::function<void(std::vector<unsigned cha
     callback(std::move(angleMsg));
 }
 
-void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const {
+void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const {
     int i = 0;
     while (i != 2){
         angleMsg.push_back(data >> (8 - i * 8) & 0xff);
@@ -488,6 +488,8 @@ std::vector<unsigned char> Protocol::handleShort(std::function<std::vector<unsig
 
 void Protocol::updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback) {
     std::vector<unsigned char> moneyVec;
+    moneyVec.push_back(MONEY_UPDATE);
+    money = htons(money);
     serializeMsgLenShort(moneyVec, money);
     callback(std::move(moneyVec));
 }

@@ -16,6 +16,7 @@ Hud::~Hud() {
 }
 
 void Hud::show() {
+    showMoney();
     showClock();
     showLife();
 }
@@ -51,6 +52,9 @@ void Hud::updateTime(uint8_t clockTick) {
 
 void Hud::showLife() {
     loadNumberVector(health);
+    Area srcHealth(0, 0, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H);
+    Area dstHealth(10, h - HUD_SYMBOL_H + 20,
+                  HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H * 2/3);
 
     if (health >= 70){
         setNumberColors({0, 255, 0});
@@ -61,10 +65,13 @@ void Hud::showLife() {
     }
 
     for (size_t i = 0; i < numberSelector.size(); ++i){
-        Area dst( i * 48, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H * 2/3);
+        Area dst(HUD_SYMBOL_W / HUD_SYMBOLS +  i * 48, h - HUD_NUM_H + 20,
+                 HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H * 2/3);
         numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
     }
+    symbols.render(srcHealth, dstHealth, SDL_FLIP_NONE);
     numberSelector.clear();
+
 }
 
 void Hud::setNumberColors(Color colors) {
@@ -85,6 +92,21 @@ void Hud::loadNumberVector(int number) {
     }
 }
 
-void Hud::updateMoney(uint16_t money) {
-    // do stuff
+void Hud::updateMoney(uint16_t newMoney) {
+    money = newMoney;
 }
+
+void Hud::showMoney() {
+    loadNumberVector(money);
+    setNumberColors({0xff, 0xff, 0});
+    Area srcMoney(7 * HUD_SYMBOL_W / HUD_SYMBOLS + 1, 0, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H);
+    Area dstMoney(w - numberSelector.size() * 48, 20, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H * 2/3);
+    for (size_t i = 0; i < numberSelector.size(); ++i) {
+        Area dst(w - (numberSelector.size() - i) * 36, 20, HUD_NUM_W / HUD_NUMS * 2 / 3,
+                 HUD_NUM_H * 2 / 3);
+        numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
+    }
+    symbols.render(srcMoney, dstMoney, SDL_FLIP_NONE);
+    numberSelector.clear();
+}
+

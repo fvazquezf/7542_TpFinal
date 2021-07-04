@@ -150,7 +150,7 @@ public:
     ~Protocol();
 
     void handleByte(uint8_t byte, std::function<void(std::vector<unsigned char>)> &callback) const;
-    void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
+    void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 
     std::vector<unsigned char> handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback);

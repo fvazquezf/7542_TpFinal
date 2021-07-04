@@ -1,7 +1,7 @@
 #include "MoneyUpdate.h"
 
 // TODO: cambiar money a uint16_t
-MoneyUpdate::MoneyUpdate(uint8_t money)
+MoneyUpdate::MoneyUpdate(uint16_t money)
 : money(money){
 }
 
