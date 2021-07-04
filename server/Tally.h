@@ -11,6 +11,7 @@ class Tally {
     std::unordered_set<int> deaths;
 
     int time;
+    int ticks;
 
 public:
     Tally();
@@ -20,7 +21,7 @@ public:
     
     void playerKilledOther(int id, int other);
 
-    void tickTime();
+    bool tickTime();
     int getTime();
     void resetTime();
 

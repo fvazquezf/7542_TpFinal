@@ -2,6 +2,7 @@
 
 Tally::Tally(){
     time = 130;
+    ticks = 59;
 }
 
 void Tally::placeInTeam(int id, bool team){
@@ -32,8 +33,13 @@ void Tally::playerKilledOther(int id, int other){
     }
 }
 
-void Tally::tickTime(){
-    time--;
+bool Tally::tickTime(){
+    ticks++;
+    if ((ticks % 60) == 0){
+        time--;
+        return true;
+    }
+    return false;
 }
 
 int Tally::getTime(){
