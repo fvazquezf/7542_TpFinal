@@ -20,7 +20,9 @@ public:
     SdlSound(SdlSound&& other) noexcept;
     SdlSound& operator=(SdlSound&& other) noexcept;
 
-    void play(int vol);
+    // reproduce con cierto volumen
+    // en un canal habilitado
+    int play();
 
     ~SdlSound();
 };

@@ -119,7 +119,9 @@ void WorldView::hit(uint8_t id) {
 
 void WorldView::kill(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(id).die();
+    auto position = entities.at(id).getPosition();
+    float distCenter = camera.calculateDistanceToCenter(position.first, position.second);
+    entities.at(id).die(distCenter);
 }
 
 void WorldView::attack(uint8_t id) {
@@ -147,6 +149,9 @@ uint8_t WorldView::getPressedButtonCode() {
 
 void WorldView::setMenu(bool isIt) {
     menuTime = isIt;
+    if (!isIt){
+        SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
+    }
 }
 
 bool WorldView::isMenuTime() const {
@@ -161,6 +166,8 @@ void WorldView::dropWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weapon
     int16_t posY = std::get<3>(weaponId);
     auto& texture = dropTextures.at(id);
     droppedWeapons.emplace_back(texture, id, uniqueIdentifier, posX, posY);
+    float dist = camera.calculateDistanceToCenter(posX, posY);
+    SoundManager::playSound(SoundManager::soundRepertoire::DROP_WEAPON, dist);
 }
 
 void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponId) {
@@ -172,13 +179,14 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     // y puede que el drawer este descheduled en draw, justamente dibujando las armas
     // al suceder el context switch...
     // va a levantar iteradores con "basura" (invalidos al fin)
-    // por ende, no los puedo eliminar aqui
+    // por ende, no los puedo eliminar aca
     for (auto& it : droppedWeapons){
         if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
             it.doNotShow();
             break;
         }
     }
+    SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, 0);
 }
 
 void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {

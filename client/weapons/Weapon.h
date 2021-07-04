@@ -51,7 +51,9 @@ public:
 
     virtual ~Weapon();
 
-    void animate(Character &character, float posX, float posY, float angle);
+    void animate(Character &character, float distanceToCenter, float angle);
+
+    void manageSound();
 };
 
 

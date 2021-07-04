@@ -19,7 +19,7 @@ add_library(sdlloop
         Client.cpp
         Hud.cpp
         Renderizable.cpp
-        NonMovable.cpp)
+        NonMovable.cpp SoundManager.cpp SoundManager.h)
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)

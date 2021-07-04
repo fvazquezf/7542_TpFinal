@@ -57,6 +57,8 @@ public:
     int16_t angleFromMouse();
 
     void renderWeapon(float playerX, float playerY, int16_t playerAngle, int sizeX, int sizeY, SdlTexture &texture);
+
+    float calculateDistanceToCenter(float posX, float posY);
 };
 
 #endif

@@ -17,6 +17,7 @@
 #include "BuyingMenu.h"
 #include "Hud.h"
 #include "weapons/DroppedWeapon.h"
+#include "SoundManager.h"
 
 class WorldView {
 private:

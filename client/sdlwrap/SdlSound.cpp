@@ -32,7 +32,6 @@ SdlSound &SdlSound::operator=(SdlSound &&other) noexcept {
     return *this;
 }
 
-void SdlSound::play(int vol) {
-    Mix_VolumeChunk(effect, vol);
-    Mix_PlayChannel(-1, effect, 0);
+int SdlSound::play() {
+    return Mix_PlayChannel(-1, effect, 0);
 }
