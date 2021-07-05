@@ -25,8 +25,14 @@ add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(editor)
 
+file(GLOB CLIENT_QT_SRC
+     "./client/qt/*.cpp"
+     "./client/qt/*.h"
+     "./client/qt/*.ui"
+)
+
 # Ejecutables demo_movimiento
-add_executable(client_main ./client/main.cpp ./client/qt/*.cpp ./client/qt/*.h ./client/qt/*.ui)
+add_executable(client_main ./client/main.cpp ${CLIENT_QT_SRC})
 #add_executable(editor ./editor/Editor.cpp)
 #add_executable(box2d_demo HelloWorld.cpp)
 #add_executable(demo_movimiento demo_movimiento.cpp)

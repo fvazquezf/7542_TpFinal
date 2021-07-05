@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.0, 2021-07-03T15:21:59. -->
+<!-- Written by QtCreator 4.11.0, 2021-07-04T22:55:31. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -224,7 +224,7 @@
      <value type="QString">CMAKE_PREFIX_PATH:STRING=%{Qt:QT_INSTALL_PREFIX}</value>
      <value type="QString">QT_QMAKE_EXECUTABLE:STRING=%{Qt:qmakeExecutable}</value>
     </valuelist>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/anichu/Documents/FIUBA/TP_FINAL/build-7542_TpFinal-Desktop-MinSizeRel</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/anichu/Documents/FIUBA/TP_FINAL/7542_TpFinal/build</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="QString" key="CMakeProjectManager.MakeStep.AdditionalArguments"></value>
@@ -420,7 +420,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/build-7542_TpFinal-Desktop-MinSizeRel</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/7542_TpFinal/build</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.2">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -570,7 +570,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/build-7542_TpFinal-Desktop-MinSizeRel</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/7542_TpFinal/build</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.RunConfiguration.4">
     <value type="QString" key="Analyzer.Perf.CallgraphMode">dwarf</value>
@@ -645,7 +645,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/build-7542_TpFinal-Desktop-MinSizeRel/editor</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/anichu/Documents/FIUBA/TP_FINAL/7542_TpFinal/build/editor</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">5</value>
   </valuemap>
