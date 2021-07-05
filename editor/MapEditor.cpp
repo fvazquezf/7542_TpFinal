@@ -45,10 +45,10 @@ void MapEditor::handleQuitButton()
 
 void MapEditor::setupWidgets()
 {
-
-    QScrollArea *posts = new QScrollArea();
-    posts->setWidgetResizable(false);
-    posts->setFrameShape(QFrame::NoFrame);
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(false);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidget(qMapEditorWidget);
 
     mainLayout = new QHBoxLayout();
     mapLayout = new QGridLayout();
@@ -73,12 +73,12 @@ void MapEditor::setupWidgets()
 
     // items layout
     QLabel *itemsLabel = new QLabel("Settings", this);
-    qEditorItemsWidget = new QEditorItemsWidget(posts);
+    qEditorItemsWidget = new QEditorItemsWidget(nullptr);
     itemsLayout->addWidget(itemsLabel);
-    itemsLayout->addWidget(posts);
+    itemsLayout->addWidget(qEditorItemsWidget);
 
     // map layout
-    mapLayout->addWidget(qMapEditorWidget);
+    mapLayout->addWidget(scrollArea);
 
     // connections
     connect(qEditorItemsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(treeClicked(QTreeWidgetItem*,int)));

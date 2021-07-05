@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include "MapConfigWindow.h"
+#include "IntroWindow.h"
+
 #include <QVBoxLayout>
 class MainWindow : public QMainWindow
 {

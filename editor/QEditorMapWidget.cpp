@@ -9,6 +9,7 @@
 #define COLUMNS "size_columns"
 #define BACKGROUND "background"
 
+#include <QTabWidget>
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
         QWidget (parent), map_name(map_name) {
     this->setAcceptDrops(true);
@@ -18,15 +19,17 @@ QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int 
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name) :
         QWidget (parent), map_name(map_name) {
-    this->setAcceptDrops(true);
+
     this->setMapLayout();
     this->loadOldFile();
 }
 
 void QEditorMapWidget::setMapLayout() {
+    
     layout = new QGridLayout (this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+
     this->setLayout(layout);
 }
 

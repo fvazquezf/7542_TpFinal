@@ -3,7 +3,7 @@
 QEditorMapListWidget::QEditorMapListWidget(QWidget *parent)
     : QListWidget(parent) {
     this->doAutoScroll();
-    this->scrollBarWidgets(Qt::AlignRight);
+    this->scrollBarWidgets(Qt::AlignCenter);
     this->setMapItems();
 }
 
