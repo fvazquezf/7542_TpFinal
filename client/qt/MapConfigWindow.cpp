@@ -1,6 +1,6 @@
 #include <QLabel>
 #include "MapConfigWindow.h"
-
+#include <QMessageBox>
 MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info, bool create)
     : QDialog(parent),
       width(width),
@@ -17,7 +17,7 @@ MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInIn
 }
 
 void MapConfigWindow::handleJoinPushButton() {
-    if (create && )
+    if (this->selectedMap == "")
         QMessageBox::warning(this, tr("Log In error"),
                              tr("Username field is empty."),
                              QMessageBox::Close);

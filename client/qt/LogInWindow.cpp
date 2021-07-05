@@ -15,7 +15,6 @@ LogInWindow::LogInWindow(QWidget *parent, int width, int height, LogInInfo &info
 void LogInWindow::playIntro() {
     this->open();
     this->close();
-    qDebug() << this->geometry().x();
     IntroWindow introWindow(this, width, height);
     introWindow.run();
 }
