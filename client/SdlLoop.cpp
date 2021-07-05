@@ -9,6 +9,7 @@
 #include "commands/Buy.h"
 #include "commands/Pickup.h"
 #include "commands/Reload.h"
+#include "commands/Plant.h"
 #include <functional>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
@@ -127,6 +128,15 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
         if (pressed){
             commands.push(std::unique_ptr<Command>(new Pickup()));
         } else {
+            return;
+        }
+    }
+
+    if (key == SDLK_SPACE){
+        if (pressed) {
+            commands.push(std::unique_ptr<Command>(new Plant(true)));
+        } else {
+            commands.push(std::unique_ptr<Command>(new Plant(false)));
             return;
         }
     }

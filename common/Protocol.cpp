@@ -330,10 +330,12 @@ std::map<uint8_t, int16_t> Protocol::deserializeAngles(std::vector<unsigned char
     return angleMap;
 }
 
-void Protocol::attack(bool done, std::function<void(std::vector<unsigned char>)> &callback) const {
-    std::vector<unsigned char> attackMsg;
-    attackMsg.push_back(done ? STOP_ATTACK : ATTACK);
-    callback(std::move(attackMsg));
+// corresponde a los mensajes de start attack, stop attack, plant bomb, stop planting bomb
+// todos los que sean al estilo bool
+void Protocol::startStopCommand(uint8_t startStopCode, std::function<void(std::vector<unsigned char>)> &callback) const {
+    std::vector<unsigned char> startStopMsg;
+    startStopMsg.push_back(startStopCode);
+    callback(std::move(startStopMsg));
 }
 
 void Protocol::updatePlayerState(uint8_t code, uint8_t playerId, std::function<void(std::vector<unsigned char>)> &callback) const {
