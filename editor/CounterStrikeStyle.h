@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QString>
+
+#include "paths.h"
+
 class CounterStrikeStyle
 {
 public:

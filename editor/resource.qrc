@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>resources/fonts/counter_strike.ttf</file>
-        <file>resources/img/wall.png</file>
-        <file>config/editor-config.yml</file>
-        <file>config/img-config.yml</file>
-    </qresource>
-</RCC>

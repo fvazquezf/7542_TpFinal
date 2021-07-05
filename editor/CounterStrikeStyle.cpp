@@ -2,7 +2,6 @@
 #include <QFontDatabase>
 #include <QDir>
 
-#define PATH_TO_COUNTER_STRIKE_FONT "/editor/resources/fonts/counter_strike.ttf"
 CounterStrikeStyle::CounterStrikeStyle() {
     QDir dir(QDir::currentPath());
     dir.cdUp();
