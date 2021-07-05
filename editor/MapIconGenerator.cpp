@@ -1,6 +1,7 @@
 #include "MapIconGenerator.h"
-#define MAP_ICON_CONFIG_PATH "mapIconsType.yml"
+#include "paths.h"
 #include <QDebug>
+
 MapIconGenerator::MapIconGenerator() {
     data = YAML::LoadFile(MAP_ICON_CONFIG_PATH);
     this->setIcons();

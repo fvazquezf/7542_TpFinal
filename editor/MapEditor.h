@@ -18,10 +18,6 @@
 #include "QEditorItemsWidget.h"
 #include "CounterStrikeStyle.h"
 
-namespace Ui {
-class MapEditor;
-}
-
 class MapEditor : public QDialog
 {
     Q_OBJECT
@@ -48,7 +44,6 @@ private:
     QEditorMapWidget* qMapEditorWidget;
 
     //Others
-    Ui::MapEditor *ui;
     CounterStrikeStyle styler;
     std::string selectedItem = "wall";
     std::string map_name = "map";

@@ -1,9 +1,9 @@
 #include "QEditorMapListWidget.h"
 #include <QDebug>
-QEditorMapListWidget::QEditorMapListWidget(QWidget *parent)
+QEditorMapListWidget::QEditorMapListWidget(QWidget *parent, int width, int height, LogInInfo &info)
     : QListWidget(parent) {
     this->doAutoScroll();
-    this->scrollBarWidgets(Qt::AlignCenter);
+    this->scrollBarWidgets(Qt::AlignRight);
     this->setMapItems();
 }
 
@@ -20,7 +20,7 @@ void QEditorMapListWidget::setMapItem(QString &mapName) {
 
 void QEditorMapListWidget::update() {
     this->clear();
-    QDir directory(PATH_TO_MAPS);
+    QDir directory(DIRECTORY_PATH);
     QStringList mapsList  = directory.entryList();
     for (QString& mapName : mapsList) {
         if(mapName != "." && mapName != "..") {

@@ -10,15 +10,33 @@
 #include "Receiver.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
-//#include "editor/Editor.h"
+
+// QT:
+#include "./qt/LogInWindow.h"
+#include "./qt/IntroWindow.h"
+#include "./qt/LogInInfo.h"
+#include <QApplication>
+#include <iostream>
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
 
     //Editor in QT
-    //Editor editor;
-    //editor.run(argc, argv);
+    QApplication a(argc, nullptr);
+    LogInInfo info;
+    LogInWindow w(nullptr, 640, 400, info);
+    w.show();
+    a.exec();
 
+    /*
+    Info es una clase con 4 atributos publicos de tipo std::string
+    - port
+    - ip
+    - username
+    - map (nombre del mapa sin .yml)
+    */
+
+    // SDL
     Socket cli;
     try {
         cli.connect(argv[1], argv[2]);

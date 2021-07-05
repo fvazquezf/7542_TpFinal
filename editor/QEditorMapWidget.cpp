@@ -1,13 +1,15 @@
 #include "QEditorMapWidget.h"
 #define QTILE_SIZE 32
-#define PATH_TO_MAPS "../maps/"
+#include "paths.h"
 #include <QtDebug>
 #include <exception>
 #include<QScrollArea>
 
 #define ROWS "size_rows"
 #define COLUMNS "size_columns"
+#define BACKGROUND "background"
 
+#include <QTabWidget>
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
         QWidget (parent), map_name(map_name) {
     this->setAcceptDrops(true);
@@ -17,15 +19,17 @@ QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int 
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name) :
         QWidget (parent), map_name(map_name) {
-    this->setAcceptDrops(true);
+
     this->setMapLayout();
     this->loadOldFile();
 }
 
 void QEditorMapWidget::setMapLayout() {
+    
     layout = new QGridLayout (this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
+
     this->setLayout(layout);
 }
 
@@ -44,13 +48,33 @@ void QEditorMapWidget::loadNewFile(int rows, int columns) {
 
 }
 
-void QEditorMapWidget::setTilesFromNewFile() {
+void QEditorMapWidget::setTilesBackGround() {
     for(int i = 0; i<  size[ROWS]; i++){
         for(int j = 0; j < size[COLUMNS]; j++){
-            std::string s = "aztec";
-            this->addQTile(s, i, j);
+            QIcon icon = icons.getIcon(selectedBackground);
+            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
+            layout->addWidget(tile, i, j);
         }
     }
+
+    for (unsigned long i = 0; i < elements.size(); i ++) {
+        if(tiles[elements[i]].size() == 0) {
+            continue;
+        }
+        std::list<std::list<int>> ::iterator it;
+        for (it = tiles[elements[i]].begin(); it != tiles[elements[i]].end(); ++it) {
+            std::list<int> ::iterator it2 = (*it).begin();
+            QIcon icon = icons.getIcon(elements[i]);
+            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
+            int x = *(it2);
+            int y = *(++it2);
+            layout->addWidget(tile, x, y);
+        }
+    }
+}
+
+void QEditorMapWidget::setTilesFromNewFile() {
+    this->setTilesBackGround();
 }
 
 void QEditorMapWidget::loadOldFile() {
@@ -64,6 +88,9 @@ void QEditorMapWidget::setTilesFromOldFile() {
 
     this->size[COLUMNS] = map_config[COLUMNS].as<int>();
     this->size[ROWS] = map_config[ROWS].as<int>();
+    this->selectedBackground = map_config[BACKGROUND].as<std::string>();
+
+    this->setTilesBackGround();
 
     for (unsigned long i = 0; i< elements.size(); i ++) {
         try {
@@ -86,8 +113,10 @@ void QEditorMapWidget::updateMapLFile() {
 
     YAML::Emitter out;
     out << size;
+    
 
-    std::string res = "";
+    std::string res = BACKGROUND;
+    res += ": " + selectedBackground + "\n";
     for (unsigned long i = 0; i < elements.size(); i ++) {
         if(tiles[elements[i]].size() == 0) {
             continue;
@@ -107,7 +136,12 @@ void QEditorMapWidget::updateMapLFile() {
 }
 
 void QEditorMapWidget::setItem(std::string &item) {
-    this->selectedItem = item;
+    if(std::count(elements.begin(), elements.end(), item)){
+        this->selectedItem = item;
+    } else {
+        this->selectedBackground = item;
+        setTilesBackGround();
+    }
 }
 
 /*

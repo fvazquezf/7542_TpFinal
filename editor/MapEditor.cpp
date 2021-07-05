@@ -1,19 +1,16 @@
 #include "MapEditor.h"
-#include "ui_MapEditor.h"
 #include <QDebug>
 
 #define N 5
 #define TILE_SIZE 32
-#define PATH_TO_MAPS "../maps/"
+#include "paths.h"
 #define WIDTH 15
 #define HEIGHT 15
 
 MapEditor::MapEditor(QWidget *parent, const std::string &name) :
-    QDialog(parent),
-    ui(new Ui::MapEditor)
+    QDialog(parent)
 {
     styler.setCounterStrikeFont(this, 12);
-    ui->setupUi(this);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name);
     setupWidgets();
@@ -22,11 +19,9 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name) :
 
 
 MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int column) :
-    QDialog(parent),
-    ui(new Ui::MapEditor)
+    QDialog(parent)
 {
     styler.setCounterStrikeFont(this, 12);
-    ui->setupUi(this);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name, row, column);
     setupWidgets();
@@ -35,7 +30,6 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int colu
 
 MapEditor::~MapEditor()
 {
-    delete ui;
 }
 
 void MapEditor::handleSaveButton()
@@ -51,10 +45,10 @@ void MapEditor::handleQuitButton()
 
 void MapEditor::setupWidgets()
 {
-
-    QScrollArea *posts = new QScrollArea();
-    posts->setWidgetResizable(false);
-    posts->setFrameShape(QFrame::NoFrame);
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(false);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidget(qMapEditorWidget);
 
     mainLayout = new QHBoxLayout();
     mapLayout = new QGridLayout();
@@ -79,12 +73,12 @@ void MapEditor::setupWidgets()
 
     // items layout
     QLabel *itemsLabel = new QLabel("Settings", this);
-    qEditorItemsWidget = new QEditorItemsWidget(posts);
+    qEditorItemsWidget = new QEditorItemsWidget(nullptr);
     itemsLayout->addWidget(itemsLabel);
-    itemsLayout->addWidget(posts);
+    itemsLayout->addWidget(qEditorItemsWidget);
 
     // map layout
-    mapLayout->addWidget(qMapEditorWidget);
+    mapLayout->addWidget(scrollArea);
 
     // connections
     connect(qEditorItemsWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(treeClicked(QTreeWidgetItem*,int)));

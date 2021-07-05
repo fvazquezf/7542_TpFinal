@@ -1,18 +1,17 @@
 #include "MapConfigWindow.h"
-#include "ui_MapConfigWindow.h"
 #include "QEditorMapWidget.h"
+
 MapConfigWindow::MapConfigWindow(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::MapConfigWindow)
+    QDialog(parent)
 {
-    ui->setupUi(this);
     styler.setCounterStrikeFont(this, 14);
     this->setWindowTitle("Counter Strike 2D - Configuration");
     setMainLayout();
 }
 
-void MapConfigWindow::handleJoinPushButton()
+void MapConfigWindow::handleQuitPushButton()
 {
+    this->close();
 }
 
 
@@ -46,16 +45,16 @@ void MapConfigWindow::setBottonLayout() {
     bottonLayout = new QHBoxLayout();
 
     QPushButton *editPushButton = new QPushButton("Edit", this);
-    QPushButton *joinPushButton = new QPushButton("Join", this);
+    QPushButton *quitPushButton = new QPushButton("Quit", this);
     QPushButton *createPushButton = new QPushButton("Create", this);
 
     bottonLayout->addWidget(editPushButton,1);
     bottonLayout->addWidget(createPushButton,1);
-    bottonLayout->addWidget(joinPushButton,1);
+    bottonLayout->addWidget(quitPushButton,1);
 
     connect(editPushButton, SIGNAL (released()), this, SLOT (handleEditPushButton()));
     connect(createPushButton, SIGNAL (released()), this, SLOT (handleCreatePushButton()));
-    connect(joinPushButton, SIGNAL (released()), this, SLOT (handleJoinPushButton()));
+    connect(quitPushButton, SIGNAL (released()), this, SLOT (handleQuitPushButton()));
 }
 void MapConfigWindow::setMainLayout() {
     setBottonLayout();
@@ -69,7 +68,6 @@ void MapConfigWindow::setMainLayout() {
 }
 
 MapConfigWindow::~MapConfigWindow() {
-    delete ui;
 }
 
 

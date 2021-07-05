@@ -3,13 +3,14 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QDir>
-#include "paths.h"
+#include "LogInInfo.h"
+#define DIRECTORY_PATH "../maps"
 
 class QEditorMapListWidget : public QListWidget {
     Q_OBJECT
 
 public:
-    QEditorMapListWidget(QWidget* parent);
+    QEditorMapListWidget(QWidget *parent, int width, int height, LogInInfo &info);
     void update();
 private:
     void setMapItems();
