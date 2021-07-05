@@ -57,6 +57,11 @@ bool ThLogin::handleLoginMessage(uint8_t msgCode, const std::vector<unsigned cha
             loginLister(LOGIN_LIST_GAMES, gameList);
             return false;
         }
+        case LIST_MAPS: {
+            std::string gameList = games.listMaps();
+            loginLister(LOGIN_LIST_MAPS, gameList);
+            return false;
+        }
         case CREATE: {
             std::pair<std::string, std::string> gamePair = prot.deserializeCreateGame(msg);
             return games.createMatch(std::move(gamePair.first), gamePair.second, socketHander, response);

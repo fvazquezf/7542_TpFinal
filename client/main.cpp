@@ -10,53 +10,44 @@
 #include "Receiver.h"
 #include "commands/CreateGame.h"
 #include "commands/JoinGame.h"
+
+// QT:
+#include "./qt/LogInWindow.h"
+#include "./qt/IntroWindow.h"
+#include "./qt/LogInInfo.h"
+#include <QApplication>
+#include <iostream>
 #include "sdlwrap/SdlSound.h"
 #include "commands/ListGame.h"
-//#include "editor/Editor.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
     //Editor in QT
-    //Editor editor;
-    //editor.run(argc, argv);
-
-    Socket cli;
+    QApplication a(argc, nullptr);
+    LogInInfo info;
+    LogInWindow w(nullptr, 640, 400, info);
+    w.show();
     try {
-        cli.connect(argv[1], argv[2]);
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return -1;
-    } catch (...) {
-        std::cerr << "Error desconocido en el hilo main" << std::endl;
+        a.exec();
+    } catch (const std::exception& e){
+        std::cout << e.what() << std::endl;
         return -1;
     }
+    Socket cli = std::move(info.socket);
+
+    /*
+    Info es una clase con 4 atributos publicos de tipo std::string
+    - port
+    - ip
+    - username
+    - map (nombre del mapa sin .yml)
+    */
+
+    // SDL
 
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
-
-	// Desde aca hasta el proximo comentario, esta seccion es temporal, hasta que tengamos qt
-	std::string s;
-    do {
-        std::cout << "Crea o unite a una partida escribiendo Crear <nombre> o Unirse <nombre>\n";
-        std::getline(std::cin, s);
-        std::cout << s;
-    }
-	while (s.find("Unirse") == std::string::npos && s.find("Crear" ) == std::string::npos && s.find("listar" ) == std::string::npos);
-
-	std::stringstream stream(s);
-	std::string comando;
-	std::string nombre;
-	stream >> comando;
-    stream >> nombre;
-    if (comando == "Crear"){
-        comms.push(std::unique_ptr<Command>(new CreateGame(nombre, "mapa")));
-    } else if (comando == "Unirse"){
-        comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
-    } else {
-        comms.push(std::unique_ptr<Command>(new ListGame()));
-    }
-    // End seccion
 
     SdlWindow window(600, 400, false, "unaVentana");
     SoundManager::start();

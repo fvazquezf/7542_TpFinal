@@ -1,4 +1,5 @@
 #include <iostream>
+#include <dirent.h>
 #include "GamesMonitor.h"
 #include "yaml-cpp/yaml.h"
 #include "../common/ConfigVariables.h"
@@ -35,6 +36,26 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::MONEY_KILL_ENEMY, config["money_kill_enemy"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_WON, config["money_round_won"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
+
+    // iterando el filesytem para cargar los nombres de los mapas
+    // no hay un header de filesystem en c++11 asi que lo hago estilo C
+    // codigo obtenido de un ejemplo de la library dirent.h
+    // https://stackoverflow.com/a/12240511
+    struct dirent *entry;
+    DIR *dp = opendir(MAP_PATH_PREFIX);
+    if (dp == nullptr) {
+        throw std::exception();
+    }
+
+    while ((entry = readdir(dp))){
+        std::string mapName(entry->d_name);
+        if (mapName == ".." || mapName == "."){
+            continue;
+        }
+        mapNames.insert(mapName);
+    }
+
+    closedir(dp);
 }
 
 GamesMonitor::GamesMonitor(GamesMonitor &&other) noexcept
@@ -59,6 +80,13 @@ bool GamesMonitor::createMatch(std::string gameName,
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     std::string mapPath = MAP_PATH_PREFIX + mapName + MAP_EXTENSION;
     YAML::Node map;
+
+    // si el mapa no existe
+    // me voy
+    if (!mapNames.count(mapName + MAP_EXTENSION)){
+        response(-1);
+        return false;
+    }
 
     // si hay un juego con ese nombre, no puedo crear partida
     if (matches.count(gameName)){
@@ -121,6 +149,17 @@ std::string GamesMonitor::listGames() {
         games += (*match).first + "\n";
         ++match;
     }
-
     return games;
+}
+
+std::string GamesMonitor::listMaps() {
+    std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    std::string maps;
+    auto mapIt = mapNames.begin();
+    while (mapIt != mapNames.end()){
+        auto mapName = mapIt->substr(0, mapIt->size() - 4); // resto el tamaño de la extension para no enviarla
+        maps += (mapName + "\n");
+        ++mapIt;
+    }
+    return maps;
 }

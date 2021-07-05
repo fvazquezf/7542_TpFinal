@@ -2,11 +2,6 @@
 #define MAINWINDOW_H
 
 #include "MapConfigWindow.h"
-
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
-
 #include <QVBoxLayout>
 class MainWindow : public QMainWindow
 {
@@ -20,7 +15,6 @@ private slots:
     void handleStartPushButton();
 
 private:
-    Ui::MainWindow *ui;
     void setStart();
 
 };

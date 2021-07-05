@@ -18,6 +18,7 @@
 #define RELOAD 0x7d
 #define PLANT 0x72
 #define STOP_PLANT 0x73
+#define LIST_MAPS 0x71
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -97,7 +98,6 @@ public:
                     const std::string& mapName,
                     std::function<void(std::vector<unsigned char>)>& callback) const;
     void joinGame(const std::string& gameName, std::function<void(std::vector<unsigned char>)>& callback) const;
-    void listGames(std::function<void(std::vector<unsigned char>)>& callback) const;
     void rotate(int16_t angle, std::function<void(std::vector<unsigned char>)>& callback) const;
     void startStopCommand(uint8_t startStopCode, std::function<void(std::vector<unsigned char>)> &callback) const;
     void move(uint8_t dir, bool isDone, std::function<void(std::vector<unsigned char>)>& callback) const;
