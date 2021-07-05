@@ -18,11 +18,13 @@
 class WorldModel: public Thread {
     b2World world;
     b2Body* anchor;
-    const std::map<int, float>& matchConfig;
+    const std::map<int, int>& matchConfig;
     std::map<int, PlayerModel> playerModels;
 
     MapLayout mapLayout;
     Tally tally;
+    
+    std::shared_ptr<Weapon> bomb;
 
     std::unordered_set<int> attackingPlayers;
 
@@ -42,7 +44,7 @@ class WorldModel: public Thread {
     bool is_running;
     
     public:
-        WorldModel(Broadcaster& updates, const std::map<int, float>& matchConfig);
+        WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig);
 
         ~WorldModel() override;
         void run() override;
@@ -68,6 +70,10 @@ class WorldModel: public Thread {
         void updateWeapon(uint8_t id, uint8_t code);
         void updateBuying(bool buying);
         void updateTeams();
+        void updateHp(int id);
+        void updateMoney(int id);
+        void updateTime();
+
         
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
@@ -75,15 +81,21 @@ class WorldModel: public Thread {
         void rotatePlayer(uint8_t id, int16_t angle);
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
+        void startPlanting(uint8_t id);
+        void stopPlanting(uint8_t id);
+
 
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
         void pickUpWeapon(uint8_t id);
+        void reloadWeapon(uint8_t id);
 
-        void roundBegin();
+        void roundPurchase();
         void roundCommon();
         void roundPlay();
-        bool roundDone();
+
+        void swapTeams();
+        void reviveAll();
 
         void step();
 

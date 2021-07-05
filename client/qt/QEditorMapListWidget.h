@@ -15,6 +15,7 @@ public:
 private:
     void setMapItems();
     void setMapItem(QString &mapName);
+    LogInInfo& info;
 
 
 };

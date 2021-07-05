@@ -19,7 +19,7 @@
 class GamesMonitor {
 private:
     std::map<std::string, Match> matches;
-    std::map<int, float> matchesConfig; // config de partidas
+    std::map<int, int> matchesConfig; // config de partidas
     std::mutex gamesMonitorLock;
 public:
     explicit GamesMonitor(YAML::Node& config);
@@ -41,6 +41,8 @@ public:
     void stopGames();
 
     ~GamesMonitor();
+
+    std::string listGames();
 };
 
 

@@ -89,8 +89,14 @@ void LogInWindow::on_saveButton_clicked()
                              QMessageBox::Close);
         return;
     }
-
-    info.socket.connect(ip.c_str(), port.c_str());
+    try {
+        info.socket.connect(ip.c_str(), port.c_str());
+    } catch (const std::exception& e){
+        QMessageBox::warning(this, tr("Configuration error"),
+                             tr("Error trying to connect to server."),
+                             QMessageBox::Close);
+        return;
+    }
 
     userNameWindow = new UserNameWindow(this, width, height, info);
     this->close();

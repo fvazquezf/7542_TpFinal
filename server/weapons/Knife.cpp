@@ -1,29 +1,24 @@
 #include "Knife.h"
 
-Knife::Knife()
-: Weapon(KNIFE){
-    damage = 40;
-    cooldown = 0;
+Knife::Knife(int range, int spread, int damage, int firerate):
+ Weapon(KNIFE, 0, range, damage),
+ firerate(firerate),
+ spread(spread){
 }
 
-
 Knife::~Knife(){
-
 }
 
 bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    double dist = static_cast<double>((player - enemy).LengthSquared());
-    // 1.25 es la distancia(1.11m) de ataque al cuadrado, si esta mas lejos no le pega.
-    if (dist < 1.25) {
+    double dist = static_cast<double>((player - enemy).Length());
+    if (dist < range) {
         int res = static_cast<int>(atan2(enemy.y - player.y, enemy.x - player.x));
-        // el round creo que esta de mas
         int enemyAngle = res * 180/3.14 + 90;
         if (enemyAngle < 0){
             enemyAngle += 360;
         }
-        int start = (angle) - 60;
-        int end = (angle) + 60;
+        int start = (angle) - spread;
+        int end = (angle) + spread;
         if (start < end){
             return (start < enemyAngle && enemyAngle < end);
         } else {
@@ -44,13 +39,11 @@ int Knife::hit(){
     return dmgDist(gen);
 }
 
-bool Knife::tickCooldown(){
+bool Knife::canShoot(){
     if (cooldown == 0) {
-        // este 30 es variable, es el que determina el fireRate, se leeria del yaml de configuracion.
-        cooldown = 30;
+        cooldown = firerate;
         return true;
     } else {
-        cooldown--;
         return false;
     }
 }

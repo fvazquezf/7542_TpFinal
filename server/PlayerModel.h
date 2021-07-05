@@ -14,16 +14,15 @@ class PlayerModel{
     int dirAmount;
 
     bool isCt;
+    bool isFrozen;
 
     int hp;
     int money;
-    bool isAlive;
 
     Armory armory;
 
     public:
-        PlayerModel(DroppedWeapons& dropped);
-        PlayerModel(b2Body* body, DroppedWeapons& dropped);
+        PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;
@@ -42,11 +41,15 @@ class PlayerModel{
         void setAngle(int16_t newAngle);
         int16_t getAngle() const;
 
-        bool attack(PlayerModel& enemy);
+        bool attack(const b2Vec2& enemy);
+        void reload();
         std::shared_ptr<Weapon> hit();
-        bool gotHit(std::shared_ptr<Weapon> weapon);
+        bool gotHitAndDied(std::shared_ptr<Weapon> weapon);
+        bool canShoot();
 
-        bool tickCooldown();
+        void giveBomb(std::shared_ptr<Weapon> bomb);
+        bool startPlanting();
+
         void resetCooldown();
 
         int equipWeapon(int weaponType);
@@ -54,9 +57,12 @@ class PlayerModel{
         bool pickUpWeapon();
 
         void die();
+        void revive();
 
         void changeSide();
         bool getSide();
+        int getHp();
+        int getMoney();
 };
 
 #endif

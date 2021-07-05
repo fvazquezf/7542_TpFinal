@@ -17,6 +17,7 @@
 #include "BuyingMenu.h"
 #include "Hud.h"
 #include "weapons/DroppedWeapon.h"
+#include "SoundManager.h"
 
 class WorldView {
 private:
@@ -85,6 +86,12 @@ public:
     void buildTeams(const std::map<uint8_t, bool> &teamMap);
 
     void assignPlayer(uint8_t aPlayerId);
+
+    void updateHudTime(uint8_t time);
+
+    void updateHudHealth(uint8_t health);
+
+    void updateHudMoney(uint16_t money);
 };
 
 

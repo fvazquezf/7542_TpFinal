@@ -2,9 +2,9 @@
 #include "match.h"
 #include "../common/ConfigVariables.h"
 
-Match::Match(const std::map<int, float>& matchConfig, const std::string& mapName)
+Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
 : matchConfig(matchConfig),
-  maxUsers(matchConfig.at(ConfigVariables::MAX_JUGADORES)),
+  maxUsers(matchConfig.at(ConfigVariables::MAX_PLAYERS)),
   world(updates, matchConfig){
     try {
         mapInfo = YAML::LoadFile(mapName);

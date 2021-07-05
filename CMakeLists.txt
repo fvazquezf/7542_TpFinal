@@ -11,6 +11,7 @@ project(sdl-demo)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 find_package(Qt5Widgets)
 find_package(Qt5 COMPONENTS REQUIRED Widgets Core Multimedia MultimediaWidgets)
 qt5_wrap_ui(ui_wrap ${EDITORUI})
@@ -69,7 +70,7 @@ add_executable(editor_main ${EDITOR_QT_SRC})
 #**************************************
 
 # Linkage client
-target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop anim sdlwrapperclasses SDL2 SDL2_image lib_common commands weapons SDL2_gfx)
+target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop anim sdlwrapperclasses SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx)
 
 # Linkage esqueleto cliente-servidor
 target_link_libraries(esqueleto_server lib_server lib_common box2d yaml-cpp)

@@ -6,20 +6,16 @@
 #include <random>
 
 class Knife: public Weapon {
-    private:
-        int damage;
-        int cooldown;
-
+    int firerate;
+    int spread;
     public:
-        Knife();
+        Knife(int range, int spread, int damage, int firerate);
         ~Knife() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool tickCooldown() override;
+        bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
-
-
 };
 
 #endif

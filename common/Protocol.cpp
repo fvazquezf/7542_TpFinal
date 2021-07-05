@@ -87,25 +87,12 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case JOIN: {
-            msg = handleJoinGame(receiveCallback);
+            msg = handleStringMsg(receiveCallback);
             break;
         }
         case LIST:
-            // server se encarga de mandarle al user la lista de partidas
-            // solo un byte, mando la lista
-            // llamar a un handler del servidor
-            // thClient.handleListing();
             break;
         case MOVE: {
-            // server se encarga de mover a un jugador en una direccion
-            // dentro de una partida
-            // si el cliente esta en una partida, el servidor lo sabe
-            // (lo tienen en mem, puede ser un mapa de partidas)
-            // el cliente no necesita pasarle ningun id
-            // solo la direccion (up down left right)
-            // handle move in direction -> funcion propia del servidor
-            // thClient.move(direction);
-
             msg = handleByte(receiveCallback);
             break;
         }
@@ -174,6 +161,29 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         }
         case TEAM_UPDATE: {
             msg = handleTeamUpdate(receiveCallback);
+            break;
+        }
+        case TIMER_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
+        case HEALTH_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
+        case CLIP_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
+        case MONEY_UPDATE: {
+            msg = handleShort(receiveCallback);
+            break;
+        }
+        case RELOAD: {
+            break;
+        }
+        case LOGIN_LIST_GAMES: {
+            msg = handleStringMsg(receiveCallback);
             break;
         }
         default:
@@ -277,7 +287,7 @@ void Protocol::rotate(int16_t angle, std::function<void(std::vector<unsigned cha
     callback(std::move(angleMsg));
 }
 
-void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const {
+void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const {
     int i = 0;
     while (i != 2){
         angleMsg.push_back(data >> (8 - i * 8) & 0xff);
@@ -478,7 +488,45 @@ std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::v
     return std::make_pair(gameName, mapName);
 }
 
-std::vector<unsigned char> Protocol::handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback) {
-    auto gameNameSize = callback(2);
-    return callback(deserializeMsgLenShort(gameNameSize));
+std::vector<unsigned char> Protocol::handleStringMsg(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    auto stringSize = callback(2);
+    return callback(deserializeMsgLenShort(stringSize));
+}
+
+std::vector<unsigned char> Protocol::handleShort(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    return callback(2);
+}
+
+void Protocol::updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback) {
+    std::vector<unsigned char> moneyVec;
+    moneyVec.push_back(MONEY_UPDATE);
+    money = htons(money);
+    serializeMsgLenShort(moneyVec, money);
+    callback(std::move(moneyVec));
+}
+
+void Protocol::loginLister(uint8_t commandId,
+                           const std::string &loginList,
+                           std::function<void(std::vector<unsigned char>)> callback) {
+    std::vector<unsigned char> msg;
+    msg.push_back(commandId);
+    serializeStringMessage(msg, loginList);
+    callback(std::move(msg));
+}
+
+std::vector<std::string> Protocol::deserializeLoginListMessage(std::vector<unsigned char> &msg) {
+    auto charStart = msg.begin();
+    auto charEnd = msg.begin();
+    std::vector<std::string> games;
+    std::string aGame;
+    while (charEnd != msg.end()){
+        if (*charEnd == '\n'){
+            aGame.insert(aGame.begin(), charStart, charEnd);
+            charStart = charEnd;
+            games.push_back(aGame);
+            aGame.clear();
+        }
+        ++charEnd;
+    }
+    return games;
 }

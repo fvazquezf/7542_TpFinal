@@ -1,22 +1,52 @@
 #include <stdexcept>
 #include "Armory.h"
+#include "../../common/ConfigVariables.h"
 
 
-Armory::Armory(DroppedWeapons& droppedWeapons)
+Armory::Armory(DroppedWeapons& droppedWeapons, const std::map<int, int>& matchConfig)
 : dropped(droppedWeapons){
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
-                    std::forward_as_tuple(new Pistol()));
+                    std::forward_as_tuple(new Pistol(matchConfig.at(PISTOL_AMMO),
+                                                    matchConfig.at(PISTOL_RANGE), 
+                                                    matchConfig.at(PISTOL_ACCURACY),
+                                                    matchConfig.at(PISTOL_DAMAGE))));
 
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(2),
-                    std::forward_as_tuple(new Knife()));
+                    std::forward_as_tuple(new Knife(matchConfig.at(KNIFE_RANGE), 
+                                                    matchConfig.at(KNIFE_ACCURACY),
+                                                    matchConfig.at(KNIFE_DAMAGE),
+                                                    matchConfig.at(KNIFE_FIRERATE))));
+                                                
+    // arsenal.emplace(std::piecewise_construct,
+    //                 std::forward_as_tuple(3),
+    //                 std::forward_as_tuple(new Bomb(matchConfig.at(KNIFE_RANGE), 
+    //                                                 matchConfig.at(KNIFE_ACCURACY),
+    //                                                 matchConfig.at(KNIFE_DAMAGE),
+    //                                                 matchConfig.at(KNIFE_FIRERATE))));
 
-    // precios originales del juego, ver https://www.cs2d.com/weapons.php
-    // igualmente esto debe ser configurable
-    prices.emplace(AK47, 2500);
-    prices.emplace(M3, 1700);
-    prices.emplace(AWP, 4750);
+    prices.emplace(AWP, matchConfig.at(AWP_PRICE));
+    prices.emplace(RIFLE, matchConfig.at(RIFLE_PRICE));
+    prices.emplace(M3, matchConfig.at(SHOTGUN_PRICE));
+    
+    awp = std::shared_ptr<Weapon>(new Awp(matchConfig.at(AWP_AMMO), 
+                                          matchConfig.at(AWP_RANGE), 
+                                          matchConfig.at(AWP_ACCURACY), 
+                                          matchConfig.at(AWP_DAMAGE),
+                                          matchConfig.at(AWP_FIRERATE)));
+    
+    rifle = std::shared_ptr<Weapon>(new Rifle(matchConfig.at(RIFLE_AMMO), 
+                                              matchConfig.at(RIFLE_RANGE), 
+                                              matchConfig.at(RIFLE_ACCURACY), 
+                                              matchConfig.at(RIFLE_DAMAGE),
+                                              matchConfig.at(RIFLE_FIRERATE)));
+
+    shotgun = std::shared_ptr<Weapon>(new Shotgun(matchConfig.at(SHOTGUN_AMMO), 
+                                                  matchConfig.at(SHOTGUN_RANGE), 
+                                                  matchConfig.at(SHOTGUN_ACCURACY), 
+                                                  matchConfig.at(SHOTGUN_DAMAGE)));
+
 
     currentWeapon = 2;
 }
@@ -26,16 +56,36 @@ bool Armory::attack(const b2Vec2 &player, int16_t angle, const b2Vec2 &enemy){
     return arsenal[currentWeapon]->attack(player, angle, enemy);
 }
 
+void Armory::reload(){
+    arsenal.at(currentWeapon)->reload();
+}
+
 std::shared_ptr<Weapon> Armory::hit(){
     return arsenal[currentWeapon];
 }
 
-bool Armory::tickCooldown(){
-    return arsenal[currentWeapon]->tickCooldown();
+bool Armory::canShoot(){
+    return arsenal[currentWeapon]->canShoot();
+}
+
+void Armory::tickCooldown(){
+    arsenal[currentWeapon]->tickCooldown();
 }
 
 void Armory::resetCooldown(){
     arsenal[currentWeapon]->resetCooldown();
+}
+
+void Armory::giveBomb(std::shared_ptr<Weapon> bomb){
+    arsenal[3] = bomb;
+}
+
+bool Armory::startPlanting(){
+    if (arsenal.count(3) == 0) return false;
+    currentWeapon = 3;
+    // arsenal[3]->startPlanting();
+    return true;
+
 }
 
 int Armory::equipWeapon(int weaponType){
@@ -49,21 +99,25 @@ int Armory::equipWeapon(int weaponType){
     return arsenal.at(currentWeapon)->getWeaponCode();
 }
 
+void Armory::dropPrimary(const b2Vec2& playerPosition){
+    if (arsenal.count(0) > 0){
+        dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
+        arsenal.erase(0);
+    }
+    currentWeapon = 2;
+}
+
 bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
     int weaponPrice = prices.at(weaponCode);
     if (playerMoney >= weaponPrice){
         playerMoney -= weaponPrice;
-        try {
-            // aca hay que fijarse si ya tenia un arma primaria
-            // en ese caso hay que dropear
-            if (arsenal.count(0) > 0){
-                dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
-            }
-            // pisamos el viejo puntero (smart pointer, se deletea solo)
-            arsenal[0] = Weapon::getArmoryWeapon(weaponCode);
-        } catch(const std::invalid_argument& e){
-            return false;
+        if (arsenal.count(0) > 0){
+            dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
         }
+        // } else {
+        //     currentWeapon = 0;
+        // }
+        selectWeapon(weaponCode);
         return true;
     }
     return false;
@@ -74,10 +128,13 @@ bool Armory::pickUpWeapon(const b2Vec2& position){
     if (pickedWeapon == -1){
         return false;
     } else {
-       if (arsenal.count(0) > 0){
-           dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), position);
-       }
-       arsenal[0] = Weapon::getArmoryWeapon(pickedWeapon);
+        if (arsenal.count(0) > 0){
+            dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), position);
+        }
+    //    } else {
+    //        currentWeapon = 0;
+    //    }
+       selectWeapon(pickedWeapon);
        return true;
     }
 }
@@ -96,3 +153,21 @@ Armory &Armory::operator=(Armory &&other) noexcept {
     prices = std::move(other.prices);
     return *this;
 }
+
+void Armory::selectWeapon(uint8_t weaponCode){
+    switch (weaponCode) {
+        case RIFLE:
+            arsenal[0] = rifle;
+            break;
+        case M3:
+            arsenal[0] = shotgun;
+            break;
+        case AWP:
+            arsenal[0] = awp;
+            break;
+        // default:
+        //     // throw std::invalid_argument("Invalid weapon code\n");
+    }
+}
+
+ 

@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "../Camera.h"
 #include <iostream>
+#include "../SoundManager.h"
 
 #define PI 3.1416f
 
@@ -20,7 +21,8 @@ Character::Character(SdlTexture &texture,
   weapon(weapons),
   movementAnimation(texture, 6, 2, 3, 32, player),
   bloodAnimation(blood, 16, 4, 4, 32, false),
-  legAnimation(legs, 6, 3, 2, 32, false){
+  legAnimation(legs, 6, 3, 2, 32, false),
+  currentMovingUpdates(0){
     movementAnimation.renderFromFrame(0);
     bloodAnimation.renderFromFrame(8);
     weaponCharacterFrameMap = {
@@ -90,18 +92,18 @@ Character &Character::operator=(Character &&other) noexcept {
     return *this;
 }
 
-void Character::die() {
-    // play random dead sound
-    // drop weapons in place
+void Character::die(float distanceToCenter) {
+    SoundManager::playSound(SoundManager::soundRepertoire::DIE1, distanceToCenter);
 }
 
 void Character::hit() {
     wasHit = true;
     bleeding = true;
+    SoundManager::playSound(SoundManager::soundRepertoire::HIT1, 0);
 }
 
 void Character::attack() {
-    weapon.animate(*this, posX, posY, angle);
+    weapon.animate(*this, posX, angle);
 }
 
 void Character::pushPositionOffset(std::tuple<float, float, int> positionOffset) {
@@ -122,6 +124,17 @@ void Character::updatePosition(float x, float y) {
         legAnimation.setStartingIteration(lastIter + 1);
     } else if (moving && ((diffX < 0.005) && (diffY < 0.005))){
         moving = false;
+        currentMovingUpdates = 0;
+    }
+    if (moving){
+        ++currentMovingUpdates;
+        if ((currentMovingUpdates % 25) == 0){
+            SoundManager::playSound(SoundManager::STEP1, 0);
+        }
     }
     Renderizable::updatePosition(x, y);
+}
+
+std::pair<float, float> Character::getPosition() {
+    return {posX, posY};
 }

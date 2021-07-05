@@ -15,6 +15,7 @@
 #define CHANGE_WEAPON 0x6f
 #define BUY 0x7a
 #define PICKUP 0x7c
+#define RELOAD 0x7d
 
 // updates (server side)
 #define POS_UPDATE 0x20
@@ -27,6 +28,10 @@
 #define WEAPON_DROP_UPDATE 0x27
 #define MAP_INFO_UPDATE 0x28
 #define TEAM_UPDATE 0x29
+#define TIMER_UPDATE 0x2a
+#define HEALTH_UPDATE 0x2b
+#define MONEY_UPDATE 0x2c
+#define CLIP_UPDATE 0x2d
 
 // update misc
 // login response me manda
@@ -37,6 +42,8 @@
 #define LOGIN_RESPONSE 0x60
 #define LOGIN_OK 0
 #define LOGIN_BAD 1
+#define LOGIN_LIST_GAMES 0x61
+#define LOGIN_LIST_MAPS 0x62
 #define GAME_INFO
 
 #define BUY_START 0
@@ -118,6 +125,7 @@ public:
                     std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateMapInformation(const std::string& serializedMap, std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateTeams(const std::map<uint8_t, bool> &map, std::function<void(std::vector<unsigned char>)> &callback);
+    void updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback);
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -135,19 +143,25 @@ public:
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
     std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
+    std::vector<std::string> deserializeLoginListMessage(std::vector<unsigned char>& msg);
 
-                                //---------------SERVER---------------//
+
     std::vector<unsigned char> handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleByte(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleShort(std::function<std::vector<unsigned char>(size_t)> &callback);
     std::vector<unsigned char> handleRotation(std::function<std::vector<unsigned char>(size_t)> &callback);
 
     ~Protocol();
 
     void handleByte(uint8_t byte, std::function<void(std::vector<unsigned char>)> &callback) const;
-    void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, int16_t data) const;
+    void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 
-    std::vector<unsigned char> handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleStringMsg(std::function<std::vector<unsigned char>(size_t)> &callback);
+
+    void loginLister(uint8_t commandId,
+                     const std::string &loginList,
+                     std::function<void(std::vector<unsigned char>)> callback);
 };
 
 

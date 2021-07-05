@@ -1,4 +1,3 @@
-#include <c++/9/iostream>
 #include <client/commands/Command.h>
 #include <memory>
 #include <client/commands/ListGame.h>
@@ -101,7 +100,6 @@ void UserNameWindow::on_joinButton_clicked() {
 }
 
 // callback para send desde qt!
-// he visto esto tantas veces... (ref a trivago)
 void UserNameWindow::send(std::vector<unsigned char> msg) {
     info.socket.send(reinterpret_cast<const char *>(msg.data()), msg.size());
 }

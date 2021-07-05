@@ -17,16 +17,22 @@
 #include "./qt/LogInInfo.h"
 #include <QApplication>
 #include <iostream>
+#include "sdlwrap/SdlSound.h"
+#include "commands/ListGame.h"
 
 // main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
-
     //Editor in QT
     QApplication a(argc, nullptr);
     LogInInfo info;
     LogInWindow w(nullptr, 640, 400, info);
     w.show();
-    a.exec();
+    try {
+        a.exec();
+    } catch (const std::exception& e){
+        std::cout << e.what() << std::endl;
+        return -1;
+    }
     Socket cli = std::move(info.socket);
     return 0;
 
@@ -61,7 +67,7 @@ int main(int argc, const char *argv[]){
         std::getline(std::cin, s);
         std::cout << s;
     }
-	while (s.find("Unirse") == std::string::npos && s.find("Crear" ) == std::string::npos);
+	while (s.find("Unirse") == std::string::npos && s.find("Crear" ) == std::string::npos && s.find("listar" ) == std::string::npos);
 
 	std::stringstream stream(s);
 	std::string comando;
@@ -70,12 +76,15 @@ int main(int argc, const char *argv[]){
     stream >> nombre;
     if (comando == "Crear"){
         comms.push(std::unique_ptr<Command>(new CreateGame(nombre, "mapa")));
-    } else {
+    } else if (comando == "Unirse"){
         comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
+    } else {
+        comms.push(std::unique_ptr<Command>(new ListGame()));
     }
     // End seccion
 
-    SdlWindow window(800, 600, false, "unaVentana");
+    SdlWindow window(600, 400, false, "unaVentana");
+    SoundManager::start();
     WorldView world(window);
 
     SdlLoop l(comms, world);
