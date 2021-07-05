@@ -24,6 +24,7 @@ public:
     bool tickTime();
     int getTime();
     void resetTime();
+    int getTerrorist();
 
     bool isRoundOver();
     bool ctWon();

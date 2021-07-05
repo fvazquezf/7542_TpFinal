@@ -18,6 +18,13 @@ Armory::Armory(DroppedWeapons& droppedWeapons, const std::map<int, int>& matchCo
                                                     matchConfig.at(KNIFE_ACCURACY),
                                                     matchConfig.at(KNIFE_DAMAGE),
                                                     matchConfig.at(KNIFE_FIRERATE))));
+                                                
+    // arsenal.emplace(std::piecewise_construct,
+    //                 std::forward_as_tuple(3),
+    //                 std::forward_as_tuple(new Bomb(matchConfig.at(KNIFE_RANGE), 
+    //                                                 matchConfig.at(KNIFE_ACCURACY),
+    //                                                 matchConfig.at(KNIFE_DAMAGE),
+    //                                                 matchConfig.at(KNIFE_FIRERATE))));
 
     prices.emplace(AWP, matchConfig.at(AWP_PRICE));
     prices.emplace(RIFLE, matchConfig.at(RIFLE_PRICE));
@@ -67,6 +74,18 @@ void Armory::tickCooldown(){
 
 void Armory::resetCooldown(){
     arsenal[currentWeapon]->resetCooldown();
+}
+
+void Armory::giveBomb(std::shared_ptr<Weapon> bomb){
+    arsenal[3] = bomb;
+}
+
+bool Armory::startPlanting(){
+    if (arsenal.count(3) == 0) return false;
+    currentWeapon = 3;
+    // arsenal[3]->startPlanting();
+    return true;
+
 }
 
 int Armory::equipWeapon(int weaponType){

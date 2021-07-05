@@ -21,6 +21,8 @@ add_library(lib_server
     weapons/Pistol.cpp
     weapons/Awp.cpp
     weapons/Shotgun.cpp
+    weapons/Rifle.cpp
+    weapons/Bomb.cpp
     weapons/Armory.cpp
     events/StartMoveEvent.cpp 
     events/StopMoveEvent.cpp
@@ -38,7 +40,6 @@ add_library(lib_server
     events/DisconnectEvent.cpp 
     events/PickUpEvent.cpp 
     events/ReloadEvent.cpp 
-    weapons/Rifle.cpp
     updates/BuyTimeUpdate.cpp     
     weapons/DroppedWeapons.cpp
     updates/WeaponDropUpdate.cpp

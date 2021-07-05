@@ -50,6 +50,12 @@ void Tally::resetTime(){
     time = 130;
 }
 
+int Tally::getTerrorist(){
+    auto it = ttSide.begin();
+    std::advance(it, rand() % ttSide.size());
+    return it->first;
+}
+
 // checkea si termino la ronda
 // x casos:
 // 1 - murieron todos los cts -> ganan tts

@@ -23,6 +23,8 @@ class WorldModel: public Thread {
 
     MapLayout mapLayout;
     Tally tally;
+    
+    std::shared_ptr<Weapon> bomb;
 
     std::unordered_set<int> attackingPlayers;
 
@@ -79,6 +81,9 @@ class WorldModel: public Thread {
         void rotatePlayer(uint8_t id, int16_t angle);
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
+        void startPlanting(uint8_t id);
+        void stopPlanting(uint8_t id);
+
 
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);

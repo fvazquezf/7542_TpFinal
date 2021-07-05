@@ -14,10 +14,10 @@ class PlayerModel{
     int dirAmount;
 
     bool isCt;
+    bool isFrozen;
 
     int hp;
     int money;
-    bool isAlive;
 
     Armory armory;
 
@@ -41,14 +41,15 @@ class PlayerModel{
         void setAngle(int16_t newAngle);
         int16_t getAngle() const;
 
-        bool attack(PlayerModel& enemy);
+        bool attack(const b2Vec2& enemy);
         void reload();
         std::shared_ptr<Weapon> hit();
         bool gotHitAndDied(std::shared_ptr<Weapon> weapon);
-        int getHp();
-        int getMoney();
-
         bool canShoot();
+
+        void giveBomb(std::shared_ptr<Weapon> bomb);
+        bool startPlanting();
+
         void resetCooldown();
 
         int equipWeapon(int weaponType);
@@ -60,6 +61,8 @@ class PlayerModel{
 
         void changeSide();
         bool getSide();
+        int getHp();
+        int getMoney();
 };
 
 #endif

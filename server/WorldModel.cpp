@@ -20,6 +20,8 @@
 #include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
 
+#include "../common/ConfigVariables.h"
+
 WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig)
 : world (b2Vec2(0.0f, 0.0f)),
   matchConfig(matchConfig),
@@ -32,7 +34,13 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
-	
+
+    bomb = std::shared_ptr<Weapon> (new Bomb(matchConfig.at(KNIFE_RANGE), 
+                                             matchConfig.at(KNIFE_ACCURACY),
+                                             matchConfig.at(KNIFE_DAMAGE),
+                                             matchConfig.at(KNIFE_FIRERATE)));
+
+
 	this->anchor = world.CreateBody(&anchorDef);
 
 	is_running = false;
@@ -164,6 +172,7 @@ void WorldModel::run(){
         purchaseFase = true;
         roundPurchase();
 		purchaseFase = false;
+        playerModels.at(tally.getTerrorist()).giveBomb(bomb);
         roundPlay();
 		stopAllPlayers();
         tally.resetTime();
@@ -223,6 +232,17 @@ void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
 		playerModel.second.step();
 	}
+    // if (bomb.isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
+    //     bomb.tickPlanting();
+    // } else {
+    //     if (bomb.isActive()){
+    //         tally.tickBomb();
+    //         if (bomb.exploded()){
+    //             romperTodo;
+    //         }
+    //     }
+    // }
+
 	for (auto id: attackingPlayers){
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
@@ -231,7 +251,7 @@ void WorldModel::step(){
 		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
 		    if (&victim.second == &attacker) continue;
-            if (attacker.attack(victim.second)){
+            if (attacker.attack(victim.second.getPosition())){
                 if (victim.second.gotHitAndDied(attacker.hit())){
                     victim.second.die();
                     tally.playerKilledOther(id, victim.first);
@@ -282,8 +302,8 @@ void WorldModel::updateDead(int id){
     updates.pushAll(updatePtr);
 }
 
-void WorldModel::updateWeapon(uint8_t id, uint8_t weaponType){
-	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponType));
+void WorldModel::updateWeapon(uint8_t id, uint8_t weaponCode){
+	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponCode));
     updates.pushAll(updatePtr);
 }
 
@@ -344,6 +364,21 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 void WorldModel::startAttack(uint8_t id){
 	if (purchaseFase) return;
 	attackingPlayers.insert(id);
+}
+
+void WorldModel::startPlanting(uint8_t id){
+	if (purchaseFase) return;
+	if (playerModels.at(id).startPlanting()){
+        equipWeapon(id, 3); //chequear que 3 es la type bomba
+        // frenar movimiento 
+    }
+}
+
+void WorldModel::stopPlanting(uint8_t id){
+    // stopPlanting solo funciona si se esta plantando, si se esta plantando se reactiva al jugador
+    // bomba va a necsitar una referencia del jugador que la sostiene para avisarle que se active
+    // o devolver esa referencia para "prenderlo"
+    // bomb.stopPlanting();
 }
 
 void WorldModel::stopAttack(uint8_t id){

@@ -10,6 +10,7 @@
 #include "Shotgun.h"
 #include "Awp.h"
 #include "Rifle.h"
+#include "Bomb.h"
 #include "DroppedWeapons.h"
 
 
@@ -39,6 +40,10 @@ class Armory {
         void tickCooldown();
 
         void resetCooldown();
+
+        void giveBomb(std::shared_ptr<Weapon> bomb);
+
+        bool startPlanting();
 
         int equipWeapon(int weaponType);
 
