@@ -1,6 +1,8 @@
 #include <QLabel>
+#include <QMessageBox>
 #include "MapConfigWindow.h"
 #include <QMessageBox>
+
 MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info, bool create)
     : QDialog(parent),
       width(width),
@@ -17,13 +19,29 @@ MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInIn
 }
 
 void MapConfigWindow::handleJoinPushButton() {
-    if (this->selectedMap == "")
+    if (selectedMap.isEmpty()) {
+        std::string msg = "Please, select a ";
+        msg += createWindow ? "map" : "game";
         QMessageBox::warning(this, tr("Log In error"),
-                             tr("Username field is empty."),
+                             tr(msg.c_str()),
                              QMessageBox::Close);
-    return;
-    info.map = this->selectedMap.toStdString();
+    }
+    if (!createWindow) {
+        info.sendJoinGameInfo(selectedMap.toStdString());
+        this->close();
+        return;
+    }
+
+    if (createWindow && usernameLineEdit->text().isEmpty()) {
+        QMessageBox::warning(this, tr("Log In error"),
+                             tr("Game name field is empty."),
+                             QMessageBox::Close);
+        return;
+    }
+
+    info.sendCreateGameInfo(usernameLineEdit->text().toStdString(), selectedMap.toStdString());
     this->close();
+    return;
 }
 
 void MapConfigWindow::handleClickMouse(QListWidgetItem* item) {

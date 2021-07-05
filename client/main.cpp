@@ -34,7 +34,6 @@ int main(int argc, const char *argv[]){
         return -1;
     }
     Socket cli = std::move(info.socket);
-    return 0;
 
     /*
     Info es una clase con 4 atributos publicos de tipo std::string
@@ -45,43 +44,10 @@ int main(int argc, const char *argv[]){
     */
 
     // SDL
-    /*Socket cli;
-    try {
-        cli.connect(argv[1], argv[2]);
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return -1;
-    } catch (...) {
-        std::cerr << "Error desconocido en el hilo main" << std::endl;
-        return -1;
-    }*/
 
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
-
-	// Desde aca hasta el proximo comentario, esta seccion es temporal, hasta que tengamos qt
-	std::string s;
-    do {
-        std::cout << "Crea o unite a una partida escribiendo Crear <nombre> o Unirse <nombre>\n";
-        std::getline(std::cin, s);
-        std::cout << s;
-    }
-	while (s.find("Unirse") == std::string::npos && s.find("Crear" ) == std::string::npos && s.find("listar" ) == std::string::npos);
-
-	std::stringstream stream(s);
-	std::string comando;
-	std::string nombre;
-	stream >> comando;
-    stream >> nombre;
-    if (comando == "Crear"){
-        comms.push(std::unique_ptr<Command>(new CreateGame(nombre, "mapa")));
-    } else if (comando == "Unirse"){
-        comms.push(std::unique_ptr<Command>(new JoinGame(nombre)));
-    } else {
-        comms.push(std::unique_ptr<Command>(new ListGame()));
-    }
-    // End seccion
 
     SdlWindow window(600, 400, false, "unaVentana");
     SoundManager::start();

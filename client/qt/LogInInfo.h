@@ -21,5 +21,8 @@ public:
 
     std::vector<std::string> receiveGameInformation();
 
+    void sendJoinGameInfo(std::string selectedGame);
+
+    void sendCreateGameInfo(std::string gameName, std::string mapName);
 };
 #endif // LOGININFO_H

@@ -78,12 +78,12 @@ bool GamesMonitor::createMatch(std::string gameName,
                                const std::function<Socket(void)> &handIn,
                                const std::function<void(int8_t)>& response) {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
-    std::string mapPath = mapName + MAP_EXTENSION;
+    std::string mapPath = MAP_PATH_PREFIX + mapName + MAP_EXTENSION;
     YAML::Node map;
 
     // si el mapa no existe
     // me voy
-    if (!mapNames.count(mapPath)){
+    if (!mapNames.count(mapName + MAP_EXTENSION)){
         response(-1);
         return false;
     }

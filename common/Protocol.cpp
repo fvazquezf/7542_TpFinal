@@ -520,6 +520,7 @@ std::vector<std::string> Protocol::deserializeLoginListMessage(std::vector<unsig
         if (*charEnd == '\n'){
             aGame.insert(aGame.begin(), charStart, charEnd);
             charStart = charEnd;
+            ++charStart;
             games.push_back(aGame);
             aGame.clear();
         }
