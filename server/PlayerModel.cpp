@@ -116,7 +116,7 @@ std::shared_ptr<Weapon> PlayerModel::hit(){
     return armory.hit();
 }
 
-bool PlayerModel::gotHit(std::shared_ptr<Weapon> weapon){
+bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
     std::cout << hp << std::endl;
     if (hp <= 0){
@@ -135,8 +135,8 @@ int PlayerModel::getMoney(){
     return money;
 }
 
-bool PlayerModel::tickCooldown(){
-    return armory.tickCooldown();
+bool PlayerModel::canShoot(){
+    return armory.canShoot();
 }
 
 void PlayerModel::resetCooldown(){

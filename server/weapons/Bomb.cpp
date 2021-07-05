@@ -39,7 +39,7 @@ int Bomb::hit(){
     return damage;
 }
 
-bool Bomb::tickCooldown(){
+bool Bomb::canShoot(){
     if (cooldown == 0) {
         cooldown = 30;
         return true;

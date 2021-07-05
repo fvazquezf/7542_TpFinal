@@ -10,8 +10,6 @@ Knife::~Knife(){
 }
 
 bool Knife::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-
     double dist = static_cast<double>((player - enemy).Length());
     if (dist < range) {
         int res = static_cast<int>(atan2(enemy.y - player.y, enemy.x - player.x));
@@ -41,9 +39,8 @@ int Knife::hit(){
     return dmgDist(gen);
 }
 
-bool Knife::tickCooldown(){
+bool Knife::canShoot(){
     if (cooldown == 0) {
-        // este 30 es variable, es el que determina el fireRate, se leeria del yaml de configuracion.
         cooldown = firerate;
         return true;
     } else {

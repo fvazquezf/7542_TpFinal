@@ -44,11 +44,11 @@ class PlayerModel{
         bool attack(PlayerModel& enemy);
         void reload();
         std::shared_ptr<Weapon> hit();
-        bool gotHit(std::shared_ptr<Weapon> weapon);
+        bool gotHitAndDied(std::shared_ptr<Weapon> weapon);
         int getHp();
         int getMoney();
 
-        bool tickCooldown();
+        bool canShoot();
         void resetCooldown();
 
         int equipWeapon(int weaponType);

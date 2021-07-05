@@ -12,12 +12,7 @@ Pistol::~Pistol(){
 }
 
 bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    if (clip == 0) return false;
-    clip--;
-    double dist = static_cast<double>((player - enemy).Length());
     b2Vec2 bulletPosition(player);
-
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
     double oldDist = INFINITY;
     double currDist = 0;
@@ -48,8 +43,9 @@ int Pistol::hit(){
     return damage;
 }
 
-bool Pistol::tickCooldown(){
-    if (cooldown == 0) {
+bool Pistol::canShoot(){
+    if (cooldown == 0 && clip != 0) {
+        clip--;
         cooldown = 1;
         return true;
     } else {
@@ -60,4 +56,3 @@ bool Pistol::tickCooldown(){
 void Pistol::resetCooldown(){
     cooldown = 0;
 }
-

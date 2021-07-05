@@ -12,9 +12,6 @@ Shotgun::~Shotgun(){
 }
 
 bool Shotgun::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    if (ammo == 0) return false;
-    ammo--;
     double dist = static_cast<double>((player - enemy).Length());
     if (dist < range) {
         double res = atan2(enemy.y - player.y, enemy.x - player.x);
@@ -58,8 +55,9 @@ int Shotgun::hit(){
     return damageOutput;
 }
 
-bool Shotgun::tickCooldown(){
-    if (cooldown == 0) {
+bool Shotgun::canShoot(){
+    if (cooldown == 0 && clip != 0) {
+        clip--;
         cooldown = 1;
         return true;
     } else {

@@ -181,7 +181,7 @@ void WorldModel::roundPurchase() {
 	}
     updatePositions();
     usleep(FRAMERATE);
-    for (size_t i = 0; i < 600; ++i){
+    for (size_t i = 0; i < 60; ++i){
         roundCommon();
     }
     updateBuying(false);
@@ -226,24 +226,22 @@ void WorldModel::step(){
 	for (auto id: attackingPlayers){
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
-		for (auto& it : playerModels){
+        if (!attacker.canShoot()) continue;
+        updateAttack(id);
+		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
-		    if (&it.second != &attacker){
-                if ( playerModels.at(id).attack(it.second) ){
-                    if (it.second.gotHit(playerModels.at(id).hit())){
-                        it.second.die();
-                        tally.playerKilledOther(id, it.first);
-                        updateDead(it.first);
-                        updateWeapon(it.first, KNIFE);
-                    } else {
-                        updateHit(it.first);
-                    }
-                    updateHp(it.first);
+		    if (&victim.second == &attacker) continue;
+            if (attacker.attack(victim.second)){
+                if (victim.second.gotHitAndDied(attacker.hit())){
+                    victim.second.die();
+                    tally.playerKilledOther(id, victim.first);
+                    updateDead(victim.first);
+                    updateWeapon(victim.first, KNIFE);
+                } else {
+                    updateHit(victim.first);
                 }
-		    }
-		}
-		if (playerModels.at(id).tickCooldown()){
-			updateAttack(id);
+                updateHp(victim.first);
+            }
 		}
 	}
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);

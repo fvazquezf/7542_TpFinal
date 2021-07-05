@@ -14,10 +14,6 @@ Awp::~Awp(){
 }
 
 bool Awp::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    if (clip == 0) return false;
-    clip--;
-
     b2Vec2 bulletPosition(player);
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
     double oldDist = INFINITY;
@@ -45,8 +41,9 @@ int Awp::hit(){
     return damage;
 }
 
-bool Awp::tickCooldown(){
-    if (cooldown == 0) {
+bool Awp::canShoot(){
+    if (cooldown == 0 && clip != 0) {
+        clip--;
         cooldown = firerate;
         return true;
     } else {

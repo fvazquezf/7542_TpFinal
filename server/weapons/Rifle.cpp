@@ -13,10 +13,6 @@ Rifle::~Rifle(){
 }
 
 bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    if (ammo == 0) return 0;
-    ammo--;
-
     b2Vec2 bulletPosition(player);
 
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
@@ -47,9 +43,9 @@ int Rifle::hit(){
     return damage;
 }
 
-bool Rifle::tickCooldown(){
-    if (cooldown == 0) {
-        // este 60 es variable, es el que determina el fireRate, se leeria del yaml de configuracion.
+bool Rifle::canShoot(){
+    if (cooldown == 0 && clip != 0) {
+        clip--;
         cooldown = firerate;
         return true;
     } else {

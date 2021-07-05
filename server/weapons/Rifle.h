@@ -14,7 +14,7 @@ class Rifle: public Weapon {
         ~Rifle() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool tickCooldown() override;
+        bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
 
