@@ -71,6 +71,7 @@ void PlayerModel::stopMove(int dir){
 
 void PlayerModel::step(){
     float vel = this->model->GetLinearVelocity().Length();
+    armory.tickCooldown();
     if (vel < 12){
         this->model->ApplyForceToCenter(this->netForce, true);
     }
@@ -118,7 +119,6 @@ std::shared_ptr<Weapon> PlayerModel::hit(){
 
 bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
-    std::cout << hp << std::endl;
     if (hp <= 0){
         hp = 0;
         return true;
@@ -164,6 +164,7 @@ void PlayerModel::die() {
 void PlayerModel::revive() {
     isAlive = true;
     hp = 100;
+    reload();
 }
 
 

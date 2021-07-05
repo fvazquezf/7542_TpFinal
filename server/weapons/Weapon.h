@@ -27,6 +27,8 @@ public:
     
     virtual bool canShoot() = 0;
 
+    void tickCooldown();
+
     virtual void resetCooldown() = 0;
 
     void reload();

@@ -4,6 +4,7 @@
 Rifle::Rifle(int ammo, int range, int accuracy, int damage, int firerate)
 : Weapon(RIFLE, ammo, range, damage){
     hitDistance = 0;
+    this->firerate = firerate;
     this->accuracy = static_cast<double>(accuracy)/100;
 }
 
@@ -49,10 +50,10 @@ bool Rifle::canShoot(){
         cooldown = firerate;
         return true;
     } else {
-        cooldown--;
         return false;
     }
 }
 
 void Rifle::resetCooldown(){
+
 }

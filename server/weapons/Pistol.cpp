@@ -46,7 +46,7 @@ int Pistol::hit(){
 bool Pistol::canShoot(){
     if (cooldown == 0 && clip != 0) {
         clip--;
-        cooldown = 1;
+        cooldown = 8000;
         return true;
     } else {
         return false;

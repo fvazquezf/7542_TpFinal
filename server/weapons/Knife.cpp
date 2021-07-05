@@ -44,7 +44,6 @@ bool Knife::canShoot(){
         cooldown = firerate;
         return true;
     } else {
-        cooldown--;
         return false;
     }
 }

@@ -35,7 +35,7 @@ shotgun_range: 900
 shotgun_accuracy: 30
 shotgun_damage: 100
 
-knife_range: 300
+knife_range: 150
 knife_accuracy: 60
 knife_damage: 20
 knife_firerate: 30

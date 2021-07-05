@@ -181,7 +181,7 @@ void WorldModel::roundPurchase() {
 	}
     updatePositions();
     usleep(FRAMERATE);
-    for (size_t i = 0; i < 60; ++i){
+    for (size_t i = 0; i < 600; ++i){
         roundCommon();
     }
     updateBuying(false);

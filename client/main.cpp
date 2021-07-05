@@ -55,7 +55,7 @@ int main(int argc, const char *argv[]){
     }
     // End seccion
 
-    SdlWindow window(800, 600, false, "unaVentana");
+    SdlWindow window(600, 400, false, "unaVentana");
     SoundManager::start();
     WorldView world(window);
 

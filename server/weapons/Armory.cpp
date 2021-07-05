@@ -61,6 +61,10 @@ bool Armory::canShoot(){
     return arsenal[currentWeapon]->canShoot();
 }
 
+void Armory::tickCooldown(){
+    arsenal[currentWeapon]->tickCooldown();
+}
+
 void Armory::resetCooldown(){
     arsenal[currentWeapon]->resetCooldown();
 }

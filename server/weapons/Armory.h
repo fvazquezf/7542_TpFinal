@@ -36,6 +36,8 @@ class Armory {
 
         bool canShoot();
 
+        void tickCooldown();
+
         void resetCooldown();
 
         int equipWeapon(int weaponType);

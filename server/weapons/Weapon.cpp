@@ -19,10 +19,12 @@ Weapon::~Weapon() {
 
 }
 
+void Weapon::tickCooldown(){
+    if (cooldown != 0) cooldown--;
+}
+
 void Weapon::reload(){
-    std::cout << "oldAmmo" << clip << std::endl;
     clip = ammo;
-    std::cout << "newAmmo" << clip << std::endl;
 }
 
 uint8_t Weapon::getWeaponCode(){
