@@ -88,7 +88,6 @@ bool GamesMonitor::joinMatch(const std::string &gameName,
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     // si no hay un juego con ese nombre, no puedo unirme
     if (!matches.count(gameName)){
-        std::cout << "No hay nada\n";
         response(-1);
         return false;
     }
@@ -106,4 +105,22 @@ void GamesMonitor::stopGames() {
     for (auto& m : matches){
         m.second.stop();
     }
+}
+
+// devuelvo por movimiento
+// pq si devuelvo por ref
+// puede que otro login cree un game
+// modifique a la variable referenciada
+// y nos arruine el string
+std::string GamesMonitor::listGames() {
+    std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    std::string games;
+    // simil muy simil tp3
+    auto match = matches.begin();
+    while (match != matches.end()){
+        games += (*match).first + "\n";
+        ++match;
+    }
+
+    return games;
 }

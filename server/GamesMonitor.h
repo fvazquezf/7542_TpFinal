@@ -41,6 +41,8 @@ public:
     void stopGames();
 
     ~GamesMonitor();
+
+    std::string listGames();
 };
 
 

@@ -87,7 +87,7 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case JOIN: {
-            msg = handleJoinGame(receiveCallback);
+            msg = handleStringMsg(receiveCallback);
             break;
         }
         case LIST:
@@ -180,6 +180,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case RELOAD: {
+            break;
+        }
+        case LOGIN_LIST_GAMES: {
+            msg = handleStringMsg(receiveCallback);
             break;
         }
         default:
@@ -484,9 +488,9 @@ std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::v
     return std::make_pair(gameName, mapName);
 }
 
-std::vector<unsigned char> Protocol::handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback) {
-    auto gameNameSize = callback(2);
-    return callback(deserializeMsgLenShort(gameNameSize));
+std::vector<unsigned char> Protocol::handleStringMsg(std::function<std::vector<unsigned char>(size_t)> &callback) {
+    auto stringSize = callback(2);
+    return callback(deserializeMsgLenShort(stringSize));
 }
 
 std::vector<unsigned char> Protocol::handleShort(std::function<std::vector<unsigned char>(size_t)> &callback) {
@@ -499,4 +503,30 @@ void Protocol::updateMoney(uint16_t money, std::function<void(std::vector<unsign
     money = htons(money);
     serializeMsgLenShort(moneyVec, money);
     callback(std::move(moneyVec));
+}
+
+void Protocol::loginLister(uint8_t commandId,
+                           const std::string &loginList,
+                           std::function<void(std::vector<unsigned char>)> callback) {
+    std::vector<unsigned char> msg;
+    msg.push_back(commandId);
+    serializeStringMessage(msg, loginList);
+    callback(std::move(msg));
+}
+
+std::vector<std::string> Protocol::deserializeLoginListMessage(std::vector<unsigned char> &msg) {
+    auto charStart = msg.begin();
+    auto charEnd = msg.begin();
+    std::vector<std::string> games;
+    std::string aGame;
+    while (charEnd != msg.end()){
+        if (*charEnd == '\n'){
+            aGame.insert(aGame.begin(), charStart, charEnd);
+            charStart = charEnd;
+            games.push_back(aGame);
+        } else {
+            ++charEnd;
+        }
+    }
+    return games;
 }

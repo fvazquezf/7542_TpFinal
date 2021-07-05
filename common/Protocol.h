@@ -42,6 +42,8 @@
 #define LOGIN_RESPONSE 0x60
 #define LOGIN_OK 0
 #define LOGIN_BAD 1
+#define LOGIN_LIST_GAMES 0x61
+#define LOGIN_LIST_MAPS 0x62
 #define GAME_INFO
 
 #define BUY_START 0
@@ -141,6 +143,7 @@ public:
     std::map<uint8_t, int16_t> deserializeAngles(std::vector<unsigned char>& msg);
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
     std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
+    std::vector<std::string> deserializeLoginListMessage(std::vector<unsigned char>& msg);
 
 
     std::vector<unsigned char> handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback);
@@ -154,7 +157,11 @@ public:
     void serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const;
     uint16_t deserializeMsgLenShort(std::vector<unsigned char> &msg) const;
 
-    std::vector<unsigned char> handleJoinGame(std::function<std::vector<unsigned char>(size_t)> &callback);
+    std::vector<unsigned char> handleStringMsg(std::function<std::vector<unsigned char>(size_t)> &callback);
+
+    void loginLister(uint8_t commandId,
+                     const std::string &loginList,
+                     std::function<void(std::vector<unsigned char>)> callback);
 };
 
 
