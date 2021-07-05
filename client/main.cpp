@@ -27,7 +27,16 @@ int main(int argc, const char *argv[]){
     LogInWindow w(nullptr, 640, 400, info);
     w.show();
     a.exec();
-    
+
+    /*
+    Info es una clase con 4 atributos publicos de tipo std::string
+    - port
+    - ip
+    - username
+    - map (nombre del mapa sin .yml)
+    */
+
+    // SDL
     Socket cli;
     try {
         cli.connect(argv[1], argv[2]);

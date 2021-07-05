@@ -5,7 +5,9 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -ggdb -DDEBUG -Wall -fno-inl
 
 project(sdl-demo)
 
-#Including QT
+#**************************************
+#***********Including QT***************
+#**************************************
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -15,15 +17,23 @@ qt5_wrap_ui(ui_wrap ${EDITORUI})
 qt5_wrap_cpp(moc_sources ${EDITOR_HEADERS})
 qt5_add_resources(QT_RESOURCES ./client/qt/resources.qrc)
 
-#Including yaml
+##*************************************
+#***********Including yaml*************
+#**************************************
 find_package(yaml-cpp REQUIRED)
 
-# Including others
+#**************************************
+#*******Including subdirectories*******
+#**************************************
 add_subdirectory(libs/box2d)
 add_subdirectory(common)
 add_subdirectory(server)
 add_subdirectory(client)
 add_subdirectory(editor)
+
+#**************************************
+#********Creating excecutables*********
+#**************************************
 
 file(GLOB CLIENT_QT_SRC
      "./client/qt/*.cpp"
@@ -31,7 +41,17 @@ file(GLOB CLIENT_QT_SRC
      "./client/qt/*.ui"
 )
 
-# Ejecutables demo_movimiento
+file(GLOB EDITOR_QT_SRC
+     "./editor/*.cpp"
+     "./editor/*.h"
+     "./editor/*.ui"
+)
+
+#**************************************
+#******** Creating excecutables********
+#**************************************
+
+# Ejecutables cliente
 add_executable(client_main ./client/main.cpp ${CLIENT_QT_SRC})
 #add_executable(editor ./editor/Editor.cpp)
 #add_executable(box2d_demo HelloWorld.cpp)
@@ -41,11 +61,19 @@ add_executable(client_main ./client/main.cpp ${CLIENT_QT_SRC})
 # Ejecutables esqueleto cliente-servidor
 add_executable(esqueleto_server ./server/main.cpp)
 
-# Linkage demo_movimiento
+# Ejecutables editor
+add_executable(editor_main ${EDITOR_QT_SRC})
+
+#**************************************
+#**********Linking libraries***********
+#**************************************
+
+# Linkage client
 target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop anim sdlwrapperclasses SDL2 SDL2_image lib_common commands weapons SDL2_gfx)
-#target_link_libraries(editor lib_editor Qt5::Widgets Qt5::Core Qt5::Gui)
 
 # Linkage esqueleto cliente-servidor
 target_link_libraries(esqueleto_server lib_server lib_common box2d yaml-cpp)
 
+# Linkage editor
+target_link_libraries(editor_main Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Widgets Qt5::Core Qt5::Gui yaml-cpp)
 

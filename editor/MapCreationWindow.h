@@ -2,11 +2,15 @@
 #define MAPCREATIONWINDOW_H
 
 #include <QDialog>
+#include <QVBoxLayout>
+#include <QVBoxLayout>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QDebug>
 #include "./CounterStrikeStyle.h"
-
-namespace Ui {
-class MapCreationWindow;
-}
 
 class MapCreationWindow : public QDialog
 {
@@ -17,15 +21,18 @@ public:
     ~MapCreationWindow();
 
 private slots:
-
-    void on_continueButton_clicked();
-    void on_backButton_clicked();
+    void on_saveButton_clicked();
 
 private:
-    Ui::MapCreationWindow *ui;
     CounterStrikeStyle styler;
     QString mapName;
     QString mapSize;
+    QVBoxLayout* mainLayout;
+    QLineEdit* mapNameEditLine;
+    QComboBox* sizeComboBox;
+    QPushButton* saveButton;
+
+    void setUpAll();
 };
 
 #endif // MAPCREATIONWINDOW_H

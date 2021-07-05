@@ -1,11 +1,9 @@
 #include "MapConfigWindow.h"
-#include "ui_MapConfigWindow.h"
 #include "QEditorMapWidget.h"
+
 MapConfigWindow::MapConfigWindow(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::MapConfigWindow)
+    QDialog(parent)
 {
-    ui->setupUi(this);
     styler.setCounterStrikeFont(this, 14);
     this->setWindowTitle("Counter Strike 2D - Configuration");
     setMainLayout();
@@ -69,7 +67,6 @@ void MapConfigWindow::setMainLayout() {
 }
 
 MapConfigWindow::~MapConfigWindow() {
-    delete ui;
 }
 
 

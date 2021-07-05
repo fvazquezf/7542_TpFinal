@@ -11,10 +11,6 @@
 #include "./MapCreationWindow.h"
 #include "./QEditorMapListWidget.h"
 
-namespace Ui {
-class MapConfigWindow;
-}
-
 class MapConfigWindow : public QDialog
 {
     Q_OBJECT
@@ -30,7 +26,6 @@ private slots:
     void handleClickMouse(QListWidgetItem * item);
 
 private:
-    Ui::MapConfigWindow *ui;
     CounterStrikeStyle styler;
     QVBoxLayout* mainLayout;
     QHBoxLayout* bottonLayout;

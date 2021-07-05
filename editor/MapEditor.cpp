@@ -1,5 +1,4 @@
 #include "MapEditor.h"
-#include "ui_MapEditor.h"
 #include <QDebug>
 
 #define N 5
@@ -9,11 +8,9 @@
 #define HEIGHT 15
 
 MapEditor::MapEditor(QWidget *parent, const std::string &name) :
-    QDialog(parent),
-    ui(new Ui::MapEditor)
+    QDialog(parent)
 {
     styler.setCounterStrikeFont(this, 12);
-    ui->setupUi(this);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name);
     setupWidgets();
@@ -22,11 +19,9 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name) :
 
 
 MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int column) :
-    QDialog(parent),
-    ui(new Ui::MapEditor)
+    QDialog(parent)
 {
     styler.setCounterStrikeFont(this, 12);
-    ui->setupUi(this);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name, row, column);
     setupWidgets();
@@ -35,7 +30,6 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int colu
 
 MapEditor::~MapEditor()
 {
-    delete ui;
 }
 
 void MapEditor::handleSaveButton()
