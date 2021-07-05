@@ -37,6 +37,7 @@ add_library(lib_server
     events/BuyEvent.cpp 
     events/DisconnectEvent.cpp 
     events/PickUpEvent.cpp 
+    events/ReloadEvent.cpp 
     weapons/Rifle.cpp
     updates/BuyTimeUpdate.cpp     
     weapons/DroppedWeapons.cpp
@@ -44,6 +45,7 @@ add_library(lib_server
     updates/TimeUpdate.cpp
     updates/MoneyUpdate.cpp
     updates/HpUpdate.cpp
-    updates/TeamsUpdate.cpp)
+    updates/TeamsUpdate.cpp
+    updates/ClipUpdate.cpp)
 
 

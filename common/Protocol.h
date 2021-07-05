@@ -31,6 +31,7 @@
 #define TIMER_UPDATE 0x2a
 #define HEALTH_UPDATE 0x2b
 #define MONEY_UPDATE 0x2c
+#define CLIP_UPDATE 0x2d
 
 // update misc
 // login response me manda

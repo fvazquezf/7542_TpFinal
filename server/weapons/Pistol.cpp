@@ -13,8 +13,8 @@ Pistol::~Pistol(){
 
 bool Pistol::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     if (cooldown != 0) return false;
-    if (ammo == 0) return false;
-    ammo--;
+    if (clip == 0) return false;
+    clip--;
     double dist = static_cast<double>((player - enemy).Length());
     b2Vec2 bulletPosition(player);
 

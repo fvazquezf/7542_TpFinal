@@ -379,7 +379,7 @@ void WorldModel::pickUpWeapon(uint8_t id){
 }
 
 void WorldModel::reloadWeapon(uint8_t id){
-    playerModels.at(id);
+    playerModels.at(id).reload();
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {

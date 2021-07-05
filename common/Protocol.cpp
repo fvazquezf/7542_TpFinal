@@ -171,8 +171,15 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleByte(receiveCallback);
             break;
         }
+        case CLIP_UPDATE: {
+            msg = handleByte(receiveCallback);
+            break;
+        }
         case MONEY_UPDATE: {
             msg = handleShort(receiveCallback);
+            break;
+        }
+        case RELOAD: {
             break;
         }
         default:

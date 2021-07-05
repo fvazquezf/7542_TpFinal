@@ -10,7 +10,7 @@ match_max_players: 2
 # accuracy en shorgun/knife determina el spread
 # las armas sin firerate disparan nuevamente cuando se hace click
 
-pistol_ammo: 100
+pistol_ammo: 5
 pistol_range: 1000
 pistol_accuracy: 25
 pistol_damage: 40

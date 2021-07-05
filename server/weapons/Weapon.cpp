@@ -1,5 +1,6 @@
 #include <memory>
 #include <stdexcept>
+#include <iostream>
 #include "Weapon.h"
 #include "Shotgun.h"
 #include "Awp.h"
@@ -19,14 +20,16 @@ Weapon::~Weapon() {
 }
 
 void Weapon::reload(){
+    std::cout << "oldAmmo" << clip << std::endl;
     clip = ammo;
+    std::cout << "newAmmo" << clip << std::endl;
 }
 
 uint8_t Weapon::getWeaponCode(){
     return weaponCode;
 }
 
-int Weapon::getAmmo(){
-    return ammo;
+int Weapon::getClip(){
+    return clip;
 }
 
