@@ -23,8 +23,8 @@ bool Shotgun::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
         if (enemyAngle < 0){
             enemyAngle += 360;
         }
-        int start = (angle) - accuracy;
-        int end = (angle) + accuracy;
+        int start = (angle) - spread;
+        int end = (angle) + spread;
         if (start < end){
             if (start < enemyAngle && enemyAngle < end){
                 calcDamage(dist);
