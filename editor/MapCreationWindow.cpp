@@ -3,7 +3,7 @@
 
 
 #include "CounterStrikeStyle.h"
-#define PATH_TO_MAPS "../maps/"
+#include "paths.h"
 MapCreationWindow::MapCreationWindow(QWidget *parent) :
     QDialog(parent)
 {
@@ -11,6 +11,7 @@ MapCreationWindow::MapCreationWindow(QWidget *parent) :
     this->setWindowTitle("Counter Strike 2D - Configuration");
     mainLayout = new QVBoxLayout();
     this->setLayout(mainLayout);
+    this->setUpAll();
 }
 
 void MapCreationWindow::setUpAll(){
@@ -18,6 +19,12 @@ void MapCreationWindow::setUpAll(){
     saveButton = new QPushButton();
     mapNameEditLine = new QLineEdit();
     sizeComboBox = new QComboBox();
+
+    saveButton->setText("Save");
+
+    sizeComboBox->addItem("Small");
+    sizeComboBox->addItem("Medium");
+    sizeComboBox->addItem("Large");
 
     QLabel* titleMapName = new QLabel();
     QLabel* titleMapSize = new QLabel();

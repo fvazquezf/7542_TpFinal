@@ -1,6 +1,6 @@
 #include "QEditorMapWidget.h"
 #define QTILE_SIZE 32
-#define PATH_TO_MAPS "../maps/"
+#include "paths.h"
 #include <QtDebug>
 #include <exception>
 #include<QScrollArea>

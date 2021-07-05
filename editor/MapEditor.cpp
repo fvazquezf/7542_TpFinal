@@ -3,7 +3,7 @@
 
 #define N 5
 #define TILE_SIZE 32
-#define PATH_TO_MAPS "../maps/"
+#include "paths.h"
 #define WIDTH 15
 #define HEIGHT 15
 

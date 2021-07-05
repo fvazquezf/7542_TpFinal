@@ -20,7 +20,7 @@ void QEditorMapListWidget::setMapItem(QString &mapName) {
 
 void QEditorMapListWidget::update() {
     this->clear();
-    QDir directory(DIRECTORY_PATH);
+    QDir directory(PATH_TO_MAPS);
     QStringList mapsList  = directory.entryList();
     for (QString& mapName : mapsList) {
         if(mapName != "." && mapName != "..") {
