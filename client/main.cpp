@@ -27,6 +27,8 @@ int main(int argc, const char *argv[]){
     LogInWindow w(nullptr, 640, 400, info);
     w.show();
     a.exec();
+    Socket cli = std::move(info.socket);
+    return 0;
 
     /*
     Info es una clase con 4 atributos publicos de tipo std::string
@@ -37,7 +39,7 @@ int main(int argc, const char *argv[]){
     */
 
     // SDL
-    Socket cli;
+    /*Socket cli;
     try {
         cli.connect(argv[1], argv[2]);
     } catch (std::exception &e) {
@@ -46,7 +48,7 @@ int main(int argc, const char *argv[]){
     } catch (...) {
         std::cerr << "Error desconocido en el hilo main" << std::endl;
         return -1;
-    }
+    }*/
 
 	bool running = true;
 

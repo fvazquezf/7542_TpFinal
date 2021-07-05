@@ -1,9 +1,8 @@
 #include "LogInWindow.h"
 #include <QDebug>
 LogInWindow::LogInWindow(QWidget *parent, int width, int height, LogInInfo &info)
-    : QDialog(parent), width(width), height(height), info(&info)
+    : QDialog(parent), width(width), height(height), info(info), userNameWindow(nullptr)
 {
-
     this->setWindowTitle("Counter Strike 2D");
     this->setFixedHeight(height);
     this->setFixedWidth(width);
@@ -11,7 +10,6 @@ LogInWindow::LogInWindow(QWidget *parent, int width, int height, LogInInfo &info
     this->open();
     this->playIntro();
     setUpAll();
-
 }
 
 void LogInWindow::playIntro() {
@@ -24,10 +22,10 @@ void LogInWindow::playIntro() {
 
 LogInWindow::~LogInWindow()
 {
+    delete userNameWindow;
 }
 
 void LogInWindow::setUpAll() {
-
     mainLayout = new QVBoxLayout();
     this->setLayout(mainLayout);
     this->setMainTitle();
@@ -91,10 +89,10 @@ void LogInWindow::on_saveButton_clicked()
                              QMessageBox::Close);
         return;
     }
-    info->ip = ip;
-    info->port = port;
 
-    UserNameWindow* userWindow = new UserNameWindow(nullptr, width, height, *info);
+    info.socket.connect(ip.c_str(), port.c_str());
+
+    userNameWindow = new UserNameWindow(this, width, height, info);
     this->close();
-    userWindow->show();
+    userNameWindow->show();
 }

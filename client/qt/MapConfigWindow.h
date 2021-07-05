@@ -30,7 +30,7 @@ private slots:
 private:
     int width;
     int height;
-    LogInInfo* info;
+    LogInInfo& info;
     CounterStrikeStyle styler;
     QVBoxLayout* mainLayout;
     QHBoxLayout* bottonLayout;
