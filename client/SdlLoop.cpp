@@ -135,6 +135,7 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
     if (key == SDLK_SPACE){
         if (pressed) {
             commands.push(std::unique_ptr<Command>(new Plant(true)));
+            return;
         } else {
             commands.push(std::unique_ptr<Command>(new Plant(false)));
             return;
