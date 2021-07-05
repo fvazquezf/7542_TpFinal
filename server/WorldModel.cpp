@@ -19,6 +19,7 @@
 #include "updates/MoneyUpdate.h"
 #include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
+#include "updates/BombPlantUpdate.h"
 
 #include "../common/ConfigVariables.h"
 
@@ -35,7 +36,7 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
 
-    bomb = std::shared_ptr<Weapon> (new Bomb(matchConfig.at(KNIFE_RANGE), 
+    bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(KNIFE_RANGE), 
                                              matchConfig.at(KNIFE_ACCURACY),
                                              matchConfig.at(KNIFE_DAMAGE),
                                              matchConfig.at(KNIFE_FIRERATE)));
@@ -228,21 +229,47 @@ void WorldModel::roundCommon() {
     usleep(FRAMERATE + elapsed.count());
 }
 
+void WorldModel::startPlanting(uint8_t id){
+	if (purchaseFase) return;
+	if (playerModels.at(id).startPlanting()){
+        equipWeapon(id, 3); //chequear que 3 es la type bomba 
+        bomb->setPlanter(id);
+    }
+    std::cout << "world start Planting" << std::endl;
+}
+
+void WorldModel::stopPlanting(uint8_t id){
+    if (purchaseFase) return;
+	if (playerModels.at(id).stopPlanting()){
+        //puede haber un update aca
+    }
+    std::cout << "world stop Planting" << std::endl;
+    // stopPlanting solo funciona si se esta plantando, si se esta plantando se reactiva al jugador
+    // bomba va a necsitar una referencia del jugador que la sostiene para avisarle que se active
+    // o devolver esa referencia para "prenderlo"
+    // bomb.stopPlanting();
+}
+
+
+
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
 		playerModel.second.step();
 	}
-    // if (bomb.isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
-    //     bomb.tickPlanting();
-    // } else {
-    //     if (bomb.isActive()){
-    //         tally.tickBomb();
-    //         if (bomb.exploded()){
-    //             romperTodo;
-    //         }
-    //     }
-    // }
-
+    if (bomb->isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
+        bomb->tickPlanting();
+        if (bomb->isActive()){
+            playerModels.at(bomb->getPlanter()).stopPlanting();
+            updateBombPlanted();
+        }
+    } else {
+        if (bomb->isActive()){
+            // tally.tickBomb();
+            // if (bomb.exploded()){
+            //     romperTodo;
+            // }
+        }
+    }
 	for (auto id: attackingPlayers){
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
@@ -340,6 +367,11 @@ void WorldModel::updateTime(){
     updates.pushAll(updatePtr);
 }
 
+void WorldModel::updateBombPlanted(){
+    std::shared_ptr<Update> updatePtr(new BombPlantUpdate());
+    updates.pushAll(updatePtr);
+}
+
 void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
 	if (purchaseFase) return;
     playerModels.at(id).startMove(dir);
@@ -364,21 +396,6 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 void WorldModel::startAttack(uint8_t id){
 	if (purchaseFase) return;
 	attackingPlayers.insert(id);
-}
-
-void WorldModel::startPlanting(uint8_t id){
-	if (purchaseFase) return;
-	if (playerModels.at(id).startPlanting()){
-        equipWeapon(id, 3); //chequear que 3 es la type bomba
-        // frenar movimiento 
-    }
-}
-
-void WorldModel::stopPlanting(uint8_t id){
-    // stopPlanting solo funciona si se esta plantando, si se esta plantando se reactiva al jugador
-    // bomba va a necsitar una referencia del jugador que la sostiene para avisarle que se active
-    // o devolver esa referencia para "prenderlo"
-    // bomb.stopPlanting();
 }
 
 void WorldModel::stopAttack(uint8_t id){

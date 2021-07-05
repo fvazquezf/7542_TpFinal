@@ -21,6 +21,9 @@ class PlayerModel{
 
     Armory armory;
 
+    void freeze();
+    void unfreeze();
+
     public:
         PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
@@ -49,6 +52,7 @@ class PlayerModel{
 
         void giveBomb(std::shared_ptr<Weapon> bomb);
         bool startPlanting();
+        bool stopPlanting();
 
         void resetCooldown();
 

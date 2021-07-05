@@ -83,9 +83,25 @@ void Armory::giveBomb(std::shared_ptr<Weapon> bomb){
 bool Armory::startPlanting(){
     if (arsenal.count(3) == 0) return false;
     currentWeapon = 3;
-    // arsenal[3]->startPlanting();
+    Bomb* bomb = static_cast<Bomb*>(arsenal[3].get());
+    bomb->startPlanting();
+    std::cout << "armoty start Planting" << std::endl;
     return true;
+}
 
+bool Armory::stopPlanting(){
+    if (arsenal.count(3) == 0) return false;
+    Bomb* bomb = static_cast<Bomb*>(arsenal[3].get());
+    if (bomb->isActive()) {
+        arsenal.erase(3);
+        currentWeapon = 1;
+        std::cout << "armory deleted bomb" << std::endl;
+    } 
+    if (bomb->isPlanting()){
+        bomb->stopPlanting();
+        std::cout << "armory stoped Planting" << std::endl;
+    }
+    return true;
 }
 
 int Armory::equipWeapon(int weaponType){

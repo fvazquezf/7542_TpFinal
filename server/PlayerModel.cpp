@@ -131,18 +131,28 @@ bool PlayerModel::canShoot(){
 }
 
 void PlayerModel::giveBomb(std::shared_ptr<Weapon> bomb){
+    // chequeo inecesario pero por si acaso
     if (!isCt){
         armory.giveBomb(bomb);
+        std::cout << "player recibed bomb" << std::endl;
     }
 }
 
 bool PlayerModel::startPlanting(){
     if (isCt) return false;
     if (armory.startPlanting()){
-        isFrozen = true;
+        freeze();
+        std::cout << "player start Planting" << std::endl;
         return true;
     }
     return false;
+}
+
+bool PlayerModel::stopPlanting(){
+    if (isCt) return false;
+    std::cout << "player stop Planting" << std::endl;
+    unfreeze();
+    return armory.stopPlanting();
 }
 
 
@@ -166,12 +176,12 @@ bool PlayerModel::pickUpWeapon(){
 }
 
 void PlayerModel::die() {
-    isFrozen = true;
+    freeze();
     armory.dropPrimary(model->GetPosition());
 }
 
 void PlayerModel::revive() {
-    isFrozen = false;
+    unfreeze();
     hp = 100;
     reload();
 }
@@ -191,4 +201,14 @@ int PlayerModel::getHp(){
 
 int PlayerModel::getMoney(){
     return money;
+}
+
+void PlayerModel::freeze(){
+    isFrozen = true;
+    netForce.SetZero();
+    dirAmount = 0;
+}
+
+void PlayerModel::unfreeze(){
+    isFrozen = false;
 }

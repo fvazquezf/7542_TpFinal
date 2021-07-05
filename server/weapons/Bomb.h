@@ -6,8 +6,15 @@
 
 class Bomb: public Weapon {
     private:
-        bool isActive;
+        bool planting;
+        bool active;
         bool exploded;
+
+        int plantingCooldown;
+        int plantingTicks;
+
+        int planter;
+
         int firerate;
         int spread;
 
@@ -20,7 +27,13 @@ class Bomb: public Weapon {
         void resetCooldown() override;
         int hit() override;
 
-        bool plant();
+        bool startPlanting();
+        void setPlanter(int id);
+        int getPlanter();
+        void stopPlanting();
+        bool isPlanting();
+        void tickPlanting();
+        bool isActive();
         bool defuse();
 };
 

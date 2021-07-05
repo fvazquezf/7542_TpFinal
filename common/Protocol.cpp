@@ -182,6 +182,12 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case RELOAD: {
             break;
         }
+        case PLANT: {
+            break;
+        }
+        case STOP_PLANT: {
+            break;
+        }
         case LOGIN_LIST_GAMES: {
             msg = handleStringMsg(receiveCallback);
             break;

@@ -1,9 +1,16 @@
 #include "Bomb.h"
+#include <iostream>
 
 Bomb::Bomb(int range, int spread, int damage, int firerate):
  Weapon(BOMB, 0, range, damage),
  firerate(firerate),
  spread(spread){
+    planting = false;
+    planter = -1;
+    active = false;
+    exploded = false;
+    plantingCooldown = 60;
+    plantingTicks = 0;
 }
 
 Bomb::~Bomb(){
@@ -47,3 +54,38 @@ void Bomb::resetCooldown(){
     cooldown = 0;
 }
 
+
+bool Bomb::startPlanting(){
+    planting = true;
+    std::cout << "bomb start Planting" << std::endl;
+}
+
+void Bomb::setPlanter(int id){
+    planter = id;
+}
+
+int Bomb::getPlanter(){
+    return planter;
+}
+
+void Bomb::stopPlanting(){
+    planting = false;
+    plantingTicks = 0;
+    std::cout << "bomb stop Planting" << std::endl;
+}
+
+bool Bomb::isPlanting(){
+    return planting;
+}
+
+void Bomb::tickPlanting(){
+    plantingTicks++;
+    if (plantingTicks == plantingCooldown){
+        active = true;
+        std::cout << "bomb activated" << std::endl;
+    }
+}
+
+bool Bomb::isActive(){
+    return active;
+}

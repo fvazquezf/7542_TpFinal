@@ -24,7 +24,7 @@ class WorldModel: public Thread {
     MapLayout mapLayout;
     Tally tally;
     
-    std::shared_ptr<Weapon> bomb;
+    std::shared_ptr<Bomb> bomb;
 
     std::unordered_set<int> attackingPlayers;
 
@@ -73,6 +73,7 @@ class WorldModel: public Thread {
         void updateHp(int id);
         void updateMoney(int id);
         void updateTime();
+        void updateBombPlanted();
 
         
         void movePlayer(uint8_t id, uint8_t dir);

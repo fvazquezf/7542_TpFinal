@@ -28,6 +28,8 @@ add_library(lib_server
     events/StopMoveEvent.cpp
     events/StopAttackEvent.cpp
     events/StartAttackEvent.cpp
+    events/StartPlantEvent.cpp
+    events/StopPlantEvent.cpp
     events/EquipWeaponEvent.cpp
     updates/PositionUpdate.cpp 
     events/RotateEvent.cpp 
@@ -47,6 +49,7 @@ add_library(lib_server
     updates/MoneyUpdate.cpp
     updates/HpUpdate.cpp
     updates/TeamsUpdate.cpp
-    updates/ClipUpdate.cpp)
+    updates/ClipUpdate.cpp
+    updates/BombPlantUpdate.cpp)
 
 

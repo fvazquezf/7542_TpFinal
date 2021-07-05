@@ -44,6 +44,7 @@ class Armory {
         void giveBomb(std::shared_ptr<Weapon> bomb);
 
         bool startPlanting();
+        bool stopPlanting();
 
         int equipWeapon(int weaponType);
 
