@@ -24,12 +24,6 @@ void Protocol::joinGame(const std::string &gameName,
     callback(std::move(msg));
 }
 
-void Protocol::listGames(std::function<void(std::vector<unsigned char>)>&callback) const {
-    std::vector<unsigned char> msg;
-    msg.push_back(LIST);
-    callback(std::move(msg));
-}
-
 Protocol::~Protocol() {
 }
 
@@ -184,6 +178,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         }
         case LOGIN_LIST_GAMES: {
             msg = handleStringMsg(receiveCallback);
+            break;
+        }
+        case LIST_MAPS: {
             break;
         }
         default:

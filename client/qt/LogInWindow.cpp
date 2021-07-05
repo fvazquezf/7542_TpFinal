@@ -22,7 +22,6 @@ void LogInWindow::playIntro() {
 
 LogInWindow::~LogInWindow()
 {
-    delete userNameWindow;
 }
 
 void LogInWindow::setUpAll() {

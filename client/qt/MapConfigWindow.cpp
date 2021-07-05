@@ -1,30 +1,55 @@
+#include <QLabel>
 #include "MapConfigWindow.h"
 
-MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info)
-    : QDialog(parent), width(width), height(height), info(info)
-{
+MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info, bool create)
+    : QDialog(parent),
+      width(width),
+      height(height),
+      info(info),
+      createWindow(create),
+      usernameLineEdit(nullptr){
     styler.setCounterStrikeFont(this, 14);
     this->setWindowTitle("Counter Strike 2D - Configuration");
     setMainLayout();
+    if (create){
+        this->setEditLinesLayout();
+    }
 }
 
-void MapConfigWindow::handleJoinPushButton()
-{
+void MapConfigWindow::handleJoinPushButton() {
+    if (create && )
+        QMessageBox::warning(this, tr("Log In error"),
+                             tr("Username field is empty."),
+                             QMessageBox::Close);
+    return;
     info.map = this->selectedMap.toStdString();
     this->close();
 }
 
-
-
 void MapConfigWindow::handleClickMouse(QListWidgetItem* item) {
     this->selectedMap = item->text();
+}
+
+void MapConfigWindow::setEditLinesLayout() {
+    QHBoxLayout *usernameLayout = new QHBoxLayout();
+
+    QLabel *userLabel = new QLabel();
+    userLabel->setText("GAME NAME");
+
+    usernameLineEdit = new QLineEdit();
+
+    usernameLayout->addWidget(userLabel);
+
+    usernameLayout->addWidget(usernameLineEdit);
+
+    mainLayout->addLayout(usernameLayout);
 }
 
 
 void MapConfigWindow::setBottonLayout() {
     bottonLayout = new QHBoxLayout();
 
-    QPushButton *joinPushButton = new QPushButton("Join", this);
+    QPushButton *joinPushButton = new QPushButton(createWindow ? "Create" : "Join", this);
 
     bottonLayout->addWidget(joinPushButton,1);
 

@@ -1,6 +1,7 @@
 #include <client/commands/Command.h>
 #include <memory>
 #include <client/commands/ListGame.h>
+#include <client/commands/ListMaps.h>
 #include "UserNameWindow.h"
 
 UserNameWindow::UserNameWindow(QWidget *parent, int width, int height, LogInInfo &info)
@@ -78,8 +79,13 @@ void UserNameWindow::on_saveButton_clicked()
     }
 
     info.username = username;*/
+    Protocol prot;
+    std::unique_ptr<Command> listMaps = std::unique_ptr<Command>(new ListMaps());
+    std::function<void(std::vector<unsigned char>)> sender =
+            std::bind(&UserNameWindow::send, this, std::placeholders::_1);
+    listMaps->serialize(sender, prot);
 
-    MapConfigWindow* mapWindow = new MapConfigWindow(nullptr, width, height, info);
+    MapConfigWindow* mapWindow = new MapConfigWindow(nullptr, width, height, info, true);
     this->close();
     mapWindow->show();
 }
@@ -94,7 +100,7 @@ void UserNameWindow::on_joinButton_clicked() {
             std::bind(&UserNameWindow::send, this, std::placeholders::_1);
     listGames->serialize(sender, prot);
 
-    MapConfigWindow* mapWindow = new MapConfigWindow(nullptr, width, height, info);
+    MapConfigWindow* mapWindow = new MapConfigWindow(nullptr, width, height, info, false);
     this->close();
     mapWindow->show();
 }

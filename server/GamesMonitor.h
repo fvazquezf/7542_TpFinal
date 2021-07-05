@@ -6,7 +6,7 @@
 #include <yaml-cpp/node/node.h>
 #include "match.h"
 #define MAP_PATH_PREFIX "../maps/"
-#define MAP_EXTENSION ".yaml"
+#define MAP_EXTENSION ".yml"
 
 /*
  * contenedor de juegos
@@ -20,6 +20,7 @@ class GamesMonitor {
 private:
     std::map<std::string, Match> matches;
     std::map<int, int> matchesConfig; // config de partidas
+    std::unordered_set<std::string> mapNames;
     std::mutex gamesMonitorLock;
 public:
     explicit GamesMonitor(YAML::Node& config);
@@ -38,11 +39,13 @@ public:
                    const std::function<Socket(void)> &handIn,
                    const std::function<void(int8_t)> &response);
 
+    std::string listGames();
+    std::string listMaps();
+
     void stopGames();
 
     ~GamesMonitor();
 
-    std::string listGames();
 };
 
 

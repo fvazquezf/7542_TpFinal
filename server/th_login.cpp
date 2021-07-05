@@ -54,9 +54,12 @@ bool ThLogin::handleLoginMessage(uint8_t msgCode, const std::vector<unsigned cha
             // copy ellision optimization
             // si el compilador no la hace hay que mover
             std::string gameList = games.listGames();
-            gameList += "partida\n";
-            gameList += "otraPartidaxD\n";
             loginLister(LOGIN_LIST_GAMES, gameList);
+            return false;
+        }
+        case LIST_MAPS: {
+            std::string gameList = games.listMaps();
+            loginLister(LOGIN_LIST_MAPS, gameList);
             return false;
         }
         case CREATE: {
