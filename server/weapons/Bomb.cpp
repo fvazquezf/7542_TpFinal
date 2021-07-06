@@ -6,11 +6,15 @@ Bomb::Bomb(int range, int spread, int damage, int firerate):
  firerate(firerate),
  spread(spread){
     planting = false;
+    defusing = false;
+    defused = false;
     planter = -1;
     active = false;
     exploded = false;
-    plantingCooldown = 60;
+    plantingCooldown = 180;
     plantingTicks = 0;
+    defusingTicks = 0;
+    fuse = 600;
 }
 
 Bomb::~Bomb(){
@@ -56,6 +60,7 @@ void Bomb::resetCooldown(){
 
 
 bool Bomb::startPlanting(){
+    // aca hay que chequear que este en el site
     planting = true;
     std::cout << "bomb start Planting" << std::endl;
 }
@@ -86,6 +91,52 @@ void Bomb::tickPlanting(){
     }
 }
 
+void Bomb::tickFuse(){
+    fuse--;
+    if (fuse == 0){
+        active = false;
+        exploded = true;
+    }
+}
+
+bool Bomb::isBoom(){
+    return exploded;
+}
+
 bool Bomb::isActive(){
     return active;
+}
+
+bool Bomb::startDefusing(){
+    // aca hay que chequear si esta cerca de la bomba
+    defusing = true;
+    return true;
+}
+
+void Bomb::tickDefuse(){
+    defusingTicks++;
+    if (defusingTicks == plantingCooldown){
+        defused = true;
+        std::cout << "bomb defused" << std::endl;
+    }
+}
+
+bool Bomb::isDefusing(){
+    return defusing;
+}
+
+bool Bomb::isDefused(){
+    return defused;
+}
+
+
+void Bomb::reset(){
+    planting = false;
+    defusing = false;
+    defused = false;
+    active = false;
+    exploded = false;
+    plantingTicks = 0;
+    defusingTicks = 0;
+    fuse = 300;
 }

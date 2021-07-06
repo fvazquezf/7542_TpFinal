@@ -172,11 +172,11 @@ void WorldModel::run(){
     for (int i = 0; i < 10 && is_running; i++){
 		if (i == 5) swapTeams();
         purchaseFase = true;
+        playerModels.at(tally.getTerrorist()).giveBomb(bomb);
         roundPurchase();
 		purchaseFase = false;
-        playerModels.at(tally.getTerrorist()).giveBomb(bomb);
         roundPlay();
-		stopAllPlayers();
+		bomb->reset();
         tally.resetTime();
         // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
@@ -234,9 +234,15 @@ void WorldModel::roundCommon() {
 
 void WorldModel::startPlanting(uint8_t id){
 	if (purchaseFase) return;
+    // if (mapLayout.isInSite(playerModels.at(id).getPosition())){
+
+    // }
 	if (playerModels.at(id).startPlanting()){
         equipWeapon(id, 3); //chequear que 3 es la type bomba 
         bomb->setPlanter(id);
+    }
+    if (playerModels.at(id).startDefusing()){
+        bomb->startDefusing();
     }
     std::cout << "world start Planting" << std::endl;
 }
@@ -244,16 +250,11 @@ void WorldModel::startPlanting(uint8_t id){
 void WorldModel::stopPlanting(uint8_t id){
     if (purchaseFase) return;
 	if (playerModels.at(id).stopPlanting()){
-        //puede haber un update aca
+        updateWeapon(id, KNIFE);
     }
+    playerModels.at(id).stopDefusing();
     std::cout << "world stop Planting" << std::endl;
-    // stopPlanting solo funciona si se esta plantando, si se esta plantando se reactiva al jugador
-    // bomba va a necsitar una referencia del jugador que la sostiene para avisarle que se active
-    // o devolver esa referencia para "prenderlo"
-    // bomb.stopPlanting();
 }
-
-
 
 void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
@@ -262,16 +263,23 @@ void WorldModel::step(){
     if (bomb->isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
         bomb->tickPlanting();
         if (bomb->isActive()){
-            playerModels.at(bomb->getPlanter()).stopPlanting();
+            int id = bomb->getPlanter();
+            playerModels.at(id).stopPlanting();
             updateBombPlanted();
+            updateWeapon(id, KNIFE);
         }
-    } else {
-        if (bomb->isActive()){
-            // tally.tickBomb();
-            // if (bomb.exploded()){
-            //     romperTodo;
-            // }
-        }
+    }
+    if (bomb->isActive()){
+        bomb->tickFuse();
+    }
+    if (bomb->isBoom()){
+        tally.bombExploded();
+    }
+    if (bomb->isDefusing()){
+        bomb->tickDefuse();
+    }
+    if (bomb->isDefused()){
+        tally.bombDefused();
     }
 	for (auto id: attackingPlayers){
 	    // el atacante

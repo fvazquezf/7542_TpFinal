@@ -10,6 +10,9 @@ class Tally {
     std::map<int, std::pair<int, int>> ttSide;
     std::unordered_set<int> deaths;
 
+    bool boom;
+    bool notBoom;
+
     int time;
     int ticks;
 
@@ -25,6 +28,9 @@ public:
     int getTime();
     void resetTime();
     int getTerrorist();
+
+    void bombExploded();
+    void bombDefused();
 
     bool isRoundOver();
     bool ctWon();

@@ -54,6 +54,9 @@ class PlayerModel{
         bool startPlanting();
         bool stopPlanting();
 
+        bool startDefusing();
+        void stopDefusing();
+
         void resetCooldown();
 
         int equipWeapon(int weaponType);

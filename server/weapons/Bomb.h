@@ -9,9 +9,14 @@ class Bomb: public Weapon {
         bool planting;
         bool active;
         bool exploded;
+        bool defusing;
+        bool defused;
 
         int plantingCooldown;
         int plantingTicks;
+        int defusingTicks;
+
+        int fuse;
 
         int planter;
 
@@ -28,13 +33,21 @@ class Bomb: public Weapon {
         int hit() override;
 
         bool startPlanting();
-        void setPlanter(int id);
-        int getPlanter();
-        void stopPlanting();
         bool isPlanting();
+        void stopPlanting();
         void tickPlanting();
         bool isActive();
-        bool defuse();
+        void tickFuse();
+        bool isBoom();
+        void setPlanter(int id);
+        int getPlanter();
+
+        bool startDefusing();  
+        bool isDefusing();
+        void tickDefuse();       
+        bool isDefused();   
+
+        void reset();
 };
 
 #endif

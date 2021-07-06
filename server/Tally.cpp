@@ -3,6 +3,8 @@
 Tally::Tally(){
     time = 130;
     ticks = 59;
+    boom = false;
+    notBoom = false;
 }
 
 void Tally::placeInTeam(int id, bool team){
@@ -48,6 +50,8 @@ int Tally::getTime(){
 
 void Tally::resetTime(){
     time = 130;
+    boom = false;
+    notBoom = false;
 }
 
 int Tally::getTerrorist(){
@@ -64,8 +68,17 @@ int Tally::getTerrorist(){
 // 4 - exploto la bomba -> ganan tts
 // 5 - defusearon la bomba -> ganan cts
 
+void Tally::bombExploded(){
+    boom = true;
+}
+
+void Tally::bombDefused(){
+    notBoom = true;
+}
 
 bool Tally::isRoundOver(){
+    if (boom) return true;
+    if (notBoom) return true;
     if (ctWon()){
         deaths.clear();
         return true;

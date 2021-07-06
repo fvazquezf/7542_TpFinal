@@ -155,6 +155,18 @@ bool PlayerModel::stopPlanting(){
     return armory.stopPlanting();
 }
 
+bool PlayerModel::startDefusing(){
+    if (isCt) {
+        freeze();
+        return true;
+    }
+    return false;
+}
+
+void PlayerModel::stopDefusing(){
+    if (isCt) unfreeze();
+}
+
 
 void PlayerModel::resetCooldown(){
     armory.resetCooldown();
