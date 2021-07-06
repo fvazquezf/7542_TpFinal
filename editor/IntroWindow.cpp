@@ -35,5 +35,4 @@ void IntroWindow::run(){
 }
 
 IntroWindow::~IntroWindow() {
-
 }

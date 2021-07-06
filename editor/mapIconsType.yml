@@ -22,13 +22,20 @@ background:
  - ["water1", "../sprites/gfx/backgrounds/water1.jpg"]
 
 walls:
- - ["wall" , "img/wall.png"]
+ - ["wall_1" , "../sprites/map/wall_1.png"]
+ - ["wall_2" , "../sprites/map/wall_2.png"]
+ - ["wall_3" , "../sprites/map/wall_3.png"]
+ - ["wall_4" , "../sprites/map/wall_4.png"]
+ - ["wall_5" , "../sprites/map/wall_5.png"]
+ - ["wall_6" , "../sprites/map/wall_6.png"]
+ - ["wall_7" , "../sprites/map/wall_7.png"]
+ - ["wall_8" , "../sprites/map/wall_8.png"]
 
 weapons:
  - ["bomb", "../sprites/map/weapon_bomb.png"]
  - ["knife", "../sprites/map/weapon_knife.png"]
  - ["glock", "../sprites/map/weapon_glock.png"]
- - ["aka-47", "../sprites/map/weapon_aka47.png"]
+ - ["AK-47", "../sprites/map/weapon_ak47.png"]
  - ["m3", "../sprites/map/weapon_m3.png"]
  - ["AWP", "../sprites/map/weapon_awp.png"]
 zones:

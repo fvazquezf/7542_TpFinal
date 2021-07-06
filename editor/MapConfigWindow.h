@@ -22,7 +22,7 @@ public:
 private slots:
     void handleEditPushButton();
     void handleCreatePushButton();
-    void handleJoinPushButton();
+    void handleQuitPushButton();
     void handleClickMouse(QListWidgetItem * item);
 
 private:

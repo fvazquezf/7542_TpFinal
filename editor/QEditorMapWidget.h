@@ -8,6 +8,7 @@
 #include <fstream>
 #include <QMouseEvent>
 #include "MapIconGenerator.h"
+#include <algorithm>
 
 class QEditorMapWidget : public QWidget {
     Q_OBJECT
@@ -22,14 +23,19 @@ private:
     QGridLayout* layout;
     std::map<std::string, std::list<std::list<int>>> tiles;
     std::map<std::string, int> size;
-    std::vector<std::string> elements = {"aztec", "zoneA", "zoneB", "zoneBomb", "bomb", "m3"};
+    std::vector<std::string> elements = {
+        "wall_1", "wall_2", "wall_3", "wall_4", "wall_5", "wall_6", "wall_7", "wall_8",
+        "zoneA", "zoneB", "zoneBomb",
+        "bomb", "m3", "AK-47", "knife", "glock", "AWP"};
 
     std::string map_name;
     MapIconGenerator icons;
     std::string selectedItem;
+    std::string selectedBackground = "aztec";
 
     void setMapLayout();
 
+    void setTilesBackGround();
     void setTilesFromOldFile();
     void setTilesFromNewFile();
 
