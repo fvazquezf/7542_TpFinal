@@ -1,10 +1,26 @@
 #include "MapLayout.h"
 #include <random>
+#include <iostream>
 
 MapLayout::MapLayout(): ctSpawn ({{45, 50}, {45, 50}}),
                         ttSpawn ({{40, 45}, {40, 45}}),
                         bombSite ({{40, 50}, {40, 50}}){
 }
+
+// b-a = lado x del rectangulo
+// d-c = lado y del rectangulo 
+void MapLayout::setCtSpawn(int a, int b, int c, int d){ 
+    ctSpawn =  {{b, a}, {d, c}};
+}
+
+void MapLayout::setTtSpawn(int a, int b, int c, int d){ 
+    ttSpawn =  {{b, a}, {d, c}};
+}
+
+void MapLayout::setBombSite(int a, int b, int c, int d){ 
+    bombSite =  {{b, a}, {d, c}};
+}
+
 
 bool MapLayout::isInSite(const b2Vec2& position){
     if ((bombSite.first.first < position.x) && (position.x < bombSite.first.second)){

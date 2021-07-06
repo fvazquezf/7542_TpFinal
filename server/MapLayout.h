@@ -12,6 +12,9 @@ class MapLayout {
 
 public:
     MapLayout();
+    void setCtSpawn(int a, int b, int c, int d);
+    void setTtSpawn(int a, int b, int c, int d);
+    void setBombSite(int a, int b, int c, int d);
 
     bool isInSite(const b2Vec2& position);
 
