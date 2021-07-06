@@ -5,12 +5,22 @@
 #include "Renderizable.h"
 
 class NonMovable : public Renderizable{
+private:
+    int rescaling;
 public:
     NonMovable(SdlTexture& texture,
          int sizeW,
          int sizeH,
          float posX,
          float posY);
+
+    NonMovable(SdlTexture& texture,
+               int sizeW,
+               int sizeH,
+               float posX,
+               float posY,
+               int rescaling);
+
 
     void render(Camera &camera, size_t iteration) override;
 

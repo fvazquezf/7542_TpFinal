@@ -31,9 +31,6 @@ void MapView::loadMap(const std::string &mapFile) {
         // rip, nos desconectamos
         // handlear
     }
-    /*size_columns: 15
-    size_rows: 15
-    background: nuke*/
 
     columns = map["size_columns"].as<size_t>();
     rows = map["size_rows"].as<size_t>();
@@ -92,7 +89,23 @@ void MapView::loadWalls() {
 
 
 void MapView::loadZones() {
-
+    auto zoneInformation = mapInformation["zones"].as<std::vector<std::vector<std::string>>>();
+    for (auto& zone : zoneInformation) {
+        if (map[zone[0]]) { // si hay informacion sobre esa zona, creo y guardo la textura
+            auto zonePositions = map[zone[0]].as<std::vector<std::pair<int, int>>>();
+            textureHolder.emplace(std::piecewise_construct,
+                                  std::forward_as_tuple(zone[0]),
+                                  std::forward_as_tuple(zone[1], window));
+            auto &zoneTexture = textureHolder.at(zone[0]);
+            for (auto &zonePosition : zonePositions) { // para ese tipo de pared, obtengo las posiciones
+                walls.emplace_back(zoneTexture,
+                                   32,
+                                   32,
+                                   zonePosition.first,
+                                   zonePosition.second);
+            }
+        }
+    }
 }
 
 MapView::~MapView() {
