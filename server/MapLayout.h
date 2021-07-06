@@ -13,6 +13,8 @@ class MapLayout {
 public:
     MapLayout();
 
+    bool isInSite(const b2Vec2& position);
+
     b2Vec2 placeCt();
 
     b2Vec2 placeTt();

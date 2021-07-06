@@ -36,15 +36,15 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
-
-    bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(KNIFE_RANGE), 
-                                             matchConfig.at(KNIFE_ACCURACY),
-                                             matchConfig.at(KNIFE_DAMAGE),
-                                             matchConfig.at(KNIFE_FIRERATE)));
+    bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
+                                             matchConfig.at(BOMB_ACCURACY),
+                                             matchConfig.at(BOMB_DAMAGE),
+                                             matchConfig.at(BOMB_FIRERATE),
+                                             matchConfig.at(BOMB_FUSE),
+                                             matchConfig.at(BOMB_ACTIVATE_TIME)));
 
 
 	this->anchor = world.CreateBody(&anchorDef);
-
 	is_running = false;
 	purchaseFase = true;
 }
@@ -234,15 +234,14 @@ void WorldModel::roundCommon() {
 
 void WorldModel::startPlanting(uint8_t id){
 	if (purchaseFase) return;
-    // if (mapLayout.isInSite(playerModels.at(id).getPosition())){
-
-    // }
-	if (playerModels.at(id).startPlanting()){
-        equipWeapon(id, 3); //chequear que 3 es la type bomba 
-        bomb->setPlanter(id);
-    }
-    if (playerModels.at(id).startDefusing()){
-        bomb->startDefusing();
+    if (mapLayout.isInSite(playerModels.at(id).getPosition())){
+        if (playerModels.at(id).startPlanting()){
+            equipWeapon(id, 3);
+            bomb->setPlanter(id);
+        }   
+        if (playerModels.at(id).startDefusing()){
+            bomb->startDefusing();
+        }
     }
     std::cout << "world start Planting" << std::endl;
 }
@@ -252,7 +251,9 @@ void WorldModel::stopPlanting(uint8_t id){
 	if (playerModels.at(id).stopPlanting()){
         updateWeapon(id, KNIFE);
     }
-    playerModels.at(id).stopDefusing();
+    if (playerModels.at(id).stopDefusing()){
+        bomb->stopDefusing();
+    }
     std::cout << "world stop Planting" << std::endl;
 }
 

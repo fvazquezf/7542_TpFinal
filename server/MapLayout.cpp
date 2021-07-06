@@ -6,6 +6,15 @@ MapLayout::MapLayout(): ctSpawn ({{45, 50}, {45, 50}}),
                         bombSite ({{40, 50}, {40, 50}}){
 }
 
+bool MapLayout::isInSite(const b2Vec2& position){
+    if ((bombSite.first.first < position.x) && (position.x < bombSite.first.second)){
+        if ((bombSite.second.first < position.y) && (position.y < bombSite.second.second)){
+            return true;
+        }
+    }
+    return false;
+}
+
 b2Vec2 MapLayout::placeCt(){
     std::random_device rd;
     std::mt19937 gen(rd());

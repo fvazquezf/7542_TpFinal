@@ -44,3 +44,10 @@ money_kill_enemy: 500
 money_round_won: 1000
 money_round_lost: 500
 
+bomb_range: 150
+bomb_accuracy: 60
+bomb_damage: 20
+bomb_firerate: 30
+bomb_fuse: 300
+bomb_activate_time: 180
+

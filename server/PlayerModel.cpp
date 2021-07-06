@@ -163,8 +163,12 @@ bool PlayerModel::startDefusing(){
     return false;
 }
 
-void PlayerModel::stopDefusing(){
-    if (isCt) unfreeze();
+bool PlayerModel::stopDefusing(){
+    if (isCt) { 
+        unfreeze();
+        return true;
+    }
+    return false;
 }
 
 

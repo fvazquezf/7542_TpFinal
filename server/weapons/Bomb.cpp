@@ -1,7 +1,7 @@
 #include "Bomb.h"
 #include <iostream>
 
-Bomb::Bomb(int range, int spread, int damage, int firerate):
+Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime):
  Weapon(BOMB, 0, range, damage),
  firerate(firerate),
  spread(spread){
@@ -11,10 +11,11 @@ Bomb::Bomb(int range, int spread, int damage, int firerate):
     planter = -1;
     active = false;
     exploded = false;
-    plantingCooldown = 180;
+    plantingCooldown = activateTime;
     plantingTicks = 0;
     defusingTicks = 0;
-    fuse = 600;
+    this->fuse = fuse;
+    remainingTime = fuse;
 }
 
 Bomb::~Bomb(){
@@ -92,8 +93,8 @@ void Bomb::tickPlanting(){
 }
 
 void Bomb::tickFuse(){
-    fuse--;
-    if (fuse == 0){
+    remainingTime--;
+    if (remainingTime == 0){
         active = false;
         exploded = true;
     }
@@ -108,9 +109,13 @@ bool Bomb::isActive(){
 }
 
 bool Bomb::startDefusing(){
-    // aca hay que chequear si esta cerca de la bomba
     defusing = true;
     return true;
+}
+bool Bomb::stopDefusing(){
+    defusing = false;
+    defusingTicks = 0;
+    return false;
 }
 
 void Bomb::tickDefuse(){
@@ -138,5 +143,5 @@ void Bomb::reset(){
     exploded = false;
     plantingTicks = 0;
     defusingTicks = 0;
-    fuse = 300;
+    remainingTime = fuse;
 }

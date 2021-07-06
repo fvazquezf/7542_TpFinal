@@ -55,7 +55,7 @@ class PlayerModel{
         bool stopPlanting();
 
         bool startDefusing();
-        void stopDefusing();
+        bool stopDefusing();
 
         void resetCooldown();
 

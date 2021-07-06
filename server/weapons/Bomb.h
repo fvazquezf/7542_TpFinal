@@ -17,6 +17,7 @@ class Bomb: public Weapon {
         int defusingTicks;
 
         int fuse;
+        int remainingTime;
 
         int planter;
 
@@ -24,7 +25,7 @@ class Bomb: public Weapon {
         int spread;
 
     public:
-        Bomb(int range, int spread, int damage, int firerate);
+        Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime);
         ~Bomb() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
@@ -43,6 +44,7 @@ class Bomb: public Weapon {
         int getPlanter();
 
         bool startDefusing();  
+        bool stopDefusing();  
         bool isDefusing();
         void tickDefuse();       
         bool isDefused();   
