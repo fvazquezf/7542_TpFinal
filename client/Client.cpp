@@ -4,6 +4,7 @@
 #include "SdlLoop.h"
 #include "Drawer.h"
 #include "Receiver.h"
+#include "MapView.h"
 
 
 Client::Client(Socket clientSocket)
@@ -12,6 +13,8 @@ Client::Client(Socket clientSocket)
 }
 
 void Client::launch() {
+    //MapView map(window, "../algo.yaml");
+    //map.loadMap("../maps/mapita.yml");
     BlockingQueue<std::unique_ptr<Command>> comms;
 
     //SdlWindow window(600, 400, false, "unaVentana");

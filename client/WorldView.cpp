@@ -1,6 +1,7 @@
 #include "WorldView.h"
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
 
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
@@ -8,6 +9,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   stencil(window, 45, 0, 0),
   menu(window),
   hud(window),
+  map(window, "../mapIconsConfig.yaml"),
   menuTime(false),
   done(false),
   terror("../sprites/gfx/player/t1.bmp", window),
@@ -18,6 +20,7 @@ WorldView::WorldView(SdlWindow& aWindow)
         {200, 0, 0}),
   legs("../sprites/gfx/player/legs.bmp",window),
   backgroundTiles("../sprites/gfx/backgrounds/aztec.png", window){
+    map.loadMap("../maps/mapita.yml");
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -77,6 +80,7 @@ void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
+    //map.render(camera);
     for (auto& tile : tiles){
         camera.render(tile, iteration);
     }

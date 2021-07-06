@@ -20,6 +20,7 @@
 #include "sdlwrap/SdlSound.h"
 #include "commands/ListGame.h"
 #include "Client.h"
+#include "MapView.h"
 
 int main(int argc, const char *argv[]){
     //Editor in QT
@@ -34,7 +35,6 @@ int main(int argc, const char *argv[]){
     - username
     - map (nombre del mapa sin .yml)
     */
-
     try {
         a.exec();
     } catch (const std::exception& e){
@@ -44,54 +44,5 @@ int main(int argc, const char *argv[]){
     Socket cli = std::move(info.socket);
     Client clientHandler(std::move(cli));
     clientHandler.launch();
-
-    /* // SDL
-	bool running = true;
-
-	BlockingQueue<std::unique_ptr<Command>> comms;
-
-    SdlWindow window(600, 400, false, "unaVentana");
-    SoundManager::start();
-    WorldView world(window);
-
-    SdlLoop l(comms, world);
-
-	Protocol prot;
-
-	Sender sender(comms, cli, prot);
-	sender.start();
-	Receiver receiver(world, cli, prot);
-	receiver.start();
-
-	l.start();
-    auto start = std::chrono::steady_clock::now();
-    size_t it = 0;
-	while (running){
-        world.render(it);
-        auto end = std::chrono::steady_clock::now();
-        std::chrono::duration<float, std::micro> elapsed = (end - start);
-        int rest = FRAMERATE - std::ceil(elapsed.count());
-
-        // me comi unos ricos frames
-        if (rest < 0){
-            int behind = - rest;
-            rest = FRAMERATE - behind % FRAMERATE;
-            int lost = behind + rest;
-            start += std::chrono::microseconds(lost);
-            it += lost / FRAMERATE;
-        }
-        usleep(rest);
-        start += std::chrono::microseconds(FRAMERATE);
-        ++it;
-        if (l.isDone()){
-            running = false;
-            receiver.stop();
-            cli.close();
-        }
-    }
-	l.join();
-	sender.join();
-	receiver.join();
-	return 0;*/
     return 0;
 }

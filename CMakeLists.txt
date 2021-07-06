@@ -70,7 +70,7 @@ add_executable(editor_main ${EDITOR_QT_SRC})
 #**************************************
 
 # Linkage client
-target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop anim sdlwrapperclasses SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx)
+target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop anim sdlwrapperclasses SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx yaml-cpp)
 
 # Linkage esqueleto cliente-servidor
 target_link_libraries(esqueleto_server lib_server lib_common box2d yaml-cpp)
