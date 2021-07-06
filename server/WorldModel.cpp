@@ -4,6 +4,7 @@
 #include <chrono>
 #include <unistd.h>
 #include <utility>
+#include <updates/GameDoneUpdate.h>
 
 #define FRAMERATE 1000000/60.0f
 
@@ -180,6 +181,8 @@ void WorldModel::run(){
         // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
     // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
+    updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
+    is_running = false;
 }
 
 void WorldModel::roundPurchase() {

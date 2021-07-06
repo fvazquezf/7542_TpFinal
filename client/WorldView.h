@@ -28,6 +28,7 @@ private:
     Hud hud;
 
     std::atomic_bool menuTime;
+    std::atomic_bool done;
 
     SdlTexture terror;
     SdlTexture counterTerrorist;
@@ -92,6 +93,9 @@ public:
     void updateHudHealth(uint8_t health);
 
     void updateHudMoney(uint16_t money);
+
+    void signalDone();
+    bool isDone();
 };
 
 

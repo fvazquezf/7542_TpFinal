@@ -13,7 +13,7 @@ void Drawer::stop() {
 void Drawer::run() {
     auto start = std::chrono::steady_clock::now();
     size_t it = 0;
-    while (running){
+    while (!world.isDone()){
         world.render(it);
         auto end = std::chrono::steady_clock::now();
         std::chrono::duration<float, std::micro> elapsed = (end - start);

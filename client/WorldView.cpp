@@ -9,6 +9,7 @@ WorldView::WorldView(SdlWindow& aWindow)
   menu(window),
   hud(window),
   menuTime(false),
+  done(false),
   terror("../sprites/gfx/player/t1.bmp", window),
   counterTerrorist("../sprites/gfx/player/ct1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
@@ -221,5 +222,18 @@ void WorldView::updateHudHealth(uint8_t health) {
 void WorldView::updateHudMoney(uint16_t money) {
     std::lock_guard<std::mutex> lock(worldMutex);
     hud.updateMoney(money);
+}
+
+void WorldView::signalDone() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    SDL_Event quit;
+    quit.type = SDL_QUIT;
+    SDL_PushEvent(&quit);
+    done = true;
+}
+
+bool WorldView::isDone() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    return done.operator bool();
 }
 

@@ -50,6 +50,6 @@ add_library(lib_server
     updates/HpUpdate.cpp
     updates/TeamsUpdate.cpp
     updates/ClipUpdate.cpp
-    updates/BombPlantUpdate.cpp)
+    updates/BombPlantUpdate.cpp updates/GameDoneUpdate.cpp updates/GameDoneUpdate.h)
 
 

@@ -35,6 +35,7 @@
 #define HEALTH_UPDATE 0x2b
 #define MONEY_UPDATE 0x2c
 #define CLIP_UPDATE 0x2d
+#define GAME_DONE 0x2e
 
 // update misc
 // login response me manda

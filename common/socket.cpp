@@ -126,6 +126,7 @@ void Socket::close() {
     if (this->sfd != -1){
         ::shutdown(this->sfd, SHUT_RDWR);
         ::close(this->sfd);
+        this->sfd = -1;
     }
 }
 
@@ -138,6 +139,5 @@ void Socket::shutdown(int channel) {
 Socket::~Socket() {
     if (this->sfd != -1) {
         this->close();
-        this->sfd = -1;
     }
 }

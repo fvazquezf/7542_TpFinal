@@ -19,22 +19,14 @@
 #include <iostream>
 #include "sdlwrap/SdlSound.h"
 #include "commands/ListGame.h"
+#include "Client.h"
 
-// main estaria siendo actualmente el drawer (masomenos, hace muchas cosas)
 int main(int argc, const char *argv[]){
     //Editor in QT
     QApplication a(argc, nullptr);
     LogInInfo info;
     LogInWindow w(nullptr, 640, 400, info);
     w.show();
-    try {
-        a.exec();
-    } catch (const std::exception& e){
-        std::cout << e.what() << std::endl;
-        return -1;
-    }
-    Socket cli = std::move(info.socket);
-
     /*
     Info es una clase con 4 atributos publicos de tipo std::string
     - port
@@ -43,8 +35,17 @@ int main(int argc, const char *argv[]){
     - map (nombre del mapa sin .yml)
     */
 
-    // SDL
+    try {
+        a.exec();
+    } catch (const std::exception& e){
+        std::cout << e.what() << std::endl;
+        return -1;
+    }
+    Socket cli = std::move(info.socket);
+    Client clientHandler(std::move(cli));
+    clientHandler.launch();
 
+    /* // SDL
 	bool running = true;
 
 	BlockingQueue<std::unique_ptr<Command>> comms;
@@ -91,5 +92,6 @@ int main(int argc, const char *argv[]){
 	l.join();
 	sender.join();
 	receiver.join();
-	return 0;
+	return 0;*/
+    return 0;
 }

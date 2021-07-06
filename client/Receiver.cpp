@@ -15,12 +15,13 @@ void Receiver::run() {
             std::bind(&Receiver::receive, this, std::placeholders::_1);
     while (running){
         char update;
-        if (peer.recv(&update, 1) < 0){
+        if (peer.recv(&update, 1) <= 0){
             break;
         }
         std::vector<unsigned char> msg = prot.dispatchReceived(update, cb);
         handleReceived(update, msg);
     }
+    world.signalDone();
 }
 
 void Receiver::stop() {
@@ -100,6 +101,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case MONEY_UPDATE: {
             auto money = prot.deserializeMsgLenShort(msg);
             world.updateHudMoney(money);
+            break;
+        }
+        case GAME_DONE: {
+            running = false;
             break;
         }
         default:

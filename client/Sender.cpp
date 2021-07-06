@@ -17,6 +17,7 @@ void Sender::run() {
                 std::bind(&Sender::send, this, std::placeholders::_1);
         comm->serialize(callback, prot);
     }
+    peer.close(); // mata a receive
 }
 
 Sender::~Sender() {

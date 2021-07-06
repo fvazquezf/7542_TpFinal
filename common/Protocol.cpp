@@ -189,6 +189,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case LIST_MAPS: {
             break;
         }
+        case GAME_DONE: {
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");

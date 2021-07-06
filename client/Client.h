@@ -10,7 +10,7 @@ private:
     Socket clientSocket;
     SdlWindow window;
 public:
-    Client();
+    explicit Client(Socket clientSocket);
 
     Client(const Client& other) = delete;
     Client& operator=(const Client& other) = delete;
@@ -18,10 +18,8 @@ public:
     Client(Client&& other) noexcept;
     Client& operator=(Client&& other) noexcept;
 
-    void launch(const char* host, const char* serv);
-    void login(std::stringstream& stream);
+    void launch();
 
-    void play();
 
     ~Client();
 };
