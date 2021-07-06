@@ -9,7 +9,7 @@ class StopMoveEvent : public ClientEvent {
 
     public:
     explicit StopMoveEvent(int id, int dir);
-    void updatePlayer(WorldModel &world);
+    void updatePlayer(WorldModel &world) override;
 };
 
 

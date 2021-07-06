@@ -76,12 +76,9 @@ void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
     map.render(camera);
-    /*for (auto& tile : tiles){
-        camera.render(tile, iteration);
-    }*/
-    /*for (auto& weapon : droppedWeapons){
+    for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
-    }*/
+    }
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
@@ -96,7 +93,6 @@ void WorldView::render(size_t iteration) {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
-        std::cout << it.second.first << " " << it.second.second << std::endl;
         entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
 }

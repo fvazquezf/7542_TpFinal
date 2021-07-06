@@ -4,7 +4,6 @@
 
 #include <yaml-cpp/node/node.h>
 #include <yaml-cpp/node/parse.h>
-#include <iostream>
 #include "MapView.h"
 #include "Camera.h"
 
@@ -36,8 +35,8 @@ void MapView::loadMap(const std::string &mapFile) {
     rows = map["size_rows"].as<size_t>();
     loadBackground();
     loadWalls();
+    loadWeapons();
     loadZones();
-    //loadDroppedWeapons();
 }
 
 void MapView::loadBackground() {
@@ -87,6 +86,10 @@ void MapView::loadWalls() {
     }
 }
 
+// cargamos todas
+void MapView::loadWeapons() {
+
+}
 
 void MapView::loadZones() {
     auto zoneInformation = mapInformation["zones"].as<std::vector<std::vector<std::string>>>();
@@ -120,8 +123,6 @@ void MapView::render(Camera &cam) {
     for (auto& wall : walls){
         cam.render(wall, 0);
     }
-
-    for (auto& weapon : droppedWeapons){
-        weapon.draw(cam);
-    }
 }
+
+

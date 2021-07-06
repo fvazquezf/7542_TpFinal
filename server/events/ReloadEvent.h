@@ -6,7 +6,7 @@
 
 class ReloadEvent : public ClientEvent {
 public:
-    ReloadEvent(uint8_t id);
+    explicit ReloadEvent(uint8_t id);
 
     void updatePlayer(WorldModel &world) override;
 

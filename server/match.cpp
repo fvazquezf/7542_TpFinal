@@ -11,7 +11,7 @@ Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
         mapInfo = YAML::LoadFile(mapName);
         world.loadMap(mapInfo);
     } catch(const std::exception& e){
-        throw e;
+        throw;
     }
 }
 
@@ -31,8 +31,10 @@ Match &Match::operator=(Match &&other) noexcept {
         return *this;
     }
 
-    maxUsers = other.maxUsers;
     users = std::move(other.users);
+    maxUsers = other.maxUsers;
+    updates = std::move(other.updates);
+    world = std::move(other.world);
     return *this;
 }
 

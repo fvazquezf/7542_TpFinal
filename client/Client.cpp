@@ -13,11 +13,8 @@ Client::Client(Socket clientSocket)
 }
 
 void Client::launch() {
-    //MapView map(window, "../algo.yaml");
-    //map.loadMap("../maps/mapita.yml");
     BlockingQueue<std::unique_ptr<Command>> comms;
 
-    //SdlWindow window(600, 400, false, "unaVentana");
     SoundManager::start();
     WorldView world(window);
     Drawer drawer(world);

@@ -58,6 +58,7 @@ WorldModel::~WorldModel() {
 
 WorldModel::WorldModel(WorldModel &&other) noexcept
 : world(b2Vec2(0.0f, 0.0f)),
+  anchor(nullptr),
   matchConfig(other.matchConfig),
   playerModels(std::move(other.playerModels)),
   usersEvents(std::move(other.usersEvents)),

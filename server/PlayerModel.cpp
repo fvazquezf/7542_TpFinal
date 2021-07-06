@@ -20,6 +20,10 @@ armory(dropped, matchConfig){
 PlayerModel::PlayerModel(PlayerModel &&other) noexcept
 : model(other.model),
   netForce(other.netForce),
+  angle(other.angle),
+  dirAmount(other.dirAmount),
+  hp(other.hp),
+  money(other.money),
   armory(std::move(other.armory)){
     other.model = nullptr;
 }
@@ -31,6 +35,11 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
 
     model = other.model;
     netForce = other.netForce;
+    angle = other.angle;
+    dirAmount = other.dirAmount;
+    hp = other.hp;
+    money = other.money;
+    armory = std::move(other.armory);
     other.model = nullptr;
     return *this;
 }

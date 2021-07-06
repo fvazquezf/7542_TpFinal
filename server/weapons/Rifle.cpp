@@ -18,7 +18,7 @@ bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
 
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
     double oldDist = INFINITY;
-    double currDist = 0;
+    double currDist;
     double bulletTravelledDistance = 0;
 
     while (bulletTravelledDistance < range){

@@ -16,7 +16,6 @@ protected:
     int ammo;
     int clip;
     double range;
-    int accuracy;
     int damage;
     int cooldown;
     uint8_t weaponCode;

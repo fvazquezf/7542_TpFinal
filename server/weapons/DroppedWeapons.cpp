@@ -47,5 +47,7 @@ DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other) noexcept {
         return *this;
     }
 
+    uniquifier = std::move(other.uniquifier);
+    droppedWeapons = std::move(other.droppedWeapons);
     return *this;
 }

@@ -67,7 +67,8 @@ ThReceiver::ThReceiver(ThReceiver &&other) noexcept
 : peer(other.peer),
   is_running(other.is_running.operator bool()),
   protocol(other.protocol),
-  eventQueue(other.eventQueue){
+  eventQueue(other.eventQueue),
+  userId(other.userId){
     // no hay que hacerle stop
     // si a other le hacemos stop matamos al peer (el rd)
     other.is_running = false;
@@ -80,6 +81,7 @@ ThReceiver &ThReceiver::operator=(ThReceiver &&other) noexcept {
 
     is_running = other.is_running.operator bool();
     other.is_running = false;
+    userId = other.userId;
 
     return *this;
 }

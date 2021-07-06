@@ -8,6 +8,7 @@ User::User(Socket socket,
 : socket(std::move(socket)),
   sender(this->socket, protocol, updateQueue),
   receiver(this->socket, protocol, eventQueue, id),
+  playing(false),
   id(id){
 }
 
@@ -43,9 +44,8 @@ User::User(User &&other) noexcept
   socket(std::move(other.socket)),
   sender(std::move(other.sender)),
   receiver(std::move(other.receiver)),
-  id(other.id)
-  //model(other.model)
-{
+  playing(other.playing),
+  id(other.id){
 }
 
 User &User::operator=(User &&other) noexcept {
@@ -56,8 +56,9 @@ User &User::operator=(User &&other) noexcept {
     protocol = std::move(other.protocol);
     socket = std::move(other.socket);
     receiver = std::move(other.receiver);
-    sender = (std::move(other.sender));
-    //model = other.model;
+    sender = std::move(other.sender);
+    playing = other.playing;
+    id = other.id;
     return *this;
 }
 

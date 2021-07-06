@@ -143,7 +143,8 @@ bool Armory::pickUpWeapon(const b2Vec2& position){
 Armory::Armory(Armory &&other) noexcept
 : arsenal(std::move(other.arsenal)),
   prices(std::move(other.prices)),
-  dropped(other.dropped){
+  dropped(other.dropped),
+  currentWeapon(2){
 }
 
 Armory &Armory::operator=(Armory &&other) noexcept {
@@ -152,6 +153,7 @@ Armory &Armory::operator=(Armory &&other) noexcept {
     }
     arsenal = std::move(other.arsenal);
     prices = std::move(other.prices);
+    currentWeapon = 2;
     return *this;
 }
 

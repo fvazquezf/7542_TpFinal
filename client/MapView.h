@@ -16,7 +16,7 @@ private:
     void loadBackground();
     void loadWalls();
     void loadZones();
-    void loadDroppedWeapons();
+    void loadWeapons();
 
     SdlWindow& window;
     std::vector<NonMovable> backgroundTiles;
@@ -43,6 +43,7 @@ public:
     MapView& operator=(MapView&& other) noexcept;
 
     ~MapView();
+
 };
 
 

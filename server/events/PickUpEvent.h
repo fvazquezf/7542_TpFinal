@@ -6,7 +6,7 @@
 
 class PickUpEvent : public ClientEvent {
 public:
-    PickUpEvent(uint8_t id);
+    explicit PickUpEvent(uint8_t id);
 
     void updatePlayer(WorldModel &world) override;
 
