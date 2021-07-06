@@ -3,6 +3,7 @@
 #include <QIcon>
 #include <unordered_map>
 #include "yaml-cpp/yaml.h"
+#include "constantes.h"
 
 class MapIconGenerator {
 

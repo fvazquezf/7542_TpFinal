@@ -1,16 +1,10 @@
 #include "MapEditor.h"
-#include <QDebug>
-
-#define N 5
-#define TILE_SIZE 32
-#include "paths.h"
-#define WIDTH 15
-#define HEIGHT 15
 
 MapEditor::MapEditor(QWidget *parent, const std::string &name) :
     QDialog(parent)
 {
-    styler.setCounterStrikeFont(this, 12);
+    this->setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    styler.setCounterStrikeFont(this, 16);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name);
     setupWidgets();

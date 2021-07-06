@@ -3,7 +3,7 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QDir>
-#include "paths.h"
+#include "constantes.h"
 
 class QEditorMapListWidget : public QListWidget {
     Q_OBJECT

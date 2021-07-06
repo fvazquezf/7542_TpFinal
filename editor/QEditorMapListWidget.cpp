@@ -1,5 +1,5 @@
 #include "QEditorMapListWidget.h"
-#include <QDebug>
+
 QEditorMapListWidget::QEditorMapListWidget(QWidget *parent)
     : QListWidget(parent) {
     this->doAutoScroll();
