@@ -4,12 +4,16 @@
 #include <QtDebug>
 #include <exception>
 #include<QScrollArea>
-
+#include <QTabWidget>
+#include <QDrag>
+#include <QWindow>
+#include <QMimeData>
+#include <QByteArrayList>
+#include <QRegularExpression>
 #define ROWS "size_rows"
 #define COLUMNS "size_columns"
 #define BACKGROUND "background"
 
-#include <QTabWidget>
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
         QWidget (parent), map_name(map_name) {
     this->setAcceptDrops(true);
@@ -19,7 +23,7 @@ QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int 
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name) :
         QWidget (parent), map_name(map_name) {
-
+    this->setAcceptDrops(true);
     this->setMapLayout();
     this->loadOldFile();
 }
@@ -34,10 +38,15 @@ void QEditorMapWidget::setMapLayout() {
 }
 
 void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
+    QIcon backgorundIcon = icons.getIcon(this->selectedBackground);
+    QTile* backgorundIconQTile = new QTile(this, QTILE_SIZE, QTILE_SIZE, backgorundIcon);
+    layout->addWidget(backgorundIconQTile, row, column);
+    if(elements.size() == 0) {
+        return;
+    }
     QIcon icon = icons.getIcon(element);
     QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
-    std::list<int> pos = {row, column};
-    tiles[element].push_back(pos);
+    positions[std::pair<int,int>(row, column)] = element;
     layout->addWidget(tile, row, column);
 }
 
@@ -57,19 +66,13 @@ void QEditorMapWidget::setTilesBackGround() {
         }
     }
 
-    for (unsigned long i = 0; i < elements.size(); i ++) {
-        if(tiles[elements[i]].size() == 0) {
-            continue;
-        }
-        std::list<std::list<int>> ::iterator it;
-        for (it = tiles[elements[i]].begin(); it != tiles[elements[i]].end(); ++it) {
-            std::list<int> ::iterator it2 = (*it).begin();
-            QIcon icon = icons.getIcon(elements[i]);
+    std::map <std::pair<int,int>, std::string>::iterator it;
+    for (it = positions.begin(); it != positions.end(); ++it) {
+            QIcon icon = icons.getIcon(it->second);
             QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
-            int x = *(it2);
-            int y = *(++it2);
+            int x = it->first.first;
+            int y = it->first.second;
             layout->addWidget(tile, x, y);
-        }
     }
 }
 
@@ -98,7 +101,10 @@ void QEditorMapWidget::setTilesFromOldFile() {
             std::list<std::list<int>> ::iterator it;
             for (it = pos.begin(); it != pos.end(); ++it) {
                 std::list<int> ::iterator it2 = (*it).begin();
-                this->addQTile(elements[i], *(it2), *(it2++));
+                int x = *(it2);
+                int y = *(++it2);
+                positions[std::pair<int,int>(x, y)] = elements[i];
+                this->addQTile(elements[i], x, y);
             }
         } catch(YAML::BadConversion ex) {
 
@@ -114,6 +120,12 @@ void QEditorMapWidget::updateMapLFile() {
     YAML::Emitter out;
     out << size;
     
+    std::map<std::string, std::list<std::pair<int,int>>> tiles;
+
+    std::map <std::pair<int,int>, std::string>::iterator it;
+    for (it = positions.begin(); it != positions.end(); ++it) {
+        tiles[it->second].push_back(it->first);
+    }
 
     std::string res = BACKGROUND;
     res += ": " + selectedBackground + "\n";
@@ -122,10 +134,9 @@ void QEditorMapWidget::updateMapLFile() {
             continue;
         }
         res += elements[i] + ":\n";
-        std::list<std::list<int>> ::iterator it;
+        std::list<std::pair<int,int>> ::iterator it;
         for (it = tiles[elements[i]].begin(); it != tiles[elements[i]].end(); ++it) {
-            std::list<int> ::iterator it2 = (*it).begin();
-            res += "  - [" + std::to_string(*(it2)) + "," + std::to_string(*(it2++)) + "]\n";
+            res += "  - [" + std::to_string(it->first) + "," + std::to_string(it->second) + "]\n";
         }
         res += "\n";
     }
@@ -144,113 +155,72 @@ void QEditorMapWidget::setItem(std::string &item) {
     }
 }
 
-/*
 void QEditorMapWidget::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (event->mimeData()->hasFormat(fridgetMagnetsMimeType())) {
-        if (children().contains(event->source())) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
-        } else {
-            event->acceptProposedAction();
-
-    } else if (event->mimeData()->hasText()) {
-        event->acceptProposedAction();
+    if (event->source() == this) {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
     } else {
-        event->ignore();
-    }
-}
-
-void QEditorMapWidget::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (event->mimeData()->hasFormat(fridgetMagnetsMimeType())) {
-        if (children().contains(event->source())) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
-        } else {
-            event->acceptProposedAction();
-        }
-    } else if (event->mimeData()->hasText()) {
         event->acceptProposedAction();
-    } else {
-        event->ignore();
     }
 }
 
 void QEditorMapWidget::dropEvent(QDropEvent *event)
-{
-    if (event->mimeData()->hasFormat(fridgetMagnetsMimeType())) {
-        const QMimeData *mime = event->mimeData();
-        QByteArray itemData = mime->data(fridgetMagnetsMimeType());
-        QDataStream dataStream(&itemData, QIODevice::ReadOnly);
+{   
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+    
+    const QMimeData *mime = event->mimeData();
 
-        QString text;
-        QPoint offset;
-        dataStream >> text >> offset;
+    QPoint position = event->pos();
 
-        DragLabel *newLabel = new DragLabel(text, this);
-        newLabel->move(event->pos() - offset);
-        newLabel->show();
-        newLabel->setAttribute(Qt::WA_DeleteOnClose);
+    QPoint hotSpot;
+    QByteArrayList hotSpotPos = mime->data("application/x-hotspot").split(' ');
+    hotSpot.setX(hotSpotPos.first().toInt());
+    hotSpot.setY(hotSpotPos.last().toInt());
 
-        if (event->source() == this) {
-            event->setDropAction(Qt::MoveAction);
-            event->accept();
-        } else {
-            event->acceptProposedAction();
-        }
-    } else if (event->mimeData()->hasText()) {
-        QStringList pieces = event->mimeData()->text().split(
-            QRegularExpression(QStringLiteral("\\s+")), Qt::SkipEmptyParts);
-        QPoint position = event->pos();
+    std::pair<int,int> pos1(position.y()/QTILE_SIZE, position.x()/QTILE_SIZE);
+    std::pair<int,int> pos2(hotSpot.y()/QTILE_SIZE, hotSpot.x()/QTILE_SIZE);
 
-        for (const QString &piece : pieces) {
-            DragLabel *newLabel = new DragLabel(piece, this);
-            newLabel->move(position);
-            newLabel->show();
-            newLabel->setAttribute(Qt::WA_DeleteOnClose);
-
-            position += QPoint(newLabel->width(), 0);
-        }
-
-        event->acceptProposedAction();
-    } else {
-        event->ignore();
-    }
-}
-*/
-void QEditorMapWidget::mousePressEvent(QMouseEvent *event) {
-    if(event->type() == QMouseEvent::MouseButtonPress) {
+    if(pos1 == pos2) {
+        // Point and click
         QPoint pos = event->pos();
         int row = pos.y() / QTILE_SIZE;
         int column = pos.x() / QTILE_SIZE;
         this->addQTile(this->selectedItem, row, column);
+        return;
+    } else {
+        // Drag and drop
+        std::string aux = positions[pos1];
+        positions[pos1] = positions[pos2];
+        positions[pos2] = aux;
+        this->addQTile(positions[pos1], pos1.first, pos1.second);
+        this->addQTile(positions[pos2], pos2.first, pos2.second);
     }
-/*
-    DragLabel *child = static_cast<DragLabel*>(childAt(event->pos()));
+
+}
+
+void QEditorMapWidget::mousePressEvent(QMouseEvent *event) {
+
+    // Drag and Drop
+    QLabel *child = qobject_cast<QLabel*>(childAt(event->pos()));
     if (!child)
         return;
 
+    QPoint pos = event->pos();
     QPoint hotSpot = event->pos() - child->pos();
-
-    QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    dataStream << child->labelText() << QPoint(hotSpot);
-
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData(fridgetMagnetsMimeType(), itemData);
-    mimeData->setText(child->labelText());
+    mimeData->setData("application/x-hotspot",
+                      QByteArray::number(pos.x()) + ' ' + QByteArray::number(pos.y()));
+
+    qreal dpr = window()->windowHandle()->devicePixelRatio();
+    QPixmap pixmap(child->size() * dpr);
+    pixmap.setDevicePixelRatio(dpr);
+    child->render(&pixmap);
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->setPixmap(child->pixmap(Qt::ReturnByValue));
+    drag->setPixmap(pixmap);
     drag->setHotSpot(hotSpot);
-
-    child->hide();
-
-    if (drag->exec(Qt::MoveAction | Qt::CopyAction, Qt::CopyAction) == Qt::MoveAction)
-        child->close();
-    else
-        child->show();
-        */
+    drag->exec(Qt::MoveAction);
 }

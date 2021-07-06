@@ -9,9 +9,15 @@
 #include <QMouseEvent>
 #include "MapIconGenerator.h"
 #include <algorithm>
+#include <utility>
 
 class QEditorMapWidget : public QWidget {
     Q_OBJECT
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 public:
     QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns);
@@ -22,6 +28,7 @@ public:
 private:
     QGridLayout* layout;
     std::map<std::string, std::list<std::list<int>>> tiles;
+    std::map<std::pair<int,int>, std::string> positions;
     std::map<std::string, int> size;
     std::vector<std::string> elements = {
         "wall_1", "wall_2", "wall_3", "wall_4", "wall_5", "wall_6", "wall_7", "wall_8",
@@ -43,13 +50,7 @@ private:
     void loadOldFile();
 
     void addQTile(std::string &element, int row, int column);
-/*
-protected:
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-    */
-    void mousePressEvent(QMouseEvent *event) override;
+
 };
 
 #endif   //QEDITOR_MAP_WIDGET_H
