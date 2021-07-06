@@ -1,10 +1,7 @@
 #include <QApplication>
 #include "MapConfigWindow.h"
 #include "IntroWindow.h"
-
-
-#define WIDTH 1024
-#define HEIGHT 720 
+#include "constantes.h"
 
 int main(int argc, char* argv[]){
     
@@ -13,7 +10,7 @@ int main(int argc, char* argv[]){
     MapConfigWindow* window = new MapConfigWindow(nullptr);
     window->open();
     window->close();
-    IntroWindow introWindow(window, WIDTH, HEIGHT);
+    IntroWindow introWindow(window, SCREEN_WIDTH, SCREEN_HEIGHT);
     introWindow.run();
     window->show();
 

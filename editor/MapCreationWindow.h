@@ -10,8 +10,10 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QDebug>
-#include "./CounterStrikeStyle.h"
-
+#include <utility>
+#include "MapEditor.h"
+#include "CounterStrikeStyle.h"
+#include "constantes.h"
 class MapCreationWindow : public QDialog
 {
     Q_OBJECT
@@ -31,6 +33,7 @@ private:
     QLineEdit* mapNameEditLine;
     QComboBox* sizeComboBox;
     QPushButton* saveButton;
+    std::pair<int,int> getSize();
 
     void setUpAll();
 };

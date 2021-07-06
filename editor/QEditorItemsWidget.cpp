@@ -1,5 +1,4 @@
 #include "QEditorItemsWidget.h"
-#include <QtDebug>
 
 #define HEADER_LABEL "Map elements"
 

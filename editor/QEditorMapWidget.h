@@ -10,6 +10,7 @@
 #include "MapIconGenerator.h"
 #include <algorithm>
 #include <utility>
+#include "constantes.h"
 
 class QEditorMapWidget : public QWidget {
     Q_OBJECT

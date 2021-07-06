@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QIcon>
+#include <QString>
 
 class QTile : public QLabel
 {

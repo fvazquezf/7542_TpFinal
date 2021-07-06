@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QString>
 
-#include "paths.h"
+#include "constantes.h"
 
 class CounterStrikeStyle
 {

@@ -1,18 +1,13 @@
 #include "QEditorMapWidget.h"
-#define QTILE_SIZE 32
-#include "paths.h"
 #include <QtDebug>
 #include <exception>
-#include<QScrollArea>
+#include <QScrollArea>
 #include <QTabWidget>
 #include <QDrag>
 #include <QWindow>
 #include <QMimeData>
 #include <QByteArrayList>
 #include <QRegularExpression>
-#define ROWS "size_rows"
-#define COLUMNS "size_columns"
-#define BACKGROUND "background"
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
         QWidget (parent), map_name(map_name) {
@@ -51,15 +46,15 @@ void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
 }
 
 void QEditorMapWidget::loadNewFile(int rows, int columns) {
-    size[COLUMNS] = columns;
-    size[ROWS] = rows;
+    size[LABEL_COLUMNS] = columns;
+    size[LABEL_ROWS] = rows;
     this->setTilesFromNewFile();
 
 }
 
 void QEditorMapWidget::setTilesBackGround() {
-    for(int i = 0; i<  size[ROWS]; i++){
-        for(int j = 0; j < size[COLUMNS]; j++){
+    for(int i = 0; i<  size[LABEL_ROWS]; i++){
+        for(int j = 0; j < size[LABEL_COLUMNS]; j++){
             QIcon icon = icons.getIcon(selectedBackground);
             QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
             layout->addWidget(tile, i, j);
@@ -89,9 +84,9 @@ void QEditorMapWidget::setTilesFromOldFile() {
     std::string path = PATH_TO_MAPS + map_name + ".yml";
     YAML::Node map_config = YAML::LoadFile(path);
 
-    this->size[COLUMNS] = map_config[COLUMNS].as<int>();
-    this->size[ROWS] = map_config[ROWS].as<int>();
-    this->selectedBackground = map_config[BACKGROUND].as<std::string>();
+    this->size[LABEL_COLUMNS] = map_config[LABEL_COLUMNS].as<int>();
+    this->size[LABEL_ROWS] = map_config[LABEL_ROWS].as<int>();
+    this->selectedBackground = map_config[LABEL_BACKGROUND].as<std::string>();
 
     this->setTilesBackGround();
 
@@ -127,7 +122,7 @@ void QEditorMapWidget::updateMapLFile() {
         tiles[it->second].push_back(it->first);
     }
 
-    std::string res = BACKGROUND;
+    std::string res = LABEL_BACKGROUND;
     res += ": " + selectedBackground + "\n";
     for (unsigned long i = 0; i < elements.size(); i ++) {
         if(tiles[elements[i]].size() == 0) {

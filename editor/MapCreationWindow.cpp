@@ -1,9 +1,5 @@
 #include "MapCreationWindow.h"
-#include "MapEditor.h"
 
-
-#include "CounterStrikeStyle.h"
-#include "paths.h"
 MapCreationWindow::MapCreationWindow(QWidget *parent) :
     QDialog(parent)
 {
@@ -54,6 +50,16 @@ MapCreationWindow::~MapCreationWindow()
 {
 }
 
+std::pair<int,int> MapCreationWindow::getSize() {
+    if(this->mapSize == "Small") {
+        return std::pair <int,int> (MAP_SIZE_SMALL_X,MAP_SIZE_SMALL_Y);
+    } else if (this->mapSize == "Medium") {
+        return std::pair <int,int> (MAP_SIZE_MEDIUM_X,MAP_SIZE_MEDIUM_Y);
+    } else {
+        return std::pair <int,int> (MAP_SIZE_LARGE_X,MAP_SIZE_LARGE_Y);
+    }
+}
+
 void MapCreationWindow::on_saveButton_clicked()
 {
     this->mapName = mapNameEditLine->text();
@@ -64,10 +70,9 @@ void MapCreationWindow::on_saveButton_clicked()
                              QMessageBox::Close);
         return;
     }
-    qDebug() << "Map name: " << this->mapName;
-    qDebug() << "Map size: " << this->mapSize;
 
     this->close();
-    MapEditor mapEditor(this, this->mapName.toStdString(), 15, 15);
+    std::pair<int,int> size = this->getSize();
+    MapEditor mapEditor(this, this->mapName.toStdString(), size.first, size.second);
     mapEditor.exec();
 }
