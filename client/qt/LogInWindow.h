@@ -26,14 +26,15 @@ private slots:
     void on_saveButton_clicked();
 
 private:
-    int height;
     int width;
-    LogInInfo* info;
+    int height;
+    LogInInfo& info;
     QVBoxLayout* mainLayout;
     CounterStrikeStyle styler;
     QLineEdit* ipLineEdit;
     QLineEdit* portLineEdit;
     QPushButton* saveButton;
+    UserNameWindow* userNameWindow;
     void setUpAll();
     void setMainTitle();
     void setButtonsLayout();

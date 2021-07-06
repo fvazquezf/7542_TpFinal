@@ -5,19 +5,16 @@
 #include "Weapon.h"
 
 class Shotgun: public Weapon {
-    private:
-        int damage;
-        int cooldown;
-
     protected:
         void calcDamage(float dist);
-
+        int damageOutput;
+        int spread;
     public:
-        Shotgun();
+        Shotgun(int ammo, int range, int spread, int damage);
         ~Shotgun() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool tickCooldown() override;
+        bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
 

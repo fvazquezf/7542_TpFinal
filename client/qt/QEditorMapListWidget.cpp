@@ -1,7 +1,10 @@
 #include "QEditorMapListWidget.h"
 #include <QDebug>
+#include <common/Protocol.h>
+
 QEditorMapListWidget::QEditorMapListWidget(QWidget *parent, int width, int height, LogInInfo &info)
-    : QListWidget(parent) {
+    : QListWidget(parent),
+      info(info){
     this->doAutoScroll();
     this->scrollBarWidgets(Qt::AlignRight);
     this->setMapItems();
@@ -19,7 +22,7 @@ void QEditorMapListWidget::setMapItem(QString &mapName) {
 
 
 void QEditorMapListWidget::update() {
-    this->clear();
+    /*this->clear();
     QDir directory(DIRECTORY_PATH);
     QStringList mapsList  = directory.entryList();
     for (QString& mapName : mapsList) {
@@ -27,6 +30,10 @@ void QEditorMapListWidget::update() {
             mapName.chop(4);
             this->addItem(mapName);
         }
+    }*/
+    auto gamesList = info.receiveGameInformation();
+    for (auto& game : gamesList){
+        this->addItem(QString::fromUtf8( game.data(), game.size()));
     }
 }
 

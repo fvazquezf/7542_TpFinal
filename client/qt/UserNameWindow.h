@@ -23,23 +23,28 @@ class UserNameWindow : public QDialog
 
 public:
     explicit UserNameWindow(QWidget *parent, int width, int height, LogInInfo &info);
-    ~UserNameWindow();
+    ~UserNameWindow() override;
 
 private slots:
     void on_saveButton_clicked();
+    void on_createButton_clicked();
+    void on_joinButton_clicked();
 
 private:
     int width;
     int height;
-    LogInInfo* info;
+    LogInInfo& info;
     QVBoxLayout* mainLayout;
     CounterStrikeStyle styler;
     QLineEdit* usernameLineEdit;
-    QPushButton* saveButton;
+    //QPushButton* saveButton;
+    QPushButton createGame;
+    QPushButton joinGame;
     void setUpAll();
     void setMainTitle();
     void setButtonsLayout();
     void setEditLinesLayout();
+    void send(std::vector<unsigned char> msg);
 };
 
 #endif // USERNAMEWINDOW_H

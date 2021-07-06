@@ -6,17 +6,13 @@
 
 class Pistol: public Weapon {
     private:
-        int damage;
-        int cooldown;
-
-        // distancia maxima de "viaje" de la bala
-        double maxHittingDistance;
+    double accuracy;
     public:
-        Pistol();
+        Pistol(int ammo, int range, int accuracy, int damage);
         ~Pistol() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool tickCooldown() override;
+        bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Weapon.h"
 #include "../anim/Character.h"
+#include "../SoundManager.h"
 
 Weapon::Weapon(std::map<uint8_t, SdlTexture> &weaponTextureMap)
 : weaponTextureMap(weaponTextureMap),
@@ -39,7 +40,7 @@ Weapon &Weapon::operator=(Weapon &&other) noexcept {
     return *this;
 }
 
-void Weapon::animate(Character &character, float posX, float posY, float angle) {
+void Weapon::animate(Character &character, float distanceToCenter, float angle) {
     if (currentWeapon == KNIFE){
         // i controla el numero de frames
         for (int i = 0; i <= 10; ++i){
@@ -55,8 +56,23 @@ void Weapon::animate(Character &character, float posX, float posY, float angle) 
             character.pushPositionOffset(std::move(offset));
         }
     }
+    manageSound();
 }
 
 float Weapon::parabolicMotion(int nFrame) {
     return ((-MAX_ROT_KNIFE)/25.0f) * nFrame*nFrame + 2.0f * MAX_ROT_KNIFE/5.0f * nFrame;
+}
+
+void Weapon::manageSound() {
+    if (currentWeapon == KNIFE){
+        SoundManager::playSound(SoundManager::KNF_S, 0);
+    } else if (currentWeapon == PISTOL){
+        SoundManager::playSound(SoundManager::GLOCK_S, 0);
+    } else if (currentWeapon == M3){
+        SoundManager::playSound(SoundManager::M3_S, 0);
+    } else if (currentWeapon == AWP) {
+        SoundManager::playSound(SoundManager::AWP_S, 0);
+    } else if (currentWeapon == AK47){
+        SoundManager::playSound(SoundManager::AK47_S, 0);
+    }
 }

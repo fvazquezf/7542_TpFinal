@@ -41,6 +41,7 @@ private:
     std::atomic<bool> is_logged_in;
 
     void loginResponse(int8_t id);
+    void loginLister(uint8_t commandId, const std::string& gamesList);
 };
 
 #endif

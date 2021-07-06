@@ -13,7 +13,7 @@ class IntroWindow : public QVideoWidget
     public:
         IntroWindow(QWidget *parent, int width, int heigth);
         void run();
-        ~IntroWindow();
+        ~IntroWindow() override;
    private:
         QMediaPlaylist* playlist;
         QMediaPlayer* player;

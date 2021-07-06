@@ -1,6 +1,7 @@
 #include "WorldView.h"
 #include <cstdint>
 #include <algorithm>
+#include <iostream>
 
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
@@ -8,7 +9,9 @@ WorldView::WorldView(SdlWindow& aWindow)
   stencil(window, 45, 0, 0),
   menu(window),
   hud(window),
+  map(window, "../mapIconsConfig.yaml"),
   menuTime(false),
+  done(false),
   terror("../sprites/gfx/player/t1.bmp", window),
   counterTerrorist("../sprites/gfx/player/ct1.bmp", window),
   blood("../sprites/gfx/fragments.bmp",
@@ -17,6 +20,7 @@ WorldView::WorldView(SdlWindow& aWindow)
         {200, 0, 0}),
   legs("../sprites/gfx/player/legs.bmp",window),
   backgroundTiles("../sprites/gfx/backgrounds/aztec.png", window){
+    map.loadMap("../maps/mapita.yml");
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -65,8 +69,8 @@ WorldView::WorldView(SdlWindow& aWindow)
 WorldView::~WorldView() {
 }
 
+// SOLO ACCEDIDO POR RECEIVER DESDE BUILD TEAMS (CON EL LOCK)
 void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
-    std::lock_guard<std::mutex> lock(worldMutex);
     entities.emplace(std::piecewise_construct,
                      std::forward_as_tuple(id),
                      std::forward_as_tuple(isCt ? counterTerrorist : terror, 0, 0, isPlayer,
@@ -76,6 +80,7 @@ void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
+    //map.render(camera);
     for (auto& tile : tiles){
         camera.render(tile, iteration);
     }
@@ -88,7 +93,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
-    //hud.show();
+    hud.show();
     stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }
@@ -96,6 +101,7 @@ void WorldView::render(size_t iteration) {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
+        std::cout << it.second.first << " " << it.second.second << std::endl;
         entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
 }
@@ -119,7 +125,9 @@ void WorldView::hit(uint8_t id) {
 
 void WorldView::kill(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(id).die();
+    auto position = entities.at(id).getPosition();
+    float distCenter = camera.calculateDistanceToCenter(position.first, position.second);
+    entities.at(id).die(distCenter);
 }
 
 void WorldView::attack(uint8_t id) {
@@ -147,6 +155,9 @@ uint8_t WorldView::getPressedButtonCode() {
 
 void WorldView::setMenu(bool isIt) {
     menuTime = isIt;
+    if (!isIt){
+        SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
+    }
 }
 
 bool WorldView::isMenuTime() const {
@@ -161,6 +172,8 @@ void WorldView::dropWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weapon
     int16_t posY = std::get<3>(weaponId);
     auto& texture = dropTextures.at(id);
     droppedWeapons.emplace_back(texture, id, uniqueIdentifier, posX, posY);
+    float dist = camera.calculateDistanceToCenter(posX, posY);
+    SoundManager::playSound(SoundManager::soundRepertoire::DROP_WEAPON, dist);
 }
 
 void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponId) {
@@ -172,21 +185,26 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     // y puede que el drawer este descheduled en draw, justamente dibujando las armas
     // al suceder el context switch...
     // va a levantar iteradores con "basura" (invalidos al fin)
-    // por ende, no los puedo eliminar aqui
+    // por ende, no los puedo eliminar aca
     for (auto& it : droppedWeapons){
         if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
             it.doNotShow();
             break;
         }
     }
+    SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, 0);
 }
 
 void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {
+    std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : teamMap){
         uint8_t characterId = it.first;
         bool isCt = it.second;
         // si no existe el jugador, debo crearlo
         if (!entities.count(characterId)){
+            characterEntityCreate(characterId, characterId == playerId, isCt);
+        } else { // si existe, significa que estamos cambiando de bando
+            entities.erase(characterId);
             characterEntityCreate(characterId, characterId == playerId, isCt);
         }
     }
@@ -194,5 +212,32 @@ void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {
 
 void WorldView::assignPlayer(uint8_t aPlayerId) {
     playerId = aPlayerId;
+}
+
+void WorldView::updateHudTime(uint8_t time) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateTime(time);
+}
+
+void WorldView::updateHudHealth(uint8_t health) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateHealth(health);
+}
+
+void WorldView::updateHudMoney(uint16_t money) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateMoney(money);
+}
+
+void WorldView::signalDone() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    SDL_Event quit;
+    quit.type = SDL_QUIT;
+    SDL_PushEvent(&quit);
+    done = true;
+}
+
+bool WorldView::isDone() {
+    return done;
 }
 

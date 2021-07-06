@@ -1,30 +1,69 @@
 #include <iostream>
+#include <dirent.h>
 #include "GamesMonitor.h"
 #include "yaml-cpp/yaml.h"
 #include "../common/ConfigVariables.h"
 
 GamesMonitor::GamesMonitor(YAML::Node& config) {
-    matchesConfig.emplace(ConfigVariables::VIDA_JUGADORES, config["vida_jugadores"].as<int>());
-    matchesConfig.emplace(ConfigVariables::DINERO_INICIAL, config["dinero_inicial"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MAX_JUGADORES, config["match_max_players"].as<int>());
-    matchesConfig.emplace(ConfigVariables::GLOCK_BULLETS, config["glock_max_bullets"].as<int>());
-    matchesConfig.emplace(ConfigVariables::AK47_BULLETS, config["ak47_max_bullets"].as<int>());
-    matchesConfig.emplace(ConfigVariables::M3_BULLETS, config["m3_max_bullets"].as<int>());
-    matchesConfig.emplace(ConfigVariables::AWP_BULLETS, config["awp_max_bullets"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PLAYER_HP, config["player_hp"].as<int>());
+    matchesConfig.emplace(ConfigVariables::STARTING_MONEY, config["starting_money"].as<int>());
+    matchesConfig.emplace(ConfigVariables::MAX_PLAYERS, config["match_max_players"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PISTOL_AMMO, config["pistol_ammo"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PISTOL_RANGE, config["pistol_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PISTOL_ACCURACY, config["pistol_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PISTOL_DAMAGE, config["pistol_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_PRICE, config["awp_price"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_AMMO, config["awp_ammo"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_RANGE, config["awp_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_ACCURACY, config["awp_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_DAMAGE, config["awp_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_FIRERATE, config["awp_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_PRICE, config["rifle_price"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_AMMO, config["rifle_ammo"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_RANGE, config["rifle_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_ACCURACY, config["rifle_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_DAMAGE, config["rifle_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_FIRERATE, config["rifle_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_PRICE, config["shotgun_price"].as<int>());
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_AMMO, config["shotgun_ammo"].as<int>());
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_RANGE, config["shotgun_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_ACCURACY, config["shotgun_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_DAMAGE, config["shotgun_damage"].as<int>());     
+    matchesConfig.emplace(ConfigVariables::KNIFE_RANGE, config["knife_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_ACCURACY, config["knife_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_DAMAGE, config["knife_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_FIRERATE, config["knife_firerate"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_KILL_ENEMY, config["money_kill_enemy"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_WON, config["money_round_won"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MIN_DMG_KNF, config["min_dmg_knife"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MAX_DMG_KNF, config["max_dmg_knife"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MIN_DMG_GLK, config["min_dmg_glock"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MAX_DMG_GLK, config["max_dmg_glock"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MIN_DMG_M3, config["min_dmg_m3"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MAX_DMG_M3, config["max_dmg_m3"].as<int>());
-    matchesConfig.emplace(ConfigVariables::FR_KNF, config["fire_rate_knife"].as<float>());
-    matchesConfig.emplace(ConfigVariables::FR_AWP, config["fire_rate_awp"].as<float>());
-    matchesConfig.emplace(ConfigVariables::FR_AK47, config["fire_rate_ak47"].as<float>());
-    matchesConfig.emplace(ConfigVariables::FR_GLK, config["fire_rate_glock"].as<float>());
-    matchesConfig.emplace(ConfigVariables::FR_M3, config["fire_rate_m3"].as<float>());
+    matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_RANGE, config["bomb_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_ACCURACY, config["bomb_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_DAMAGE, config["bomb_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_FIRERATE, config["bomb_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_FUSE, config["bomb_fuse"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_ACTIVATE_TIME, config["bomb_activate_time"].as<int>());
+
+
+    // iterando el filesytem para cargar los nombres de los mapas
+    // no hay un header de filesystem en c++11 asi que lo hago estilo C
+    // codigo obtenido de un ejemplo de la library dirent.h
+    // https://stackoverflow.com/a/12240511
+    struct dirent *entry;
+    DIR *dp = opendir(MAP_PATH_PREFIX);
+    if (dp == nullptr) {
+        throw std::exception();
+    }
+
+    while ((entry = readdir(dp))){
+        std::string mapName(entry->d_name);
+        if (mapName == ".." || mapName == "."){
+            continue;
+        }
+        mapNames.insert(mapName);
+    }
+
+    closedir(dp);
 }
 
 GamesMonitor::GamesMonitor(GamesMonitor &&other) noexcept
@@ -49,6 +88,13 @@ bool GamesMonitor::createMatch(std::string gameName,
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     std::string mapPath = MAP_PATH_PREFIX + mapName + MAP_EXTENSION;
     YAML::Node map;
+
+    // si el mapa no existe
+    // me voy
+    if (!mapNames.count(mapName + MAP_EXTENSION)){
+        response(-1);
+        return false;
+    }
 
     // si hay un juego con ese nombre, no puedo crear partida
     if (matches.count(gameName)){
@@ -78,7 +124,6 @@ bool GamesMonitor::joinMatch(const std::string &gameName,
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     // si no hay un juego con ese nombre, no puedo unirme
     if (!matches.count(gameName)){
-        std::cout << "No hay nada\n";
         response(-1);
         return false;
     }
@@ -96,4 +141,33 @@ void GamesMonitor::stopGames() {
     for (auto& m : matches){
         m.second.stop();
     }
+}
+
+// devuelvo por movimiento
+// pq si devuelvo por ref
+// puede que otro login cree un game
+// modifique a la variable referenciada
+// y nos arruine el string
+std::string GamesMonitor::listGames() {
+    std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    std::string games;
+    // simil muy simil tp3
+    auto match = matches.begin();
+    while (match != matches.end()){
+        games += (*match).first + "\n";
+        ++match;
+    }
+    return games;
+}
+
+std::string GamesMonitor::listMaps() {
+    std::lock_guard<std::mutex> lock(gamesMonitorLock);
+    std::string maps;
+    auto mapIt = mapNames.begin();
+    while (mapIt != mapNames.end()){
+        auto mapName = mapIt->substr(0, mapIt->size() - 4); // resto el tamaño de la extension para no enviarla
+        maps += (mapName + "\n");
+        ++mapIt;
+    }
+    return maps;
 }

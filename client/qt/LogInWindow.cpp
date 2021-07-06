@@ -1,9 +1,8 @@
 #include "LogInWindow.h"
 #include <QDebug>
 LogInWindow::LogInWindow(QWidget *parent, int width, int height, LogInInfo &info)
-    : QDialog(parent), width(width), height(height), info(&info)
+    : QDialog(parent), width(width), height(height), info(info), userNameWindow(nullptr)
 {
-
     this->setWindowTitle("Counter Strike 2D");
     this->setFixedHeight(height);
     this->setFixedWidth(width);
@@ -11,14 +10,13 @@ LogInWindow::LogInWindow(QWidget *parent, int width, int height, LogInInfo &info
     this->open();
     this->playIntro();
     setUpAll();
-
 }
 
 void LogInWindow::playIntro() {
     this->open();
     this->close();
-    IntroWindow introWindow(this, width, height);
-    introWindow.run();
+    //IntroWindow introWindow(this, width, height);
+    //introWindow.run();
 }
 
 LogInWindow::~LogInWindow()
@@ -26,7 +24,6 @@ LogInWindow::~LogInWindow()
 }
 
 void LogInWindow::setUpAll() {
-
     mainLayout = new QVBoxLayout();
     this->setLayout(mainLayout);
     this->setMainTitle();
@@ -90,10 +87,16 @@ void LogInWindow::on_saveButton_clicked()
                              QMessageBox::Close);
         return;
     }
-    info->ip = ip;
-    info->port = port;
+    try {
+        info.socket.connect(ip.c_str(), port.c_str());
+    } catch (const std::exception& e){
+        QMessageBox::warning(this, tr("Configuration error"),
+                             tr("Error trying to connect to server."),
+                             QMessageBox::Close);
+        return;
+    }
 
-    UserNameWindow* userWindow = new UserNameWindow(nullptr, width, height, *info);
+    userNameWindow = new UserNameWindow(this, width, height, info);
     this->close();
-    userWindow->show();
+    userNameWindow->show();
 }

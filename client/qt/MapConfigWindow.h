@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QString>
 #include <QPushButton>
+#include <QLineEdit>
 
 #include "./CounterStrikeStyle.h"
 #include "./QEditorMapListWidget.h"
@@ -20,8 +21,8 @@ class MapConfigWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info);
-    ~MapConfigWindow();
+    explicit MapConfigWindow(QWidget *parent, int width, int height, LogInInfo &info, bool create);
+    ~MapConfigWindow() override;
 
 private slots:
     void handleJoinPushButton();
@@ -30,18 +31,20 @@ private slots:
 private:
     int width;
     int height;
-    LogInInfo* info;
+    LogInInfo& info;
+    bool createWindow;
     CounterStrikeStyle styler;
     QVBoxLayout* mainLayout;
     QHBoxLayout* bottonLayout;
+    QLineEdit* usernameLineEdit;
     QEditorMapListWidget* qEditorMapList;
 
     QString selectedMap;
 
     void execCreationWindow();
-    void execEditorWindow(QString &mapName);
     void setMainLayout();
     void setBottonLayout();
+    void setEditLinesLayout();
 
 };
 

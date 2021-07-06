@@ -50,6 +50,18 @@ bool ThLogin::handleLoginMessage(uint8_t msgCode, const std::vector<unsigned cha
                                                         this,
                                                         std::placeholders::_1);
     switch (msgCode) {
+        case LIST: {
+            // copy ellision optimization
+            // si el compilador no la hace hay que mover
+            std::string gameList = games.listGames();
+            loginLister(LOGIN_LIST_GAMES, gameList);
+            return false;
+        }
+        case LIST_MAPS: {
+            std::string gameList = games.listMaps();
+            loginLister(LOGIN_LIST_MAPS, gameList);
+            return false;
+        }
         case CREATE: {
             std::pair<std::string, std::string> gamePair = prot.deserializeCreateGame(msg);
             return games.createMatch(std::move(gamePair.first), gamePair.second, socketHander, response);
@@ -79,4 +91,10 @@ void ThLogin::loginResponse(int8_t id) {
 
 void ThLogin::sendMsgs(std::vector<unsigned char> msg) {
     peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
+}
+
+void ThLogin::loginLister(uint8_t commandId, const std::string& loginList){
+    std::function<void(std::vector<unsigned char>)> sender =
+            std::bind(&ThLogin::sendMsgs, this, std::placeholders::_1);
+    prot.loginLister(commandId, loginList, sender);
 }

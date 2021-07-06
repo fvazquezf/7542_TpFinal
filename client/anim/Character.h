@@ -3,6 +3,7 @@
 #include "../Renderizable.h"
 #include "../weapons/Weapon.h"
 #include "Animation.h"
+#include "../SoundManager.h"
 
 class Character : public Renderizable {
 private:
@@ -10,7 +11,6 @@ private:
     bool bleeding;
     bool wasHit;
     bool moving;
-    bool isCt;
     size_t lastIter;
     Weapon weapon;
     // animacion de movimiento
@@ -21,6 +21,7 @@ private:
     Animation legAnimation;
 
     std::map<uint8_t, uint8_t> weaponCharacterFrameMap;
+    size_t currentMovingUpdates;
 public:
 	Character(SdlTexture& texture,
               float posX,
@@ -43,13 +44,15 @@ public:
 	void changeWeapon(uint8_t weaponCode);
 
 	void hit();
-	void die();
+	void die(float distanceToCenter);
 
 	~Character() override;
 
     void attack();
 
     void pushPositionOffset(std::tuple<float, float, int> positionOffset);
+
+    std::pair<float, float> getPosition();
 };
 
 #endif

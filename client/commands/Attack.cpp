@@ -5,7 +5,7 @@ Attack::Attack(bool done)
 }
 
 void Attack::serialize(std::function<void(std::vector<unsigned char>)> &callback, const Protocol &protocol) {
-    protocol.attack(done, callback);
+    protocol.startStopCommand(done ? STOP_ATTACK : ATTACK, callback);
 }
 
 Attack::~Attack() {

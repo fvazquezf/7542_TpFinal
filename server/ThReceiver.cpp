@@ -9,6 +9,9 @@
 #include "events/BuyEvent.h"
 #include "events/DisconnectEvent.h"
 #include "events/PickUpEvent.h"
+#include "events/ReloadEvent.h"
+#include "events/StartPlantEvent.h"
+#include "events/StopPlantEvent.h"
 
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
@@ -108,6 +111,15 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         case PICKUP:
             eventQueue.push(std::unique_ptr<ClientEvent>(new PickUpEvent(userId)));
+            break;
+        case RELOAD:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new ReloadEvent(userId)));
+            break;
+        case PLANT:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new StartPlantEvent(userId)));
+            break;
+        case STOP_PLANT:
+            eventQueue.push(std::unique_ptr<ClientEvent>(new StopPlantEvent(userId)));
             break;
         default:
             break;

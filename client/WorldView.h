@@ -17,6 +17,8 @@
 #include "BuyingMenu.h"
 #include "Hud.h"
 #include "weapons/DroppedWeapon.h"
+#include "SoundManager.h"
+#include "MapView.h"
 
 class WorldView {
 private:
@@ -25,8 +27,10 @@ private:
     Stencil stencil;
     BuyingMenu menu;
     Hud hud;
+    MapView map;
 
     std::atomic_bool menuTime;
+    std::atomic_bool done;
 
     SdlTexture terror;
     SdlTexture counterTerrorist;
@@ -38,8 +42,8 @@ private:
     std::map<uint8_t, SdlTexture> weapons;
     std::map<uint8_t, SdlTexture> dropTextures;
 
-    std::vector<DroppedWeapon> droppedWeapons;
-    std::vector<NonMovable> tiles;
+    std::vector<DroppedWeapon> droppedWeapons; // va a mapView
+    std::vector<NonMovable> tiles; // va a mapView
 
     // varios hilos acceden de manera concurrente a la view
     // SDL, Drawer, Receiver
@@ -85,6 +89,15 @@ public:
     void buildTeams(const std::map<uint8_t, bool> &teamMap);
 
     void assignPlayer(uint8_t aPlayerId);
+
+    void updateHudTime(uint8_t time);
+
+    void updateHudHealth(uint8_t health);
+
+    void updateHudMoney(uint16_t money);
+
+    void signalDone();
+    bool isDone();
 };
 
 

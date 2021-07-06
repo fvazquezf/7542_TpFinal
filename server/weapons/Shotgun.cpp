@@ -1,9 +1,9 @@
 #include "Shotgun.h"
 
-Shotgun::Shotgun()
-: Weapon(M3){
-    damage = 0;
-    cooldown = 0;
+Shotgun::Shotgun(int ammo, int range, int spread, int damage)
+: Weapon(M3, ammo, range, damage),
+  spread(spread){
+    damageOutput = 0;
 }
 
 
@@ -12,18 +12,16 @@ Shotgun::~Shotgun(){
 }
 
 bool Shotgun::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
-    if (cooldown != 0) return false;
-    float dist = (player - enemy).LengthSquared();
-    // 900 es la distancia(30m) maxima de ataque al cuadrado, si esta mas lejos no le pega.
-    if (dist < 900.0f) {
+    double dist = static_cast<double>((player - enemy).Length());
+    if (dist < range) {
         double res = atan2(enemy.y - player.y, enemy.x - player.x);
         // el round creo que esta de mas
         int enemyAngle = std::round(res * 180/3.14) + 90;
         if (enemyAngle < 0){
             enemyAngle += 360;
         }
-        int start = (angle) - 30;
-        int end = (angle) + 30;
+        int start = (angle) - spread;
+        int end = (angle) + spread;
         if (start < end){
             if (start < enemyAngle && enemyAngle < end){
                 calcDamage(dist);
@@ -44,22 +42,23 @@ bool Shotgun::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
 }
 
 void Shotgun::calcDamage(float dist){
-    damage = 20;
-    if (dist < 400.0f){
-        damage = 50;
-        if (dist < 64.0f){
-            damage = 100;
+    damageOutput = damage/5;
+    if (dist < range/2){
+        damageOutput = damage/3;
+        if (dist < range/5){
+            damageOutput = damage;
         }
     }
 }
 
 int Shotgun::hit(){
-    return damage;
+    return damageOutput;
 }
 
-bool Shotgun::tickCooldown(){
-    if (cooldown == 0) {
-        cooldown = 1;
+bool Shotgun::canShoot(){
+    if (cooldown == 0 && clip != 0) {
+        clip--;
+        cooldown = 8000;
         return true;
     } else {
         return false;

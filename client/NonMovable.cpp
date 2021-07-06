@@ -8,11 +8,12 @@ NonMovable::NonMovable(SdlTexture &texture,
            float posX,
            float posY)
 : Renderizable(texture, sizeW, sizeH, posX, posY){
+    rescaling = 1;
 }
 
 void NonMovable::render(Camera &camera, size_t iteration) {
     // size de una tile
-    Area src(0, 0, sizeW, sizeH);
+    Area src(0, 0, sizeW / rescaling, sizeH / rescaling);
     if (camera.isVisible(posX, posY) ){
         camera.renderInSight(texture, src, posX, posY, 0);
     }
@@ -23,7 +24,8 @@ NonMovable::~NonMovable() {
 }
 
 NonMovable::NonMovable(NonMovable &&other) noexcept
-: Renderizable(std::move(other)){
+: Renderizable(std::move(other)),
+  rescaling(other.rescaling){
 }
 
 NonMovable &NonMovable::operator=(NonMovable &&other) noexcept {
@@ -34,5 +36,11 @@ NonMovable &NonMovable::operator=(NonMovable &&other) noexcept {
     sizeH = other.sizeH;
     posX = other.posX;
     posY = other.posY;
+    rescaling = other.rescaling;
     return *this;
+}
+
+NonMovable::NonMovable(SdlTexture &texture, int sizeW, int sizeH, float posX, float posY, int rescaling)
+: Renderizable(texture, sizeW, sizeH, posX, posY),
+  rescaling(rescaling){
 }
