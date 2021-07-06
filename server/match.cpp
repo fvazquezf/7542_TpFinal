@@ -9,6 +9,7 @@ Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
   world(updates, matchConfig){
     try {
         mapInfo = YAML::LoadFile(mapName);
+        world.loadMap(mapInfo);
     } catch(const std::exception& e){
         throw e;
     }

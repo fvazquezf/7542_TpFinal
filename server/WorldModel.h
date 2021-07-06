@@ -11,6 +11,7 @@
 #include "../common/ProtectedQueue.h"
 #include <memory>
 #include <utility>
+#include "yaml-cpp/yaml.h"
 
 #include <map>
 #include <unordered_set>
@@ -60,6 +61,7 @@ class WorldModel: public Thread {
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void createBox(b2BodyDef& boxDef);
+        void loadMap(YAML::Node& mapInfo);
 
         void updatePositions();
         void updateAngles();

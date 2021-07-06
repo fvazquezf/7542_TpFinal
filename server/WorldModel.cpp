@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <utility>
 #include <updates/GameDoneUpdate.h>
+#include "yaml-cpp/yaml.h"
 
 #define FRAMERATE 1000000/60.0f
 
@@ -94,14 +95,12 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	b2Body* body = world.CreateBody(&bodyDef);
 
 	b2CircleShape bodyCircle;
-	bodyCircle.m_radius = 0.25f;
+	bodyCircle.m_radius = 0.2f;
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &bodyCircle;
-	// Set the box density to be non-zero, so it will be dynamic.
 	fixtureDef.density = 1.0f;
 
-	// Add the shape to the body.
 	body->CreateFixture(&fixtureDef);
 
 	b2FrictionJointDef fJointDef;
@@ -122,10 +121,38 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 void WorldModel::createBox(b2BodyDef& boxDef){
 	b2Body* box = this->world.CreateBody(&boxDef);
     b2PolygonShape bodyBox;
-	bodyBox.SetAsBox(1.0f, 1.0f);
+	bodyBox.SetAsBox(.75f, 0.75f);
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &bodyBox;
     box->CreateFixture(&fixtureDef);
+}
+
+void WorldModel::loadMap(YAML::Node& mapInfo){
+    std::vector<std::pair<int, int>> walls;
+    std::vector<std::pair<int, int>> temp;
+    temp = mapInfo["wall_1"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_2"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_3"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_4"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_5"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_6"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_7"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+    temp = mapInfo["wall_8"].as<std::vector<std::pair<int, int>>>();
+    walls.insert(walls.end(), temp.begin(), temp.end());
+
+    b2BodyDef boxDef;
+    boxDef.type = b2_staticBody;
+    for (auto& pos: walls){
+        boxDef.position.Set(pos.first, pos.second);
+        createBox(boxDef);
+    }
 }
 
 void WorldModel::run(){
