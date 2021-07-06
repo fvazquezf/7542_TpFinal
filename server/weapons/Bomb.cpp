@@ -62,6 +62,7 @@ void Bomb::resetCooldown(){
 
 bool Bomb::startPlanting(){
     planting = true;
+    return true;
 }
 
 void Bomb::setPlanter(int id){

@@ -128,33 +128,6 @@ void WorldModel::createBox(b2BodyDef& boxDef){
     box->CreateFixture(&fixtureDef);
 }
 
-void WorldModel::loadMap(){
-	b2BodyDef boxDef;
-	boxDef.type = b2_staticBody;
-	float x = -20;
-	float y = 20;
-
-	for (int i = 0; i<20 ; i++){
-		boxDef.position.Set(x, y);
-		this->createBox(boxDef);
-
-		boxDef.position.Set(x, -y);
-		this->createBox(boxDef);
-
-		x = x + 2;
-	}
-	y = y - 2;
-	for (int i = 0; i<19 ; i++){
-		boxDef.position.Set(x, y);
-		this->createBox(boxDef);
-
-		boxDef.position.Set(-x, y);
-		this->createBox(boxDef);
-
-		y = y - 2;
-	}
-}
-
 void WorldModel::run(){
 	is_running = true;
     // division en equipos
@@ -173,29 +146,32 @@ void WorldModel::run(){
     // Ciclo de juego, 10 rondas
     for (int i = 0; i < 10 && is_running; i++){
 		if (i == 5) swapTeams();
+        resetRound();
         purchaseFase = true;
         playerModels.at(tally.getTerrorist()).giveBomb(bomb);
         roundPurchase();
 		purchaseFase = false;
         roundPlay();
-		bomb->reset();
-        tally.resetTime();
-        // checkGameDone() -> checkea si termino la partida, si termino, is_running = false
     }
-    // roundEnd() -> envia info de la partida, cierra a los clientes, etc etc
     updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
     is_running = false;
 }
 
-void WorldModel::roundPurchase() {
-    // 600 ticks, 10 segundos
-    updateBuying(true);
+void WorldModel::resetRound(){
     reviveAll();
     for (auto & playerModel : this->playerModels){
 		playerModel.second.reposition(mapLayout);
 	}
+    bomb->reset();
+    tally.resetTime();
+    attackingPlayers.clear();
+}
+
+void WorldModel::roundPurchase() {
+    updateBuying(true);
     updatePositions();
     usleep(FRAMERATE);
+    // 600 ticks, 10 segundos
     for (size_t i = 0; i < 600; ++i){
         roundCommon();
     }
@@ -208,6 +184,7 @@ void WorldModel::roundPlay() {
     while (!tally.isRoundOver()){
         roundCommon();
     }
+    usleep(FRAMERATE * 120);
 }
 
 void WorldModel::roundCommon() {
@@ -258,10 +235,8 @@ void WorldModel::stopPlanting(uint8_t id){
     }
 }
 
-void WorldModel::step(){
-	for (auto & playerModel : this->playerModels){
-		playerModel.second.step();
-	}
+void WorldModel::plantingLogic(){
+    // esto se tiene que refactorizar CLARAMENTE
     if (bomb->isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
         bomb->tickPlanting();
         if (bomb->isActive()){
@@ -283,6 +258,13 @@ void WorldModel::step(){
     if (bomb->isDefused()){
         tally.bombDefused();
     }
+}
+
+void WorldModel::step(){
+	for (auto & playerModel : this->playerModels){
+		playerModel.second.step();
+	}
+    plantingLogic();
 	for (auto id: attackingPlayers){
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
@@ -393,13 +375,6 @@ void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
 void WorldModel::stopMovingPlayer(uint8_t id, uint8_t dir) {
 	if (purchaseFase) return;
     playerModels.at(id).stopMove(dir);
-}
-
-void WorldModel::stopAllPlayers(){
-	for (auto& it : playerModels){
-        it.second.stopMove(5);
-    }
-	attackingPlayers.clear();
 }
 
 void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {

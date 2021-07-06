@@ -60,7 +60,6 @@ class WorldModel: public Thread {
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void createBox(b2BodyDef& boxDef);
-        void loadMap();
 
         void updatePositions();
         void updateAngles();
@@ -78,7 +77,6 @@ class WorldModel: public Thread {
         
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);
-        void stopAllPlayers();
         void rotatePlayer(uint8_t id, int16_t angle);
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
@@ -101,6 +99,8 @@ class WorldModel: public Thread {
         void step();
 
 
+    void plantingLogic();
+    void resetRound();
     void disconnectPlayer(uint8_t id);
 };
 
