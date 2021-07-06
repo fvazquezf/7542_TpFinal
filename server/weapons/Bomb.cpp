@@ -61,9 +61,7 @@ void Bomb::resetCooldown(){
 
 
 bool Bomb::startPlanting(){
-    // aca hay que chequear que este en el site
     planting = true;
-    std::cout << "bomb start Planting" << std::endl;
 }
 
 void Bomb::setPlanter(int id){
@@ -77,7 +75,6 @@ int Bomb::getPlanter(){
 void Bomb::stopPlanting(){
     planting = false;
     plantingTicks = 0;
-    std::cout << "bomb stop Planting" << std::endl;
 }
 
 bool Bomb::isPlanting(){
@@ -88,7 +85,6 @@ void Bomb::tickPlanting(){
     plantingTicks++;
     if (plantingTicks == plantingCooldown){
         active = true;
-        std::cout << "bomb activated" << std::endl;
     }
 }
 
@@ -122,7 +118,6 @@ void Bomb::tickDefuse(){
     defusingTicks++;
     if (defusingTicks == plantingCooldown){
         defused = true;
-        std::cout << "bomb defused" << std::endl;
     }
 }
 

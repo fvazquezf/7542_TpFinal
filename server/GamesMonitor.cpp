@@ -8,12 +8,6 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::PLAYER_HP, config["player_hp"].as<int>());
     matchesConfig.emplace(ConfigVariables::STARTING_MONEY, config["starting_money"].as<int>());
     matchesConfig.emplace(ConfigVariables::MAX_PLAYERS, config["match_max_players"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_RANGE, config["bomb_range"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_ACCURACY, config["bomb_accuracy"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_DAMAGE, config["bomb_damage"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_FIRERATE, config["bomb_firerate"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_FUSE, config["bomb_fuse"].as<int>());
-    matchesConfig.emplace(ConfigVariables::BOMB_ACTIVATE_TIME, config["bomb_activate_time"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_AMMO, config["pistol_ammo"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_RANGE, config["pistol_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_ACCURACY, config["pistol_accuracy"].as<int>());
@@ -35,9 +29,21 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::SHOTGUN_RANGE, config["shotgun_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_ACCURACY, config["shotgun_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_DAMAGE, config["shotgun_damage"].as<int>());     
+    matchesConfig.emplace(ConfigVariables::KNIFE_RANGE, config["knife_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_ACCURACY, config["knife_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_DAMAGE, config["knife_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_FIRERATE, config["knife_firerate"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_KILL_ENEMY, config["money_kill_enemy"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_WON, config["money_round_won"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
+    matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_RANGE, config["bomb_range"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_ACCURACY, config["bomb_accuracy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_DAMAGE, config["bomb_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_FIRERATE, config["bomb_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_FUSE, config["bomb_fuse"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_ACTIVATE_TIME, config["bomb_activate_time"].as<int>());
+
 
     // iterando el filesytem para cargar los nombres de los mapas
     // no hay un header de filesystem en c++11 asi que lo hago estilo C

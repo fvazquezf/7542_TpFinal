@@ -19,12 +19,6 @@ Armory::Armory(DroppedWeapons& droppedWeapons, const std::map<int, int>& matchCo
                                                     matchConfig.at(KNIFE_DAMAGE),
                                                     matchConfig.at(KNIFE_FIRERATE))));
                                                 
-    // arsenal.emplace(std::piecewise_construct,
-    //                 std::forward_as_tuple(3),
-    //                 std::forward_as_tuple(new Bomb(matchConfig.at(KNIFE_RANGE), 
-    //                                                 matchConfig.at(KNIFE_ACCURACY),
-    //                                                 matchConfig.at(KNIFE_DAMAGE),
-    //                                                 matchConfig.at(KNIFE_FIRERATE))));
 
     prices.emplace(AWP, matchConfig.at(AWP_PRICE));
     prices.emplace(RIFLE, matchConfig.at(RIFLE_PRICE));
@@ -85,7 +79,6 @@ bool Armory::startPlanting(){
     currentWeapon = 3;
     Bomb* bomb = static_cast<Bomb*>(arsenal[3].get());
     bomb->startPlanting();
-    std::cout << "armoty start Planting" << std::endl;
     return true;
 }
 
@@ -95,11 +88,9 @@ bool Armory::stopPlanting(){
     if (bomb->isActive()) {
         arsenal.erase(3);
         currentWeapon = 1;
-        std::cout << "armory deleted bomb" << std::endl;
     } 
     if (bomb->isPlanting()){
         bomb->stopPlanting();
-        std::cout << "armory stoped Planting" << std::endl;
     }
     return true;
 }
@@ -130,9 +121,6 @@ bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playe
         if (arsenal.count(0) > 0){
             dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
         }
-        // } else {
-        //     currentWeapon = 0;
-        // }
         selectWeapon(weaponCode);
         return true;
     }
@@ -147,9 +135,6 @@ bool Armory::pickUpWeapon(const b2Vec2& position){
         if (arsenal.count(0) > 0){
             dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), position);
         }
-    //    } else {
-    //        currentWeapon = 0;
-    //    }
        selectWeapon(pickedWeapon);
        return true;
     }
@@ -181,8 +166,6 @@ void Armory::selectWeapon(uint8_t weaponCode){
         case AWP:
             arsenal[0] = awp;
             break;
-        // default:
-        //     // throw std::invalid_argument("Invalid weapon code\n");
     }
 }
 

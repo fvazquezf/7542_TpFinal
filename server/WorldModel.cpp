@@ -36,6 +36,7 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
+
     bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
                                              matchConfig.at(BOMB_ACCURACY),
                                              matchConfig.at(BOMB_DAMAGE),
@@ -45,6 +46,7 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
 
 	this->anchor = world.CreateBody(&anchorDef);
+
 	is_running = false;
 	purchaseFase = true;
 }
@@ -243,7 +245,7 @@ void WorldModel::startPlanting(uint8_t id){
             bomb->startDefusing();
         }
     }
-    std::cout << "world start Planting" << std::endl;
+
 }
 
 void WorldModel::stopPlanting(uint8_t id){
@@ -254,7 +256,6 @@ void WorldModel::stopPlanting(uint8_t id){
     if (playerModels.at(id).stopDefusing()){
         bomb->stopDefusing();
     }
-    std::cout << "world stop Planting" << std::endl;
 }
 
 void WorldModel::step(){
