@@ -25,7 +25,7 @@ MapView::MapView(SdlWindow& window,
 
 void MapView::loadMap(const std::string &mapFile) {
     try {
-        map = YAML::LoadFile(mapFile);
+        map = YAML::Load(mapFile);
     } catch (const std::exception& e){
         // si no puede cargar el mapa
         // rip, nos desconectamos

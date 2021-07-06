@@ -18,9 +18,7 @@ WorldView::WorldView(SdlWindow& aWindow)
         window,
         {0, 0, 0},
         {200, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp",window),
-  backgroundTiles("../sprites/gfx/backgrounds/aztec.png", window){
-    map.loadMap("../maps/mapita.yml");
+  legs("../sprites/gfx/player/legs.bmp",window){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -61,9 +59,6 @@ WorldView::WorldView(SdlWindow& aWindow)
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(5),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
-    for (size_t i = 40; i < 70; ++i)
-        for (size_t j = 40; j < 70; ++j)
-            tiles.emplace_back(backgroundTiles, 32, 32, i, j);
 }
 
 WorldView::~WorldView() {
@@ -80,13 +75,13 @@ void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill();
-    //map.render(camera);
-    for (auto& tile : tiles){
+    map.render(camera);
+    /*for (auto& tile : tiles){
         camera.render(tile, iteration);
-    }
-    for (auto& weapon : droppedWeapons){
+    }*/
+    /*for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
-    }
+    }*/
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
@@ -239,5 +234,10 @@ void WorldView::signalDone() {
 
 bool WorldView::isDone() {
     return done;
+}
+
+void WorldView::buildMap(const std::string &mapString) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    map.loadMap(mapString);
 }
 

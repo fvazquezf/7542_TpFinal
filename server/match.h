@@ -22,8 +22,6 @@ public:
     Match& operator=(Match&& other) noexcept;
 
     int8_t addUser(Socket socket);
-    void removeUser();
-    void removeUsers();
     ~Match();
 
     void startIfShould();

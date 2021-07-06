@@ -36,14 +36,12 @@ private:
     SdlTexture counterTerrorist;
     SdlTexture blood;
     SdlTexture legs;
-    SdlTexture backgroundTiles;
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
     std::map<uint8_t, SdlTexture> dropTextures;
 
     std::vector<DroppedWeapon> droppedWeapons; // va a mapView
-    std::vector<NonMovable> tiles; // va a mapView
 
     // varios hilos acceden de manera concurrente a la view
     // SDL, Drawer, Receiver
@@ -98,6 +96,8 @@ public:
 
     void signalDone();
     bool isDone();
+
+    void buildMap(const std::string &mapString);
 };
 
 

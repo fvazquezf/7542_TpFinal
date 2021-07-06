@@ -9,7 +9,7 @@
 
 Client::Client(Socket clientSocket)
 : clientSocket(std::move(clientSocket)),
-  window(600, 400, false, "unaVentana"){
+  window(800, 600, false, "CS2D"){
 }
 
 void Client::launch() {

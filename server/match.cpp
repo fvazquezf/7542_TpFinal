@@ -1,3 +1,4 @@
+#include <updates/MapUpdate.h>
 #include "yaml-cpp/yaml.h"
 #include "match.h"
 #include "../common/ConfigVariables.h"
@@ -11,12 +12,6 @@ Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
     } catch(const std::exception& e){
         throw e;
     }
-}
-
-void Match::removeUser() {
-}
-
-void Match::removeUsers() {
 }
 
 Match::~Match() {
@@ -55,7 +50,11 @@ int8_t Match::addUser(Socket socket) {
                                         world.addPlayer(id),
                                         updates.addPlayer(id),
                                         id));
+    std::string map = Dump(mapInfo);
+    // enviamos informacion del mapa al cliente que se acaba de unir
+    // de esa manera ya puede ir cargando las texturas
     uint8_t userId = id;
+    updates.push(userId, std::unique_ptr<Update>(new MapUpdate(std::move(map))));
     id++;
     std::cout << "Users ammount: " << users.size() << "\n";
     return userId;

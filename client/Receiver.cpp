@@ -107,6 +107,11 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             running = false;
             break;
         }
+        case MAP_INFO_UPDATE: {
+            std::string map(msg.begin(), msg.end());
+            world.buildMap(map);
+            break;
+        }
         default:
             break;
     }
