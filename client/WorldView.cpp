@@ -6,7 +6,7 @@
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
-  stencil(window, 45, 0, 0),
+  stencil(window, 120, 0, 0),
   menu(window),
   hud(window),
   map(window, "../mapIconsConfig.yaml"),
@@ -74,7 +74,7 @@ void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
 
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    window.fill();
+    window.fill(0, 0, 0, 0);
     map.render(camera);
     for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
@@ -85,8 +85,8 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    stencil.createStencilTexture(camera.angleFromMouse());
     hud.show();
-    stencil.applyFilter(camera.angleFromMouse());
     window.render();
 }
 

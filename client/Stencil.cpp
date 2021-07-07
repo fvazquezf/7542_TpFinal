@@ -7,33 +7,35 @@ Stencil::Stencil(SdlWindow &window, uint16_t coneAngle, float circleRadius, uint
   coneAngle(coneAngle),
   circleRadius(circleRadius),
   stencilOpacity(opacity){
+    height = std::sqrt(std::pow(window.getHeight(), 2) + std::pow(window.getWidth(), 2));
+    base = 2 * height * tan((coneAngle * 3.1415 / 180) / 2);
+    diagonalLength = std::sqrt((std::pow((base / 2), 2) + std::pow(height, 2)));
+}
+
+
+Stencil::~Stencil() {
 
 }
 
 // triangulo isoceles (2 angulos iguales)
-// la altura es 2 * h
+// la altura es sqrt((h/2)^2 + (w/2)^2)
+// (la diagonal de la pantalla/2, siempre queda afuera de la vista)
 // el punto principal siempre esta en la mitad (w/2, h/2)
-void Stencil::applyFilter(int16_t playerAngle) {
-    int otherAngles = (180 - coneAngle) / 2;
-    float halfBaseTriangle = 2 * window.getHeight() * tan(coneAngle / 2 * (3.14f/180.0f));
-    /*int16_t angleLow = playerAngle - coneAngle/2;
-    if (angleLow > 360){
-        angleLow -= 360;
-    }
-    int16_t angleHigh = playerAngle + coneAngle/2;
-    if (angleHigh > 360) {
-        angleHigh -= 360;
-    }
-
-    std::cout << angleLow << " " << angleHigh << std::endl;
-    int16_t x2 = 3000 * sin(angleLow * 3.14f/180.0f);
-    int16_t y2 = -3000 * cos(angleLow * 3.14f/180.0f);
-    int16_t x3 = 3000 * sin(angleHigh * 3.14f/180.0f);
-    int16_t y3 = -3000 * cos(angleHigh * 3.14f/180.0f);
-    std::cout << x2 << " " << y2 << " " << x3 << " " << y3 << std::endl;*/
-    window.drawCenteredTriangle(window.getWidth()/2, window.getHeight()/2, 400 - halfBaseTriangle, 300 - 600, 400 + halfBaseTriangle, 300 - 600, 0, 0, 0, 0);
-}
-
-Stencil::~Stencil() {
-
+void Stencil::createStencilTexture(int16_t playerAngle) {
+    float dirX = sin(playerAngle * 3.1415 / 180); // direccion en X de la mira del jugador
+    float dirY = -cos(playerAngle * 3.1415 / 180); // direccion en Y de la mira del jugador
+    float xBase = (window.getWidth() / 2) + height * dirX; // base del triangulo en X
+    float yBase = (window.getHeight() / 2) + height * dirY; // base del triangulo en Y
+    float basePerpendicularX = (base / 2) * -dirY; // direccion perpendicular al punto de la base (en X)
+    float basePerpendicularY = (base / 2) * dirX; // direccion perpendicular al punto de la base (en Y)
+    // el angulo del cono determina la longitud de la base, eso se calcula solo una vez
+    window.drawCenteredTriangle(window.getWidth()/2, window.getHeight()/2,
+                                xBase + basePerpendicularX,
+                                yBase + basePerpendicularY,
+                                xBase - basePerpendicularX,
+                                yBase - basePerpendicularY,
+                                0xff, 0xff, 0xff,
+                                50);
+    window.drawCenteredCircle(20, 50);
+    window.drawRectangle(50);
 }

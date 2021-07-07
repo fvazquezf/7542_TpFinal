@@ -221,7 +221,7 @@ void WorldModel::roundPurchase() {
     updatePositions();
     usleep(FRAMERATE);
     // 600 ticks, 10 segundos
-    for (size_t i = 0; i < 600; ++i){
+    for (size_t i = 0; i < 600 && is_running; ++i){
         roundCommon();
     }
     updateBuying(false);
@@ -230,7 +230,7 @@ void WorldModel::roundPurchase() {
 void WorldModel::roundPlay() {
     // no queremos ningun evento residual
     usersEvents.clear();
-    while (!tally.isRoundOver()){
+    while (!tally.isRoundOver() && is_running){
         roundCommon();
     }
     usleep(FRAMERATE * 120);

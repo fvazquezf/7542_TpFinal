@@ -74,6 +74,7 @@ void Match::startIfShould() {
 
 void Match::stop() {
     for (auto& u : users) {
+        u.second.stop();
         u.second.join();
     }
     world.stop();

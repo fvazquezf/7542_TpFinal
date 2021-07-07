@@ -60,6 +60,9 @@ public:
 	int getHeight();
 
 	~SdlWindow();
+
+    void drawRectangle(int16_t alpha);
+    void drawCenteredCircle(int16_t radius, int16_t alpha);
 };
 
 #endif

@@ -21,6 +21,8 @@ private:
 	int height;
 
 public:
+    SdlTexture(SdlWindow& window); // crea una textura a partir del renderer actual
+
 	SdlTexture(const std::string& filename, SdlWindow& window);
     SdlTexture(const std::string &filename,
                SdlWindow& window,
@@ -49,6 +51,9 @@ public:
     int render(const Area& src, const Area& dest, float angle, const SDL_RendererFlip& flip) const;
     int render(const Area& src, const Area& dest, float angle, SDL_Point& center, const SDL_RendererFlip& flip) const;
     void changeColor(Color color);
+
+    void setToRenderingTarget();
+
 	~SdlTexture();
 };
 

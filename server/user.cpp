@@ -34,7 +34,8 @@ bool User::isDead() {
 }
 
 void User::stop() {
-    //this->thSender.stop();
+    sender.stop();
+    receiver.stop();
 }
 
 // solo llamado por map.emplace

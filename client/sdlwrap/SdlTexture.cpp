@@ -102,3 +102,20 @@ int SdlTexture::render(const Area &src, const Area &dest, uint8_t alpha) const {
 void SdlTexture::changeColor(Color color) {
     SDL_SetTextureColorMod(this->texture, color.r, color.g, color.b);
 }
+
+SdlTexture &SdlTexture::operator=(SdlTexture &&other) noexcept {
+    if (this == &other){
+        return *this;
+    }
+
+    if (texture != nullptr){
+        SDL_DestroyTexture(texture);
+    }
+
+    texture = other.texture;
+    other.texture = nullptr;
+
+    this->width = other.width;
+    this->height = other.height;
+    return *this;
+}

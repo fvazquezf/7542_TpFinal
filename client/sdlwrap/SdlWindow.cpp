@@ -27,6 +27,7 @@ SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
 	}
 	this->width = width;
     this->height = height;
+    SDL_SetRenderDrawBlendMode(rendererPtr, SDL_BLENDMODE_BLEND);
 }
 
 SdlWindow::~SdlWindow(){
@@ -49,7 +50,7 @@ void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha){
 }
 
 void SdlWindow::fill(){
-	fill(0, 0, 0, 0);
+	fill(0, 0, 0, 255);
 }
 
 void SdlWindow::render(){
@@ -102,5 +103,13 @@ int SdlWindow::drawCenteredTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t 
                             y1,
                             x2,
                             y2,
-                            x3, y3, 0xff, 0xff, 0xff, 25);
+                            x3, y3, 0xff, 0xff, 0xff, alpha);
+}
+
+void SdlWindow::drawRectangle(int16_t alpha) {
+    boxRGBA(rendererPtr, 0, 0, width, height, 0, 0, 0, alpha);
+}
+
+void SdlWindow::drawCenteredCircle(int16_t radius, int16_t alpha) {
+    filledCircleRGBA(rendererPtr, width/2, height/2, radius, 0xff, 0xff, 0xff, alpha);
 }
