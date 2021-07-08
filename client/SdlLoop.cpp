@@ -25,10 +25,14 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
     numbers.insert(SDLK_3);
     numbers.insert(SDLK_4);
 
-    presses[SDLK_w] = false;
-    presses[SDLK_a] = false;
-    presses[SDLK_s] = false;
-    presses[SDLK_d] = false;
+    movePresses[SDLK_w] = false;
+    movePresses[SDLK_a] = false;
+    movePresses[SDLK_s] = false;
+    movePresses[SDLK_d] = false;
+
+    miscPresses[SDLK_e] = false;
+    miscPresses[SDLK_SPACE] = false;
+    miscPresses[SDLK_r] = false;
 
     mousePresses[SDL_BUTTON_LEFT] = false;
     mousePresses[SDL_BUTTON_RIGHT] = false;
@@ -122,32 +126,22 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
         }
     }
 
-    // tecla a la cual no trackeamos
-    // estos son los cambios de arma
-    if (key == SDLK_e){
-        if (pressed){
+    if (pressed && (miscPresses.find(key) != miscPresses.end()) && !miscPresses.at(key)){
+        if (key == SDLK_e) {
             commands.push(std::unique_ptr<Command>(new Pickup()));
-        } else {
-            return;
-        }
-    }
-
-    if (key == SDLK_SPACE){
-        if (pressed) {
+        } else if (key == SDLK_SPACE) {
             commands.push(std::unique_ptr<Command>(new Plant(true)));
-            return;
-        } else {
-            commands.push(std::unique_ptr<Command>(new Plant(false)));
-            return;
-        }
-    }
-
-    if (key == SDLK_r){
-        if (pressed){
+        } else if (key == SDLK_r){
             commands.push(std::unique_ptr<Command>(new Reload()));
-        } else {
-            return;
         }
+        miscPresses.at(key) = true;
+        return;
+    } else if (!pressed && (miscPresses.find(key) != miscPresses.end()) &&miscPresses.at(key)){
+        if (key == SDLK_SPACE) {
+            commands.push(std::unique_ptr<Command>(new Plant(false)));
+        }
+        miscPresses.at(key) = false;
+        return;
     }
 
     if (pressed && (numbers.find(key) != numbers.end())){
@@ -155,11 +149,11 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
         return;
     }
 
-    if (pressed && !presses.at(key)){
-        presses.at(key) = true;
+    if (pressed && !movePresses.at(key)){
+        movePresses.at(key) = true;
         commands.push(std::unique_ptr<Command>(new Move(key)));
     } else if (!pressed){
-        presses.at(key) = false;
+        movePresses.at(key) = false;
         commands.push(std::unique_ptr<Command>(new Move(key, true)));
     }
 }

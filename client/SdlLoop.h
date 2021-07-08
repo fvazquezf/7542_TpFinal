@@ -21,13 +21,15 @@ private:
     SDL_Event currentEvent;
 
     std::map<uint32_t, std::function<void()>> eventMap;
-    // tracks if the key has been pressed and not released
-    std::map<SDL_Keycode, bool> presses;
-    // keeps posible number presses
+    // tracks if the movement key has been pressed and not released
+    std::map<SDL_Keycode, bool> movePresses;
+    // tracks misc presses (plant/defuse, pickup)
+    std::map<SDL_Keycode, bool> miscPresses;
+    // keeps track of number presses
     std::set<SDL_Keycode> numbers;
     // tracks if the button has been pressed and not released
     std::map<uint8_t, bool> mousePresses;
-    // tracks menu button/mouse presses to hunt for menu to game transition bugs
+    // tracks menu button/mouse movePresses to hunt for menu to game transition bugs
     std::map<uint8_t, bool> menuPresses;
 
     void handleKey(bool pressed, SDL_Keycode key);
