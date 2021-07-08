@@ -25,6 +25,7 @@ void MapConfigWindow::handleJoinPushButton() {
         QMessageBox::warning(this, tr("Log In error"),
                              tr(msg.c_str()),
                              QMessageBox::Close);
+        return;
     }
     if (!createWindow) {
         info.sendJoinGameInfo(selectedMap.toStdString());
