@@ -24,6 +24,7 @@
 class WorldView {
 private:
     SdlWindow& window;
+    YAML::Node& clientConfig;
     Camera camera;
     Stencil stencil;
     BuyingMenu menu;
@@ -53,7 +54,7 @@ private:
     std::mutex worldMutex;
     uint8_t playerId;
 public:
-    explicit WorldView(SdlWindow& window);
+    WorldView(SdlWindow& window, YAML::Node& clientConfig);
 
     WorldView(const WorldView& other) = delete;
     WorldView& operator=(const WorldView& other) = delete;

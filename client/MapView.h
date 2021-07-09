@@ -25,13 +25,13 @@ private:
     std::vector<DroppedWeapon> droppedWeapons;
     std::map<std::string, SdlTexture> textureHolder;
 
-    YAML::Node mapInformation;
+    YAML::Node& clientConfig;
     YAML::Node map;
     size_t columns;
     size_t rows;
 public:
     MapView(SdlWindow& window,
-            const std::string& mapInfoFile);
+            YAML::Node& clientConfig);
 
     MapView(const MapView& other) = delete;
     MapView& operator=(const MapView& other) = delete;

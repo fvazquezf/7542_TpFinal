@@ -1,4 +1,6 @@
-types: ["background", "walls", "weapons", "zones"]
+width: 800
+height: 600
+fullscreen: false
 
 background:
  - ["aztec", "../sprites/gfx/backgrounds/aztec.png"]
@@ -22,14 +24,14 @@ background:
  - ["water1", "../sprites/gfx/backgrounds/water1.jpg"]
 
 walls:
- - ["wall_1" , "../sprites/map/wall_1.png"]
- - ["wall_2" , "../sprites/map/wall_2.png"]
- - ["wall_3" , "../sprites/map/wall_3.png"]
- - ["wall_4" , "../sprites/map/wall_4.png"]
- - ["wall_5" , "../sprites/map/wall_5.png"]
- - ["wall_6" , "../sprites/map/wall_6.png"]
- - ["wall_7" , "../sprites/map/wall_7.png"]
- - ["wall_8" , "../sprites/map/wall_8.png"]
+ - ["wall_1" , "../sprites/map/wall_1_client.png"]
+ - ["wall_2" , "../sprites/map/wall_2_client.png"]
+ - ["wall_3" , "../sprites/map/wall_3_client.png"]
+ - ["wall_4" , "../sprites/map/wall_4_client.png"]
+ - ["wall_5" , "../sprites/map/wall_5_client.png"]
+ - ["wall_6" , "../sprites/map/wall_6_client.png"]
+ - ["wall_7" , "../sprites/map/wall_7_client.png"]
+ - ["wall_8" , "../sprites/map/wall_8_client.png"]
 
 weapons:
  - ["bomb", "../sprites/map/weapon_bomb.png"]

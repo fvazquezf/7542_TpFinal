@@ -7,16 +7,19 @@
 #include "MapView.h"
 
 
-Client::Client(Socket clientSocket)
+Client::Client(Socket clientSocket, YAML::Node& clientConfig)
 : clientSocket(std::move(clientSocket)),
-  window(800, 600, false, "CS2D"){
+  clientConfig(clientConfig),
+  window(clientConfig["width"].as<int>(),
+         clientConfig["height"].as<int>(),
+         clientConfig["fullscreen"].as<bool>(), "CS2D"){
 }
 
 void Client::launch() {
     BlockingQueue<std::unique_ptr<Command>> comms;
 
     SoundManager::start();
-    WorldView world(window);
+    WorldView world(window, clientConfig);
     Drawer drawer(world);
     drawer.start();
 
@@ -39,7 +42,10 @@ void Client::launch() {
 
 Client::Client(Client &&other) noexcept
 : clientSocket(std::move(other.clientSocket)),
-  window(800, 600, false, "unaVentana"){
+  clientConfig(other.clientConfig),
+  window(clientConfig["width"].as<int>(),
+          clientConfig["height"].as<int>(),
+                  clientConfig["fullscreen"].as<bool>(), "unaVentana"){
 }
 
 Client &Client::operator=(Client &&other) noexcept {

@@ -13,7 +13,7 @@ NonMovable::NonMovable(SdlTexture &texture,
 
 void NonMovable::render(Camera &camera, size_t iteration) {
     // size de una tile
-    Area src(0, 0, sizeW / rescaling, sizeH / rescaling);
+    Area src(0, 0, sizeW, sizeH);
     if (camera.isVisible(posX, posY) ){
         camera.renderInSight(texture, src, posX, posY, 0);
     }

@@ -3,13 +3,14 @@
 #include <algorithm>
 #include <iostream>
 
-WorldView::WorldView(SdlWindow& aWindow)
+WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
 : window(aWindow),
+  clientConfig(clientConfig),
   camera(window),
   stencil(window, 120, 0, 100),
   menu(window),
   hud(window),
-  map(window, "../mapIconsConfig.yaml"),
+  map(window, clientConfig),
   lobby(window),
   lobbyTime(true),
   menuTime(false),
@@ -89,10 +90,10 @@ void WorldView::render(size_t iteration) {
     for (auto& it : entities){
         camera.render(it.second, iteration);
     }
+    stencil.createStencilTexture(camera.angleFromMouse());
     if (menuTime){
         menu.showMenu();
     }
-    stencil.createStencilTexture(camera.angleFromMouse());
     hud.show();
     window.render();
 }

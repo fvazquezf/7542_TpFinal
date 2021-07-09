@@ -24,6 +24,21 @@
 
 int main(int argc, const char *argv[]){
     //Editor in QT
+    if (argc != 2){
+        std::cout << "Cantidad invalida de argumentos, "
+                     "ingrese por favor un archivo de configuracion valido\n";
+        return -1;
+    }
+
+    YAML::Node clientConfig;
+
+    try {
+        clientConfig = YAML::LoadFile(argv[1]);
+    } catch(const std::exception& e){
+        std::cout << e.what();
+        return -1;
+    }
+
     QApplication a(argc, nullptr);
     LogInInfo info;
     LogInWindow w(nullptr, 640, 400, info);
@@ -42,7 +57,7 @@ int main(int argc, const char *argv[]){
         return -1;
     }
     Socket cli = std::move(info.socket);
-    Client clientHandler(std::move(cli));
+    Client clientHandler(std::move(cli), clientConfig);
     clientHandler.launch();
     return 0;
 }
