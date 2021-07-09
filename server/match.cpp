@@ -65,7 +65,7 @@ void Match::start() {
     // entonces no tengo que hacer nada
     // en el caso de sacar esta condicion podria darse ese caso
     // y romper el servidor por tratar de iniciar al world 2 veces
-    if (gameStarted){
+    if (gameStarted || users.size() <= 1){
         return;
     }
     world.start();

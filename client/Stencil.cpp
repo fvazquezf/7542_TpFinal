@@ -37,5 +37,5 @@ void Stencil::createStencilTexture(int16_t playerAngle) {
                                 0xff, 0xff, 0xff,
                                 50);
     window.drawCenteredCircle(20, 50);
-    window.drawRectangle(50);
+    window.drawRectangle(stencilOpacity);
 }

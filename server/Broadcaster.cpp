@@ -46,7 +46,6 @@ Broadcaster::~Broadcaster() {
 void Broadcaster::closePlayerQueue(uint8_t id) {
     std::lock_guard<std::mutex> lock(broadcasterMutex);
     clientsQueues.at(id).signalClosed();
-    clientsQueues.erase(id);
 }
 
 void Broadcaster::closeAllQueues() {

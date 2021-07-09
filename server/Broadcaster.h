@@ -14,7 +14,6 @@ private:
 public:
     Broadcaster();
     BlockingQueue<std::shared_ptr<Update>>& addPlayer(uint8_t id);
-    // void pushAll(std::map<int, std::pair<float, float>> update);
 
     Broadcaster(const Broadcaster& other) = delete;
     Broadcaster& operator=(const Broadcaster& other) = delete;

@@ -6,7 +6,7 @@
 WorldView::WorldView(SdlWindow& aWindow)
 : window(aWindow),
   camera(window),
-  stencil(window, 120, 0, 0),
+  stencil(window, 120, 0, 100),
   menu(window),
   hud(window),
   map(window, "../mapIconsConfig.yaml"),

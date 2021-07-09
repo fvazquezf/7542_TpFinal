@@ -11,6 +11,7 @@ SdlTexture::SdlTexture(const std::string& filename, SdlWindow& window)
 	}
 
 	this->texture = window.createTexture(tmp);
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 
 	width = tmp->w;
 	height = tmp->h;
