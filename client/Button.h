@@ -22,7 +22,7 @@ public:
            SdlTexture& hudTex,
            SdlTexture& buttonTexture,
            SDL_Rect texSrc,
-           uint8_t weaponCode);
+           uint8_t buttonCode);
 
     void show();
 

@@ -19,6 +19,7 @@
 #define PLANT 0x72
 #define STOP_PLANT 0x73
 #define LIST_MAPS 0x71
+#define EARLY_START 0x74
 
 // updates (server side)
 #define POS_UPDATE 0x20

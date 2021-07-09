@@ -13,4 +13,4 @@ add_library(commands
 	Pickup.cpp 
 	Reload.cpp 
 	Plant.cpp 
-	ListMaps.cpp)
+	ListMaps.cpp EarlyStart.cpp EarlyStart.h)

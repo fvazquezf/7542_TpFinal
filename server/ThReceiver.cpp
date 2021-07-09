@@ -16,12 +16,14 @@
 ThReceiver::ThReceiver(Socket &peer,
                        Protocol &protocol,
                        ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
-                       uint8_t userId)
+                       uint8_t userId,
+                       std::function<void()>& earlyStartCallback)
 : peer(peer),
   is_running(true),
   protocol(protocol),
   eventQueue(eventQueue),
-  userId(userId){
+  userId(userId),
+  earlyStartCallback(earlyStartCallback){
 }
 
 void ThReceiver::run() {
@@ -59,8 +61,10 @@ std::vector<unsigned char> ThReceiver::receive(size_t size) {
 // resta matar la q del sender
 // desde el broadcaster
 void ThReceiver::stop() {
-    peer.shutdown(SHUT_RD);
-    is_running = false;
+    if (is_running){
+        peer.shutdown(SHUT_RD);
+        is_running = false;
+    }
 }
 
 ThReceiver::ThReceiver(ThReceiver &&other) noexcept
@@ -68,7 +72,8 @@ ThReceiver::ThReceiver(ThReceiver &&other) noexcept
   is_running(other.is_running.operator bool()),
   protocol(other.protocol),
   eventQueue(other.eventQueue),
-  userId(other.userId){
+  userId(other.userId),
+  earlyStartCallback(other.earlyStartCallback){
     // no hay que hacerle stop
     // si a other le hacemos stop matamos al peer (el rd)
     other.is_running = false;
@@ -122,6 +127,9 @@ void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         case STOP_PLANT:
             eventQueue.push(std::unique_ptr<ClientEvent>(new StopPlantEvent(userId)));
+            break;
+        case EARLY_START:
+            earlyStartCallback();
             break;
         default:
             break;

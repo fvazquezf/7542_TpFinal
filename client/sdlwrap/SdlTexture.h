@@ -21,8 +21,6 @@ private:
 	int height;
 
 public:
-    SdlTexture(SdlWindow& window); // crea una textura a partir del renderer actual
-
 	SdlTexture(const std::string& filename, SdlWindow& window);
     SdlTexture(const std::string &filename,
                SdlWindow& window,

@@ -4,7 +4,7 @@
 player_hp: 100 # vida maxima
 starting_money: 2000
 
-match_max_players: 2
+match_max_players: 5
 
 # accuracy en pistol/awp/rifle determina la distancia macima de la trayectoria al enemigo 
 # accuracy en shorgun/knife determina el spread

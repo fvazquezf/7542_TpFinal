@@ -15,6 +15,7 @@
 // singleton instance
 class SoundManager {
 private:
+    Mix_Music* music;
     // contenedor de todos los sonidos
     // si el sonido no existe se crea
     // y si existe se reproduce desde aca
@@ -28,6 +29,9 @@ private:
     void pStart();
 
     void pPlaySound(int code, float distance);
+    void pPlayMusic();
+    void pStopMusic();
+    void pHaltMusic();
     // define por unica vez un objeto estatico
     // y devuelve una instancia
     static SoundManager& getSoundManager();
@@ -36,7 +40,8 @@ public:
     enum soundRepertoire : int {
         KNF_S, GLOCK_S, AK47_S, M3_S, AWP_S,
         STEP1, DIE1, HIT1, GO, BOMB_PLANTED,
-        CT_WIN, TT_WIN, DROP_WEAPON, PICKUP_WEAPON
+        CT_WIN, TT_WIN, DROP_WEAPON, PICKUP_WEAPON,
+        MENU_SOUND
     };
     SoundManager();
 
@@ -48,8 +53,13 @@ public:
 
     static void start();
     static void playSound(int soundId, float distanceFromPlayer);
+    static void playMusic();
+    static void stopMusic();
     static void channelFinishedCallback(int channel);
     ~SoundManager();
+
+    static void haltMusic();
+
 };
 
 

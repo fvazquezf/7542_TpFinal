@@ -192,9 +192,13 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case GAME_DONE: {
             break;
         }
-        case MAP_INFO_UPDATE:
+        case MAP_INFO_UPDATE: {
             msg = handleStringMsg(receiveCallback);
             break;
+        }
+        case EARLY_START:{
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");

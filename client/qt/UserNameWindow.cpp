@@ -70,15 +70,6 @@ void UserNameWindow::setButtonsLayout() {
 
 void UserNameWindow::on_saveButton_clicked()
 {
-    /*std::string username = this->usernameLineEdit->text().toStdString();
-    if(username == "") {
-        QMessageBox::warning(this, tr("Log In error"),
-                             tr("Username field is empty."),
-                             QMessageBox::Close);
-        return;
-    }
-
-    info.username = username;*/
     Protocol prot;
     std::unique_ptr<Command> listMaps = std::unique_ptr<Command>(new ListMaps());
     std::function<void(std::vector<unsigned char>)> sender =

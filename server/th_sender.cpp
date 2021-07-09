@@ -38,8 +38,10 @@ bool ThSender::isDead() {
 }
 
 void ThSender::stop() {
-    this->is_running = false;
-    this->peer.close();
+    if (is_running){
+        this->is_running = false;
+        this->peer.close();
+    }
 }
 
 ThSender::ThSender(ThSender &&other) noexcept

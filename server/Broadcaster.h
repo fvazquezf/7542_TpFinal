@@ -10,6 +10,7 @@
 class Broadcaster{
 private:
     std::map<uint8_t, BlockingQueue<std::shared_ptr<Update>>> clientsQueues;
+    std::mutex broadcasterMutex; // puede ser accedido por main y por el world
 public:
     Broadcaster();
     BlockingQueue<std::shared_ptr<Update>>& addPlayer(uint8_t id);
@@ -27,6 +28,8 @@ public:
     ~Broadcaster();
 
     void closePlayerQueue(uint8_t id);
+
+    void closeAllQueues();
 };
 
 #endif

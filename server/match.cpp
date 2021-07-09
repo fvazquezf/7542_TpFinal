@@ -6,13 +6,15 @@
 Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
 : matchConfig(matchConfig),
   maxUsers(matchConfig.at(ConfigVariables::MAX_PLAYERS)),
-  world(updates, matchConfig){
+  world(updates, matchConfig),
+  gameStarted(false){
     try {
         mapInfo = YAML::LoadFile(mapName);
         world.loadMap(mapInfo);
     } catch(const std::exception& e){
         throw;
     }
+    startEarlyCallback = std::bind(&Match::start, this);
 }
 
 Match::~Match() {
@@ -23,7 +25,9 @@ Match::Match(Match &&other) noexcept
   matchConfig(other.matchConfig),
   maxUsers(other.maxUsers),
   updates(std::move(other.updates)),
-  world(std::move(other.world)){
+  world(std::move(other.world)),
+  gameStarted(false){
+    startEarlyCallback = std::bind(&Match::start, this);
 }
 
 Match &Match::operator=(Match &&other) noexcept {
@@ -35,52 +39,74 @@ Match &Match::operator=(Match &&other) noexcept {
     maxUsers = other.maxUsers;
     updates = std::move(other.updates);
     world = std::move(other.world);
+    gameStarted = other.gameStarted.operator bool();
+    startEarlyCallback = std::bind(&Match::start, this);
     return *this;
 }
 
-int8_t Match::addUser(Socket socket) {
-    uint8_t id = this->users.size();
-    if (maxUsers == id){
-        return -1;
-    }
-
-    // crea el user dentro del mapa
-    // world le pasa la cola no bloqueante de eventos
-    // el broadcaster le pasa la cola bloqueante de updates
-    users.emplace(std::piecewise_construct,
-                  std::forward_as_tuple(id),
-                  std::forward_as_tuple(std::move(socket),
-                                        world.addPlayer(id),
-                                        updates.addPlayer(id),
-                                        id));
-    std::string map = Dump(mapInfo);
-    // enviamos informacion del mapa al cliente que se acaba de unir
-    // de esa manera ya puede ir cargando las texturas
-    uint8_t userId = id;
-    updates.push(userId, std::unique_ptr<Update>(new MapUpdate(std::move(map))));
-    id++;
-    std::cout << "Users ammount: " << users.size() << "\n";
-    return userId;
-}
-
-void Match::startIfShould() {
-    if (this->users.size() == this->maxUsers){
-        for (auto& u : users) {
-            u.second.start();
-        }
-        world.start();
-    }
-}
-
 void Match::stop() {
+    std::lock_guard<std::mutex> lock(matchMutex);
+    updates.closeAllQueues();
     for (auto& u : users) {
         u.second.stop();
         u.second.join();
     }
-    world.stop();
-    world.join();
+    if (!world.isDead()){
+        world.stop();
+        world.join();
+    }
 }
 
-int8_t Match::getCurrentPlayerId() {
-    return this->users.size();
+// earlyStartCallback
+void Match::start() {
+    std::lock_guard<std::mutex> lock(matchMutex);
+    // si justo se unio el ultimo jugador antes del earlyStart
+    // y logro empezar la partida
+    // entonces no tengo que hacer nada
+    // en el caso de sacar esta condicion podria darse ese caso
+    // y romper el servidor por tratar de iniciar al world 2 veces
+    if (gameStarted){
+        return;
+    }
+    world.start();
+    gameStarted = true;
+}
+
+bool Match::isGameStarted() {
+    return gameStarted;
+}
+
+// ejecutado por el hilo login
+bool Match::tryAddingUserAndStartIfShould(const std::function<Socket(void)> &socketHandIn,
+                                          const std::function<void(int8_t)> &loginResponse) {
+    std::lock_guard<std::mutex> lock(matchMutex);
+    if (gameStarted){
+        loginResponse(-1);
+        return false; // si el juego comenzo, chau
+    }
+    uint8_t id = this->users.size();
+
+    loginResponse(id);
+
+    auto userPair = users.emplace(std::piecewise_construct,
+                                  std::forward_as_tuple(id),
+                                  std::forward_as_tuple(std::move(socketHandIn()),
+                                                        world.addPlayer(id),
+                                                        updates.addPlayer(id),
+                                                        id,
+                                                        startEarlyCallback));
+    // empezamos al receiver y al sender
+    // recordar que el callback puede iniciar la partida antes de que se llene
+    userPair.first->second.start();
+
+    // enviamos informacion del mapa al cliente que se acaba de unir
+    // de esa manera ya puede ir cargando las texturas
+    std::string map = Dump(mapInfo);
+    updates.push(id, std::unique_ptr<Update>(new MapUpdate(std::move(map))));
+
+    if (this->users.size() == this->maxUsers) {
+        world.start();
+        gameStarted = true;
+    }
+    return true;
 }

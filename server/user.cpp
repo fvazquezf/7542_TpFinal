@@ -4,10 +4,11 @@
 User::User(Socket socket,
            ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
            BlockingQueue<std::shared_ptr<Update>>& updateQueue,
-           uint8_t id)
+           uint8_t id,
+           std::function<void()>& earlyStartCb)
 : socket(std::move(socket)),
   sender(this->socket, protocol, updateQueue),
-  receiver(this->socket, protocol, eventQueue, id),
+  receiver(this->socket, protocol, eventQueue, id, earlyStartCb),
   playing(false),
   id(id){
 }
@@ -23,9 +24,12 @@ void User::start() {
 
 void User::join() {
     if (playing){
+        this->receiver.stop();
         this->receiver.join();
+        this->sender.stop();
         this->sender.join();
     }
+    playing = false;
 }
 
 bool User::isDead() {

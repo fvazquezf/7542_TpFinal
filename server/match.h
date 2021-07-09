@@ -21,14 +21,15 @@ public:
     Match(Match&& other) noexcept;
     Match& operator=(Match&& other) noexcept;
 
-    int8_t addUser(Socket socket);
     ~Match();
 
-    void startIfShould();
     void stop();
 
-    int8_t getCurrentPlayerId();
+    bool isGameStarted();
 
+    bool tryAddingUserAndStartIfShould(const std::function<Socket(void)> &socketHandIn,
+                                       const std::function<void(int8_t)> &loginResponse);
+    std::function<void()> startEarlyCallback;
 private:
     // cuantos jugadores pueden tener las partidas? 10 max
     std::map<uint8_t, User> users;
@@ -39,6 +40,14 @@ private:
 
     WorldModel world;
     YAML::Node mapInfo;
+
+    // el match ahora puede ser accedido por
+    // gamesMonitor (a traves del login)
+    // o por el receiver de algun cliente (por el callback de earlyStart)
+    std::mutex matchMutex;
+    std::atomic_bool gameStarted;
+    // solo accedido mediante callbacks
+    void start();
 };
 
 #endif

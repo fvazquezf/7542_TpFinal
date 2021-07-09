@@ -4,12 +4,12 @@ Button::Button(int x, int y, int w, int h,
                SdlTexture &hudTex,
                SdlTexture &buttonTexture,
                SDL_Rect texSource,
-               uint8_t weaponCode)
+               uint8_t buttonCode)
 : box{x, y, w, h},
   hudTexture(hudTex),
   buttonTex(buttonTexture),
   textureSource((texSource)),
-  code(weaponCode){
+  code(buttonCode){
 }
 
 void Button::show() {

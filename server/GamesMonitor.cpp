@@ -112,10 +112,7 @@ bool GamesMonitor::createMatch(std::string gameName,
         return false;
     }
 
-    // si creo el juego es id 0
-    response(0);
-    matches.at(gameName).addUser(handIn());
-    return true;
+    return matches.at(gameName).tryAddingUserAndStartIfShould(handIn, response);
 }
 
 bool GamesMonitor::joinMatch(const std::string &gameName,
@@ -127,10 +124,16 @@ bool GamesMonitor::joinMatch(const std::string &gameName,
         response(-1);
         return false;
     }
-    response(matches.at(gameName).getCurrentPlayerId());
-    matches.at(gameName).addUser(handIn());
-    matches.at(gameName).startIfShould();
-    return true;
+
+    // si el juego ya comenzo, bye bye
+    if (matches.at(gameName).isGameStarted()){
+        response(-1);
+        return false;
+    }
+    // zona peligrosa
+    // algun receiver podria estar tratando de empezar la partida cuando nosotros estamos aca
+    // hay que checkear si la partida se puede crear no solo aca afuera sino tambien adentro del match
+    return matches.at(gameName).tryAddingUserAndStartIfShould(handIn, response);
 }
 
 GamesMonitor::~GamesMonitor() {

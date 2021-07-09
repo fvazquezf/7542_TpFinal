@@ -2,7 +2,6 @@
 #include <SDL2/SDL.h>
 #include "commands/Move.h"
 #include "commands/CreateGame.h"
-#include "commands/JoinGame.h"
 #include "commands/Rotate.h"
 #include "commands/Attack.h"
 #include "commands/ChangeWeapon.h"
@@ -11,6 +10,7 @@
 #include "commands/Reload.h"
 #include "commands/Plant.h"
 #include <functional>
+#include <commands/EarlyStart.h>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
 : done(false), commands(commandsQ), world(world){
@@ -61,9 +61,6 @@ bool SdlLoop::isDone() {
 }
 
 void SdlLoop::handleKeyDown() {
-    /*if (world.isMenuTime()){
-        return;
-    }*/
     try {
         handleKey(true, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){
@@ -72,9 +69,6 @@ void SdlLoop::handleKeyDown() {
 }
 
 void SdlLoop::handleKeyUp() {
-    /*if (world.isMenuTime()){
-        return;
-    }*/
     try {
         handleKey(false, currentEvent.key.keysym.sym);
     } catch(const std::exception& e){
@@ -163,6 +157,9 @@ void SdlLoop::mouseButton(bool pressed, uint8_t button){
     SDL_GetMouseState(&mouseX, &mouseY);
     if (pressed && world.menuButtonPressed(mouseX, mouseY)){
         commands.push(std::unique_ptr<Command>(new Buy(world.getPressedButtonCode())));
+        return;
+    } else if (pressed && world.lobbyButtonPressed(mouseX, mouseY)){
+        commands.push(std::unique_ptr<Command>(new EarlyStart()));
         return;
     } else if (pressed && !mousePresses.at(button)){
         mousePresses.at(button) = true;

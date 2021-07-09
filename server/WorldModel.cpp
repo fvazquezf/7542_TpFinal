@@ -494,3 +494,7 @@ void WorldModel::reviveAll(){
         updateHp(it.first);
     }
 }
+
+bool WorldModel::isDead() {
+    return !is_running;
+}

@@ -10,7 +10,7 @@ SoundManager::SoundManager()
 }
 
 SoundManager::~SoundManager() {
-
+    Mix_FreeMusic(music);
 }
 
 SoundManager &SoundManager::getSoundManager() {
@@ -94,9 +94,42 @@ void SoundManager::pStart() {
     soundMap.emplace(std::piecewise_construct,
                      std::forward_as_tuple(soundRepertoire::PICKUP_WEAPON),
                      std::forward_as_tuple(path + "items/pickup.wav"));
+
+    music = Mix_LoadMUS((path + "menu.wav").c_str());
     Mix_ChannelFinished(channelFinishedCallback);
 }
 
 void SoundManager::channelFinishedCallback(int channel) {
     --(SoundManager::getSoundManager().chunksPlaying);
+}
+
+void SoundManager::playMusic() {
+    SoundManager::getSoundManager().pPlayMusic();
+}
+
+void SoundManager::pPlayMusic() {
+    if (music == nullptr){
+        return;
+    }
+
+    Mix_PlayMusic(music, 0);
+}
+
+void SoundManager::stopMusic() {
+    SoundManager::getSoundManager().pStopMusic();
+}
+
+void SoundManager::pStopMusic() {
+    if (!Mix_FadeOutMusic(1000)){
+        throw std::exception();
+    }
+    //Mix_HaltMusic();
+}
+
+void SoundManager::haltMusic() {
+    SoundManager::getSoundManager().pHaltMusic();
+}
+
+void SoundManager::pHaltMusic() {
+    Mix_HaltMusic();
 }

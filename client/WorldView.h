@@ -19,6 +19,7 @@
 #include "weapons/DroppedWeapon.h"
 #include "SoundManager.h"
 #include "MapView.h"
+#include "LobbyScreen.h"
 
 class WorldView {
 private:
@@ -28,7 +29,9 @@ private:
     BuyingMenu menu;
     Hud hud;
     MapView map;
+    LobbyScreen lobby;
 
+    std::atomic_bool lobbyTime;
     std::atomic_bool menuTime;
     std::atomic_bool done;
 
@@ -59,9 +62,11 @@ public:
     WorldView& operator=(WorldView&& other) = delete;
 
     bool menuButtonPressed(int mouseX, int mouseY);
+    bool lobbyButtonPressed(int mouseX, int mouseY);
     uint8_t getPressedButtonCode();
     void setMenu(bool isIt);
     bool isMenuTime() const;
+    bool isLobbyTime() const;
 
     void characterEntityCreate(uint8_t id, bool isPlayer, bool isCt);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);
@@ -98,6 +103,8 @@ public:
     bool isDone();
 
     void buildMap(const std::string &mapString);
+
+    void stopLobby();
 };
 
 

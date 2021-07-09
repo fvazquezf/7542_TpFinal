@@ -11,10 +11,10 @@ SdlSound::SdlSound(const std::string &soundPath)
     }
 }
 
-// "deleting null pointer has no effect"
-// por eso no pongo el if
 SdlSound::~SdlSound() {
-    delete effect;
+    if (effect != nullptr){
+        Mix_FreeChunk(effect);
+    }
 }
 
 SdlSound::SdlSound(SdlSound &&other) noexcept
@@ -26,6 +26,10 @@ SdlSound &SdlSound::operator=(SdlSound &&other) noexcept {
     if (this == &other){
         return *this;
     }
+    if (effect != nullptr){
+        Mix_FreeChunk(effect);
+    }
+
     effect = other.effect;
     other.effect = nullptr;
 

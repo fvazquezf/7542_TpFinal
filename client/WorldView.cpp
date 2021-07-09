@@ -10,6 +10,8 @@ WorldView::WorldView(SdlWindow& aWindow)
   menu(window),
   hud(window),
   map(window, "../mapIconsConfig.yaml"),
+  lobby(window),
+  lobbyTime(true),
   menuTime(false),
   done(false),
   terror("../sprites/gfx/player/t1.bmp", window),
@@ -75,6 +77,11 @@ void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill(0, 0, 0, 0);
+    if (lobbyTime){
+        lobby.draw();
+        window.render();
+        return;
+    }
     map.render(camera);
     for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
@@ -235,5 +242,25 @@ bool WorldView::isDone() {
 void WorldView::buildMap(const std::string &mapString) {
     std::lock_guard<std::mutex> lock(worldMutex);
     map.loadMap(mapString);
+}
+
+void WorldView::stopLobby() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    if (lobbyTime){
+        lobbyTime = false;
+        lobby.stopPlayingLobbyMusic();
+    }
+}
+
+bool WorldView::isLobbyTime() const {
+    return lobbyTime;
+}
+
+bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    if (!lobbyTime){
+        return false;
+    }
+    return lobby.isButtonPressed(mouseX, mouseY);
 }
 

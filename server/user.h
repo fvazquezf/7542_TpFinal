@@ -28,7 +28,8 @@ public:
     User(Socket socket,
          ProtectedQueue<std::unique_ptr<ClientEvent>>& eventQueue,
          BlockingQueue<std::shared_ptr<Update>>& updateQueue,
-         uint8_t id);
+         uint8_t id,
+         std::function<void()>& earlyStartCb);
 
     User(const User& other) = delete;
     User& operator=(const User& other) = delete;
