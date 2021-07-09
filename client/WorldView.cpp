@@ -25,7 +25,10 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
         window,
         {0, 0, 0},
         {200, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp",window){
+  legs("../sprites/gfx/player/legs.bmp",window),
+  cursor("../sprites/gfx/pointer.bmp",
+         window,
+         {0xff, 0, 0xff}){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -66,6 +69,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(5),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
+    SDL_ShowCursor(SDL_DISABLE);
 }
 
 WorldView::~WorldView() {
@@ -84,6 +88,7 @@ void WorldView::render(size_t iteration) {
     window.fill(0, 0, 0, 0);
     if (lobbyTime){
         lobby.draw();
+        drawCursor();
         window.render();
         return;
     }
@@ -98,6 +103,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    drawCursor();
     hud.show();
     window.render();
 }
@@ -175,7 +181,7 @@ void WorldView::dropWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weapon
     int16_t posY = std::get<3>(weaponId);
     auto& texture = dropTextures.at(id);
     droppedWeapons.emplace_back(texture, id, uniqueIdentifier, posX, posY);
-    float dist = camera.calculateDistanceToCenter(posX, posY);
+    float dist = camera.calculateDistanceToCenter(posX / 100, posY / 100);
     SoundManager::playSound(SoundManager::soundRepertoire::DROP_WEAPON, dist);
 }
 
@@ -257,15 +263,19 @@ void WorldView::stopLobby() {
     }
 }
 
-bool WorldView::isLobbyTime() const {
-    return lobbyTime;
-}
-
 bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
     std::lock_guard<std::mutex> lock(worldMutex);
     if (!lobbyTime){
         return false;
     }
     return lobby.isButtonPressed(mouseX, mouseY);
+}
+
+void WorldView::drawCursor() {
+    Area cursorSrc(0, 0, 46, 46);
+    int mX, mY;
+    SDL_GetMouseState(&mX, &mY);
+    Area cursorDst(mX - 12, mY - 12, 23, 23);
+    cursor.render(cursorSrc, cursorDst, SDL_FLIP_NONE);
 }
 

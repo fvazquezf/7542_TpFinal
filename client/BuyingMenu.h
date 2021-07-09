@@ -21,6 +21,7 @@
 
 class BuyingMenu {
 private:
+    SdlWindow& window;
     std::vector<Button> menuButtons;
     SdlTexture buttonSlot;
     std::vector<SdlTexture> buttonContTextures;

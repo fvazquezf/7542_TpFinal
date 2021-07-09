@@ -1,7 +1,8 @@
 #include "BuyingMenu.h"
 
 BuyingMenu::BuyingMenu(SdlWindow& window)
-: buttonSlot(BUTTON_VIEW, window){
+: window(window),
+  buttonSlot(BUTTON_VIEW, window){
     // creo las texturas de los botones
     buttonContTextures.emplace_back(AK_PATH, window, Color{R_KEY, G_KEY, B_KEY});
     buttonContTextures.emplace_back(M3_PATH, window, Color{R_KEY, G_KEY, B_KEY});
@@ -32,6 +33,7 @@ BuyingMenu::~BuyingMenu() {
 }
 
 void BuyingMenu::showMenu() {
+    window.drawRectangle(50, 150, 50, 500, 550);
     for (auto& it : menuButtons){
         it.show();
     }

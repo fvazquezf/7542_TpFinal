@@ -10,7 +10,7 @@ LobbyScreen::LobbyScreen(SdlWindow &window)
   buttonSlot("../sprites/gfx/hud_slot.bmp",window),
   backgroundTexture("../sprites/gfx/splash.bmp", window),
   buttonBackgroundTexture("../sprites/gfx/gametitle.png", window),
-  startEarlyButton(400 - 75, 400, 150, 40,
+  startEarlyButton((window.getWidth() / 2) - 75, 2 * window.getHeight() / 3, 150, 40,
                    buttonSlot,
                    buttonBackgroundTexture,
                    SDL_Rect{0, 0, 48, 20},
@@ -20,7 +20,7 @@ LobbyScreen::LobbyScreen(SdlWindow &window)
 
 void LobbyScreen::draw() {
     Area src(0, 0, 1280, 720);
-    Area dst(0, 0, 800, 600);
+    Area dst(0, 0, window.getWidth(), window.getHeight());
     backgroundTexture.render(src, dst, SDL_FLIP_NONE);
     startEarlyButton.show();
 }

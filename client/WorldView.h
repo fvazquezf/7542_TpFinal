@@ -40,6 +40,7 @@ private:
     SdlTexture counterTerrorist;
     SdlTexture blood;
     SdlTexture legs;
+    SdlTexture cursor;
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
@@ -53,6 +54,7 @@ private:
 
     std::mutex worldMutex;
     uint8_t playerId;
+    void drawCursor();
 public:
     WorldView(SdlWindow& window, YAML::Node& clientConfig);
 
@@ -67,7 +69,6 @@ public:
     uint8_t getPressedButtonCode();
     void setMenu(bool isIt);
     bool isMenuTime() const;
-    bool isLobbyTime() const;
 
     void characterEntityCreate(uint8_t id, bool isPlayer, bool isCt);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);

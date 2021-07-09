@@ -4,7 +4,7 @@ fullscreen: false
 
 stencil_on: true # turns on or off stencil buffer filter
 stencil_radius: 20 # pixels
-stencil_opacity: 150 # higher is darker
+stencil_opacity: 50 # higher is darker
 stencil_angle: 45 # stencil triangle angle, higher means fov is increased
 stencil_triangle_brightness: 80 # higher will make fov brighter
 

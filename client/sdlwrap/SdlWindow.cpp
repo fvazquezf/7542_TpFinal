@@ -106,8 +106,8 @@ int SdlWindow::drawCenteredTriangle(int16_t x1, int16_t y1, int16_t x2, int16_t 
                             x3, y3, 0xff, 0xff, 0xff, alpha);
 }
 
-void SdlWindow::drawRectangle(int16_t alpha) {
-    boxRGBA(rendererPtr, 0, 0, width, height, 0, 0, 0, alpha);
+void SdlWindow::drawRectangle(int16_t alpha, int x, int y, int w, int h) {
+    boxRGBA(rendererPtr, x, y, w, h, 0, 0, 0, alpha);
 }
 
 void SdlWindow::drawCenteredCircle(int16_t radius, int16_t alpha) {

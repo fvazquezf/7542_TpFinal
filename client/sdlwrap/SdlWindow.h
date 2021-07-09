@@ -61,7 +61,7 @@ public:
 
 	~SdlWindow();
 
-    void drawRectangle(int16_t alpha);
+    void drawRectangle(int16_t alpha, int x = 0, int y = 0, int w = 0, int h = 0);
     void drawCenteredCircle(int16_t radius, int16_t alpha);
 };
 
