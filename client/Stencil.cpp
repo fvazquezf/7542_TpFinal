@@ -2,14 +2,17 @@
 #include "Stencil.h"
 #include "sdlwrap/SdlTexture.h"
 
-Stencil::Stencil(SdlWindow &window, uint16_t coneAngle, float circleRadius, uint8_t opacity)
+Stencil::Stencil(SdlWindow &window,
+                 uint16_t coneAngle,
+                 float circleRadius,
+                 uint8_t opacity,
+                 uint8_t triangleBrightness)
 : window(window),
-  coneAngle(coneAngle),
   circleRadius(circleRadius),
-  stencilOpacity(opacity){
+  stencilOpacity(opacity),
+  triangleBrightness(triangleBrightness){
     height = std::sqrt(std::pow(window.getHeight(), 2) + std::pow(window.getWidth(), 2));
     base = 2 * height * tan((coneAngle * 3.1415 / 180) / 2);
-    diagonalLength = std::sqrt((std::pow((base / 2), 2) + std::pow(height, 2)));
 }
 
 
@@ -35,7 +38,7 @@ void Stencil::createStencilTexture(int16_t playerAngle) {
                                 xBase - basePerpendicularX,
                                 yBase - basePerpendicularY,
                                 0xff, 0xff, 0xff,
-                                50);
-    window.drawCenteredCircle(20, 50);
+                                triangleBrightness);
+    window.drawCenteredCircle(circleRadius, triangleBrightness);
     window.drawRectangle(stencilOpacity);
 }

@@ -9,16 +9,18 @@
 class Stencil {
 private:
     SdlWindow& window;
-    uint16_t coneAngle;
     float circleRadius;
     uint8_t stencilOpacity;
+    uint8_t triangleBrightness;
     float height;
     float base;
-    float diagonalLength;
 public:
-    Stencil(SdlWindow& window, uint16_t coneAngle, float circleRadius, uint8_t opacity);
+    Stencil(SdlWindow& window,
+            uint16_t coneAngle,
+            float circleRadius,
+            uint8_t opacity,
+            uint8_t triangleBrightness);
     void createStencilTexture(int16_t playerAngle);
-    void applyFilter();
 
     ~Stencil();
 };
