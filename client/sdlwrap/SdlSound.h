@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 4/7/21.
-//
-
 #ifndef SDLSOUND_H
 #define SDLSOUND_H
 

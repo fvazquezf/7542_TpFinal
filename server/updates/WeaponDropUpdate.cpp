@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 1/7/21.
-//
-
 #include "WeaponDropUpdate.h"
 
 WeaponDropUpdate::WeaponDropUpdate(uint8_t code, size_t dropIdentifier, float posX, float posY, bool drop)

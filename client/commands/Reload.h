@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 3/7/21.
-//
-
 #ifndef RELOAD_H
 #define RELOAD_H
 

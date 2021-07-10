@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 5/7/21.
-//
-
 #ifndef MAPVIEW_H
 #define MAPVIEW_H
 

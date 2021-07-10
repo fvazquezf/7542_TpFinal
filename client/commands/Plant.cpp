@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 5/7/21.
-//
-
 #include "Plant.h"
 
 Plant::Plant(bool isPlanting)

@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 5/7/21.
-//
-
 #ifndef PLANTCOMMAND_H
 #define PLANTCOMMAND_H
 

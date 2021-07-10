@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 8/7/21.
-//
-
 #include "LobbyScreen.h"
 #include "SoundManager.h"
 

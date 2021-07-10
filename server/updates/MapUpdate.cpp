@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 6/7/21.
-//
-
 #include "MapUpdate.h"
 
 MapUpdate::MapUpdate(std::string map)

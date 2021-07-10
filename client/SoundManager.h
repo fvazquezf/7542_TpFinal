@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 4/7/21.
-//
-
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 #define SOUND_PATH "../sprites/sfx/"

@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 8/7/21.
-//
-
 #ifndef EARLYSTART_H
 #define EARLYSTART_H
 

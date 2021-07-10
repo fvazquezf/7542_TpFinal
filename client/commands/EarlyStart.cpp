@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 8/7/21.
-//
-
 #include "EarlyStart.h"
 
 EarlyStart::EarlyStart() {

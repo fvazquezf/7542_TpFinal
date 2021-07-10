@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 30/6/21.
-//
-
 #include "BuyTimeUpdate.h"
 
 BuyTimeUpdate::BuyTimeUpdate(bool buyingTime)

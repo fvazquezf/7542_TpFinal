@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 4/7/21.
-//
-
 #include "SdlSound.h"
 
 SdlSound::SdlSound(const std::string &soundPath)

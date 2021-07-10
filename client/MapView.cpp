@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 5/7/21.
-//
-
 #include <yaml-cpp/node/node.h>
 #include <yaml-cpp/node/parse.h>
 #include <c++/9/iostream>

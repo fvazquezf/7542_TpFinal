@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 3/7/21.
-//
-
 #include "Reload.h"
 
 Reload::Reload() {

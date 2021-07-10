@@ -1,7 +1,3 @@
-//
-// Created by leogm99 on 5/7/21.
-//
-
 #ifndef GAMEDONEUPDATE_H
 #define GAMEDONEUPDATE_H
 
