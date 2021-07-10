@@ -1,4 +1,5 @@
 #include <sstream>
+#include <qt/LogInInfo.h>
 #include "Client.h"
 #include "WorldView.h"
 #include "SdlLoop.h"
@@ -7,8 +8,8 @@
 #include "MapView.h"
 
 
-Client::Client(Socket clientSocket, YAML::Node& clientConfig)
-: clientSocket(std::move(clientSocket)),
+Client::Client(LogInInfo& login, YAML::Node& clientConfig)
+: clientSocket(std::move(login.socket)),
   clientConfig(clientConfig),
   window(clientConfig["width"].as<int>(),
          clientConfig["height"].as<int>(),

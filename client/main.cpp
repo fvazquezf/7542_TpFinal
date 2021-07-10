@@ -56,8 +56,7 @@ int main(int argc, const char *argv[]){
         std::cout << e.what() << std::endl;
         return -1;
     }
-    Socket cli = std::move(info.socket);
-    Client clientHandler(std::move(cli), clientConfig);
+    Client clientHandler(info, clientConfig);
     clientHandler.launch();
     return 0;
 }

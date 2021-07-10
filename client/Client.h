@@ -12,7 +12,7 @@ private:
     YAML::Node& clientConfig;
     SdlWindow window;
 public:
-    Client(Socket clientSocket, YAML::Node& clientConfig);
+    Client(LogInInfo& login, YAML::Node& clientConfig);
 
     Client(const Client& other) = delete;
     Client& operator=(const Client& other) = delete;
