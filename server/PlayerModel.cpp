@@ -82,7 +82,7 @@ void PlayerModel::stopMove(int dir){
 void PlayerModel::step(){
     float vel = this->model->GetLinearVelocity().Length();
     armory.tickCooldown();
-    if (vel < 12){
+    if (vel < 11){
         this->model->ApplyForceToCenter(this->netForce, true);
     }
 }

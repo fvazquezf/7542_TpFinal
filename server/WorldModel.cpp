@@ -109,7 +109,7 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	fJointDef.bodyB = body;
 
 	b2FrictionJoint* fJoint = (b2FrictionJoint*)world.CreateJoint(&fJointDef);
-	fJoint->SetMaxForce(10);
+	fJoint->SetMaxForce(12);
 
 	playerModels.emplace(std::piecewise_construct,
                          std::forward_as_tuple(clave),
@@ -128,26 +128,70 @@ void WorldModel::createBox(b2BodyDef& boxDef){
     box->CreateFixture(&fixtureDef);
 }
 
+void WorldModel::createMapBorder(b2BodyDef& boxDef, int xSide, int ySide){
+	float x = 0;
+	float y = -0.75;
+
+	for (int i = 0; i < xSide ; i++){
+		boxDef.position.Set(x, y);
+		this->createBox(boxDef);
+
+		boxDef.position.Set(x, y+ySide+0.25);
+		this->createBox(boxDef);
+
+		x = x + 1.5;
+	}
+    x = -0.75;
+	y = 0;
+	for (int i = 0; i < ySide ; i++){
+		boxDef.position.Set(x, y);
+		this->createBox(boxDef);
+
+		boxDef.position.Set(x+xSide+0.25, y);
+		this->createBox(boxDef);
+
+		y = y + 1.5;
+	}
+}
+
+
 void WorldModel::loadMap(YAML::Node& mapInfo){
     std::vector<std::pair<int, int>> walls;
     std::vector<std::pair<int, int>> temp;
-    temp = mapInfo["wall_1"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_2"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_3"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_4"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_5"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_6"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_7"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
-    temp = mapInfo["wall_8"].as<std::vector<std::pair<int, int>>>();
-    walls.insert(walls.end(), temp.begin(), temp.end());
 
+    if (mapInfo["wall_1"]){
+        temp = mapInfo["wall_1"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_2"]){
+        temp = mapInfo["wall_2"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_3"]){
+        temp = mapInfo["wall_3"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_4"]){
+        temp = mapInfo["wall_4"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }    
+    if (mapInfo["wall_5"]){
+        temp = mapInfo["wall_5"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_6"]){
+        temp = mapInfo["wall_6"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_7"]){
+        temp = mapInfo["wall_7"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }
+    if (mapInfo["wall_8"]){
+        temp = mapInfo["wall_8"].as<std::vector<std::pair<int, int>>>();
+        walls.insert(walls.end(), temp.begin(), temp.end());
+    }   
+    
     b2BodyDef boxDef;
     boxDef.type = b2_staticBody;
     for (auto& pos: walls){
@@ -175,6 +219,9 @@ void WorldModel::loadMap(YAML::Node& mapInfo){
     c = temp[2].first;
     mapLayout.setBombSite(a, b, c, d);
 
+    int ySize = mapInfo["size_columns"].as<int>();
+    int xSize = mapInfo["size_rows"].as<int>();
+    createMapBorder(boxDef, xSize, ySize);
 }
 
 void WorldModel::run(){

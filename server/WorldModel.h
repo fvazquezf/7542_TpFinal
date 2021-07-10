@@ -61,6 +61,7 @@ class WorldModel: public Thread {
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void createBox(b2BodyDef& boxDef);
+        void createMapBorder(b2BodyDef& boxDef, int xSide, int ySide);
         void loadMap(YAML::Node& mapInfo);
 
         void updatePositions();
