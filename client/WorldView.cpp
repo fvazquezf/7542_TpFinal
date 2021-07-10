@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <iostream>
 
+// En esta clase estaría bueno un refactor para que no tenga lógica y que funcione
+// como una especie de facade nada más (ya que quitarle métodos sería demasiado difícil).
+
 WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
 : window(aWindow),
   clientConfig(clientConfig),
@@ -274,8 +277,9 @@ bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
 void WorldView::drawCursor() {
     Area cursorSrc(0, 0, 46, 46);
     int mX, mY;
+
+    // Agregar el wrapper correspondiente.
     SDL_GetMouseState(&mX, &mY);
     Area cursorDst(mX - 12, mY - 12, 23, 23);
     cursor.render(cursorSrc, cursorDst, SDL_FLIP_NONE);
 }
-

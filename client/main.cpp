@@ -56,6 +56,9 @@ int main(int argc, const char *argv[]){
         std::cout << e.what() << std::endl;
         return -1;
     }
+
+    // Por qué no pasarle la LogInInfo al client handler? Así no tendrían un socket
+    // suelto en el main. 
     Socket cli = std::move(info.socket);
     Client clientHandler(std::move(cli), clientConfig);
     clientHandler.launch();

@@ -21,6 +21,8 @@ std::vector<unsigned char> LogInInfo::receive(size_t size) {
 
 std::vector<std::string> LogInInfo::receiveGameInformation() {
     Protocol prot;
+
+    // No veo cómo usan comm, para qué es?
     char comm;
     this->socket.recv(&comm, 1);
     std::function<std::vector<unsigned char>(size_t)> receiver =

@@ -20,6 +20,7 @@ void Drawer::run() {
         int rest = FRAMERATE - std::ceil(elapsed.count());
 
         // me comi unos ricos frames
+        // y no convidaste
         if (rest < 0){
             int behind = - rest;
             rest = FRAMERATE - behind % FRAMERATE;

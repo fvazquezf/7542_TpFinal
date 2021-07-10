@@ -8,6 +8,7 @@
 class Button {
 private:
     // dimension y posicion
+    // Usar los wrappers, y si ninguno sirve agregar uno nuevo.
     SDL_Rect box;
 
     SdlTexture& hudTexture;

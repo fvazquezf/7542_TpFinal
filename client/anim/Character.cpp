@@ -38,6 +38,9 @@ Character::Character(SdlTexture &texture,
 }
 
 void Character::render(Camera &cam, size_t iteration) {
+    // No lo cambien, pero esto lo podrían haber evitado diciéndole a Camera a quién tiene que seguir
+    // (con una referencia a Positionable o algo por el estilo) y le pasaban el player (y eventualmente
+    // la cámara podría seguir a otra cosa)
     if (player){
         cam.setLogicalCenter(posX, posY);
     } else {
@@ -46,11 +49,12 @@ void Character::render(Camera &cam, size_t iteration) {
         }
     }
 
-    if (moving){
+    if (moving) {
+        // Qué es 0.2??? XD
         legAnimation.renderFor(cam, posX, posY + 0.2, 0, iteration);
     }
 
-    if (bleeding){
+    if (bleeding) {
         bleeding = bloodAnimation.renderOld(cam, 255);
     }
 
@@ -70,6 +74,7 @@ void Character::render(Camera &cam, size_t iteration) {
 Character::~Character() {
 }
 
+// No usar noexcept, puede terminar en un crash (y el mensaje es inentendible).
 Character::Character(Character &&other) noexcept
 : Renderizable(std::move(other)),
   player(other.player),
@@ -81,7 +86,7 @@ Character::Character(Character &&other) noexcept
 }
 
 Character &Character::operator=(Character &&other) noexcept {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -116,19 +121,20 @@ void Character::changeWeapon(uint8_t weaponCode) {
     }
 }
 
+// Si se mueve muy despacio no se ve la animación ni reproduce sonidos.
 void Character::updatePosition(float x, float y) {
     float diffX = abs(posX - x);
     float diffY = abs(posY - y);
-    if (!moving && ((diffX > 0.005) || (diffY > 0.005))){
+    if (!moving && ((diffX > 0.005) || (diffY > 0.005))) {
         moving = true;
         legAnimation.setStartingIteration(lastIter + 1);
-    } else if (moving && ((diffX < 0.005) && (diffY < 0.005))){
+    } else if (moving && ((diffX < 0.005) && (diffY < 0.005))) {
         moving = false;
         currentMovingUpdates = 0;
     }
-    if (moving){
+    if (moving) {
         ++currentMovingUpdates;
-        if ((currentMovingUpdates % 25) == 0){
+        if ((currentMovingUpdates % 25) == 0) {
             SoundManager::playSound(SoundManager::STEP1, 0);
         }
     }

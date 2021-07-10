@@ -33,6 +33,7 @@ class Bomb: public Weapon {
         void resetCooldown() override;
         int hit() override;
 
+        // es necesario que sean todos públicos?
         bool startPlanting();
         bool isPlanting();
         void stopPlanting();

@@ -4,7 +4,7 @@ Receiver::Receiver(WorldView &world, Socket& peer, Protocol& protocol)
 : world(world),
   peer(peer),
   prot(protocol),
-  running(true){
+  running(true) {
 }
 
 Receiver::~Receiver() {
@@ -13,9 +13,9 @@ Receiver::~Receiver() {
 void Receiver::run() {
     std::function<std::vector<unsigned char>(size_t)> cb =
             std::bind(&Receiver::receive, this, std::placeholders::_1);
-    while (running){
+    while (running) {
         char update;
-        if (peer.recv(&update, 1) <= 0){
+        if (peer.recv(&update, 1) <= 0) {
             break;
         }
         std::vector<unsigned char> msg = prot.dispatchReceived(update, cb);
@@ -36,9 +36,10 @@ std::vector<unsigned char> Receiver::receive(size_t size) {
 }
 
 void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
+    // Si llegan a hacer el refactor, acá hay un claro uso de pattern Command.
     switch (code) {
         case LOGIN_RESPONSE:{
-            if (msg.at(0) != 255){
+            if (msg.at(0) != 255) {
                 world.assignPlayer(msg.at(0));
             }
             break;
@@ -76,7 +77,7 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         }
         case WEAPON_DROP_UPDATE: {
             auto tuple = prot.deserializeDrop(msg, msg.back());
-            if (msg.back() == DROP_UPDATE){
+            if (msg.back() == DROP_UPDATE) {
                 world.dropWeapon(tuple);
             } else {
                 world.pickupWeapon(tuple);

@@ -4,6 +4,11 @@
 #include "yaml-cpp/yaml.h"
 #include "../common/ConfigVariables.h"
 
+// Podrían separar esta clase y tener un GamesMonitor -> GamesContainer -> Game, donde
+// GamesMonitor tiene al lock y sincroniza acceso
+// y GamesContainer contiene los games en sí y tiene la lógica "de diccionario"
+// También les convendría hacer una class Configuration que tenga lo que está en el constructor.
+
 GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::PLAYER_HP, config["player_hp"].as<int>());
     matchesConfig.emplace(ConfigVariables::STARTING_MONEY, config["starting_money"].as<int>());
