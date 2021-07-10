@@ -20,6 +20,8 @@ IntroWindow::IntroWindow(QWidget *parent, int width, int heigth) {
 void IntroWindow::run(){
     QDir dir(QDir::currentPath());
     dir.cdUp();
+    // Extraer las cosas hardcodeadas en constantes (y chequear que los paths funcionen cuando
+    // esté listo el instalador)
     playlist->addMedia(QUrl::fromLocalFile(dir.path() + "/client/qt/resources/intro.mp4"));
     playlist->setCurrentIndex(1);
     player->setPlaylist(playlist);
@@ -28,6 +30,7 @@ void IntroWindow::run(){
     this->show();
     player->play();
 
+    // 3 o 9?
     usleep(9 * 1000000);//sleeps for 3 second
 
     player->stop();

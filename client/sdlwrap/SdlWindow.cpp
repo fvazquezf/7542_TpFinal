@@ -2,27 +2,27 @@
 #include "SdlWindow.h"
 
 
-SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
+SdlWindow::SdlWindow(int width, int height, bool full, std::string title) {
 	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
-	if (err){
-		//handle
+	if (err) {
+		//handle using our own exceptions
 	}
 
     err = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
-	if (err){
+	if (err) {
 	    // handle
 	}
 
 	err = SDL_CreateWindowAndRenderer(width, height, SDL_RENDERER_ACCELERATED,
 										  &this->windowPtr, &this->rendererPtr);
-	if (err){
+	if (err) {
 		// handle
 	}
 
 	SDL_SetWindowTitle(this->windowPtr, title.c_str());
 
-	if (full){
+	if (full) {
 		SDL_SetWindowFullscreen(this->windowPtr, SDL_WINDOW_FULLSCREEN);
 	}
 	this->width = width;
@@ -30,13 +30,13 @@ SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
     SDL_SetRenderDrawBlendMode(rendererPtr, SDL_BLENDMODE_BLEND);
 }
 
-SdlWindow::~SdlWindow(){
-	if (this->rendererPtr){
+SdlWindow::~SdlWindow() {
+	if (this->rendererPtr) {
 		SDL_DestroyRenderer(this->rendererPtr);
 		rendererPtr = nullptr;
 	}
 
-	if (this->windowPtr){
+	if (this->windowPtr) {
 		SDL_DestroyWindow(this->windowPtr);
 		windowPtr = nullptr;
 	}
@@ -44,20 +44,20 @@ SdlWindow::~SdlWindow(){
 	SDL_Quit();
 }
 
-void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha){
+void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha) {
 	SDL_SetRenderDrawColor(rendererPtr, r, g, b, alpha);
 	SDL_RenderClear(rendererPtr);
 }
 
-void SdlWindow::fill(){
+void SdlWindow::fill() {
 	fill(0, 0, 0, 255);
 }
 
-void SdlWindow::render(){
+void SdlWindow::render() {
 	SDL_RenderPresent(rendererPtr);
 }
 
-SDL_Texture* SdlWindow::createTexture(SDL_Surface* aSurface){
+SDL_Texture* SdlWindow::createTexture(SDL_Surface* aSurface) {
 	return SDL_CreateTextureFromSurface(rendererPtr, aSurface);
 }
 
@@ -65,11 +65,11 @@ int SdlWindow::handleRender(SDL_Texture* txt,
 							const SDL_Rect& src,
 							const SDL_Rect& dst,
 							float ang,
-							SDL_RendererFlip flip){
+							SDL_RendererFlip flip) {
 	return SDL_RenderCopyEx(rendererPtr, txt, &src, &dst, ang, nullptr, flip);
 }
 
-SDL_Point SdlWindow::getCenter(){
+SDL_Point SdlWindow::getCenter() {
 	SDL_Point p;
 	SDL_GetWindowSize(windowPtr, &p.x, &p.y);
 	p.x /= 2;
@@ -78,11 +78,11 @@ SDL_Point SdlWindow::getCenter(){
 }
 
 
-int SdlWindow::getWidth(){
+int SdlWindow::getWidth() {
 	return width;
 }
 
-int SdlWindow::getHeight(){
+int SdlWindow::getHeight() {
 	return height;
 }
 

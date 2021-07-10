@@ -31,7 +31,7 @@ public:
     T pop(){
         std::unique_lock<std::mutex> lock1(queueMutex);
         // si la q esta vacia no popeo nada
-        // catcheo esta excepcion del lado del mundo
+        // catcheo esta excepcion del lado del mundo <-- Esta línea está demás
         if (q.empty()){
             throw std::invalid_argument("Queue empty exception\n");
         }

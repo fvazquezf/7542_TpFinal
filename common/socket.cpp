@@ -20,6 +20,8 @@ Socket& Socket::operator=(Socket&& other){
           return *this;
      }
 
+     // falta cerrar this->sfd si no es -1. (this->close())
+
      this->sfd = other.sfd;
      other.sfd = -1;
      return *this;
@@ -31,6 +33,7 @@ int Socket::send(const char* buffer, ssize_t len) {
     while (len > total) {
         int bs = ::send(this->sfd, &buffer[total], len-total, MSG_NOSIGNAL);
         if (bs == -1) {
+            // acá tiraría una exception con la información del errno.
             return -1;
         } else if (bs == 0) {
             return total;
@@ -47,6 +50,7 @@ int Socket::recv(char* buffer, ssize_t length) {
     while (length > total) {
         int bytes_recv = ::recv(this->sfd, &buffer[total], length-total, 0);
         if (bytes_recv == -1) {
+            // acá tiraría una exception con la información del errno.
             return -1;
         } else if (bytes_recv == 0) {
             return total;

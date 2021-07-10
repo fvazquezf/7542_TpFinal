@@ -11,6 +11,7 @@ MapCreationWindow::MapCreationWindow(QWidget *parent) :
 }
 
 void MapCreationWindow::setUpAll(){
+    // separar en métodos más chicos que vayan setupeando cada widget.
 
     saveButton = new QPushButton();
     mapNameEditLine = new QLineEdit();

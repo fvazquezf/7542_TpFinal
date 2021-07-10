@@ -75,7 +75,8 @@ void callback(std::vector<unsigned char> msg){
 }
 
 
-int main(){
+int main() {
+    // El test centennial que escucha al Duki.
     std::string game = "Hola, una partidusqui";
     /*auto create = std::unique_ptr<Command>(new CreateGame(game));
     auto join = std::unique_ptr<Command>(new JoinGame(game));

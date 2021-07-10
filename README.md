@@ -14,6 +14,7 @@ Listamos las dependencias necesarias para poder correr los programas
 - sudo apt-get install libsdl2-image-dev
 - sudo apt-get install libsdl2-gfx-dev
 - sudo apt-get install libsdl2-mixer-dev
+Aclarar las versiones (tenía una anterior de yaml-cpp y no linkeaba)
 
 Ademas, necesitamos tener instalado Makefile y CMAKE para buildear y hacer el deploy
 - sudo apt-get install make

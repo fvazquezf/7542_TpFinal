@@ -5,6 +5,7 @@
 int main(int argc, char *argv[]) {
     if (argc != 3){
         std::cerr << "Error, numero invalido de argumentos\n";
+        // Cuáles son los argumentos esperados? (mejorar el mensaje)
         return -1;
     }
     try {

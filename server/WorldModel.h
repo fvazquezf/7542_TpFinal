@@ -58,6 +58,10 @@ class WorldModel: public Thread {
         WorldModel(WorldModel&& other) noexcept;
         WorldModel& operator=(WorldModel&& other) noexcept;
 
+        // Fijate cómo separaste estos métodos en secciones: estaría bueno agregar
+        // una clase por "sección" con la lógica de cada una, y que WorldModel funcione
+        // como una Facade de esos pedazos.
+
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 
         void createBox(b2BodyDef& boxDef);

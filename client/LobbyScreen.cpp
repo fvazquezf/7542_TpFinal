@@ -7,6 +7,9 @@
 
 LobbyScreen::LobbyScreen(SdlWindow &window)
 : window(window),
+  // como en otros lugares del código, tener mucho cuidado con los paths y revisar que
+  // funcionen cuando haya instalador. Una manera es mandar todos los paths a un archivo
+  // de configuración que se podría generar en el momento de la instalación.
   buttonSlot("../sprites/gfx/hud_slot.bmp",window),
   backgroundTexture("../sprites/gfx/splash.bmp", window),
   buttonBackgroundTexture("../sprites/gfx/gametitle.png", window),

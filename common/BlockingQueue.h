@@ -53,6 +53,7 @@ public:
         std::unique_lock<std::mutex> lock1(queueMutex);
         while (q.empty()){
             if (closed){
+                // Usar una exception propia.
                 throw std::invalid_argument("Queue is closed.\n");
             }
             cv.wait(lock1);

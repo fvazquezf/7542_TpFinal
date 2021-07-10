@@ -109,6 +109,7 @@ SdlTexture &SdlTexture::operator=(SdlTexture &&other) noexcept {
         return *this;
     }
 
+    // texture == other.texture?
     if (texture != nullptr){
         SDL_DestroyTexture(texture);
     }

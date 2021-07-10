@@ -92,6 +92,7 @@ void QEditorMapWidget::setTilesFromOldFile() {
 
     for (unsigned long i = 0; i< elements.size(); i ++) {
         try {
+            // Mejorar los nombres de i, it, it2
             std::list<std::list<int>> pos = map_config[elements[i]].as<std::list<std::list<int>>>();
             std::list<std::list<int>> ::iterator it;
             for (it = pos.begin(); it != pos.end(); ++it) {
@@ -102,12 +103,13 @@ void QEditorMapWidget::setTilesFromOldFile() {
                 this->addQTile(elements[i], x, y);
             }
         } catch(YAML::BadConversion ex) {
-
+            // manejar este error
         }
     }
 }
 
 void QEditorMapWidget::updateMapLFile() {
+    // Ojo con los paths hardcodeados cuando hagan el installer.
     std::string path = PATH_TO_MAPS + map_name + ".yml";
     std::ofstream outfile;
     outfile.open(path);
@@ -142,7 +144,7 @@ void QEditorMapWidget::updateMapLFile() {
 }
 
 void QEditorMapWidget::setItem(std::string &item) {
-    if(std::count(elements.begin(), elements.end(), item)){
+    if(std::count(elements.begin(), elements.end(), item)) {
         this->selectedItem = item;
     } else {
         this->selectedBackground = item;
@@ -150,8 +152,7 @@ void QEditorMapWidget::setItem(std::string &item) {
     }
 }
 
-void QEditorMapWidget::dragEnterEvent(QDragEnterEvent *event)
-{
+void QEditorMapWidget::dragEnterEvent(QDragEnterEvent *event) {
     if (event->source() == this) {
         event->setDropAction(Qt::MoveAction);
         event->accept();
@@ -160,8 +161,7 @@ void QEditorMapWidget::dragEnterEvent(QDragEnterEvent *event)
     }
 }
 
-void QEditorMapWidget::dropEvent(QDropEvent *event)
-{   
+void QEditorMapWidget::dropEvent(QDropEvent *event) {
     event->setDropAction(Qt::MoveAction);
     event->accept();
     
@@ -177,7 +177,8 @@ void QEditorMapWidget::dropEvent(QDropEvent *event)
     std::pair<int,int> pos1(position.y()/QTILE_SIZE, position.x()/QTILE_SIZE);
     std::pair<int,int> pos2(hotSpot.y()/QTILE_SIZE, hotSpot.x()/QTILE_SIZE);
 
-    if(pos1 == pos2) {
+    // creo que sería mejor crear un método privado para cada rama del if. 
+    if (pos1 == pos2) {
         // Point and click
         QPoint pos = event->pos();
         int row = pos.y() / QTILE_SIZE;
@@ -192,7 +193,6 @@ void QEditorMapWidget::dropEvent(QDropEvent *event)
         this->addQTile(positions[pos1], pos1.first, pos1.second);
         this->addQTile(positions[pos2], pos2.first, pos2.second);
     }
-
 }
 
 void QEditorMapWidget::mousePressEvent(QMouseEvent *event) {

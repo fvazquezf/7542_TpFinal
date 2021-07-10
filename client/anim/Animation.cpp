@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "Animation.h"
 
+// C++ tiene parámetros default. Podrían usarlos acá para evitar el código duplicado.
 Animation::Animation(SdlTexture &texture,
                      int numFrames,
                      int framesW,
@@ -51,6 +52,8 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
 void Animation::render(Camera &cam, float posX, float posY, float angle, size_t iteration) {
     auto frame = frames.at(iteration % numFrames);
     Area src(frame.x, frame.y, frame.w, frame.h);
+
+    // Este isVisible lo haría dentro del renderInSight
     if (cam.isVisible(posX, posY)){
         cam.renderInSight(texture, src, posX, posY, angle);
     }
@@ -64,12 +67,16 @@ void Animation::renderFromFrame(int nFrame) {
     frameOffset = nFrame;
 }
 
+// No está mal, pero estas tuplas se podrían reemplazar por una clase Offset.
 void Animation::offsetRenderState(std::tuple<float, float, int16_t> offset) {
     modifiedState.push(std::move(offset));
 }
 
 // unique frame animation
 // used for characters
+//
+// Lo mismo estas posX y posY que pasan en todos lados, podrían convertirse en una
+// clase Position, o Vector o algo así
 std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
                                                        float posX,
                                                        float posY,
@@ -78,6 +85,9 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
     float newPosY = posY;
     int16_t newAngle = angle;
     auto frame = frames.at(currentFrame);
+
+    // La sugerencia de la nueva clase haría que esta lógica se vaya a una clase que
+    // encapsule estas cuentas y sea más fácilmente testeable.
     if (!modifiedState.empty()){
         auto state = modifiedState.front();
         newPosX += std::get<0>(state);
@@ -90,10 +100,14 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
     }
 
     Area src(frame.x, frame.y, frame.w, frame.h);
+
+    // De nuevo la sugerencia de meter el isVisible adentro de la cámara: evitaría el
+    // código repetido.
     if (camera.isVisible(newPosX, newPosY)){
         camera.renderInSight(texture, src, newPosX, newPosY, newAngle);
     }
 
+    // Si esto fuera un Vector (ish) sería más legible.
     return std::make_tuple(newPosX - posX, newPosY - posY, newAngle - angle);
 }
 
@@ -119,6 +133,8 @@ bool Animation::renderOld(Camera &camera, int maxNumFrames) {
 void Animation::renderOneAndKeep(Camera &camera, float posX, float posY) {
     auto& rect = frames.at(currentFrame);
     Area src(rect.x, rect.y, rect.w, rect.h);
+
+    // Acá no está el isVisible, es correcto eso?
     camera.renderInSight(texture, src, posX, posY, 0);
     oldRenders.emplace_back(posX, posY, 0, rect);
 }

@@ -21,6 +21,8 @@ void Hud::show() {
     showLife();
 }
 
+// Si un día trabajás con un diseñador, meté estas constantes en un archivo de configuración así
+// las toca él. Tienen el talento de ponerse intensos con "poné esto dos pixeles más a la izquierda".
 void Hud::showClock() {
     int minutesIdx = std::floor(currentClockTick / 60); // primer numero (minutos)
     int seconds = currentClockTick % 60; // segundo numero (segundos)
