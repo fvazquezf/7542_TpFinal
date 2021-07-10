@@ -9,7 +9,7 @@ Animation::Animation(SdlTexture &texture,
                      int framesH,
                      int sizeW,
                      int sizeH,
-                     bool center)
+                     size_t startingIteration)
 : texture(texture),
   currentFrame(0),
   numFrames(numFrames),
@@ -18,8 +18,8 @@ Animation::Animation(SdlTexture &texture,
   numFramesH(framesH),
   numFramesW(framesW),
   frameOffset(0),
-  center(center),
-  ticksToChangeFrame(0){
+  ticksToChangeFrame(0),
+  startingFrom(startingIteration){
     for (int i = 0; i < framesH; ++i){
         for (int j = 0; j < framesW; ++j){
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
@@ -30,18 +30,23 @@ Animation::Animation(SdlTexture &texture,
 Animation::~Animation(){
 }
 
-Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int framesH, int size, bool center)
+// para frames cuadrados
+Animation::Animation(SdlTexture &texture,
+                     int numFrames,
+                     int framesW,
+                     int size,
+                     size_t startingIteration)
 : texture(texture),
   currentFrame(0),
   numFrames(numFrames),
   sizeW(size),
   sizeH(size),
-  numFramesH(framesH),
+  numFramesH(framesW),
   numFramesW(framesW),
   frameOffset(0),
-  center(center),
-  ticksToChangeFrame(0){
-    for (int i = 0; i < framesH; ++i) {
+  ticksToChangeFrame(0),
+  startingFrom(startingIteration){
+    for (int i = 0; i < framesW; ++i) {
         for (int j = 0; j < framesW; ++j) {
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
         }
@@ -49,11 +54,10 @@ Animation::Animation(SdlTexture &texture, int numFrames, int framesW, int frames
 }
 
 void Animation::render(Camera &cam, float posX, float posY, float angle, size_t iteration) {
-    auto frame = frames.at(iteration % numFrames);
+    auto frame = frames.at((iteration - startingFrom) % numFrames);
     Area src(frame.x, frame.y, frame.w, frame.h);
     cam.renderInSight(texture, src, posX, posY, angle);
-    currentFrame = (iteration % numFrames);
-    advanceFrame();
+    currentFrame = ((iteration - startingFrom) % numFrames);
 }
 
 // seteo el frame desde el cual quiero renderizar
@@ -143,4 +147,45 @@ void Animation::setTicksToChange(size_t ticks) {
 
 void Animation::setStartingIteration(size_t iter) {
     startingFrom = iter;
+}
+
+Animation::Animation(Animation &&other)
+: texture(other.texture),
+  currentFrame(other.currentFrame),
+  numFrames(other.numFrames),
+  sizeW(other.sizeW),
+  sizeH(other.sizeH),
+  numFramesH(other.numFramesH),
+  numFramesW(other.numFramesW),
+  frames(std::move(other.frames)),
+  oldRenders(std::move(other.oldRenders)),
+  modifiedState(std::move(other.modifiedState)),
+  frameOffset(other.frameOffset),
+  ticksToChangeFrame(other.ticksToChangeFrame),
+  startingFrom(other.startingFrom){
+}
+
+Animation &Animation::operator=(Animation &&other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    currentFrame = other.currentFrame;
+    numFrames = other.numFrames;
+    sizeW = other.sizeW;
+    sizeH = other.sizeH;
+    numFramesH = other.numFramesH;
+    numFramesW = other.numFramesW;
+    frames = std::move(other.frames);
+    oldRenders = std::move(other.oldRenders);
+    modifiedState = std::move(other.modifiedState);
+    frameOffset = other.frameOffset;
+    ticksToChangeFrame = other.ticksToChangeFrame;
+    startingFrom = other.startingFrom;
+
+    return *this;
+}
+
+bool Animation::isDone() {
+    return (currentFrame == numFrames - 1);
 }

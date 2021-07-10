@@ -17,10 +17,22 @@ public:
               int framesH,
               int sizeW,
               int sizeH,
-              bool center);
+              size_t startingIter = 0);
 
     // square frames
-    Animation(SdlTexture& texture, int numFrames, int framesW, int framesH, int size, bool center);
+    Animation(SdlTexture& texture,
+              int numFrames,
+              int framesW,
+              int size,
+              size_t startingIter = 0);
+
+
+    Animation(const Animation& other) = delete;
+    Animation& operator=(const Animation& other) = delete;
+
+
+    Animation(Animation&& other);
+    Animation& operator=(Animation&& other);
 
     void render(Camera& cam, float x, float y, float angle, size_t iteration);
     void renderFromFrame(int nFrame);
@@ -47,6 +59,7 @@ public:
 
     void setTicksToChange(size_t ticks);
     void setStartingIteration(size_t iter);
+    bool isDone();
 protected:
     // textura del sprite
     SdlTexture &texture;
@@ -79,8 +92,6 @@ protected:
     // en vez de animar desde el frame 0
     // empiezo desde frameOffset
     int frameOffset;
-
-    bool center;
 
     int ticksToChangeFrame;
     size_t startingFrom;

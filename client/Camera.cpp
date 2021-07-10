@@ -27,7 +27,7 @@ void Camera::renderInSight(SdlTexture& texture,
                            float posX,
                            float posY,
                            float angle){
-    if (!isVisible(posX, posX)) {
+    if (!isVisible(posX, posY)) {
         return;
     }
 

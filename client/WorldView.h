@@ -21,6 +21,7 @@
 #include "MapView.h"
 #include "LobbyScreen.h"
 #include "Cursor.h"
+#include "anim/Explosion.h"
 
 class WorldView {
 private:
@@ -33,6 +34,7 @@ private:
     MapView map;
     LobbyScreen lobby;
     Cursor cursor;
+    Explosion bombExplosion;
 
     std::atomic_bool lobbyTime;
     std::atomic_bool menuTime;

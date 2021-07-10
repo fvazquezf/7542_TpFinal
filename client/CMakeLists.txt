@@ -18,7 +18,11 @@ add_library(sdlloop
         Client.cpp
         Hud.cpp
         Renderizable.cpp
-        NonMovable.cpp SoundManager.cpp SoundManager.h MapView.cpp MapView.h LobbyScreen.cpp LobbyScreen.h Cursor.cpp Cursor.h)
+        NonMovable.cpp
+        SoundManager.cpp
+        MapView.cpp
+        LobbyScreen.cpp
+        Cursor.cpp)
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)

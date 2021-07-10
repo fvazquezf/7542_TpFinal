@@ -19,9 +19,9 @@ Character::Character(SdlTexture &texture,
   moving(false),
   lastIter(0),
   weapon(weapons),
-  movementAnimation(texture, 6, 2, 3, 32, player),
-  bloodAnimation(blood, 16, 4, 4, 32, false),
-  legAnimation(legs, 6, 3, 2, 32, false),
+  movementAnimation(texture, 6, 2, 3, 32, 32),
+  bloodAnimation(blood, 16, 4, 32),
+  legAnimation(legs, 6, 3, 2, 32, 32),
   currentMovingUpdates(0){
     movementAnimation.renderFromFrame(0);
     bloodAnimation.renderFromFrame(8);
@@ -72,19 +72,26 @@ Character::Character(Character &&other) noexcept
   weapon(std::move(other.weapon)),
   movementAnimation(std::move(other.movementAnimation)),
   bloodAnimation(std::move(other.bloodAnimation)),
-  legAnimation(std::move(other.legAnimation)){
+  legAnimation(std::move(other.legAnimation)),
+  weaponCharacterFrameMap(std::move(other.weaponCharacterFrameMap)),
+  currentMovingUpdates(other.currentMovingUpdates){
     other.player = false;
 }
 
 Character &Character::operator=(Character &&other) noexcept {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
     player = other.player;
     other.player = false;
-
     weapon = std::move(other.weapon);
+    movementAnimation = std::move(other.movementAnimation);
+    bloodAnimation = std::move(other.bloodAnimation);
+    legAnimation = std::move(other.legAnimation);
+    weaponCharacterFrameMap = std::move(other.weaponCharacterFrameMap);
+    currentMovingUpdates = other.currentMovingUpdates;
+
     return *this;
 }
 

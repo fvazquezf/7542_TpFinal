@@ -20,6 +20,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
          window,
          clientConfig["cursor_source_file"].as<std::string>(),
          clientConfig["cursor_size"].as<int>()),
+  bombExplosion(window),
   lobbyTime(true),
   menuTime(false),
   done(false),
@@ -101,6 +102,9 @@ void WorldView::render(size_t iteration) {
         camera.render(it.second, iteration);
     }
     stencil.createStencilTexture(camera.angleFromMouse());
+
+    bombExplosion.render(camera, iteration);
+
     if (menuTime){
         menu.showMenu();
     }
@@ -112,6 +116,7 @@ void WorldView::render(size_t iteration) {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
+        std::cout << it.second.first << " " << it.second.second << std::endl;
         entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
 }
