@@ -1,36 +1,31 @@
 # 7542_TpFinal
 
-## Manual de instalacion 
+| Integrantes                            | Padron |
+| -------------------------------------- | ------ |
+| Cai, Ana Maria                         | 102150 |
+| Giampieri Mutti, Leonardo              | 102358 |
+| Vazquez Fernandez, Francisco Manuel    | 104128 |
 
-Los programas fueron ejecutados utilizando los compiladores gcc-9/g++-9 y gcc-11/g++-11
+## Tabla de contenidos
 
-Listamos las dependencias necesarias para poder correr los programas
-- sudo apt-get install build-essential
-- sudo apt-get install qt5-default
-- sudo apt-get install clang-8
-- sudo apt-get install libyaml-cpp-dev
-- sudo apt-get install qtmultimedia5-dev
-- sudo apt-get install libsdl2-dev
-- sudo apt-get install libsdl2-image-dev
-- sudo apt-get install libsdl2-gfx-dev
-- sudo apt-get install libsdl2-mixer-dev
+1. [Introduccion](#Introduccion)
+2. [Manual de instalacion ](#Manual de instalacion)
+    1. [Instalacion](#Instalacion)
+    2. [Desinstalacion](#Desinstalacion)
+3. [Manual de usuario](#Manual de ususario)
 
-Ademas, necesitamos tener instalado Makefile y CMAKE para buildear y hacer el deploy
-- sudo apt-get install make
-- sudo apt-get install cmake 
+## Introduccion
 
-Para cmake, se utiliza la version 3.10
 
-Obs: en caso de no encontrar el paquete qt5-default (resultado observado en 
-distros basadas en debian, ej Ubuntu >= 21.04) ejecutar la siguiente linea,
-que instala todas las dependencias que vienen con qt5-default:
+## Manual de instalacion
 
-- sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+### Instalacion
 
-Una vez clonado el repositorio e instalado las dependencias, debemos crear la carpeta build desde la raiz:
-``` 
-mkdir build 
-cd build
-cmake ..
-make 
-``` 
+```console
+foo@bar:~$ sh installer.sh
+```
+
+### Desinstalacion
+
+
+## Manual de ususario
