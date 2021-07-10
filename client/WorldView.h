@@ -20,6 +20,7 @@
 #include "SoundManager.h"
 #include "MapView.h"
 #include "LobbyScreen.h"
+#include "Cursor.h"
 
 class WorldView {
 private:
@@ -31,6 +32,7 @@ private:
     Hud hud;
     MapView map;
     LobbyScreen lobby;
+    Cursor cursor;
 
     std::atomic_bool lobbyTime;
     std::atomic_bool menuTime;
@@ -40,7 +42,6 @@ private:
     SdlTexture counterTerrorist;
     SdlTexture blood;
     SdlTexture legs;
-    SdlTexture cursor;
 
     std::map<uint8_t, Character> entities;
     std::map<uint8_t, SdlTexture> weapons;
@@ -54,7 +55,6 @@ private:
 
     std::mutex worldMutex;
     uint8_t playerId;
-    void drawCursor();
 public:
     WorldView(SdlWindow& window, YAML::Node& clientConfig);
 

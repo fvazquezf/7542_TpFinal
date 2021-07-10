@@ -16,6 +16,10 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
   hud(window),
   map(window, clientConfig),
   lobby(window),
+  cursor(clientConfig["cursor_type"].as<int>(),
+         window,
+         clientConfig["cursor_source_file"].as<std::string>(),
+         clientConfig["cursor_size"].as<int>()),
   lobbyTime(true),
   menuTime(false),
   done(false),
@@ -25,10 +29,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
         window,
         {0, 0, 0},
         {200, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp",window),
-  cursor("../sprites/gfx/pointer.bmp",
-         window,
-         {0xff, 0, 0xff}){
+  legs("../sprites/gfx/player/legs.bmp",window){
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -88,7 +89,7 @@ void WorldView::render(size_t iteration) {
     window.fill(0, 0, 0, 0);
     if (lobbyTime){
         lobby.draw();
-        drawCursor();
+        cursor.draw();
         window.render();
         return;
     }
@@ -103,8 +104,8 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
-    drawCursor();
     hud.show();
+    cursor.draw();
     window.render();
 }
 
@@ -270,12 +271,3 @@ bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
     }
     return lobby.isButtonPressed(mouseX, mouseY);
 }
-
-void WorldView::drawCursor() {
-    Area cursorSrc(0, 0, 46, 46);
-    int mX, mY;
-    SDL_GetMouseState(&mX, &mY);
-    Area cursorDst(mX - 12, mY - 12, 23, 23);
-    cursor.render(cursorSrc, cursorDst, SDL_FLIP_NONE);
-}
-

@@ -27,6 +27,10 @@ void Camera::renderInSight(SdlTexture& texture,
                            float posX,
                            float posY,
                            float angle){
+    if (!isVisible(posX, posX)) {
+        return;
+    }
+
     auto rect = src.buildRectangle();
     int newX = centerPix.x - (logicalCenterX - posX) * M_TO_P;
     int newY = centerPix.y - (logicalCenterY - posY) * M_TO_P;

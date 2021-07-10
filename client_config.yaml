@@ -8,6 +8,11 @@ stencil_opacity: 50 # higher is darker
 stencil_angle: 45 # stencil triangle angle, higher means fov is increased
 stencil_triangle_brightness: 80 # higher will make fov brighter
 
+
+cursor_type: 2 # de 0 a 3
+cursor_size: 23 # pixeles
+cursor_source_file: "../sprites/gfx/pointer.bmp"
+
 background:
  - ["aztec", "../sprites/gfx/backgrounds/aztec.png"]
  - ["inferno", "../sprites/gfx/backgrounds/inferno.png"]

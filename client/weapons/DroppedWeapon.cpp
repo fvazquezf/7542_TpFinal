@@ -19,7 +19,7 @@ bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifie
 }
 
 void DroppedWeapon::draw(Camera& cam) {
-    if (show && cam.isVisible(posXmm / 100, posYmm / 100)){
+    if (show){
         droppedDrawable.render(cam, 0);
     }
 }
