@@ -555,4 +555,4 @@ void WorldModel::reviveAll(){
 
 bool WorldModel::isDead() {
     return !is_running;
-}
+} 
