@@ -423,11 +423,7 @@ void WorldModel::updateAngles() {
 void WorldModel::updateAttack(int id){
 	std::shared_ptr<Update> updatePtr(new AttackUpdate(id));
     updates.pushAll(updatePtr);
-    int clip = playerModels.at(id).getClip();
-    if (clip != -1) {
-        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
-        updates.push(id, updatePtr);
-    }
+    updateClip(id);
 }
 
 void WorldModel::updateHit(int id){
@@ -443,6 +439,7 @@ void WorldModel::updateDead(int id){
 void WorldModel::updateWeapon(uint8_t id, uint8_t weaponCode){
 	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponCode));
     updates.pushAll(updatePtr);
+    updateClip(id);
 }
 
 void WorldModel::updateBuying(bool buying) {
@@ -498,6 +495,14 @@ void WorldModel::updateBombExplode(){
     updates.pushAll(updatePtr);
 }
 
+void WorldModel::updateClip(int id){
+    int clip = playerModels.at(id).getClip();
+    if (clip != -1) {
+        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
+        updates.push(id, updatePtr);
+    }
+}
+
 void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
 	if (purchaseFase) return;
     playerModels.at(id).startMove(dir);
@@ -549,11 +554,7 @@ void WorldModel::pickUpWeapon(uint8_t id){
 
 void WorldModel::reloadWeapon(uint8_t id){
     playerModels.at(id).reload();
-    int clip = playerModels.at(id).getClip();
-    if (clip != -1) {
-        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
-        updates.push(id, updatePtr);
-    }
+    updateClip(id);
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {
