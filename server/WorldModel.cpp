@@ -23,6 +23,8 @@
 #include "updates/TeamsUpdate.h"
 #include "updates/BombPlantUpdate.h"
 #include "updates/ClipUpdate.h"
+#include "updates/CtWinRoundUpdate.h"
+#include "updates/TtWinRoundUpdate.h"
 
 #include "../common/ConfigVariables.h"
 
@@ -290,6 +292,11 @@ void WorldModel::roundPlay() {
     while (!tally.isRoundOver() && is_running){
         roundCommon();
     }
+    if (tally.isRoundOver() == 1) {
+        updateCtWinRound();
+    } else if (tally.isRoundOver() == -1) {
+        updateTtWinRound();
+    }
     usleep(FRAMERATE * 120);
 }
 
@@ -473,6 +480,16 @@ void WorldModel::updateTime(){
 
 void WorldModel::updateBombPlanted(int id){
     std::shared_ptr<Update> updatePtr(new BombPlantUpdate(id));
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateCtWinRound(){
+    std::shared_ptr<Update> updatePtr(new CtWinRoundUpdate());
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateTtWinRound(){
+    std::shared_ptr<Update> updatePtr(new TtWinRoundUpdate());
     updates.pushAll(updatePtr);
 }
 
