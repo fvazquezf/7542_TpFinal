@@ -78,7 +78,7 @@ int Bomb::getPlanter(){
 }
 
 int Bomb::getFuse(){
-    return fuse;
+    return (fuse/60);
 }
 
 void Bomb::stopPlanting(){
@@ -101,7 +101,6 @@ void Bomb::tickPlanting(){
 void Bomb::tickFuse(){
     remainingTime--;
     if (remainingTime == 0){
-        active = false;
         exploded = true;
     }
 }
