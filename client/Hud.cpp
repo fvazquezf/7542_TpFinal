@@ -6,8 +6,9 @@
 Hud::Hud(SdlWindow &window)
 : symbols(HUD_SYMBOL_PATH, window, Color{0, 0, 0}),
   numbers(HUD_NUM_PATH, window, Color{0, 0, 0}),
-  health(23),
+  health(0),
   currentClockTick(0),
+  clip(0),
   w(window.getWidth()),
   h(window.getHeight()){
 }
@@ -19,6 +20,7 @@ void Hud::show() {
     showMoney();
     showClock();
     showLife();
+    showClip();
 }
 
 void Hud::showClock() {
@@ -108,5 +110,22 @@ void Hud::showMoney() {
     }
     symbols.render(srcMoney, dstMoney, SDL_FLIP_NONE);
     numberSelector.clear();
+}
+
+void Hud::showClip() {
+    loadNumberVector(clip);
+    setNumberColors({0, 0xff, 0});
+    for (size_t i = 0; i < numberSelector.size(); ++i) {
+        Area dst(w - (numberSelector.size() - i) * 36,
+                 h - HUD_NUM_H + 20,
+                 HUD_NUM_W / HUD_NUMS * 2 / 3,
+                 HUD_NUM_H * 2 / 3);
+        numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
+    }
+    numberSelector.clear();
+}
+
+void Hud::updateClip(uint8_t newClip) {
+    clip = newClip;
 }
 

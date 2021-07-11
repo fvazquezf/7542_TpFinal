@@ -276,3 +276,8 @@ bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
     }
     return lobby.isButtonPressed(mouseX, mouseY);
 }
+
+void WorldView::updateHudClip(uint8_t clip) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateClip(clip);
+}

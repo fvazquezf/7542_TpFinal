@@ -110,6 +110,9 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.buildMap(map);
             break;
         }
+        case CLIP_UPDATE:
+            world.updateHudClip(msg.at(0));
+            break;
         default:
             break;
     }

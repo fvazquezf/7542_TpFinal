@@ -109,6 +109,8 @@ public:
     void buildMap(const std::string &mapString);
 
     void stopLobby();
+
+    void updateHudClip(uint8_t clip);
 };
 
 

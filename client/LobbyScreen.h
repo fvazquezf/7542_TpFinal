@@ -15,6 +15,7 @@ private:
     SdlTexture buttonSlot;
     SdlTexture backgroundTexture;
     SdlTexture buttonBackgroundTexture;
+    SdlTexture waitingScreen;
     Button startEarlyButton;
 public:
     explicit LobbyScreen(SdlWindow& window);
