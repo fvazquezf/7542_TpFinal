@@ -203,6 +203,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             msg = handleByte(receiveCallback);
             break;
         }
+        case BOMB_EXPLODE_DONE: {
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");

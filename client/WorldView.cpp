@@ -116,7 +116,6 @@ void WorldView::render(size_t iteration) {
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     for (auto& it : positionMap){
-        std::cout << it.second.first << " " << it.second.second << std::endl;
         entities.at(it.first).updatePosition(it.second.first, it.second.second);
     }
 }
@@ -173,6 +172,7 @@ void WorldView::setMenu(bool isIt) {
     if (!isIt){
         SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
     }
+    droppedWeapons.clear();
 }
 
 bool WorldView::isMenuTime() const {
@@ -286,4 +286,17 @@ void WorldView::plantBomb(uint8_t planterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     auto planterPosition = entities.at(planterId).getPosition();
     droppedWeapons.emplace_back(dropTextures.at(5), BOMB, 0, 100 * planterPosition.first, 100 * planterPosition.second);
+    SoundManager::playSound(SoundManager::soundRepertoire::BOMB_PLANTED, 0);
+}
+
+void WorldView::blowBomb() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    std::pair<float, float> pos;
+    for (auto& it : droppedWeapons){
+        if (it.isWeaponTypeAndId(BOMB, 0)){
+            pos = it.getPosition();
+            break;
+        }
+    }
+    bombExplosion.setExplosion(pos.first, pos.second);
 }

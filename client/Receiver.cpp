@@ -116,6 +116,9 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case BOMB_PLANT_UPDATE:
             world.plantBomb(msg.at(0));
             break;
+        case BOMB_EXPLODE_DONE:
+            world.blowBomb();
+            break;
         default:
             break;
     }

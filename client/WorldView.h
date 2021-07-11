@@ -113,6 +113,8 @@ public:
     void updateHudClip(uint8_t clip);
 
     void plantBomb(uint8_t planterId);
+
+    void blowBomb();
 };
 
 
