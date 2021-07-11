@@ -21,11 +21,11 @@ class WorldModel: public Thread {
     b2Body* anchor;
     const std::map<int, int>& matchConfig;
     std::map<int, PlayerModel> playerModels;
+    std::shared_ptr<Bomb> bomb;
 
     MapLayout mapLayout;
     Tally tally;
     
-    std::shared_ptr<Bomb> bomb;
 
     std::unordered_set<int> attackingPlayers;
 

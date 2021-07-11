@@ -29,14 +29,14 @@
 WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig)
 : world (b2Vec2(0.0f, 0.0f)),
   matchConfig(matchConfig),
-  updates (updates),
-  bomb (std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
-                                             matchConfig.at(BOMB_ACCURACY),
-                                             matchConfig.at(BOMB_DAMAGE),
-                                             matchConfig.at(BOMB_FIRERATE),
-                                             matchConfig.at(BOMB_FUSE),
-                                             matchConfig.at(BOMB_ACTIVATE_TIME)))),
+  bomb (std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE),
+                                        matchConfig.at(BOMB_ACCURACY),
+                                        matchConfig.at(BOMB_DAMAGE),
+                                        matchConfig.at(BOMB_FIRERATE),
+                                        matchConfig.at(BOMB_FUSE),
+                                        matchConfig.at(BOMB_ACTIVATE_TIME)))),
   tally(bomb),
+  updates (updates),
   droppedWeapons(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;

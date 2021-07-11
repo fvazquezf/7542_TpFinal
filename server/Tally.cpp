@@ -1,7 +1,9 @@
 #include "Tally.h"
 
+#include <utility>
+
 Tally::Tally(std::shared_ptr<Bomb> bomb): 
- bomb (bomb){
+ bomb (std::move(bomb)){
     time = 130;
     ticks = 59;
     score = {0, 0};
