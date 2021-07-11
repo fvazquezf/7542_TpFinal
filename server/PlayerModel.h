@@ -70,6 +70,7 @@ class PlayerModel{
         bool getSide();
         int getHp();
         int getMoney();
+        int getClip();
 };
 
 #endif

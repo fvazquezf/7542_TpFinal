@@ -225,6 +225,10 @@ int PlayerModel::getMoney(){
     return money;
 }
 
+int PlayerModel::getClip(){
+    return armory.getClip();
+}
+
 void PlayerModel::freeze(){
     isFrozen = true;
     netForce.SetZero();

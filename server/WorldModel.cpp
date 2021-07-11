@@ -22,6 +22,7 @@
 #include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
 #include "updates/BombPlantUpdate.h"
+#include "updates/ClipUpdate.h"
 
 #include "../common/ConfigVariables.h"
 
@@ -408,6 +409,11 @@ void WorldModel::updateAngles() {
 void WorldModel::updateAttack(int id){
 	std::shared_ptr<Update> updatePtr(new AttackUpdate(id));
     updates.pushAll(updatePtr);
+    int clip = playerModels.at(id).getClip();
+    if (clip != -1) {
+        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
+        updates.push(id, updatePtr);
+    }
 }
 
 void WorldModel::updateHit(int id){
@@ -514,6 +520,11 @@ void WorldModel::pickUpWeapon(uint8_t id){
 
 void WorldModel::reloadWeapon(uint8_t id){
     playerModels.at(id).reload();
+    int clip = playerModels.at(id).getClip();
+    if (clip != -1) {
+        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
+        updates.push(id, updatePtr);
+    }
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {
