@@ -292,11 +292,14 @@ void WorldView::plantBomb(uint8_t planterId) {
 void WorldView::blowBomb() {
     std::lock_guard<std::mutex> lock(worldMutex);
     std::pair<float, float> pos;
-    for (auto& it : droppedWeapons){
-        if (it.isWeaponTypeAndId(BOMB, 0)){
-            pos = it.getPosition();
+    auto dropped = droppedWeapons.begin();
+    while (dropped != droppedWeapons.end()){
+        if (dropped->isWeaponTypeAndId(BOMB, 0)){
+            pos = dropped->getPosition();
+            dropped = droppedWeapons.erase(dropped);
             break;
         }
     }
     bombExplosion.setExplosion(pos.first, pos.second);
+    SoundManager::playSound(SoundManager::soundRepertoire::BOMB_EXPLODE, 0);
 }
