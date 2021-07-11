@@ -281,3 +281,9 @@ void WorldView::updateHudClip(uint8_t clip) {
     std::lock_guard<std::mutex> lock(worldMutex);
     hud.updateClip(clip);
 }
+
+void WorldView::plantBomb(uint8_t planterId) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    auto planterPosition = entities.at(planterId).getPosition();
+    droppedWeapons.emplace_back(dropTextures.at(5), BOMB, 0, planterPosition.first, planterPosition.second);
+}

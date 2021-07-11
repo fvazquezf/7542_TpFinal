@@ -25,7 +25,6 @@ void MapView::loadMap(const std::string &mapFile) {
     rows = map["size_rows"].as<size_t>();
     loadBackground();
     loadWalls();
-    loadWeapons();
     loadZones();
 }
 
@@ -74,11 +73,6 @@ void MapView::loadWalls() {
             }
         }
     }
-}
-
-// cargamos todas
-void MapView::loadWeapons() {
-
 }
 
 void MapView::loadZones() {

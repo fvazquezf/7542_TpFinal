@@ -12,7 +12,6 @@ private:
     void loadBackground();
     void loadWalls();
     void loadZones();
-    void loadWeapons();
 
     SdlWindow& window;
     std::vector<NonMovable> backgroundTiles;
