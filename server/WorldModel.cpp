@@ -25,6 +25,7 @@
 #include "updates/ClipUpdate.h"
 #include "updates/CtWinRoundUpdate.h"
 #include "updates/TtWinRoundUpdate.h"
+#include "updates/BombExplodeUpdate.h"
 
 #include "../common/ConfigVariables.h"
 
@@ -364,7 +365,7 @@ void WorldModel::plantingLogic(){
         bomb->tickFuse();
     }
     if (bomb->isBoom()){
-        // updateExplosion();
+        updateBombExplode();
     }
     if (bomb->isDefusing()){
         bomb->tickDefuse();
@@ -490,6 +491,11 @@ void WorldModel::updateCtWinRound(){
 
 void WorldModel::updateTtWinRound(){
     std::shared_ptr<Update> updatePtr(new TtWinRoundUpdate());
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateTtWinRound(){
+    std::shared_ptr<Update> updatePtr(new BombExplodeUpdate());
     updates.pushAll(updatePtr);
 }
 
