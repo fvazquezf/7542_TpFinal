@@ -5,6 +5,7 @@
 MapLayout::MapLayout(): ctSpawn ({{45, 50}, {45, 50}}),
                         ttSpawn ({{40, 45}, {40, 45}}),
                         bombSite ({{40, 50}, {40, 50}}){
+                                
 }
 
 // b-a = lado x del rectangulo
@@ -19,6 +20,10 @@ void MapLayout::setTtSpawn(int a, int b, int c, int d){
 
 void MapLayout::setBombSite(int a, int b, int c, int d){ 
     bombSite =  {{a, b}, {c, d}};
+}
+
+void MapLayout::loadWalls(std::set<std::pair<int, int>> walls){
+    this->walls.swap(walls);
 }
 
 
