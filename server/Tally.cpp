@@ -75,9 +75,9 @@ int Tally::getTerrorist(){
 
 int Tally::isRoundOver(){
     // cambiar bool por int diciendo quien gano
-    if (ctWon()) return true;
-    if (ttWon()) return true;
-    return false;
+    if (ctWon()) return 1;
+    if (ttWon()) return -1;
+    return 0;
 }
 
 bool Tally::ctWon(){
