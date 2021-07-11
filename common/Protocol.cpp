@@ -199,6 +199,9 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case EARLY_START:{
             break;
         }
+        case BOMB_PLANT_UPDATE: {
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
