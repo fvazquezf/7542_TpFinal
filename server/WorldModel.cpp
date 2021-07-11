@@ -130,24 +130,24 @@ void WorldModel::createBox(b2BodyDef& boxDef){
 
 void WorldModel::createMapBorder(b2BodyDef& boxDef, int xSide, int ySide){
 	float x = 0;
-	float y = -0.75;
+	float y = -0.95;
 
 	for (int i = 0; i < xSide ; i++){
 		boxDef.position.Set(x, y);
 		this->createBox(boxDef);
 
-		boxDef.position.Set(x, y+ySide+0.25);
+		boxDef.position.Set(x, y+ySide+1.15);
 		this->createBox(boxDef);
 
 		x = x + 1.5;
 	}
-    x = -0.75;
+    x = -0.95;
 	y = 0;
 	for (int i = 0; i < ySide ; i++){
 		boxDef.position.Set(x, y);
 		this->createBox(boxDef);
 
-		boxDef.position.Set(x+xSide+0.25, y);
+		boxDef.position.Set(x+xSide+1.15, y);
 		this->createBox(boxDef);
 
 		y = y + 1.5;
@@ -268,7 +268,7 @@ void WorldModel::roundPurchase() {
     updatePositions();
     usleep(FRAMERATE);
     // 600 ticks, 10 segundos
-    for (size_t i = 0; i < 600 && is_running; ++i){
+    for (size_t i = 0; i < 60 && is_running; ++i){
         roundCommon();
     }
     updateBuying(false);
