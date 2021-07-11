@@ -200,6 +200,7 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
             break;
         }
         case BOMB_PLANT_UPDATE: {
+            msg = handleByte(receiveCallback);
             break;
         }
         default:

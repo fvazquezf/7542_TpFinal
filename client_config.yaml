@@ -52,6 +52,6 @@ weapons:
  - ["m3", "../sprites/map/weapon_m3.png"]
  - ["AWP", "../sprites/map/weapon_awp.png"]
 zones:
- - ["zoneA", "../sprites/map/zone_a.png"]
- - ["zoneB", "../sprites/map/zone_b.png"]
- - ["zoneBomb", "../sprites/map/zone_bomb.png"]
+ - ["zoneA", "../sprites/map/zone_a_client.png"]
+ - ["zoneB", "../sprites/map/zone_b_client.png"]
+ - ["zoneBomb", "../sprites/map/zone_bomb_client.png"]
