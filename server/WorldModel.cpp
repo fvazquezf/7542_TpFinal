@@ -199,24 +199,24 @@ void WorldModel::loadMap(YAML::Node& mapInfo){
         createBox(boxDef);
     }
     temp = mapInfo["zoneA"].as<std::vector<std::pair<int, int>>>();
-    int b = temp[0].second;
-    int a = temp[1].second;
-    int d = temp[1].first;
-    int c = temp[2].first;
+    int a = temp[1].first;
+    int b = temp[2].first;
+    int c = temp[0].second;
+    int d = temp[1].second;
     mapLayout.setCtSpawn(a, b, c, d);
 
     temp = mapInfo["zoneB"].as<std::vector<std::pair<int, int>>>();
-    b = temp[0].second;
-    a = temp[1].second;
-    d = temp[1].first;
-    c = temp[2].first;
+    a = temp[1].first;
+    b = temp[2].first;
+    c = temp[0].second;
+    d = temp[1].second;
     mapLayout.setTtSpawn(a, b, c, d);
 
     temp = mapInfo["zoneBomb"].as<std::vector<std::pair<int, int>>>();
-    b = temp[0].second;
-    a = temp[1].second;
-    d = temp[1].first;
-    c = temp[2].first;
+    a = temp[1].first;
+    b = temp[2].first;
+    c = temp[0].second;
+    d = temp[1].second;
     mapLayout.setBombSite(a, b, c, d);
 
     int ySize = mapInfo["size_columns"].as<int>();

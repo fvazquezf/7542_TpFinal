@@ -10,15 +10,15 @@ MapLayout::MapLayout(): ctSpawn ({{45, 50}, {45, 50}}),
 // b-a = lado x del rectangulo
 // d-c = lado y del rectangulo 
 void MapLayout::setCtSpawn(int a, int b, int c, int d){ 
-    ctSpawn =  {{b, a}, {d, c}};
+    ctSpawn =  {{a, b}, {c, d}};
 }
 
 void MapLayout::setTtSpawn(int a, int b, int c, int d){ 
-    ttSpawn =  {{b, a}, {d, c}};
+    ttSpawn =  {{a, b}, {c, d}};
 }
 
 void MapLayout::setBombSite(int a, int b, int c, int d){ 
-    bombSite =  {{b, a}, {d, c}};
+    bombSite =  {{a, b}, {c, d}};
 }
 
 
