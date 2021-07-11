@@ -114,9 +114,11 @@ bool Bomb::isActive(){
 }
 
 bool Bomb::startDefusing(){
+    if (!active) return false;
     defusing = true;
     return true;
 }
+
 bool Bomb::stopDefusing(){
     defusing = false;
     defusingTicks = 0;

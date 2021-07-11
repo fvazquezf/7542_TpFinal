@@ -49,14 +49,6 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
 
-    // bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
-    //                                          matchConfig.at(BOMB_ACCURACY),
-    //                                          matchConfig.at(BOMB_DAMAGE),
-    //                                          matchConfig.at(BOMB_FIRERATE),
-    //                                          matchConfig.at(BOMB_FUSE),
-    //                                          matchConfig.at(BOMB_ACTIVATE_TIME)));
-
-
 	this->anchor = world.CreateBody(&anchorDef);
 
 	is_running = false;
@@ -169,40 +161,40 @@ void WorldModel::createMapBorder(b2BodyDef& boxDef, int xSide, int ySide){
 
 
 void WorldModel::loadMap(YAML::Node& mapInfo){
-    std::vector<std::pair<int, int>> walls;
+    std::set<std::pair<int, int>> walls;
     std::vector<std::pair<int, int>> temp;
 
     if (mapInfo["wall_1"]){
         temp = mapInfo["wall_1"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_2"]){
         temp = mapInfo["wall_2"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_3"]){
         temp = mapInfo["wall_3"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_4"]){
         temp = mapInfo["wall_4"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }    
     if (mapInfo["wall_5"]){
         temp = mapInfo["wall_5"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_6"]){
         temp = mapInfo["wall_6"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_7"]){
         temp = mapInfo["wall_7"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_8"]){
         temp = mapInfo["wall_8"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }   
     
     b2BodyDef boxDef;
@@ -211,6 +203,7 @@ void WorldModel::loadMap(YAML::Node& mapInfo){
         boxDef.position.Set(pos.first, pos.second);
         createBox(boxDef);
     }
+    mapLayout.loadWalls(std::move(walls));
     temp = mapInfo["zoneA"].as<std::vector<std::pair<int, int>>>();
     int a = temp[1].first;
     int b = temp[2].first;
@@ -341,7 +334,7 @@ void WorldModel::startPlanting(uint8_t id){
 void WorldModel::stopPlanting(uint8_t id){
     if (purchaseFase) return;
 	if (playerModels.at(id).stopPlanting()){
-        updateWeapon(id, KNIFE);
+        equipWeapon(id, 2);
     }
     if (playerModels.at(id).stopDefusing()){
         bomb->stopDefusing();
@@ -356,7 +349,7 @@ void WorldModel::plantingLogic(){
             int id = bomb->getPlanter();
             playerModels.at(id).stopPlanting();
             updateBombPlanted(id);
-            updateWeapon(id, KNIFE);
+            equipWeapon(id, 2dd);
             tally.startBombTiming();
         }
     }
