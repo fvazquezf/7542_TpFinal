@@ -6,8 +6,9 @@
 
 class BombPlantUpdate : public Update{
 private:
+    int planterId;
 public:
-    BombPlantUpdate();
+    explicit BombPlantUpdate(int id);
 
     void serialize(std::function<void(std::vector<unsigned char>)>& callback) override;
 
