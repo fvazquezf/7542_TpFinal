@@ -32,24 +32,28 @@ class Bomb: public Weapon {
         bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
+        int getClip() override;
 
         bool startPlanting();
-        bool isPlanting();
         void stopPlanting();
         void tickPlanting();
-        bool isActive();
         void tickFuse();
-        bool isBoom();
-        void setPlanter(int id);
-        int getPlanter();
 
         bool startDefusing();  
         bool stopDefusing();  
+        void tickDefuse();   
+
+        bool isPlanting();
+        bool isActive();
         bool isDefusing();
-        void tickDefuse();       
-        bool isDefused();   
+        bool isBoom();
+        bool isDefused();       
 
         void reset();
+
+        void setPlanter(int id);
+        int getPlanter();
+        int getFuse();
 };
 
 #endif

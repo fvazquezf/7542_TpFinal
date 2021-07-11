@@ -30,6 +30,13 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 : world (b2Vec2(0.0f, 0.0f)),
   matchConfig(matchConfig),
   updates (updates),
+  bomb (std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
+                                             matchConfig.at(BOMB_ACCURACY),
+                                             matchConfig.at(BOMB_DAMAGE),
+                                             matchConfig.at(BOMB_FIRERATE),
+                                             matchConfig.at(BOMB_FUSE),
+                                             matchConfig.at(BOMB_ACTIVATE_TIME)))),
+  tally(bomb),
   droppedWeapons(updates){
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
@@ -39,12 +46,12 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
 
-    bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
-                                             matchConfig.at(BOMB_ACCURACY),
-                                             matchConfig.at(BOMB_DAMAGE),
-                                             matchConfig.at(BOMB_FIRERATE),
-                                             matchConfig.at(BOMB_FUSE),
-                                             matchConfig.at(BOMB_ACTIVATE_TIME)));
+    // bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
+    //                                          matchConfig.at(BOMB_ACCURACY),
+    //                                          matchConfig.at(BOMB_DAMAGE),
+    //                                          matchConfig.at(BOMB_FIRERATE),
+    //                                          matchConfig.at(BOMB_FUSE),
+    //                                          matchConfig.at(BOMB_ACTIVATE_TIME)));
 
 
 	this->anchor = world.CreateBody(&anchorDef);
@@ -68,6 +75,8 @@ WorldModel::WorldModel(WorldModel &&other) noexcept
   timeStep(other.timeStep),
   velocityIterations(other.velocityIterations),
   positionIterations(other.positionIterations),
+  bomb(other.bomb),
+  tally(other.tally),
   is_running(other.is_running){
     // tengo que crearlo asi pq
     // en box2d el world
@@ -232,12 +241,12 @@ void WorldModel::run(){
         playerModels.at(i).changeSide();
     }
     updateTeams();  
+    updateTime();
     // Setup inicial
     for (auto & playerModel : this->playerModels){
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
         updateMoney(playerModel.first);
         updateHp(playerModel.first);
-        updateTime();
         updateWeapon(playerModel.first, KNIFE);
 	}
     // Ciclo de juego, 10 rondas
@@ -260,7 +269,7 @@ void WorldModel::resetRound(){
 		playerModel.second.reposition(mapLayout);
 	}
     bomb->reset();
-    tally.resetTime();
+    tally.resetRound();
     attackingPlayers.clear();
 }
 
@@ -339,21 +348,19 @@ void WorldModel::plantingLogic(){
         if (bomb->isActive()){
             int id = bomb->getPlanter();
             playerModels.at(id).stopPlanting();
-            updateBombPlanted();
+            updateBombPlanted(id);
             updateWeapon(id, KNIFE);
+            tally.startBombTiming();
         }
     }
     if (bomb->isActive()){
         bomb->tickFuse();
     }
     if (bomb->isBoom()){
-        tally.bombExploded();
+        // updateExplosion();
     }
     if (bomb->isDefusing()){
         bomb->tickDefuse();
-    }
-    if (bomb->isDefused()){
-        tally.bombDefused();
     }
 }
 
@@ -361,7 +368,6 @@ void WorldModel::step(){
 	for (auto & playerModel : this->playerModels){
 		playerModel.second.step();
 	}
-    plantingLogic();
 	for (auto id: attackingPlayers){
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
@@ -383,6 +389,7 @@ void WorldModel::step(){
             }
 		}
 	}
+    plantingLogic();
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
 
@@ -464,8 +471,8 @@ void WorldModel::updateTime(){
     updates.pushAll(updatePtr);
 }
 
-void WorldModel::updateBombPlanted(){
-    std::shared_ptr<Update> updatePtr(new BombPlantUpdate());
+void WorldModel::updateBombPlanted(int id){
+    std::shared_ptr<Update> updatePtr(new BombPlantUpdate(id));
     updates.pushAll(updatePtr);
 }
 

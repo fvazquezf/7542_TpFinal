@@ -59,6 +59,10 @@ void Bomb::resetCooldown(){
     cooldown = 0;
 }
 
+int Bomb::getClip(){
+    return -1;
+}
+
 
 bool Bomb::startPlanting(){
     planting = true;
@@ -71,6 +75,10 @@ void Bomb::setPlanter(int id){
 
 int Bomb::getPlanter(){
     return planter;
+}
+
+int Bomb::getFuse(){
+    return fuse;
 }
 
 void Bomb::stopPlanting(){
@@ -86,6 +94,7 @@ void Bomb::tickPlanting(){
     plantingTicks++;
     if (plantingTicks == plantingCooldown){
         active = true;
+        planting = false;
     }
 }
 

@@ -75,7 +75,7 @@ class WorldModel: public Thread {
         void updateHp(int id);
         void updateMoney(int id);
         void updateTime();
-        void updateBombPlanted();
+        void updateBombPlanted(int id);
 
         
         void movePlayer(uint8_t id, uint8_t dir);
