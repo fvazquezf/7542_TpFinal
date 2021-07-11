@@ -336,7 +336,6 @@ void WorldModel::startPlanting(uint8_t id){
             bomb->startDefusing();
         }
     }
-
 }
 
 void WorldModel::stopPlanting(uint8_t id){
@@ -494,7 +493,7 @@ void WorldModel::updateTtWinRound(){
     updates.pushAll(updatePtr);
 }
 
-void WorldModel::updateTtWinRound(){
+void WorldModel::updateBombExplode(){
     std::shared_ptr<Update> updatePtr(new BombExplodeUpdate());
     updates.pushAll(updatePtr);
 }
