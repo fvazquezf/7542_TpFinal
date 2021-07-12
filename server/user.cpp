@@ -32,11 +32,6 @@ void User::join() {
     playing = false;
 }
 
-bool User::isDead() {
-    //return this->thSender.isDead();
-    return true;
-}
-
 void User::stop() {
     sender.stop();
     receiver.stop();

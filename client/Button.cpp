@@ -15,7 +15,7 @@ Button::Button(int x, int y, int w, int h,
 void Button::show() {
     Area src(0, 0, box.w, box.h);
     Area dstHud(box.x, box.y, box.w, box.h);
-    Area dstGunTex(box.x + (box.w/2 - textureSource.w / 2 ),
+    Area dstGunTex(box.x + (box.w/2 - textureSource.w / 2),
                    box.y + (box.h/2 - textureSource.h / 2),
                    textureSource.w,
                    textureSource.h);
@@ -37,4 +37,23 @@ bool Button::checkPressed(int mouseX, int mouseY) {
 
 uint8_t Button::getCode() const {
     return code;
+}
+
+Button::Button(Button &&other)
+: box(other.box),
+  hudTexture(other.hudTexture),
+  buttonTex(other.buttonTex),
+  textureSource(other.textureSource),
+  code(other.code){
+}
+
+Button &Button::operator=(Button &&other) {
+    if (this == &other) {
+        return *this;
+    }
+
+    box = other.box;
+    textureSource = other.textureSource;
+    code = other.code;
+    return *this;
 }

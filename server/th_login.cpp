@@ -32,8 +32,9 @@ bool ThLogin::isDead() {
 }
 
 void ThLogin::stop() {
-    if (this->is_logged_in) {
+    if (!this->is_logged_in) {
         peer.close();
+        is_logged_in = true;
     }
 }
 

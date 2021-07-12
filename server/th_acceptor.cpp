@@ -27,13 +27,16 @@ void ThAcceptor::run() {
             client->start();
             this->cleanTheads();
         } catch (std::invalid_argument &e) {
-            return;
+            break;
         } catch (std::exception &e) {
             std::cerr << e.what() << std::endl;
+            break;
         } catch (...) {
             std::cerr << "Error desconocido en el hilo client\n";
+            break;
         }
     }
+    killIdle();
 }
 
 void ThAcceptor::cleanTheads() {
@@ -52,4 +55,14 @@ void ThAcceptor::cleanTheads() {
 void ThAcceptor::stop() {
     this->keep_running = false;
     this->server.close();
+}
+
+void ThAcceptor::killIdle() {
+    auto it = this->clients.begin();
+    while (it != this->clients.end()) {
+        (*it)->stop();
+        (*it)->join();
+        delete (*it);
+        it = this->clients.erase(it);
+    }
 }

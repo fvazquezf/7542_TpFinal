@@ -1,8 +1,8 @@
 #include "BuyingMenu.h"
 
-BuyingMenu::BuyingMenu(SdlWindow& window)
+BuyingMenu::BuyingMenu(SdlWindow& window, SdlTexture& hudButton)
 : window(window),
-  buttonSlot(BUTTON_VIEW, window){
+  buttonSlot(hudButton){
     // creo las texturas de los botones
     buttonContTextures.emplace_back(AK_PATH, window, Color{R_KEY, G_KEY, B_KEY});
     buttonContTextures.emplace_back(M3_PATH, window, Color{R_KEY, G_KEY, B_KEY});

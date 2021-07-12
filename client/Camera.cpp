@@ -6,8 +6,8 @@
 
 Camera::Camera(SdlWindow& window)
 : window(window),
-  logicalCenterX(-100),
-  logicalCenterY(-100) {
+  logicalCenterX(0),
+  logicalCenterY(0) {
     centerPix = window.getCenter();
     width = 2*centerPix.x;
     height = 2*centerPix.y;

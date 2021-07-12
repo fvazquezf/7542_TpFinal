@@ -12,50 +12,22 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
           clientConfig["stencil_radius"].as<float>(),
           clientConfig["stencil_opacity"].as<int>(),
           clientConfig["stencil_triangle_brightness"].as<int>()),
-  menu(window),
   hud(window),
   map(window, clientConfig),
-  lobby(window),
   cursor(clientConfig["cursor_type"].as<int>(),
          window,
          clientConfig["cursor_source_file"].as<std::string>(),
          clientConfig["cursor_size"].as<int>()),
   bombExplosion(window),
+  characterManager(window, clientConfig),
   lobbyTime(true),
   menuTime(false),
+  skinTime(false),
   done(false),
-  terror("../sprites/gfx/player/t1.bmp", window),
-  counterTerrorist("../sprites/gfx/player/ct1.bmp", window),
-  blood("../sprites/gfx/fragments.bmp",
-        window,
-        {0, 0, 0},
-        {200, 0, 0}),
-  legs("../sprites/gfx/player/legs.bmp",window){
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(0),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(1),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/m3.bmp", window)));
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(2),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/awp.bmp", window)));
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(3),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/knife.bmp", window)));
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(4),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
-    weapons.emplace(std::piecewise_construct,
-                    std::forward_as_tuple(5),
-                    std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
-
+  hudButton(clientConfig["hud_button"].as<std::string>(), window),
+  lobby(window, hudButton),
+  menu(window, hudButton),
+  skins(window, clientConfig, hudButton, true, characterManager){
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(0),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/ak47_d.bmp", window)));
@@ -77,14 +49,6 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
 WorldView::~WorldView() {
 }
 
-// SOLO ACCEDIDO POR RECEIVER DESDE BUILD TEAMS (CON EL LOCK)
-void WorldView::characterEntityCreate(uint8_t id, bool isPlayer, bool isCt) {
-    entities.emplace(std::piecewise_construct,
-                     std::forward_as_tuple(id),
-                     std::forward_as_tuple(isCt ? counterTerrorist : terror, 0, 0, isPlayer,
-                                                   weapons, blood, legs));
-}
-
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill(0, 0, 0, 0);
@@ -98,9 +62,7 @@ void WorldView::render(size_t iteration) {
     for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
     }
-    for (auto& it : entities){
-        camera.render(it.second, iteration);
-    }
+    characterManager.draw(camera, iteration);
     stencil.createStencilTexture(camera.angleFromMouse());
 
     bombExplosion.render(camera, iteration);
@@ -108,6 +70,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    skins.draw();
     hud.show();
     cursor.draw();
     window.render();
@@ -115,9 +78,7 @@ void WorldView::render(size_t iteration) {
 
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    for (auto& it : positionMap){
-        entities.at(it.first).updatePosition(it.second.first, it.second.second);
-    }
+    characterManager.updatePositions(positionMap);
 }
 
 int16_t WorldView::getPlayerAngle() {
@@ -127,31 +88,27 @@ int16_t WorldView::getPlayerAngle() {
 
 void WorldView::updateAngles(std::map<uint8_t, int16_t> &angles) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    for (auto& it : angles){
-        entities.at(it.first).updateAngle(it.second);
-    }
+    characterManager.updateAngles(angles);
 }
 
 void WorldView::hit(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(id).hit();
+    characterManager.hit(id, camera);
 }
 
 void WorldView::kill(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    auto position = entities.at(id).getPosition();
-    float distCenter = camera.calculateDistanceToCenter(position.first, position.second);
-    entities.at(id).die(distCenter);
+    characterManager.kill(id, camera);
 }
 
 void WorldView::attack(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(id).attack();
+    characterManager.attack(id);
 }
 
 void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    entities.at(characterId).changeWeapon(weaponCode);
+    characterManager.changeWeapon(weaponCode, characterId);
 }
 
 bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
@@ -168,12 +125,16 @@ uint8_t WorldView::getPressedButtonCode() {
 }
 
 void WorldView::setMenu(bool isIt) {
+    std::lock_guard<std::mutex> lock(worldMutex);
     menuTime = isIt;
     if (!isIt){
-        hud.resetHud();
+        // si el jugador no selecciono un skin
+        // asignamos skins random
+        skins.setRandomSkinsIfNotSelected();
+        hud.resetHud(); // desactivamos la pantalla de winner
+        // GO, GO, GO!
         SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
     }
-    droppedWeapons.clear();
 }
 
 bool WorldView::isMenuTime() const {
@@ -211,23 +172,18 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, 0);
 }
 
-void WorldView::buildTeams(const std::map<uint8_t, bool> &teamMap) {
+void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    for (auto& it : teamMap){
-        uint8_t characterId = it.first;
-        bool isCt = it.second;
-        // si no existe el jugador, debo crearlo
-        if (!entities.count(characterId)){
-            characterEntityCreate(characterId, characterId == playerId, isCt);
-        } else { // si existe, significa que estamos cambiando de bando
-            entities.erase(characterId);
-            characterEntityCreate(characterId, characterId == playerId, isCt);
-        }
-    }
+    skinTime = true;
+    skins.setPlayerTeam(teamMap.at(playerId));
+    characterManager.assignTeams(std::move(teamMap));
+
 }
 
 void WorldView::assignPlayer(uint8_t aPlayerId) {
+    std::lock_guard<std::mutex> lock(worldMutex);
     playerId = aPlayerId;
+    characterManager.setPlayerId(aPlayerId);
 }
 
 void WorldView::updateHudTime(uint8_t time) {
@@ -285,9 +241,7 @@ void WorldView::updateHudClip(uint8_t clip) {
 
 void WorldView::plantBomb(uint8_t planterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    auto planterPosition = entities.at(planterId).getPosition();
-    droppedWeapons.emplace_back(dropTextures.at(5), BOMB, 0, 100 * planterPosition.first, 100 * planterPosition.second);
-    SoundManager::playSound(SoundManager::soundRepertoire::BOMB_PLANTED, 0);
+    characterManager.plantBomb(planterId, droppedWeapons, dropTextures.at(BOMB));
 }
 
 void WorldView::blowBomb() {
@@ -300,6 +254,7 @@ void WorldView::blowBomb() {
             dropped = droppedWeapons.erase(dropped);
             break;
         }
+        ++dropped;
     }
     bombExplosion.setExplosion(pos.first, pos.second);
     SoundManager::playSound(SoundManager::soundRepertoire::BOMB_EXPLODE, 0);
@@ -308,4 +263,18 @@ void WorldView::blowBomb() {
 void WorldView::updateHudWinner(bool ctIsWinner) {
     std::lock_guard<std::mutex> lock(worldMutex);
     hud.updateWinner(ctIsWinner);
+}
+
+bool WorldView::skinSelectionTime() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    return skinTime;
+}
+
+void WorldView::selectSkin() {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    try {
+        skins.assignTexturesFromButtonPressed();
+        skinTime = false;
+    } catch (std::exception& e){
+    }
 }

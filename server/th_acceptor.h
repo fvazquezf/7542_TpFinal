@@ -16,7 +16,7 @@ class ThAcceptor : public Thread {
   std::list<ThLogin *> clients;
   bool keep_running;
   void cleanTheads();
-
+  void killIdle();
  public:
   explicit ThAcceptor(char* port, GamesMonitor& games);
   ~ThAcceptor() override;

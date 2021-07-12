@@ -1,14 +1,13 @@
 #include "LobbyScreen.h"
 #include "SoundManager.h"
 
-LobbyScreen::LobbyScreen(SdlWindow &window)
+LobbyScreen::LobbyScreen(SdlWindow &window, SdlTexture& hudButton)
 : window(window),
-  buttonSlot("../sprites/gfx/hud_slot.bmp",window),
   backgroundTexture("../sprites/gfx/splash.bmp", window),
   buttonBackgroundTexture("../sprites/gfx/gametitle.png", window),
   waitingScreen("../sprites/gfx/waiting.bmp", window, {0x20, 0x20, 0x80}),
   startEarlyButton((window.getWidth() / 2) - 75, 2 * window.getHeight() / 3, 150, 40,
-                   buttonSlot,
+                   hudButton,
                    buttonBackgroundTexture,
                    SDL_Rect{0, 0, 48, 20},
                    0){

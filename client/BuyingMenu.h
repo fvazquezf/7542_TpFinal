@@ -8,7 +8,6 @@
 #define AK_PATH "../sprites/gfx/weapons/ak47_m.bmp"
 #define M3_PATH "../sprites/gfx/weapons/m3_m.bmp"
 #define AWP_PATH "../sprites/gfx/weapons/awp_m.bmp"
-#define BUTTON_VIEW "../sprites/gfx/hud_slot.bmp"
 
 // con gimp encontramos los parametros para Color Key
 #define R_KEY 0xff
@@ -23,11 +22,11 @@ class BuyingMenu {
 private:
     SdlWindow& window;
     std::vector<Button> menuButtons;
-    SdlTexture buttonSlot;
+    SdlTexture& buttonSlot;
     std::vector<SdlTexture> buttonContTextures;
     uint8_t lastButtonPressed;
 public:
-    explicit BuyingMenu(SdlWindow& window);
+    BuyingMenu(SdlWindow& window, SdlTexture& hudButton);
 
     void showMenu();
 

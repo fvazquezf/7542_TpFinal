@@ -22,6 +22,7 @@
 #include "LobbyScreen.h"
 #include "Cursor.h"
 #include "anim/Explosion.h"
+#include "SkinSelector.h"
 
 class WorldView {
 private:
@@ -29,24 +30,24 @@ private:
     YAML::Node& clientConfig;
     Camera camera;
     Stencil stencil;
-    BuyingMenu menu;
     Hud hud;
     MapView map;
-    LobbyScreen lobby;
     Cursor cursor;
     Explosion bombExplosion;
+    CharacterManager characterManager;
 
     std::atomic_bool lobbyTime;
     std::atomic_bool menuTime;
+    std::atomic_bool skinTime;
     std::atomic_bool done;
 
-    SdlTexture terror;
-    SdlTexture counterTerrorist;
-    SdlTexture blood;
-    SdlTexture legs;
+    SdlTexture hudButton;
+
+    LobbyScreen lobby;
+    BuyingMenu menu;
+    SkinSelector skins;
 
     std::map<uint8_t, Character> entities;
-    std::map<uint8_t, SdlTexture> weapons;
     std::map<uint8_t, SdlTexture> dropTextures;
 
     std::vector<DroppedWeapon> droppedWeapons; // va a mapView
@@ -72,7 +73,6 @@ public:
     void setMenu(bool isIt);
     bool isMenuTime() const;
 
-    void characterEntityCreate(uint8_t id, bool isPlayer, bool isCt);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);
 
     void updatePositions(std::map<uint8_t, std::pair<float, float>>& positionMap);
@@ -93,7 +93,7 @@ public:
 
     void pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weaponIdentification);
 
-    void buildTeams(const std::map<uint8_t, bool> &teamMap);
+    void buildTeams(std::map<uint8_t, bool> teamMap);
 
     void assignPlayer(uint8_t aPlayerId);
 
@@ -117,6 +117,10 @@ public:
     void blowBomb();
 
     void updateHudWinner(bool ctIsWinner);
+
+    bool skinSelectionTime();
+
+    void selectSkin();
 };
 
 

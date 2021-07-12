@@ -274,7 +274,7 @@ void WorldModel::roundPurchase() {
     updatePositions();
     usleep(FRAMERATE);
     // 600 ticks, 10 segundos
-    for (size_t i = 0; i < 60 && is_running; ++i){
+    for (size_t i = 0; i < 600 && is_running; ++i){
         roundCommon();
     }
     updateBuying(false);

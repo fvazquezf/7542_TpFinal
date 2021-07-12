@@ -41,8 +41,6 @@ public:
     void join();
     void stop();
 
-    bool isDead();
-
     ~User();
 };
 

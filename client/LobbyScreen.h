@@ -12,13 +12,12 @@
 class LobbyScreen {
 private:
     SdlWindow& window;
-    SdlTexture buttonSlot;
     SdlTexture backgroundTexture;
     SdlTexture buttonBackgroundTexture;
     SdlTexture waitingScreen;
     Button startEarlyButton;
 public:
-    explicit LobbyScreen(SdlWindow& window);
+    LobbyScreen(SdlWindow& window, SdlTexture& hudButton);
 
     LobbyScreen(const LobbyScreen& other) = delete;
     LobbyScreen& operator=(const LobbyScreen& other) = delete;
