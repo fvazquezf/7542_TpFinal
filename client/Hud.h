@@ -17,10 +17,19 @@
 #define HUD_NUM_PATH "../sprites/gfx/hud_nums.bmp"
 #define CTWIN_PATH "../sprites/gfx/ctWinRound.bmp"
 #define TTWIN_PATH "../sprites/gfx/ttWinRound.bmp"
+#define CT_ROUNDS_PATH "../sprites/gfx/CT.bmp"
+#define TT_ROUNDS_PATH "../sprites/gfx/tt.bmp"
+#define BAR_PATH "../sprites/gfx/barr.bmp"
+#define CT_ROUND_W 219
+#define CT_ROUND_H 167
+#define TT_ROUND_W 233
+#define TT_ROUND_H 186
 #define TT_W 1139
 #define TT_H 161
 #define CT_W 1501
 #define CT_H 147
+#define BAR_W 195
+#define BAR_H 181
 
 class Hud {
 private:
@@ -28,11 +37,16 @@ private:
     SdlTexture numbers;
     SdlTexture ctWin;
     SdlTexture ttWin;
+    SdlTexture ctRoundsTex;
+    SdlTexture ttRoundsTex;
+    SdlTexture bar;
     std::vector<Area> numberSelector;
     uint8_t health;
     uint8_t currentClockTick;
     uint16_t money;
     uint8_t clip;
+    uint8_t ttRounds;
+    uint8_t ctRounds;
     bool winnerTime;
     bool ctWon;
     int w;
@@ -41,6 +55,7 @@ private:
     void showLife();
     void showMoney();
     void showClip();
+    void showRounds();
     void setNumberColors(Color colors);
     Area areaFromIdxPosition(uint8_t idx) const; // los bmp son horizontales, solo me muevo en "x"
     void loadNumberVector(int number);
