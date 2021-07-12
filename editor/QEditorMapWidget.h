@@ -7,7 +7,7 @@
 #include "yaml-cpp/yaml.h"
 #include <fstream>
 #include <QMouseEvent>
-#include "MapIconGenerator.h"
+#include "MapQPixmapGenerator.h"
 #include <algorithm>
 #include <utility>
 #include "constantes.h"
@@ -37,13 +37,14 @@ private:
         "bomb", "m3", "AK-47", "knife", "glock", "AWP"};
 
     std::string map_name;
-    MapIconGenerator icons;
+    MapQPixmapGenerator pixmaps;
     std::string selectedItem;
     std::string selectedBackground = "aztec";
 
     void setMapLayout();
 
     void setTilesBackGround();
+    void updateBackGround();
     void setTilesFromOldFile();
     void setTilesFromNewFile();
 

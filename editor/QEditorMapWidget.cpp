@@ -9,6 +9,8 @@
 #include <QByteArrayList>
 #include <QRegularExpression>
 
+#include <QPixmap>
+
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
         QWidget (parent), map_name(map_name) {
     this->setAcceptDrops(true);
@@ -33,13 +35,13 @@ void QEditorMapWidget::setMapLayout() {
 }
 
 void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
-    QIcon backgorundIcon = icons.getIcon(this->selectedBackground);
+    QPixmap backgorundIcon = pixmaps.getPixmap(this->selectedBackground);
     QTile* backgorundIconQTile = new QTile(this, QTILE_SIZE, QTILE_SIZE, backgorundIcon);
     layout->addWidget(backgorundIconQTile, row, column);
     if(elements.size() == 0) {
         return;
     }
-    QIcon icon = icons.getIcon(element);
+    QPixmap icon = pixmaps.getPixmap(element);
     QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
     positions[std::pair<int,int>(row, column)] = element;
     layout->addWidget(tile, row, column);
@@ -52,22 +54,33 @@ void QEditorMapWidget::loadNewFile(int rows, int columns) {
 
 }
 
-void QEditorMapWidget::setTilesBackGround() {
-    for(int i = 0; i<  size[LABEL_ROWS]; i++){
-        for(int j = 0; j < size[LABEL_COLUMNS]; j++){
-            QIcon icon = icons.getIcon(selectedBackground);
-            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
-            layout->addWidget(tile, i, j);
-        }
+void QEditorMapWidget::updateBackGround() {
+
+    QPixmap backgroundQPixmap = pixmaps.getPixmap(selectedBackground);
+    for (int i = 0; i < layout->count(); ++i) {
+        QTile *widget = (QTile*) layout->itemAt(i)->widget();
+        widget->setPixmap(backgroundQPixmap);
     }
 
     std::map <std::pair<int,int>, std::string>::iterator it;
     for (it = positions.begin(); it != positions.end(); ++it) {
-            QIcon icon = icons.getIcon(it->second);
-            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
+            QPixmap pixmap = pixmaps.getPixmap(it->second);
+            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, pixmap);
             int x = it->first.first;
             int y = it->first.second;
             layout->addWidget(tile, x, y);
+    }
+
+
+}
+
+void QEditorMapWidget::setTilesBackGround() {
+    QPixmap backgroundQPixmap = pixmaps.getPixmap(selectedBackground);
+    for (int i = 0; i < size[LABEL_ROWS]; ++i) {
+        for (int j = 0; j < size[LABEL_COLUMNS]; ++j) {
+            QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, backgroundQPixmap);
+            layout->addWidget(tile, i, j);
+        }
     }
 }
 
@@ -144,7 +157,7 @@ void QEditorMapWidget::setItem(std::string &item) {
         this->selectedItem = item;
     } else {
         this->selectedBackground = item;
-        setTilesBackGround();
+        updateBackGround();
     }
 }
 
