@@ -206,6 +206,12 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case BOMB_EXPLODE_DONE: {
             break;
         }
+        case TT_WIN_ROUND: {
+            break;
+        }
+        case CT_WIN_ROUND: {
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");

@@ -119,6 +119,12 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case BOMB_EXPLODE_DONE:
             world.blowBomb();
             break;
+        case CT_WIN_ROUND:
+            world.updateHudWinner(true);
+            break;
+        case TT_WIN_ROUND:
+            world.updateHudWinner(false);
+            break;
         default:
             break;
     }

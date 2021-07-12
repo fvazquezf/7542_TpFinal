@@ -349,7 +349,7 @@ void WorldModel::plantingLogic(){
             int id = bomb->getPlanter();
             playerModels.at(id).stopPlanting();
             updateBombPlanted(id);
-            equipWeapon(id, 2dd);
+            equipWeapon(id, 2);
             tally.startBombTiming();
         }
     }

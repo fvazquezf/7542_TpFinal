@@ -5,7 +5,7 @@
 #include <map>
 #include "sdlwrap/SdlSound.h"
 #define MAX_SOUND_DISTANCE 25.0f
-#define MAX_CHUNKS 5
+#define MAX_CHUNKS 10
 
 // sound manager unico
 // singleton instance

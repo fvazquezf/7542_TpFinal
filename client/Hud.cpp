@@ -4,11 +4,15 @@
 #include "Hud.h"
 
 Hud::Hud(SdlWindow &window)
-: symbols(HUD_SYMBOL_PATH, window, Color{0, 0, 0}),
-  numbers(HUD_NUM_PATH, window, Color{0, 0, 0}),
+: symbols(HUD_SYMBOL_PATH, window, {0, 0, 0}),
+  numbers(HUD_NUM_PATH, window, {0, 0, 0}),
+  ctWin(CTWIN_PATH, window),
+  ttWin(TTWIN_PATH, window),
   health(0),
   currentClockTick(0),
   clip(0),
+  winnerTime(false),
+  ctWon(false),
   w(window.getWidth()),
   h(window.getHeight()){
 }
@@ -21,6 +25,9 @@ void Hud::show() {
     showClock();
     showLife();
     showClip();
+    if (winnerTime){
+        showWinner();
+    }
 }
 
 void Hud::showClock() {
@@ -127,5 +134,32 @@ void Hud::showClip() {
 
 void Hud::updateClip(uint8_t newClip) {
     clip = newClip;
+}
+
+void Hud::showWinner() {
+    if (ctWon) {
+        Area srcCt(0, 0, CT_W, CT_H);
+        Area dstCt(w/2 - CT_W / 8, h/2, CT_W / 4, CT_H / 4);
+        ctWin.render(srcCt, dstCt, SDL_FLIP_NONE);
+    } else {
+        Area srcTT(0, 0, TT_W, TT_H);
+        Area dstTT(w/2 - TT_W / 8, h/2, TT_W / 4, TT_H / 4);
+        ttWin.render(srcTT, dstTT, SDL_FLIP_NONE);
+    }
+}
+
+void Hud::updateWinner(bool ctIsWinner) {
+    winnerTime = true;
+    ctWon = ctIsWinner;
+    if (ctWon){
+        SoundManager::playSound(SoundManager::soundRepertoire::CT_WIN, 0);
+    } else {
+        SoundManager::playSound(SoundManager::soundRepertoire::TT_WIN, 0);
+    }
+}
+
+void Hud::resetHud() {
+    winnerTime = false;
+    ctWon = false;
 }
 

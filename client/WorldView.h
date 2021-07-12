@@ -115,6 +115,8 @@ public:
     void plantBomb(uint8_t planterId);
 
     void blowBomb();
+
+    void updateHudWinner(bool ctIsWinner);
 };
 
 

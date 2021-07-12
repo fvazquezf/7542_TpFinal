@@ -5,6 +5,7 @@
 #include <vector>
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
+#include "SoundManager.h"
 
 #define HUD_SYMBOLS 13
 #define HUD_SYMBOL_W 832
@@ -14,16 +15,26 @@
 #define HUD_NUM_W 528 // sacado con gimp -> hay 12 simbolos, pero 1 de ellos no tiene el mismo tamaño al resto
 #define HUD_NUM_H 66
 #define HUD_NUM_PATH "../sprites/gfx/hud_nums.bmp"
+#define CTWIN_PATH "../sprites/gfx/ctWinRound.bmp"
+#define TTWIN_PATH "../sprites/gfx/ttWinRound.bmp"
+#define TT_W 1139
+#define TT_H 161
+#define CT_W 1501
+#define CT_H 147
 
 class Hud {
 private:
     SdlTexture symbols;
     SdlTexture numbers;
+    SdlTexture ctWin;
+    SdlTexture ttWin;
     std::vector<Area> numberSelector;
     uint8_t health;
     uint8_t currentClockTick;
     uint16_t money;
     uint8_t clip;
+    bool winnerTime;
+    bool ctWon;
     int w;
     int h;
     void showClock();
@@ -41,9 +52,13 @@ public:
     void updateTime(uint8_t clockTick);
     void updateMoney(uint16_t money);
     void updateClip(uint8_t newClip);
+    void updateWinner(bool ctIsWinner);
+
+    void resetHud();
 
     ~Hud();
 
+    void showWinner();
 };
 
 

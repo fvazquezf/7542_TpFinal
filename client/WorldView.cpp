@@ -170,6 +170,7 @@ uint8_t WorldView::getPressedButtonCode() {
 void WorldView::setMenu(bool isIt) {
     menuTime = isIt;
     if (!isIt){
+        hud.resetHud();
         SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
     }
     droppedWeapons.clear();
@@ -302,4 +303,9 @@ void WorldView::blowBomb() {
     }
     bombExplosion.setExplosion(pos.first, pos.second);
     SoundManager::playSound(SoundManager::soundRepertoire::BOMB_EXPLODE, 0);
+}
+
+void WorldView::updateHudWinner(bool ctIsWinner) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    hud.updateWinner(ctIsWinner);
 }
