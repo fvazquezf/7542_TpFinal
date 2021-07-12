@@ -1,36 +1,49 @@
 # 7542_TpFinal
 
-## Manual de instalacion 
+| Integrantes                            | Padron |
+| -------------------------------------- | ------ |
+| Cai, Ana Maria                         | 102150 |
+| Giampieri Mutti, Leonardo              | 102358 |
+| Vazquez Fernandez, Francisco Manuel    | 104128 |
 
-Los programas fueron ejecutados utilizando los compiladores gcc-9/g++-9 y gcc-11/g++-11
+## Tabla de contenidos
 
-Listamos las dependencias necesarias para poder correr los programas
-- sudo apt-get install build-essential
-- sudo apt-get install qt5-default
-- sudo apt-get install clang-8
-- sudo apt-get install libyaml-cpp-dev
-- sudo apt-get install qtmultimedia5-dev
-- sudo apt-get install libsdl2-dev
-- sudo apt-get install libsdl2-image-dev
-- sudo apt-get install libsdl2-gfx-dev
-- sudo apt-get install libsdl2-mixer-dev
+- [7542_TpFinal](#7542_tpfinal)
+  - [Tabla de contenidos](#tabla-de-contenidos)
+  - [Introduccion](#introduccion)
+  - [Manual de instalacion](#manual-de-instalacion)
+    - [Instalacion](#instalacion)
+    - [Desinstalacion](#desinstalacion)
+  - [Manual de ususario](#manual-de-ususario)
 
-Ademas, necesitamos tener instalado Makefile y CMAKE para buildear y hacer el deploy
-- sudo apt-get install make
-- sudo apt-get install cmake 
+## Introduccion
 
-Para cmake, se utiliza la version 3.10
 
-Obs: en caso de no encontrar el paquete qt5-default (resultado observado en 
-distros basadas en debian, ej Ubuntu >= 21.04) ejecutar la siguiente linea,
-que instala todas las dependencias que vienen con qt5-default:
+## Manual de instalacion
 
-- sudo apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+### Instalacion
 
-Una vez clonado el repositorio e instalado las dependencias, debemos crear la carpeta build desde la raiz:
-``` 
-mkdir build 
-cd build
-cmake ..
-make 
-``` 
+Para instalar las dependencias del juego se debe correr el siguiente comando en la consola:
+
+```console
+sh installer.sh
+```
+
+### Desinstalacion
+
+Para instalar las dependencias del juego se debe correr el siguiente comando en la consola:
+
+```console
+sh desinstaller.sh <flags>
+```
+
+Las flags que pueden haber y combinar son:
+
+- `--qt`:  borra las dependencias de qt
+- `--sdl`:  borra las dependencias de sdl2
+- `--yaml`:  borra las dependencias de yaml-cpp
+- `--cpp`:  borra las dependencias: clang, cmake, make y build-essential
+- `--repo`:  elimina el repositorio
+- `--all`:  borra las dependencias de qt, sdl2, yaml-cpp, clang, cmake, make y build-essentia, y elimina el repositorio
+
+## Manual de ususario
