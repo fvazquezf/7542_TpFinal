@@ -91,7 +91,7 @@ void QEditorMapWidget::setTilesFromOldFile() {
     this->setTilesBackGround();
 
     for (unsigned long i = 0; i< elements.size(); i ++) {
-        try {
+        if(map_config[elements[i]]) {
             std::list<std::list<int>> pos = map_config[elements[i]].as<std::list<std::list<int>>>();
             std::list<std::list<int>> ::iterator it;
             for (it = pos.begin(); it != pos.end(); ++it) {
@@ -101,8 +101,6 @@ void QEditorMapWidget::setTilesFromOldFile() {
                 positions[std::pair<int,int>(x, y)] = elements[i];
                 this->addQTile(elements[i], x, y);
             }
-        } catch(YAML::BadConversion ex) {
-
         }
     }
 }
