@@ -256,7 +256,6 @@ void WorldModel::run(){
         roundPlay();
     }
     updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
-    is_running = false;
 }
 
 void WorldModel::resetRound(){
