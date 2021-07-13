@@ -16,6 +16,7 @@ class Knife: public Weapon {
         bool canShoot() override;
         void resetCooldown() override;
         int hit() override;
+        int getClip() override;
 };
 
 #endif

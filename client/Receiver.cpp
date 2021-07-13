@@ -85,7 +85,7 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         }
         case TEAM_UPDATE: {
             auto teamMap = prot.deserializeTeams(msg);
-            world.buildTeams(teamMap);
+            world.buildTeams(std::move(teamMap));
             break;
         }
         case TIMER_UPDATE: {
@@ -110,6 +110,21 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             world.buildMap(map);
             break;
         }
+        case CLIP_UPDATE:
+            world.updateHudClip(msg.at(0));
+            break;
+        case BOMB_PLANT_UPDATE:
+            world.plantBomb(msg.at(0));
+            break;
+        case BOMB_EXPLODE_DONE:
+            world.blowBomb();
+            break;
+        case CT_WIN_ROUND:
+            world.updateHudWinner(true);
+            break;
+        case TT_WIN_ROUND:
+            world.updateHudWinner(false);
+            break;
         default:
             break;
     }

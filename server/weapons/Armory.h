@@ -54,6 +54,8 @@ class Armory {
 
         bool pickUpWeapon(const b2Vec2& position);
 
+        int getClip();
+
         Armory(const Armory& other) = delete;
         Armory& operator=(const Armory& other) = delete;
 

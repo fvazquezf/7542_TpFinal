@@ -5,7 +5,7 @@
 #include <map>
 #include "sdlwrap/SdlSound.h"
 #define MAX_SOUND_DISTANCE 25.0f
-#define MAX_CHUNKS 5
+#define MAX_CHUNKS 10
 
 // sound manager unico
 // singleton instance
@@ -36,8 +36,8 @@ public:
     enum soundRepertoire : int {
         KNF_S, GLOCK_S, AK47_S, M3_S, AWP_S,
         STEP1, DIE1, HIT1, GO, BOMB_PLANTED,
-        CT_WIN, TT_WIN, DROP_WEAPON, PICKUP_WEAPON,
-        MENU_SOUND
+        BOMB_EXPLODE, CT_WIN, TT_WIN,
+        DROP_WEAPON, PICKUP_WEAPON, MENU_SOUND
     };
     SoundManager();
 

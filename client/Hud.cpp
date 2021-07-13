@@ -1,13 +1,22 @@
-#include <tuple>
 #include <iostream>
 #include <sstream>
 #include "Hud.h"
 
 Hud::Hud(SdlWindow &window)
-: symbols(HUD_SYMBOL_PATH, window, Color{0, 0, 0}),
-  numbers(HUD_NUM_PATH, window, Color{0, 0, 0}),
-  health(23),
+: symbols(HUD_SYMBOL_PATH, window, {0, 0, 0}),
+  numbers(HUD_NUM_PATH, window, {0, 0, 0}),
+  ctWin(CTWIN_PATH, window),
+  ttWin(TTWIN_PATH, window),
+  ctRoundsTex(CT_ROUNDS_PATH, window),
+  ttRoundsTex(TT_ROUNDS_PATH, window),
+  bar(BAR_PATH, window, {0xff, 0xff, 0xff}),
+  health(0),
   currentClockTick(0),
+  clip(0),
+  ttRounds(0),
+  ctRounds(0),
+  winnerTime(false),
+  ctWon(false),
   w(window.getWidth()),
   h(window.getHeight()){
 }
@@ -19,6 +28,11 @@ void Hud::show() {
     showMoney();
     showClock();
     showLife();
+    showClip();
+    showRounds();
+    if (winnerTime){
+        showWinner();
+    }
 }
 
 void Hud::showClock() {
@@ -107,6 +121,75 @@ void Hud::showMoney() {
         numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
     }
     symbols.render(srcMoney, dstMoney, SDL_FLIP_NONE);
+    numberSelector.clear();
+}
+
+void Hud::showClip() {
+    loadNumberVector(clip);
+    setNumberColors({0, 0xff, 0});
+    for (size_t i = 0; i < numberSelector.size(); ++i) {
+        Area dst(w - (numberSelector.size() - i) * 36,
+                 h - HUD_NUM_H + 20,
+                 HUD_NUM_W / HUD_NUMS * 2 / 3,
+                 HUD_NUM_H * 2 / 3);
+        numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
+    }
+    numberSelector.clear();
+}
+
+void Hud::updateClip(uint8_t newClip) {
+    clip = newClip;
+}
+
+void Hud::showWinner() {
+    if (ctWon) {
+        Area srcCt(0, 0, CT_W, CT_H);
+        Area dstCt(w/2 - CT_W / 8, h/2, CT_W / 4, CT_H / 4);
+        ctWin.render(srcCt, dstCt, SDL_FLIP_NONE);
+    } else {
+        Area srcTT(0, 0, TT_W, TT_H);
+        Area dstTT(w/2 - TT_W / 8, h/2, TT_W / 4, TT_H / 4);
+        ttWin.render(srcTT, dstTT, SDL_FLIP_NONE);
+    }
+}
+
+void Hud::updateWinner(bool ctIsWinner) {
+    winnerTime = true;
+    ctWon = ctIsWinner;
+    if (ctWon){
+        ++ctRounds;
+        SoundManager::playSound(SoundManager::soundRepertoire::CT_WIN, 0);
+    } else {
+        ++ttRounds;
+        SoundManager::playSound(SoundManager::soundRepertoire::TT_WIN, 0);
+    }
+}
+
+void Hud::resetHud() {
+    winnerTime = false;
+    ctWon = false;
+}
+
+void Hud::showRounds() {
+    loadNumberVector(ttRounds);
+    Area srcTT(0, 0, TT_ROUND_W, TT_ROUND_H);
+    Area dstTT(w/3, 0, TT_ROUND_W/4, TT_ROUND_H/4);
+    Area roundsTT(w/3 + TT_ROUND_W/4 + HUD_NUM_W / HUD_NUMS * 1/3, 0, HUD_NUM_W / HUD_NUMS * 2/3,
+             HUD_NUM_H * 2/3);
+    ttRoundsTex.render(srcTT, dstTT, SDL_FLIP_NONE);
+    numbers.render(numberSelector.at(0), roundsTT, SDL_FLIP_NONE);
+    Area srcBar(0, 0, BAR_W, BAR_H);
+    Area dstBar(w/2, 0, BAR_W/3, BAR_H/3);
+    bar.render(srcBar, dstBar, SDL_FLIP_NONE);
+    numberSelector.clear();
+
+    loadNumberVector(ctRounds);
+    Area srcCT(0, 0, TT_ROUND_W, TT_ROUND_H);
+    Area dstCT(w/2 + BAR_W/3, 0, TT_ROUND_W/4, TT_ROUND_H/4);
+    Area roundsCT(w/2 + BAR_W/3 + TT_ROUND_W/4 + HUD_NUM_W / HUD_NUMS * 1/3, 0, HUD_NUM_W / HUD_NUMS * 2/3,
+                  HUD_NUM_H * 2/3);
+    ctRoundsTex.render(srcCT, dstCT, SDL_FLIP_NONE);
+    numbers.render(numberSelector.at(0), roundsCT, SDL_FLIP_NONE);
     numberSelector.clear();
 }
 

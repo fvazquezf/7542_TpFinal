@@ -8,9 +8,10 @@
 PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
 model(body),
 angle(0),
-hp(matchConfig.at(PLAYER_HP)),
+maxHp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
 armory(dropped, matchConfig){
+    hp = maxHp;
     this->netForce.SetZero();
     dirAmount = 0;
     isCt = false;
@@ -23,6 +24,7 @@ PlayerModel::PlayerModel(PlayerModel &&other) noexcept
   angle(other.angle),
   dirAmount(other.dirAmount),
   hp(other.hp),
+  maxHp(other.maxHp),
   money(other.money),
   armory(std::move(other.armory)){
     other.model = nullptr;
@@ -38,6 +40,7 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
     angle = other.angle;
     dirAmount = other.dirAmount;
     hp = other.hp;
+    maxHp = other.maxHp;
     money = other.money;
     armory = std::move(other.armory);
     other.model = nullptr;
@@ -204,7 +207,7 @@ void PlayerModel::die() {
 
 void PlayerModel::revive() {
     unfreeze();
-    hp = 100;
+    hp = maxHp;
     reload();
 }
 
@@ -223,6 +226,10 @@ int PlayerModel::getHp(){
 
 int PlayerModel::getMoney(){
     return money;
+}
+
+int PlayerModel::getClip(){
+    return armory.getClip();
 }
 
 void PlayerModel::freeze(){

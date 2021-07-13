@@ -22,12 +22,23 @@
 #include "updates/TimeUpdate.h"
 #include "updates/TeamsUpdate.h"
 #include "updates/BombPlantUpdate.h"
+#include "updates/ClipUpdate.h"
+#include "updates/CtWinRoundUpdate.h"
+#include "updates/TtWinRoundUpdate.h"
+#include "updates/BombExplodeUpdate.h"
 
 #include "../common/ConfigVariables.h"
 
 WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig)
 : world (b2Vec2(0.0f, 0.0f)),
   matchConfig(matchConfig),
+  bomb (std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE),
+                                        matchConfig.at(BOMB_ACCURACY),
+                                        matchConfig.at(BOMB_DAMAGE),
+                                        matchConfig.at(BOMB_FIRERATE),
+                                        matchConfig.at(BOMB_FUSE),
+                                        matchConfig.at(BOMB_ACTIVATE_TIME)))),
+  tally(bomb),
   updates (updates),
   droppedWeapons(updates){
 	this->timeStep = 1.0f / 60.0f;
@@ -37,14 +48,6 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
     b2BodyDef anchorDef;
 	anchorDef.position.Set(0.0f, -10.0f);
-
-    bomb = std::shared_ptr<Bomb> (new Bomb(matchConfig.at(BOMB_RANGE), 
-                                             matchConfig.at(BOMB_ACCURACY),
-                                             matchConfig.at(BOMB_DAMAGE),
-                                             matchConfig.at(BOMB_FIRERATE),
-                                             matchConfig.at(BOMB_FUSE),
-                                             matchConfig.at(BOMB_ACTIVATE_TIME)));
-
 
 	this->anchor = world.CreateBody(&anchorDef);
 
@@ -67,6 +70,8 @@ WorldModel::WorldModel(WorldModel &&other) noexcept
   timeStep(other.timeStep),
   velocityIterations(other.velocityIterations),
   positionIterations(other.positionIterations),
+  bomb(other.bomb),
+  tally(other.tally),
   is_running(other.is_running){
     // tengo que crearlo asi pq
     // en box2d el world
@@ -156,40 +161,40 @@ void WorldModel::createMapBorder(b2BodyDef& boxDef, int xSide, int ySide){
 
 
 void WorldModel::loadMap(YAML::Node& mapInfo){
-    std::vector<std::pair<int, int>> walls;
+    std::set<std::pair<int, int>> walls;
     std::vector<std::pair<int, int>> temp;
 
     if (mapInfo["wall_1"]){
         temp = mapInfo["wall_1"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_2"]){
         temp = mapInfo["wall_2"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_3"]){
         temp = mapInfo["wall_3"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_4"]){
         temp = mapInfo["wall_4"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }    
     if (mapInfo["wall_5"]){
         temp = mapInfo["wall_5"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_6"]){
         temp = mapInfo["wall_6"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_7"]){
         temp = mapInfo["wall_7"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }
     if (mapInfo["wall_8"]){
         temp = mapInfo["wall_8"].as<std::vector<std::pair<int, int>>>();
-        walls.insert(walls.end(), temp.begin(), temp.end());
+        walls.insert(temp.begin(), temp.end());
     }   
     
     b2BodyDef boxDef;
@@ -198,6 +203,7 @@ void WorldModel::loadMap(YAML::Node& mapInfo){
         boxDef.position.Set(pos.first, pos.second);
         createBox(boxDef);
     }
+    mapLayout.loadWalls(std::move(walls));
     temp = mapInfo["zoneA"].as<std::vector<std::pair<int, int>>>();
     int a = temp[1].first;
     int b = temp[2].first;
@@ -231,12 +237,12 @@ void WorldModel::run(){
         playerModels.at(i).changeSide();
     }
     updateTeams();  
+    updateTime();
     // Setup inicial
     for (auto & playerModel : this->playerModels){
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
         updateMoney(playerModel.first);
         updateHp(playerModel.first);
-        updateTime();
         updateWeapon(playerModel.first, KNIFE);
 	}
     // Ciclo de juego, 10 rondas
@@ -259,7 +265,7 @@ void WorldModel::resetRound(){
 		playerModel.second.reposition(mapLayout);
 	}
     bomb->reset();
-    tally.resetTime();
+    tally.resetRound();
     attackingPlayers.clear();
 }
 
@@ -268,7 +274,7 @@ void WorldModel::roundPurchase() {
     updatePositions();
     usleep(FRAMERATE);
     // 600 ticks, 10 segundos
-    for (size_t i = 0; i < 60 && is_running; ++i){
+    for (size_t i = 0; i < 600 && is_running; ++i){
         roundCommon();
     }
     updateBuying(false);
@@ -279,6 +285,11 @@ void WorldModel::roundPlay() {
     usersEvents.clear();
     while (!tally.isRoundOver() && is_running){
         roundCommon();
+    }
+    if (tally.isRoundOver() == 1) {
+        updateCtWinRound();
+    } else if (tally.isRoundOver() == -1) {
+        updateTtWinRound();
     }
     usleep(FRAMERATE * 120);
 }
@@ -318,13 +329,12 @@ void WorldModel::startPlanting(uint8_t id){
             bomb->startDefusing();
         }
     }
-
 }
 
 void WorldModel::stopPlanting(uint8_t id){
     if (purchaseFase) return;
 	if (playerModels.at(id).stopPlanting()){
-        updateWeapon(id, KNIFE);
+        equipWeapon(id, 2);
     }
     if (playerModels.at(id).stopDefusing()){
         bomb->stopDefusing();
@@ -338,30 +348,27 @@ void WorldModel::plantingLogic(){
         if (bomb->isActive()){
             int id = bomb->getPlanter();
             playerModels.at(id).stopPlanting();
-            updateBombPlanted();
-            updateWeapon(id, KNIFE);
+            updateBombPlanted(id);
+            equipWeapon(id, 2);
+            tally.startBombTiming();
         }
     }
     if (bomb->isActive()){
         bomb->tickFuse();
     }
     if (bomb->isBoom()){
-        tally.bombExploded();
+        updateBombExplode();
     }
     if (bomb->isDefusing()){
         bomb->tickDefuse();
     }
-    if (bomb->isDefused()){
-        tally.bombDefused();
-    }
 }
 
 void WorldModel::step(){
-	for (auto & playerModel : this->playerModels){
+	for (auto & playerModel : this->playerModels) {
 		playerModel.second.step();
 	}
-    plantingLogic();
-	for (auto id: attackingPlayers){
+	for (auto id: attackingPlayers) {
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
         if (!attacker.canShoot()) continue;
@@ -369,8 +376,9 @@ void WorldModel::step(){
 		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
 		    if (&victim.second == &attacker) continue;
-            if (attacker.attack(victim.second.getPosition())){
-                if (victim.second.gotHitAndDied(attacker.hit())){
+            if (attacker.attack(victim.second.getPosition())) {
+                if (mapLayout.checkTunneling(attacker.getPosition(), victim.second.getPosition())) continue;
+                if (victim.second.gotHitAndDied(attacker.hit())) {
                     victim.second.die();
                     tally.playerKilledOther(id, victim.first);
                     updateDead(victim.first);
@@ -382,6 +390,7 @@ void WorldModel::step(){
             }
 		}
 	}
+    plantingLogic();
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
 
@@ -408,6 +417,7 @@ void WorldModel::updateAngles() {
 void WorldModel::updateAttack(int id){
 	std::shared_ptr<Update> updatePtr(new AttackUpdate(id));
     updates.pushAll(updatePtr);
+    updateClip(id);
 }
 
 void WorldModel::updateHit(int id){
@@ -423,6 +433,7 @@ void WorldModel::updateDead(int id){
 void WorldModel::updateWeapon(uint8_t id, uint8_t weaponCode){
 	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponCode));
     updates.pushAll(updatePtr);
+    updateClip(id);
 }
 
 void WorldModel::updateBuying(bool buying) {
@@ -458,9 +469,32 @@ void WorldModel::updateTime(){
     updates.pushAll(updatePtr);
 }
 
-void WorldModel::updateBombPlanted(){
-    std::shared_ptr<Update> updatePtr(new BombPlantUpdate());
+void WorldModel::updateBombPlanted(int id){
+    std::shared_ptr<Update> updatePtr(new BombPlantUpdate(id));
     updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateCtWinRound(){
+    std::shared_ptr<Update> updatePtr(new CtWinRoundUpdate());
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateTtWinRound(){
+    std::shared_ptr<Update> updatePtr(new TtWinRoundUpdate());
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateBombExplode(){
+    std::shared_ptr<Update> updatePtr(new BombExplodeUpdate());
+    updates.pushAll(updatePtr);
+}
+
+void WorldModel::updateClip(int id){
+    int clip = playerModels.at(id).getClip();
+    if (clip != -1) {
+        std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
+        updates.push(id, updatePtr);
+    }
 }
 
 void WorldModel::movePlayer(uint8_t id, uint8_t dir) {
@@ -514,6 +548,7 @@ void WorldModel::pickUpWeapon(uint8_t id){
 
 void WorldModel::reloadWeapon(uint8_t id){
     playerModels.at(id).reload();
+    updateClip(id);
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {
@@ -544,4 +579,4 @@ void WorldModel::reviveAll(){
 
 bool WorldModel::isDead() {
     return !is_running;
-}
+} 

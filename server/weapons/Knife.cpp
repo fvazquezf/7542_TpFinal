@@ -52,3 +52,7 @@ void Knife::resetCooldown(){
     cooldown = 0;
 }
 
+int Knife::getClip(){
+    return -1;
+}
+

@@ -155,11 +155,14 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
 void SdlLoop::mouseButton(bool pressed, uint8_t button){
     int mouseX, mouseY = 0;
     SDL_GetMouseState(&mouseX, &mouseY);
-    if (pressed && world.menuButtonPressed(mouseX, mouseY)){
+    if (pressed && !world.skinSelectionTime() && world.menuButtonPressed(mouseX, mouseY) ){
         commands.push(std::unique_ptr<Command>(new Buy(world.getPressedButtonCode())));
         return;
     } else if (pressed && world.lobbyButtonPressed(mouseX, mouseY)){
         commands.push(std::unique_ptr<Command>(new EarlyStart()));
+        return;
+    } else if (pressed && world.skinSelectionTime()){
+        world.selectSkin();
         return;
     } else if (pressed && !mousePresses.at(button)){
         mousePresses.at(button) = true;

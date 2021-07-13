@@ -8,10 +8,24 @@ stencil_opacity: 50 # higher is darker
 stencil_angle: 45 # stencil triangle angle, higher means fov is increased
 stencil_triangle_brightness: 80 # higher will make fov brighter
 
-
 cursor_type: 2 # de 0 a 3
 cursor_size: 23 # pixeles
 cursor_source_file: "../sprites/gfx/pointer.bmp"
+
+hud_button: "../sprites/gfx/hud_slot.bmp"
+
+seal_force: "../sprites/gfx/player/ct1.bmp"
+gsg-9: "../sprites/gfx/player/ct2.bmp"
+sas: "../sprites/gfx/player/ct3.bmp"
+gign: "../sprites/gfx/player/ct4.bmp"
+
+pheonix: "../sprites/gfx/player/t1.bmp"
+l337: "../sprites/gfx/player/t2.bmp"
+artic: "../sprites/gfx/player/t3.bmp"
+guerilla: "../sprites/gfx/player/t4.bmp"
+
+blood: "../sprites/gfx/fragments.bmp"
+legs: "../sprites/gfx/player/legs.bmp"
 
 background:
  - ["aztec", "../sprites/gfx/backgrounds/aztec.png"]
@@ -52,6 +66,6 @@ weapons:
  - ["m3", "../sprites/map/weapon_m3.png"]
  - ["AWP", "../sprites/map/weapon_awp.png"]
 zones:
- - ["zoneA", "../sprites/map/zone_a.png"]
- - ["zoneB", "../sprites/map/zone_b.png"]
- - ["zoneBomb", "../sprites/map/zone_bomb.png"]
+ - ["zoneA", "../sprites/map/zone_a_client.png"]
+ - ["zoneB", "../sprites/map/zone_b_client.png"]
+ - ["zoneBomb", "../sprites/map/zone_bomb_client.png"]

@@ -140,6 +140,11 @@ bool Armory::pickUpWeapon(const b2Vec2& position){
     }
 }
 
+int Armory::getClip(){
+    return arsenal.at(currentWeapon)->getClip();
+}
+
+
 Armory::Armory(Armory &&other) noexcept
 : arsenal(std::move(other.arsenal)),
   prices(std::move(other.prices)),

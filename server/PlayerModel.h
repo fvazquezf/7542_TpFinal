@@ -16,6 +16,7 @@ class PlayerModel{
     bool isCt;
     bool isFrozen;
 
+    int maxHp;
     int hp;
     int money;
 
@@ -70,6 +71,7 @@ class PlayerModel{
         bool getSide();
         int getHp();
         int getMoney();
+        int getClip();
 };
 
 #endif

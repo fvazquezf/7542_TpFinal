@@ -18,8 +18,7 @@ public:
     ~ThSender() override;
     void run() override;
     void stop();
-    bool isDead();
-   
+
     ThSender(const ThSender&) = delete;
     ThSender& operator=(const ThSender&) = delete;
 

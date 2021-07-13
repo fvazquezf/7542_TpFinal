@@ -24,6 +24,12 @@ public:
            SDL_Rect texSrc,
            uint8_t buttonCode);
 
+    Button(const Button& other) = delete;
+    Button& operator=(const Button& other) = delete;
+
+    Button(Button&& other);
+    Button& operator=(Button&& other);
+
     void show();
 
     bool checkPressed(int mouseX, int mouseY);

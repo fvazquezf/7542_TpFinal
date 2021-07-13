@@ -59,6 +59,10 @@ void Bomb::resetCooldown(){
     cooldown = 0;
 }
 
+int Bomb::getClip(){
+    return -1;
+}
+
 
 bool Bomb::startPlanting(){
     planting = true;
@@ -71,6 +75,10 @@ void Bomb::setPlanter(int id){
 
 int Bomb::getPlanter(){
     return planter;
+}
+
+int Bomb::getFuse(){
+    return (fuse/60);
 }
 
 void Bomb::stopPlanting(){
@@ -86,13 +94,13 @@ void Bomb::tickPlanting(){
     plantingTicks++;
     if (plantingTicks == plantingCooldown){
         active = true;
+        planting = false;
     }
 }
 
 void Bomb::tickFuse(){
     remainingTime--;
     if (remainingTime == 0){
-        active = false;
         exploded = true;
     }
 }
@@ -106,9 +114,11 @@ bool Bomb::isActive(){
 }
 
 bool Bomb::startDefusing(){
+    if (!active) return false;
     defusing = true;
     return true;
 }
+
 bool Bomb::stopDefusing(){
     defusing = false;
     defusingTicks = 0;

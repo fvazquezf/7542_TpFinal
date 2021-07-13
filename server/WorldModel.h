@@ -21,11 +21,11 @@ class WorldModel: public Thread {
     b2Body* anchor;
     const std::map<int, int>& matchConfig;
     std::map<int, PlayerModel> playerModels;
+    std::shared_ptr<Bomb> bomb;
 
     MapLayout mapLayout;
     Tally tally;
     
-    std::shared_ptr<Bomb> bomb;
 
     std::unordered_set<int> attackingPlayers;
 
@@ -75,7 +75,11 @@ class WorldModel: public Thread {
         void updateHp(int id);
         void updateMoney(int id);
         void updateTime();
-        void updateBombPlanted();
+        void updateBombPlanted(int id);
+        void updateCtWinRound();
+        void updateTtWinRound();
+        void updateBombExplode();
+        void updateClip(int id);
 
         
         void movePlayer(uint8_t id, uint8_t dir);

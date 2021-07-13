@@ -54,3 +54,7 @@ DroppedWeapon::~DroppedWeapon() {
 void DroppedWeapon::doNotShow() {
     show = false;
 }
+
+std::pair<float, float> DroppedWeapon::getPosition() {
+    return std::make_pair(posXmm / 100, posYmm / 100);
+}

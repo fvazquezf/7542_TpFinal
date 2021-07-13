@@ -36,6 +36,8 @@ public:
     ~DroppedWeapon();
 
     void doNotShow();
+
+    std::pair<float, float> getPosition();
 };
 
 

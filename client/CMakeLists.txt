@@ -22,7 +22,7 @@ add_library(sdlloop
         SoundManager.cpp
         MapView.cpp
         LobbyScreen.cpp
-        Cursor.cpp)
+        Cursor.cpp SkinSelector.cpp SkinSelector.h CharacterManager.cpp CharacterManager.h)
 
 add_subdirectory(sdlwrap)
 add_subdirectory(anim)

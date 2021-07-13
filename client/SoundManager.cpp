@@ -90,6 +90,9 @@ void SoundManager::pStart() {
     soundMap.emplace(std::piecewise_construct,
                      std::forward_as_tuple(soundRepertoire::PICKUP_WEAPON),
                      std::forward_as_tuple(path + "items/pickup.wav"));
+    soundMap.emplace(std::piecewise_construct,
+                     std::forward_as_tuple(soundRepertoire::BOMB_EXPLODE),
+                     std::forward_as_tuple(path + "weapons/c4_explode.wav"));
 
     music = Mix_LoadMUS((path + "menu.wav").c_str());
     Mix_ChannelFinished(channelFinishedCallback);
@@ -119,7 +122,6 @@ void SoundManager::pStopMusic() {
     if (!Mix_FadeOutMusic(1000)){
         throw std::exception();
     }
-    //Mix_HaltMusic();
 }
 
 void SoundManager::haltMusic() {

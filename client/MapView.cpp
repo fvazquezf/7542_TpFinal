@@ -25,7 +25,6 @@ void MapView::loadMap(const std::string &mapFile) {
     rows = map["size_rows"].as<size_t>();
     loadBackground();
     loadWalls();
-    loadWeapons();
     loadZones();
 }
 
@@ -76,11 +75,6 @@ void MapView::loadWalls() {
     }
 }
 
-// cargamos todas
-void MapView::loadWeapons() {
-
-}
-
 void MapView::loadZones() {
     auto zoneInformation = clientConfig["zones"].as<std::vector<std::vector<std::string>>>();
     for (auto& zone : zoneInformation) {
@@ -91,7 +85,7 @@ void MapView::loadZones() {
                                   std::forward_as_tuple(zone[1], window));
             auto &zoneTexture = textureHolder.at(zone[0]);
             for (auto &zonePosition : zonePositions) { // para ese tipo de pared, obtengo las posiciones
-                walls.emplace_back(zoneTexture,
+                zones.emplace_back(zoneTexture,
                                    32,
                                    32,
                                    zonePosition.first,
@@ -112,6 +106,10 @@ void MapView::render(Camera &cam) {
 
     for (auto& wall : walls){
         cam.render(wall, 0);
+    }
+
+    for (auto& zone : zones){
+        cam.render(zone, 0);
     }
 }
 

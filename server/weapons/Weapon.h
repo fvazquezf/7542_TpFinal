@@ -38,7 +38,7 @@ public:
 
     uint8_t getWeaponCode();
 
-    int getClip();
+    virtual int getClip();
 };
 
 

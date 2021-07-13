@@ -1,10 +1,12 @@
 #include "Tally.h"
 
-Tally::Tally(){
+#include <utility>
+
+Tally::Tally(std::shared_ptr<Bomb> bomb): 
+ bomb (std::move(bomb)){
     time = 130;
     ticks = 59;
-    boom = false;
-    notBoom = false;
+    score = {0, 0};
 }
 
 void Tally::placeInTeam(int id, bool team){
@@ -35,6 +37,10 @@ void Tally::playerKilledOther(int id, int other){
     }
 }
 
+void Tally::startBombTiming(){
+    time = bomb->getFuse();
+}
+
 bool Tally::tickTime(){
     ticks++;
     if ((ticks % 60) == 0){
@@ -48,10 +54,9 @@ int Tally::getTime(){
     return time;
 }
 
-void Tally::resetTime(){
+void Tally::resetRound(){
+    deaths.clear();
     time = 130;
-    boom = false;
-    notBoom = false;
 }
 
 int Tally::getTerrorist(){
@@ -68,42 +73,30 @@ int Tally::getTerrorist(){
 // 4 - exploto la bomba -> ganan tts
 // 5 - defusearon la bomba -> ganan cts
 
-void Tally::bombExploded(){
-    boom = true;
-}
-
-void Tally::bombDefused(){
-    notBoom = true;
-}
-
-bool Tally::isRoundOver(){
-    if (boom) return true;
-    if (notBoom) return true;
-    if (ctWon()){
-        deaths.clear();
-        return true;
-    } 
-    if (ttWon()){
-        deaths.clear();
-        return true;   
-    }
-    return false;
+int Tally::isRoundOver(){
+    // cambiar bool por int diciendo quien gano
+    if (ctWon()) return 1;
+    if (ttWon()) return -1;
+    return 0;
 }
 
 bool Tally::ctWon(){
+    if (bomb->isDefused()) return true;
+    if (bomb->isActive()) return false;
+    if (!bomb->isBoom() && time == 0) return true;
+    
     bool isOver = true;
     for (auto it = ttSide.begin(); it != ttSide.end() && isOver; it++){
         isOver = (deaths.find(it->first) != deaths.end());
     }
-    // if (bomb.isPlanted() && bomb.) return false;
     return isOver;
 }
 
 bool Tally::ttWon(){
+    if (bomb->isBoom()) return true;
     bool isOver = true;
     for (auto it = ctSide.begin(); it != ctSide.end() && isOver; it++){
         isOver = (deaths.find(it->first) != deaths.end());
     }
-    // if (bomb.isPlanted() && bomb.) return false;
     return isOver;
 }

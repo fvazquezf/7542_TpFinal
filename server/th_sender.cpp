@@ -1,13 +1,5 @@
 #include "./th_sender.h"
 #include "../common/Protocol.h"
-#define BUFF_SIZE 256
-
-/*ThSender::ThSender(Socket &socket, Protocol& protocol, BlockingQueue<std::map<int, std::pair<float, float>>>& updates)
-: is_running(true),
-  peer(socket),
-  protocol(protocol),
-  updates(updates) {
-}*/
 
 ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<std::shared_ptr<Update>> &updates)
 : is_running(true),
@@ -31,10 +23,6 @@ void ThSender::run() {
         }
     }
     this->stop();
-}
-
-bool ThSender::isDead() {
-    return !is_running;
 }
 
 void ThSender::stop() {

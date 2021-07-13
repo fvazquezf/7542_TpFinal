@@ -2,6 +2,7 @@
 #define MAPLAYOUT_H
 
 #include <tuple>
+#include <set>
 #include "../libs/box2d/include/box2d/box2d.h"
 
 class MapLayout {
@@ -10,11 +11,18 @@ class MapLayout {
 
     std::pair<std::pair<int, int>, std::pair<int, int>> bombSite;
 
+    std::set<std::pair<int, int>> walls;
+
+    bool plotLine(int x0, int y0, int x1, int y1);
+
 public:
     MapLayout();
     void setCtSpawn(int a, int b, int c, int d);
     void setTtSpawn(int a, int b, int c, int d);
     void setBombSite(int a, int b, int c, int d);
+    void loadWalls(std::set<std::pair<int, int>> walls);
+
+    bool checkTunneling(const b2Vec2& attacker, const b2Vec2& victim);
 
     bool isInSite(const b2Vec2& position);
 
