@@ -365,10 +365,10 @@ void WorldModel::plantingLogic(){
 }
 
 void WorldModel::step(){
-	for (auto & playerModel : this->playerModels){
+	for (auto & playerModel : this->playerModels) {
 		playerModel.second.step();
 	}
-	for (auto id: attackingPlayers){
+	for (auto id: attackingPlayers) {
 	    // el atacante
 	    auto& attacker = playerModels.at(id);
         if (!attacker.canShoot()) continue;
@@ -376,8 +376,9 @@ void WorldModel::step(){
 		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
 		    if (&victim.second == &attacker) continue;
-            if (attacker.attack(victim.second.getPosition())){
-                if (victim.second.gotHitAndDied(attacker.hit())){
+            if (attacker.attack(victim.second.getPosition())) {
+                if (mapLayout.checkTunneling(attacker.getPosition(), victim.second.getPosition())) continue;
+                if (victim.second.gotHitAndDied(attacker.hit())) {
                     victim.second.die();
                     tally.playerKilledOther(id, victim.first);
                     updateDead(victim.first);

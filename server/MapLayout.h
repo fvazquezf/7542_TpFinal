@@ -13,12 +13,16 @@ class MapLayout {
 
     std::set<std::pair<int, int>> walls;
 
+    bool plotLine(int x0, int y0, int x1, int y1);
+
 public:
     MapLayout();
     void setCtSpawn(int a, int b, int c, int d);
     void setTtSpawn(int a, int b, int c, int d);
     void setBombSite(int a, int b, int c, int d);
     void loadWalls(std::set<std::pair<int, int>> walls);
+
+    bool checkTunneling(const b2Vec2& attacker, const b2Vec2& victim);
 
     bool isInSite(const b2Vec2& position);
 
