@@ -10,16 +10,17 @@
 #include <QRegularExpression>
 
 #include <QPixmap>
+#include <iostream>
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name, int rows, int columns) :
-        QWidget (parent), map_name(map_name) {
+        QWidget (parent), zoneValidator(e.zones), map_name(map_name) {
     this->setAcceptDrops(true);
     this->setMapLayout();
     this->loadNewFile(rows, columns);
 }
 
 QEditorMapWidget::QEditorMapWidget (QWidget* parent, std::string &map_name) :
-        QWidget (parent), map_name(map_name) {
+        QWidget (parent), zoneValidator(e.zones), map_name(map_name) {
     this->setAcceptDrops(true);
     this->setMapLayout();
     this->loadOldFile();
@@ -34,17 +35,48 @@ void QEditorMapWidget::setMapLayout() {
     this->setLayout(layout);
 }
 
-void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
+void QEditorMapWidget::_addQTile(std::string &element, int row, int column) {
     QPixmap backgorundIcon = pixmaps.getPixmap(this->selectedBackground);
     QTile* backgorundIconQTile = new QTile(this, QTILE_SIZE, QTILE_SIZE, backgorundIcon);
     layout->addWidget(backgorundIconQTile, row, column);
-    if(elements.size() == 0) {
+    if(e.elements.size() == 0) {
         return;
     }
     QPixmap icon = pixmaps.getPixmap(element);
     QTile* tile = new QTile(this, QTILE_SIZE, QTILE_SIZE, icon);
     positions[std::pair<int,int>(row, column)] = element;
     layout->addWidget(tile, row, column);
+}
+
+void QEditorMapWidget::removeQTile(int row, int column) {
+    QPixmap backgorundIcon = pixmaps.getPixmap(this->selectedBackground);
+    QTile* backgorundIconQTile = new QTile(this, QTILE_SIZE, QTILE_SIZE, backgorundIcon);
+    layout->addWidget(backgorundIconQTile, row, column);
+    positions.erase(std::pair<int,int>(row, column));
+}
+
+void QEditorMapWidget::resetZone(std::string &element) {
+    std::vector<std::pair<int,int>> positions = zoneValidator.getPositions(element);
+    for (auto & pos : positions) {
+        removeQTile(pos.first, pos.second);
+    }
+    zoneValidator.reset(element);
+}
+
+void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
+    if(std::count(e.zones.begin(), e.zones.end(), element)) {
+        if(zoneValidator.addPosition(element, row, column)) {
+            this->_addQTile(element, row, column);
+        } else {
+            this->resetZone(element);
+        }
+    } else {
+        std::string previousElement = positions[std::pair<int,int>(row, column)];
+        if(std::count(e.zones.begin(), e.zones.end(), previousElement)) {
+            this->resetZone(previousElement);
+        }
+        this->_addQTile(element, row, column);
+    }
 }
 
 void QEditorMapWidget::loadNewFile(int rows, int columns) {
@@ -103,16 +135,16 @@ void QEditorMapWidget::setTilesFromOldFile() {
 
     this->setTilesBackGround();
 
-    for (unsigned long i = 0; i< elements.size(); i ++) {
-        if(map_config[elements[i]]) {
-            std::list<std::list<int>> pos = map_config[elements[i]].as<std::list<std::list<int>>>();
+    for (unsigned long i = 0; i< e.elements.size(); i ++) {
+        if(map_config[e.elements[i]]) {
+            std::list<std::list<int>> pos = map_config[e.elements[i]].as<std::list<std::list<int>>>();
             std::list<std::list<int>> ::iterator it;
             for (it = pos.begin(); it != pos.end(); ++it) {
                 std::list<int> ::iterator it2 = (*it).begin();
                 int x = *(it2);
                 int y = *(++it2);
-                positions[std::pair<int,int>(x, y)] = elements[i];
-                this->addQTile(elements[i], x, y);
+                positions[std::pair<int,int>(x, y)] = e.elements[i];
+                this->addQTile(e.elements[i], x, y);
             }
         }
     }
@@ -135,13 +167,13 @@ void QEditorMapWidget::updateMapLFile() {
 
     std::string res = LABEL_BACKGROUND;
     res += ": " + selectedBackground + "\n";
-    for (unsigned long i = 0; i < elements.size(); i ++) {
-        if(tiles[elements[i]].size() == 0) {
+    for (unsigned long i = 0; i < e.elements.size(); i ++) {
+        if(tiles[e.elements[i]].size() == 0) {
             continue;
         }
-        res += elements[i] + ":\n";
+        res += e.elements[i] + ":\n";
         std::list<std::pair<int,int>> ::iterator it;
-        for (it = tiles[elements[i]].begin(); it != tiles[elements[i]].end(); ++it) {
+        for (it = tiles[e.elements[i]].begin(); it != tiles[e.elements[i]].end(); ++it) {
             res += "  - [" + std::to_string(it->first) + "," + std::to_string(it->second) + "]\n";
         }
         res += "\n";
@@ -153,7 +185,7 @@ void QEditorMapWidget::updateMapLFile() {
 }
 
 void QEditorMapWidget::setItem(std::string &item) {
-    if(std::count(elements.begin(), elements.end(), item)){
+    if(std::count(e.elements.begin(), e.elements.end(), item)){
         this->selectedItem = item;
     } else {
         this->selectedBackground = item;
@@ -229,4 +261,8 @@ void QEditorMapWidget::mousePressEvent(QMouseEvent *event) {
     drag->setPixmap(pixmap);
     drag->setHotSpot(hotSpot);
     drag->exec(Qt::MoveAction);
+}
+
+bool QEditorMapWidget::hasValidZones() {
+    return this->zoneValidator.isValidZone();
 }

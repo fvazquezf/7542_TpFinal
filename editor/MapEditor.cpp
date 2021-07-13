@@ -15,6 +15,7 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name) :
 MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int column) :
     QDialog(parent)
 {
+    this->setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     styler.setCounterStrikeFont(this, 12);
     this->map_name = name;
     this->qMapEditorWidget = new QEditorMapWidget(this, this->map_name, row, column);
@@ -28,8 +29,14 @@ MapEditor::~MapEditor()
 
 void MapEditor::handleSaveButton()
 {
-    qMapEditorWidget->updateMapLFile();
-    this->close();
+    if(qMapEditorWidget->hasValidZones()){
+        qMapEditorWidget->updateMapLFile();
+        this->close();
+        return;
+    }
+    QMessageBox::warning(this, tr("Map editor"),
+                        tr("Valid zones not set. They have to be rectangular."),
+                        QMessageBox::Close);
 }
 
 void MapEditor::handleQuitButton()

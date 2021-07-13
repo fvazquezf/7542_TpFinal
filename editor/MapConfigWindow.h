@@ -10,7 +10,7 @@
 #include "./MapEditor.h"
 #include "./MapCreationWindow.h"
 #include "./QEditorMapListWidget.h"
-
+#include <QMessageBox>
 class MapConfigWindow : public QDialog
 {
     Q_OBJECT
@@ -31,7 +31,7 @@ private:
     QHBoxLayout* bottonLayout;
     QEditorMapListWidget* qEditorMapList;
 
-    QString selectedMap;
+    QString selectedMap = "";
 
     void execCreationWindow();
     void execEditorWindow(QString &mapName);
