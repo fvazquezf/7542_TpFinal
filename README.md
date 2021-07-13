@@ -2,7 +2,6 @@
   <img src="readme_img/intro.gif" alt="animated" />
 </p>
 
-
 # 7542_TpFinal
  
 **Trabajo Practico Final**
@@ -99,7 +98,6 @@ Finalemente, el ultimo ejecutable es el editor de mapas del juego. Para ello, se
 ## Manual de usuario
  
 ### Ciclo del juego
-  
 
 Una ves que se levanta el servidor, se pueden correr clientes. Estos se levantan con el comando indicado. Esto abre una ventana donde se debe introducir el puerto y el ip. Luego se puede elegir entre crear o unirse a una partida.
 Si se elije crear una partida, indicar el mapa a utilizar y el nombre de la misma. Después de esto se debe esperar a que se complete la partida de jugadores.
@@ -176,6 +174,9 @@ Luego, se debe primero clickear el elemento que desea insertar y segundo clickea
 Para poder mover elementos en el mapa se debe clickear al elemento que se quiere mover y soltar el cursor en la posición nueva del mapa.
  
 ![Alt Text](readme_img/editor_insert.gif)
+
+Cada mapa debe tener una de las tres zonas mencionadas y estas zonas deben ser rectangulares.
+Para configurar aquello, se debe indicar con cuatro marcas en el mapa tal que se forme un rectangulo. Si se pone una maraca de mas, se pone un elemento sobre esa marca o se ponen cuatro marcas que no forman un rectangulo, toda la zona se elimina automaticamnete.
  
 ### Configuración
  
