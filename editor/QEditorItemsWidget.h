@@ -4,7 +4,7 @@
 #include <QTreeWidget>
 #include <QWidget>
 #include <QIcon>
-#include "MapIconGenerator.h"
+#include "MapQPixmapGenerator.h"
 #include <QMouseEvent>
 
 class QEditorItemsWidget : public QTreeWidget {
@@ -13,7 +13,7 @@ class QEditorItemsWidget : public QTreeWidget {
 public:
     QEditorItemsWidget(QWidget* parent);
 private:
-    MapIconGenerator icons;
+    MapQPixmapGenerator pixmaps;
     void setMapItems();
     std::string selectedItem;
     std::vector<std::string> types;

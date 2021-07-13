@@ -23,6 +23,12 @@ void MapConfigWindow::handleCreatePushButton()
 
 void MapConfigWindow::handleEditPushButton()
 {
+    if(this->selectedMap == "") {
+        QMessageBox::warning(this, tr("Map editor"),
+                        tr("Please select a map to edit."),
+                        QMessageBox::Close);
+        return;
+    }
     this->close();
     MapEditor mapEditor(this, this->selectedMap.toStdString());
     mapEditor.exec();

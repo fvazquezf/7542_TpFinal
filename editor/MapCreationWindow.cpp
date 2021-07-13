@@ -10,40 +10,71 @@ MapCreationWindow::MapCreationWindow(QWidget *parent) :
     this->setUpAll();
 }
 
-void MapCreationWindow::setUpAll(){
+void MapCreationWindow::setUpMapNameField() {
 
-    saveButton = new QPushButton();
+    QHBoxLayout* mapNameLayout = new QHBoxLayout();
+
+    // Label
+    QLabel* titleMapName = new QLabel();
+    titleMapName->setText("Map name");
+    mapNameLayout->addWidget(titleMapName);
+
+    // LineEdit
     mapNameEditLine = new QLineEdit();
-    sizeComboBox = new QComboBox();
+    mapNameLayout->addWidget(mapNameEditLine);
 
-    saveButton->setText("Save");
+    mainLayout->addLayout(mapNameLayout);
+}
+
+void MapCreationWindow::setUpSizeField() {
+    
+    QHBoxLayout* mapSizeLayout = new QHBoxLayout();
+
+    // Title
+    QLabel* titleMapSize = new QLabel();
+    titleMapSize->setText("Map size");
+
+    mapSizeLayout->addWidget(titleMapSize);
+
+    // ComboBox
+    sizeComboBox = new QComboBox();
 
     sizeComboBox->addItem("Small");
     sizeComboBox->addItem("Medium");
     sizeComboBox->addItem("Large");
 
-    QLabel* titleMapName = new QLabel();
-    QLabel* titleMapSize = new QLabel();
-    QLabel* titleMain = new QLabel();
-
-    titleMapName->setText("Map name");
-    titleMapSize->setText("Map size");
-    titleMain->setText("Map configuartion");
-
-    QHBoxLayout* mapNameLayout = new QHBoxLayout();
-    QHBoxLayout* mapSizeLayout = new QHBoxLayout();
-
-    mapNameLayout->addWidget(titleMapName);
-    mapNameLayout->addWidget(mapNameEditLine);
-    mapSizeLayout->addWidget(titleMapSize);
     mapSizeLayout->addWidget(sizeComboBox);
 
-    mainLayout->addWidget(titleMain);
-    mainLayout->addLayout(mapNameLayout);
     mainLayout->addLayout(mapSizeLayout);
-    mainLayout->addWidget(saveButton);
+}
+
+void MapCreationWindow::setUpSaveButton() {
+
+    saveButton = new QPushButton();
+
+    saveButton->setText("Save");
 
     connect(saveButton, SIGNAL(clicked()), this, SLOT(on_saveButton_clicked()));
+
+    mainLayout->addWidget(saveButton);
+
+}
+
+void MapCreationWindow::setUpTitle() {
+
+    QLabel* titleMain = new QLabel();
+
+    titleMain->setText("Map configuartion");
+
+    mainLayout->addWidget(titleMain);
+
+}
+
+void MapCreationWindow::setUpAll(){
+    this->setUpTitle();
+    this->setUpMapNameField();
+    this->setUpSizeField();
+    this->setUpSaveButton();
 }
 
 MapCreationWindow::~MapCreationWindow()

@@ -1,8 +1,8 @@
 #include "QTile.h"
 
-QTile::QTile (QWidget *parent, int width, int height, QIcon &icon) :
-    QLabel (parent), icon(icon) {
-    this->setPixmap(icon.pixmap(QSize(width, height)));
+QTile::QTile (QWidget *parent, int width, int height, QPixmap &pixmap) :
+    QLabel (parent) {
+    this->setPixmap(pixmap);
     this->setEditorMapStyle(width, height);
 }
 

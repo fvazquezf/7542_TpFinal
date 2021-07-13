@@ -35,6 +35,10 @@ private:
     QPushButton* saveButton;
     std::pair<int,int> getSize();
 
+    void setUpSizeField();
+    void setUpMapNameField();
+    void setUpSaveButton();
+    void setUpTitle();
     void setUpAll();
 };
 

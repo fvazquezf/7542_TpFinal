@@ -2,7 +2,7 @@
 #define QTILE_H
 
 #include <QLabel>
-#include <QIcon>
+#include <QPixmap>
 #include <QString>
 
 class QTile : public QLabel
@@ -10,10 +10,9 @@ class QTile : public QLabel
     Q_OBJECT    
 
     public:
-        QTile (QWidget *parent, int width, int height, QIcon &icon);
+        QTile (QWidget *parent, int width, int height, QPixmap &pixmap);
 
     private:
-        QIcon icon;
         void setEditorMapStyle(int width, int height);
 };
 
