@@ -4,6 +4,7 @@
 #include <tuple>
 #include <set>
 #include "../libs/box2d/include/box2d/box2d.h"
+#include "yaml-cpp/yaml.h"
 
 class MapLayout {
     std::pair<std::pair<int, int>, std::pair<int, int>> ctSpawn;
@@ -13,14 +14,23 @@ class MapLayout {
 
     std::set<std::pair<int, int>> walls;
 
+    // Bresenhams Line Algoritm
     bool plotLine(int x0, int y0, int x1, int y1);
+
+    int randomIntBetween(int a, int b);
+
+    void createBox(b2World& world, b2BodyDef& boxDef);
+    void createMapBorder(b2World& world, int xSide, int ySide);
+    std::pair<std::pair<int, int>, std::pair<int, int>> getPointsFromRectangle(std::vector<std::pair<int, int>> positions);
 
 public:
     MapLayout();
-    void setCtSpawn(int a, int b, int c, int d);
-    void setTtSpawn(int a, int b, int c, int d);
-    void setBombSite(int a, int b, int c, int d);
-    void loadWalls(std::set<std::pair<int, int>> walls);
+
+    void loadMap(b2World& world, YAML::Node& mapInfo);
+
+    void setCtSpawn(std::vector<std::pair<int, int>> positions);
+    void setTtSpawn(std::vector<std::pair<int, int>> positions);
+    void setBombSite(std::vector<std::pair<int, int>> positions);
 
     bool checkTunneling(const b2Vec2& attacker, const b2Vec2& victim);
 
