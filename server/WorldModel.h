@@ -6,6 +6,7 @@
 #include "Broadcaster.h"
 #include "PlayerModel.h"
 #include "MapLayout.h"
+#include "updates/UpdateManager.h"
 #include "Tally.h"
 #include "events/ClientEvent.h"
 #include "../common/ProtectedQueue.h"
@@ -35,6 +36,7 @@ class WorldModel: public Thread {
     ProtectedQueue<std::unique_ptr<ClientEvent>> usersEvents;
 
     Broadcaster& updates;
+    UpdateManager updatesM;
     DroppedWeapons droppedWeapons;
 
     float timeStep;
@@ -63,24 +65,6 @@ class WorldModel: public Thread {
         void createBox(b2BodyDef& boxDef);
         void createMapBorder(b2BodyDef& boxDef, int xSide, int ySide);
         void loadMap(YAML::Node& mapInfo);
-
-        void updatePositions();
-        void updateAngles();
-        void updateAttack(int id);
-        void updateHit(int id);
-        void updateDead(int id);
-        void updateWeapon(uint8_t id, uint8_t code);
-        void updateBuying(bool buying);
-        void updateTeams();
-        void updateHp(int id);
-        void updateMoney(int id);
-        void updateTime();
-        void updateBombPlanted(int id);
-        void updateCtWinRound();
-        void updateTtWinRound();
-        void updateBombExplode();
-        void updateClip(int id);
-
         
         void movePlayer(uint8_t id, uint8_t dir);
         void stopMovingPlayer(uint8_t id, uint8_t dir);

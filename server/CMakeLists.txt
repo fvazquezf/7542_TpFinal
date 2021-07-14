@@ -55,6 +55,7 @@ add_library(lib_server
     updates/MapUpdate.cpp
     updates/CtWinRoundUpdate.cpp
     updates/TtWinRoundUpdate.cpp
-    updates/BombExplodeUpdate.cpp)
+    updates/BombExplodeUpdate.cpp
+    updates/UpdateManager.cpp)
 
 

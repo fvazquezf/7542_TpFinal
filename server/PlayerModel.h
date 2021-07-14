@@ -40,10 +40,10 @@ class PlayerModel{
         void step();
 
         void reposition(MapLayout& mapLayout);
-        const b2Vec2& getPosition();
+        const b2Vec2& getPosition() const;
 
         void setAngle(int16_t newAngle);
-        int16_t getAngle() const;
+        const int16_t getAngle() const;
 
         bool attack(const b2Vec2& enemy);
         void reload();
@@ -68,10 +68,10 @@ class PlayerModel{
         void revive();
 
         void changeSide();
-        bool getSide();
-        int getHp();
-        int getMoney();
-        int getClip();
+        bool getSide() const;
+        int getHp() const;
+        int getMoney() const;
+        int getClip() const;
 };
 
 #endif

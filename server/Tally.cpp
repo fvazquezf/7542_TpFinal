@@ -50,7 +50,7 @@ bool Tally::tickTime(){
     return false;
 }
 
-int Tally::getTime(){
+int Tally::getTime() const {
     return time;
 }
 

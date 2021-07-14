@@ -140,7 +140,7 @@ bool Armory::pickUpWeapon(const b2Vec2& position){
     }
 }
 
-int Armory::getClip(){
+int Armory::getClip() const {
     return arsenal.at(currentWeapon)->getClip();
 }
 
@@ -175,5 +175,3 @@ void Armory::selectWeapon(uint8_t weaponCode){
             break;
     }
 }
-
- 

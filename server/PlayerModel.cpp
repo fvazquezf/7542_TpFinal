@@ -100,7 +100,7 @@ void PlayerModel::reposition(MapLayout& mapLayout){
     this->model->SetTransform(newPos, 0);
 }
 
-const b2Vec2& PlayerModel::getPosition(){
+const b2Vec2& PlayerModel::getPosition() const {
     return this->model->GetPosition();
 }
 
@@ -109,7 +109,7 @@ void PlayerModel::setAngle(int16_t newAngle) {
     this->angle = newAngle;
 }
 
-int16_t PlayerModel::getAngle() const {
+const int16_t PlayerModel::getAngle() const {
     return angle;
 }
 
@@ -216,19 +216,19 @@ void PlayerModel::changeSide(){
     isCt = !isCt;
 }
 
-bool PlayerModel::getSide(){
+bool PlayerModel::getSide() const {
     return isCt;
 }
 
-int PlayerModel::getHp(){
+int PlayerModel::getHp() const {
     return hp;
 }
 
-int PlayerModel::getMoney(){
+int PlayerModel::getMoney() const {
     return money;
 }
 
-int PlayerModel::getClip(){
+int PlayerModel::getClip() const {
     return armory.getClip();
 }
 
