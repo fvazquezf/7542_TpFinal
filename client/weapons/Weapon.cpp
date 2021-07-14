@@ -56,23 +56,23 @@ void Weapon::animate(Character &character, float distanceToCenter, float angle) 
             character.pushPositionOffset(std::move(offset));
         }
     }
-    manageSound();
+    manageSound(distanceToCenter);
 }
 
 float Weapon::parabolicMotion(int nFrame) {
     return ((-MAX_ROT_KNIFE)/25.0f) * nFrame*nFrame + 2.0f * MAX_ROT_KNIFE/5.0f * nFrame;
 }
 
-void Weapon::manageSound() {
+void Weapon::manageSound(float distanceToCenter) const {
     if (currentWeapon == KNIFE){
-        SoundManager::playSound(SoundManager::KNF_S, 0);
+        SoundManager::playSound(SoundManager::KNF_S, distanceToCenter);
     } else if (currentWeapon == PISTOL){
-        SoundManager::playSound(SoundManager::GLOCK_S, 0);
+        SoundManager::playSound(SoundManager::GLOCK_S, distanceToCenter);
     } else if (currentWeapon == M3){
-        SoundManager::playSound(SoundManager::M3_S, 0);
+        SoundManager::playSound(SoundManager::M3_S, distanceToCenter);
     } else if (currentWeapon == AWP) {
-        SoundManager::playSound(SoundManager::AWP_S, 0);
+        SoundManager::playSound(SoundManager::AWP_S, distanceToCenter);
     } else if (currentWeapon == AK47){
-        SoundManager::playSound(SoundManager::AK47_S, 0);
+        SoundManager::playSound(SoundManager::AK47_S, distanceToCenter);
     }
 }

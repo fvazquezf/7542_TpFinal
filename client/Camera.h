@@ -58,7 +58,7 @@ public:
 
     void renderWeapon(float playerX, float playerY, int16_t playerAngle, int sizeX, int sizeY, SdlTexture &texture);
 
-    float calculateDistanceToCenter(float posX, float posY);
+    float calculateDistanceToCenter(float posX, float posY) const;
 };
 
 #endif

@@ -27,12 +27,12 @@ public:
     void assignTeams(std::map<uint8_t, bool> teamMap);
     void createCharacters(SdlTexture& terroristTexture, SdlTexture& counterTexture);
 
-    void updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap);
+    void updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap, Camera& camera);
     void updateAngles(std::map<uint8_t, int16_t> &angles);
     void hit(uint8_t id, Camera& camera);
     void kill(uint8_t id, Camera& camera);
     void changeWeapon(uint8_t weaponCode, uint8_t playerId);
-    void attack(uint8_t id);
+    void attack(uint8_t id, Camera& camera);
 
     void draw(Camera& camera, size_t iteration);
 

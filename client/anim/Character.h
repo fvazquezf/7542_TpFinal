@@ -43,12 +43,13 @@ public:
 
 	void changeWeapon(uint8_t weaponCode);
 
-	void hit();
+	void hit(float distanceToCenter);
 	void die(float distanceToCenter);
+	void move(float distanceToCenter) const;
 
 	~Character() override;
 
-    void attack();
+    void attack(float distanceToCenter);
 
     void pushPositionOffset(std::tuple<float, float, int> positionOffset);
 

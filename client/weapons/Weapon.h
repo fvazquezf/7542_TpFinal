@@ -53,7 +53,7 @@ public:
 
     void animate(Character &character, float distanceToCenter, float angle);
 
-    void manageSound();
+    void manageSound(float distanceToCenter) const;
 };
 
 

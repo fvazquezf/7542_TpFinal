@@ -74,10 +74,12 @@ void CharacterManager::setPlayerId(uint8_t id) {
     playerId = id;
 }
 
-void CharacterManager::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
+void CharacterManager::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap, Camera& camera) {
     for (auto& it : positionMap) {
         try {
-            entities.at(it.first).updatePosition(it.second.first, it.second.second);
+            Character& character = entities.at(it.first);
+            character.updatePosition(it.second.first, it.second.second);
+            character.move(camera.calculateDistanceToCenter(it.second.first, it.second.second));
         } catch (const std::exception& e){
         }
     }
@@ -93,7 +95,9 @@ void CharacterManager::updateAngles(std::map<uint8_t, int16_t> &angles) {
 }
 
 void CharacterManager::hit(uint8_t id, Camera& camera) {
-    entities.at(id).hit();
+    Character& character = entities.at(id);
+    auto position = character.getPosition();
+    character.hit(camera.calculateDistanceToCenter(position.first, position.second));
 }
 
 void CharacterManager::kill(uint8_t id, Camera& camera) {
@@ -102,8 +106,10 @@ void CharacterManager::kill(uint8_t id, Camera& camera) {
     entities.at(id).die(distCenter);
 }
 
-void CharacterManager::attack(uint8_t id) {
-    entities.at(id).attack();
+void CharacterManager::attack(uint8_t id, Camera& camera) {
+    Character& character = entities.at(id);
+    auto position = character.getPosition();
+    entities.at(id).attack(camera.calculateDistanceToCenter(position.first, position.second));
 }
 
 CharacterManager::~CharacterManager() {

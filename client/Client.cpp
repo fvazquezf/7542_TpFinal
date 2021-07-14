@@ -19,7 +19,7 @@ Client::Client(LogInInfo& login, YAML::Node& clientConfig)
 void Client::launch() {
     BlockingQueue<std::unique_ptr<Command>> comms;
 
-    SoundManager::start();
+    SoundManager::start(clientConfig["sound_on"].as<bool>());
     WorldView world(window, clientConfig);
     Drawer drawer(world);
     drawer.start();

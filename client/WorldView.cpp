@@ -44,6 +44,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
                   std::forward_as_tuple(5),
                   std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
     SDL_ShowCursor(SDL_DISABLE);
+    SoundManager::playMusic();
 }
 
 WorldView::~WorldView() {
@@ -78,7 +79,7 @@ void WorldView::render(size_t iteration) {
 
 void WorldView::updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    characterManager.updatePositions(positionMap);
+    characterManager.updatePositions(positionMap, camera);
 }
 
 int16_t WorldView::getPlayerAngle() {
@@ -103,7 +104,7 @@ void WorldView::kill(uint8_t id) {
 
 void WorldView::attack(uint8_t id) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    characterManager.attack(id);
+    characterManager.attack(id, camera);
 }
 
 void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
@@ -163,13 +164,16 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     // al suceder el context switch...
     // va a levantar iteradores con "basura" (invalidos al fin)
     // por ende, no los puedo eliminar aca
+    std::pair<float, float> pos;
     for (auto& it : droppedWeapons){
         if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
             it.doNotShow();
+            pos = it.getPosition();
             break;
         }
     }
-    SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, 0);
+    float distance = camera.calculateDistanceToCenter(pos.first, pos.second);
+    SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, distance);
 }
 
 void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {

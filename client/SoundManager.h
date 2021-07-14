@@ -11,6 +11,7 @@
 // singleton instance
 class SoundManager {
 private:
+    bool on;
     Mix_Music* music;
     // contenedor de todos los sonidos
     // si el sonido no existe se crea
@@ -22,7 +23,7 @@ private:
     // que se estan reproduciendo (pq el ultimo termino)
     size_t chunksPlaying;
 
-    void pStart();
+    void pStart(bool onFlag);
 
     void pPlaySound(int code, float distance);
     void pPlayMusic();
@@ -47,7 +48,7 @@ public:
     SoundManager(SoundManager&& other) = delete;
     SoundManager& operator=(SoundManager&& other) = delete;
 
-    static void start();
+    static void start(bool onFlag);
     static void playSound(int soundId, float distanceFromPlayer);
     static void playMusic();
     static void stopMusic();

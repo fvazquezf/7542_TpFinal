@@ -8,6 +8,13 @@ stencil_opacity: 50 # higher is darker
 stencil_angle: 45 # stencil triangle angle, higher means fov is increased
 stencil_triangle_brightness: 80 # higher will make fov brighter
 
+sound_on: false # FLAG PARA MATAR AL SONIDO :D 
+# obs: si se usa para propositos de testing
+# primero levantar un cliente con el flag de sound en true
+# luego modificar el flag 
+# y recien ahi levantar otros clientes
+# ya que el archivo se carga ni bien se levanta el cliente
+
 cursor_type: 2 # de 0 a 3
 cursor_size: 23 # pixeles
 cursor_source_file: "../sprites/gfx/pointer.bmp"

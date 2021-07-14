@@ -99,14 +99,14 @@ void Character::die(float distanceToCenter) {
     SoundManager::playSound(SoundManager::soundRepertoire::DIE1, distanceToCenter);
 }
 
-void Character::hit() {
+void Character::hit(float distanceToCenter) {
     wasHit = true;
     bleeding = true;
-    SoundManager::playSound(SoundManager::soundRepertoire::HIT1, 0);
+    SoundManager::playSound(SoundManager::soundRepertoire::HIT1, distanceToCenter);
 }
 
-void Character::attack() {
-    weapon.animate(*this, posX, angle);
+void Character::attack(float distanceToCenter) {
+    weapon.animate(*this, distanceToCenter, angle);
 }
 
 void Character::pushPositionOffset(std::tuple<float, float, int> positionOffset) {
@@ -131,13 +131,16 @@ void Character::updatePosition(float x, float y) {
     }
     if (moving){
         ++currentMovingUpdates;
-        if ((currentMovingUpdates % 25) == 0){
-            SoundManager::playSound(SoundManager::STEP1, 0);
-        }
     }
     Renderizable::updatePosition(x, y);
 }
 
 std::pair<float, float> Character::getPosition() {
     return {posX, posY};
+}
+
+void Character::move(float distanceToCenter) const {
+    if (moving && (currentMovingUpdates % 25) == 0){
+        SoundManager::playSound(SoundManager::STEP1, distanceToCenter);
+    }
 }

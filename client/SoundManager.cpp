@@ -19,6 +19,10 @@ void SoundManager::playSound(int soundId, float distanceFromPlayer) {
 }
 
 void SoundManager::pPlaySound(int code, float distance) {
+    if (!on) {
+        return;
+    }
+
     if (soundMap.count(code) == 0){
         return; // no existe el sonido
     }
@@ -37,15 +41,21 @@ void SoundManager::pPlaySound(int code, float distance) {
     } else {
         ++chunksPlaying;
     }
-    uint8_t soundDistance = 20 * distance;
-    Mix_SetDistance(channel, soundDistance);
+    uint8_t soundDistanceSdl = 0;
+    if (distance >= 12.75) {
+        soundDistanceSdl = 255; // no se escucha nada
+    } else {
+        soundDistanceSdl = 20 * distance; // a lo sumo es 255 ;)
+    }
+    Mix_SetDistance(channel, soundDistanceSdl);
 }
 
-void SoundManager::start() {
-    SoundManager::getSoundManager().pStart();
+void SoundManager::start(bool onFlag) {
+    SoundManager::getSoundManager().pStart(onFlag);
 }
 
-void SoundManager::pStart() {
+void SoundManager::pStart(bool onFlag) {
+    this->on = onFlag;
     chunksPlaying = 0;
     std::string path = SOUND_PATH;
     soundMap.emplace(std::piecewise_construct,
@@ -107,6 +117,9 @@ void SoundManager::playMusic() {
 }
 
 void SoundManager::pPlayMusic() {
+    if (!on) {
+        return;
+    }
     if (music == nullptr){
         return;
     }
@@ -119,6 +132,10 @@ void SoundManager::stopMusic() {
 }
 
 void SoundManager::pStopMusic() {
+    if (!on) {
+        return;
+    }
+
     if (!Mix_FadeOutMusic(1000)){
         throw std::exception();
     }

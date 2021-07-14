@@ -102,6 +102,6 @@ void Camera::renderWithAlpha(SdlTexture &texture, Area &source, float x, float y
     texture.render(source, dst, alpha);
 }
 
-float Camera::calculateDistanceToCenter(float posX, float posY) {
+float Camera::calculateDistanceToCenter(float posX, float posY) const {
     return std::sqrt(pow(abs(logicalCenterX - posX), 2) + pow(abs(logicalCenterY - posY), 2));
 }
