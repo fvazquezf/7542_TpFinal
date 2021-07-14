@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Button.h"
+#include "sdlwrap/SdlText.h"
 
 // paths a las texturas del menu (_m)
 #define AK_PATH "../sprites/gfx/weapons/ak47_m.bmp"
@@ -25,6 +26,8 @@ private:
     SdlTexture& buttonSlot;
     std::vector<SdlTexture> buttonContTextures;
     uint8_t lastButtonPressed;
+    SdlText menuText;
+    Area menuTextArea;
 public:
     BuyingMenu(SdlWindow& window, SdlTexture& hudButton);
 

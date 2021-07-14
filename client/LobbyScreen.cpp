@@ -5,13 +5,16 @@ LobbyScreen::LobbyScreen(SdlWindow &window, SdlTexture& hudButton)
 : window(window),
   backgroundTexture("../sprites/gfx/splash.bmp", window),
   buttonBackgroundTexture("../sprites/gfx/gametitle.png", window),
-  waitingScreen("../sprites/gfx/waiting.bmp", window, {0x20, 0x20, 0x80}),
+  waitingTextScreen("../sprites/fonts/counter_strike.ttf",
+                    window,
+                    30),
   startEarlyButton((window.getWidth() / 2) - 75, 2 * window.getHeight() / 3, 150, 40,
                    hudButton,
                    buttonBackgroundTexture,
                    SDL_Rect{0, 0, 48, 20},
                    0){
     //SoundManager::playMusic();
+    waitingTextScreen.setText("Espera a otros jugadores o toca el boton para jugar");
 }
 
 void LobbyScreen::draw() {
@@ -21,9 +24,8 @@ void LobbyScreen::draw() {
     Area dstBackground(0, 0, width, height);
     backgroundTexture.render(srcBackground, dstBackground, SDL_FLIP_NONE);
 
-    Area srcWaiting(0, 0, 1683, 495);
-    Area dstWaiting(1/2 * width, 1/2 * height, width / 2, height / 2);
-    waitingScreen.render(srcWaiting, dstWaiting, SDL_FLIP_NONE);
+    Area txtDst(50, height / 3, 650, 100);
+    waitingTextScreen.render(txtDst);
     startEarlyButton.show();
 }
 

@@ -50,8 +50,6 @@ public:
     int render(const Area& src, const Area& dest, float angle, SDL_Point& center, const SDL_RendererFlip& flip) const;
     void changeColor(Color color);
 
-    void setToRenderingTarget();
-
 	~SdlTexture();
 };
 

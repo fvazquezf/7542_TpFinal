@@ -1,9 +1,9 @@
 #ifndef LOBBYSCREEN_H
 #define LOBBYSCREEN_H
 
-
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
+#include "sdlwrap/SdlText.h"
 #include "Button.h"
 
 // pantalla de lobby
@@ -14,7 +14,7 @@ private:
     SdlWindow& window;
     SdlTexture backgroundTexture;
     SdlTexture buttonBackgroundTexture;
-    SdlTexture waitingScreen;
+    SdlText waitingTextScreen;
     Button startEarlyButton;
 public:
     LobbyScreen(SdlWindow& window, SdlTexture& hudButton);

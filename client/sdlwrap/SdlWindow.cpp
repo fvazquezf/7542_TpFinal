@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SDL2/SDL_ttf.h>
 #include "SdlWindow.h"
 
 
@@ -6,6 +7,11 @@ SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
 	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
 	if (err){
 		//handle
+	}
+    err = TTF_Init();
+
+	if (err){
+	    //handle
 	}
 
     err = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
@@ -42,6 +48,7 @@ SdlWindow::~SdlWindow(){
 	}
     Mix_Quit();
 	SDL_Quit();
+	TTF_Quit();
 }
 
 void SdlWindow::fill(uint8_t r, uint8_t g, uint8_t b, int alpha){
