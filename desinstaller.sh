@@ -82,8 +82,22 @@ do
         rm 7542_TpFinal
         ;;
 
+	--cs2d)
+        shift
+        echo "${green}${bold}Desinstalando CS2D...${reset}"
+	sudo rm -rf /var/cs2d
+	sudo rm /usr/bin/cs2d
+	sudo rm /usr/bin/cs2d_editor
+	sudo rm /usr/bin/cs2d_server
+        ;;
 
-
+	--box2d)
+        shift
+        echo "${green}${bold}Desinstalando BOX2D...${reset}"
+	sudo rm -rf /usr/local/include/box2d
+	sudo rm -rf /usr/local/lib/cmake/box2d/
+	sudo rm /usr/local/lib/libbox2d.a
+	;;
         --all)
         shift
 
@@ -126,16 +140,20 @@ do
         cd ..
         rmdir 7542_TpFinal
 
+        echo "${green}${bold}Desinstalando CS2D...${reset}"
+	sudo rm -rf /var/cs2d
+	sudo rm /usr/bin/cs2d
+	sudo rm /usr/bin/cs2d_editor
+	sudo rm /usr/bin/cs2d_server
+
+        echo "${green}${bold}Desinstalando BOX2D...${reset}"
+	sudo rm -rf /usr/local/include/box2d
+	sudo rm -rf /usr/local/lib/cmake/box2d/
+	sudo rm /usr/local/lib/libbox2d.a
+
         ;;
 
 
 
     esac
 done
-
-echo "${green}Desinstalando CS2D'...${reset}"
-sudo rm -rf /var/cs2d
-sudo rm /usr/bin/cs2d
-sudo rm /usr/bin/cs2d_editor
-sudo rm /usr/bin/cs2d_server
-
