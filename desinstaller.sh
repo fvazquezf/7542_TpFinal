@@ -1,7 +1,5 @@
 #!/usr/bash
 
-#!/usr/bash
-
 green=`tput setaf 2`
 bold=`tput bold`
 reset=`tput sgr0`
@@ -9,7 +7,6 @@ reset=`tput sgr0`
 echo "${green}${bold}\n********************************************************************************${reset}"
 echo "${green}${bold}*****************************DESINSTALADOR*****************************************${reset}"
 echo "${green}${bold}********************************************************************************${reset}"
-
 # Loop through arguments and process them
 for arg in "$@"
 do
@@ -111,6 +108,9 @@ do
         echo "${green}Desinstalando 'libsdl2-mixer-dev'...${reset}"
         sudo apt-get remove libsdl2-mixer-dev -y
         
+        echo "${green}Desinstalando 'libsdl2-ttf-dev'...${reset}"
+        sudo apt-get remove libsdl2-mixer-dev -y
+
         echo "${green}Desinstalando 'clang'...${reset}"
         sudo apt-get remove clang -y 
 
@@ -124,7 +124,7 @@ do
         sudo apt-get remove build-essential -y
 
         cd ..
-        rm 7542_TpFinal
+        rmdir 7542_TpFinal
 
         ;;
 
@@ -132,3 +132,10 @@ do
 
     esac
 done
+
+echo "${green}Desinstalando CS2D'...${reset}"
+sudo rm -rf /var/cs2d
+sudo rm /usr/bin/cs2d
+sudo rm /usr/bin/cs2d_editor
+sudo rm /usr/bin/cs2d_server
+

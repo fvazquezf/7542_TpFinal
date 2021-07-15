@@ -1,39 +1,24 @@
-#include <unistd.h>
-#include <chrono>
-#include <sstream>
 #include "anim/Animation.h"
-#include "SdlLoop.h"
 #include "commands/Command.h"
-#include "Sender.h"
-#include "WorldView.h"
-#include "sdlwrap/SdlWindow.h"
-#include "Receiver.h"
-#include "commands/CreateGame.h"
-#include "commands/JoinGame.h"
 
 // QT:
 #include "./qt/LogInWindow.h"
-#include "./qt/IntroWindow.h"
-#include "./qt/LogInInfo.h"
 #include <QApplication>
 #include <iostream>
-#include "sdlwrap/SdlSound.h"
-#include "commands/ListGame.h"
 #include "Client.h"
 #include "MapView.h"
+#define CLIENT_CONFIG "/var/cs2d/config/client_config.yaml"
 
 int main(int argc, const char *argv[]){
-    //Editor in QT
-    if (argc != 2){
-        std::cout << "Cantidad invalida de argumentos, "
-                     "ingrese por favor un archivo de configuracion valido\n";
+    if (argc != 1){
+        std::cout << "Uso: cs2d\n";
         return -1;
     }
 
     YAML::Node clientConfig;
 
     try {
-        clientConfig = YAML::LoadFile(argv[1]);
+        clientConfig = YAML::LoadFile(CLIENT_CONFIG);
     } catch(const std::exception& e){
         std::cout << e.what();
         return -1;

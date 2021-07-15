@@ -3,15 +3,14 @@
 #include <ostream>
 
 int main(int argc, char *argv[]) {
-    if (argc != 3){
-        std::cerr << "Error, numero invalido de argumentos\n";
+    if (argc != 2){
+        std::cerr << "Uso: cs2d_server 'PORT'\n";
         return -1;
     }
     try {
         char* port = argv[1];
-        char* configPath = argv[2];
         Server server;
-        server(port, configPath);
+        server(port);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     } catch (...) {

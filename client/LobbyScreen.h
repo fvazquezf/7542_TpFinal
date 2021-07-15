@@ -5,6 +5,7 @@
 #include "sdlwrap/SdlTexture.h"
 #include "sdlwrap/SdlText.h"
 #include "Button.h"
+#include <yaml-cpp/yaml.h>
 
 // pantalla de lobby
 // al crear una partida se dibuja un boton para iniciarla
@@ -17,7 +18,7 @@ private:
     SdlText waitingTextScreen;
     Button startEarlyButton;
 public:
-    LobbyScreen(SdlWindow& window, SdlTexture& hudButton);
+    LobbyScreen(SdlWindow& window, SdlTexture& hudButton, YAML::Node& clientConfig);
 
     LobbyScreen(const LobbyScreen& other) = delete;
     LobbyScreen& operator=(const LobbyScreen& other) = delete;

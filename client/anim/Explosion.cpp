@@ -4,8 +4,8 @@
 #include <random>
 
 
-Explosion::Explosion(SdlWindow& window)
-: explosionTexture("../sprites/gfx/explosion.png", window),
+Explosion::Explosion(SdlWindow& window, YAML::Node& config)
+: explosionTexture(config["explosion"].as<std::string>(), window),
   shouldBlow(false),
   dstX(0),
   dstY(0),

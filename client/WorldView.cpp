@@ -12,37 +12,37 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
           clientConfig["stencil_radius"].as<float>(),
           clientConfig["stencil_opacity"].as<int>(),
           clientConfig["stencil_triangle_brightness"].as<int>()),
-  hud(window),
+  hud(window, clientConfig),
   map(window, clientConfig),
   cursor(clientConfig["cursor_type"].as<int>(),
          window,
          clientConfig["cursor_source_file"].as<std::string>(),
          clientConfig["cursor_size"].as<int>()),
-  bombExplosion(window),
+  bombExplosion(window, clientConfig),
   characterManager(window, clientConfig),
   lobbyTime(true),
   menuTime(false),
   skinTime(false),
   done(false),
   hudButton(clientConfig["hud_button"].as<std::string>(), window),
-  lobby(window, hudButton),
-  menu(window, hudButton),
+  lobby(window, hudButton, clientConfig),
+  menu(window, hudButton, clientConfig),
   skins(window, clientConfig, hudButton, true, characterManager){
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(0),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/ak47_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["ak47_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(1),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/m3_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["m3_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                          std::forward_as_tuple(2),
-                         std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/awp_d.bmp", window)));
+                         std::forward_as_tuple(SdlTexture(clientConfig["awp_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(5),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["bomb_drop"].as<std::string>(), window)));
     SDL_ShowCursor(SDL_DISABLE);
     SoundManager::playMusic();
 }

@@ -5,7 +5,7 @@
 #include <mutex>
 #include <yaml-cpp/node/node.h>
 #include "match.h"
-#define MAP_PATH_PREFIX "../maps/"
+#define MAP_PATH_PREFIX "/var/cs2d/maps/"
 #define MAP_EXTENSION ".yml"
 
 /*

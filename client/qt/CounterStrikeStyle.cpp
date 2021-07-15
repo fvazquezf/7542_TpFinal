@@ -2,11 +2,9 @@
 #include <QFontDatabase>
 #include <QDir>
 
-#define PATH_TO_COUNTER_STRIKE_FONT "/client/qt/resources/fonts/counter_strike.ttf"
+#define PATH_TO_COUNTER_STRIKE_FONT "/var/cs2d/resources/fonts/counter_strike.ttf"
 CounterStrikeStyle::CounterStrikeStyle() {
-    QDir dir(QDir::currentPath());
-    dir.cdUp();
-    font_path = dir.path() + PATH_TO_COUNTER_STRIKE_FONT;
+    font_path = PATH_TO_COUNTER_STRIKE_FONT;
 }
 
 void CounterStrikeStyle::setCounterStrikeFont(QDialog* qDialog, int size) {

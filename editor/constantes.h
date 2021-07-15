@@ -1,9 +1,9 @@
 #ifndef CONSTANTES_H
 #define CONSTANTES_H
 
-#define PATH_TO_COUNTER_STRIKE_FONT "/sprites/fonts/counter_strike.ttf"
-#define PATH_TO_MAPS "../maps/"
-#define MAP_ICON_CONFIG_PATH "../editor/mapIconsType.yml"
+#define PATH_TO_COUNTER_STRIKE_FONT "/var/cs2d/resources/fonts/counter_strike.ttf"
+#define PATH_TO_MAPS "/var/cs2d/maps/"
+#define MAP_ICON_CONFIG_PATH "/var/cs2d/config/mapIconsType.yml"
 
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 720

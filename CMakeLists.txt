@@ -53,28 +53,47 @@ file(GLOB EDITOR_QT_SRC
 #**************************************
 
 # Ejecutables cliente
-add_executable(client_main ./client/main.cpp ${CLIENT_QT_SRC})
+add_executable(cs2d ./client/main.cpp ${CLIENT_QT_SRC})
 #add_executable(editor ./editor/Editor.cpp)
 #add_executable(box2d_demo HelloWorld.cpp)
 #add_executable(demo_movimiento demo_movimiento.cpp)
 #add_executable(commandTester ./client/commands/CommandTester.cpp)
 
 # Ejecutables esqueleto cliente-servidor
-add_executable(esqueleto_server ./server/main.cpp)
+add_executable(cs2d_server ./server/main.cpp)
 
 # Ejecutables editor
-add_executable(editor_main ${EDITOR_QT_SRC})
+add_executable(cs2d_editor ${EDITOR_QT_SRC})
 
 #**************************************
 #**********Linking libraries***********
 #**************************************
 
 # Linkage client
-target_link_libraries(client_main Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop sdlwrapperclasses anim SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx yaml-cpp SDL2_ttf)
+target_link_libraries(cs2d Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop sdlwrapperclasses anim SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx yaml-cpp SDL2_ttf)
 
 # Linkage esqueleto cliente-servidor
-target_link_libraries(esqueleto_server lib_server lib_common box2d yaml-cpp)
+target_link_libraries(cs2d_server lib_server lib_common box2d yaml-cpp)
 
 # Linkage editor
-target_link_libraries(editor_main Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Widgets Qt5::Core Qt5::Gui yaml-cpp)
+target_link_libraries(cs2d_editor Qt5::Multimedia Qt5::MultimediaWidgets Qt5::Widgets Qt5::Core Qt5::Gui yaml-cpp)
+
+#**************************************
+#***************Install****************
+#**************************************
+
+set(BIN "/usr/bin")
+set(RESOURCES "/var/cs2d")
+
+
+install(TARGETS cs2d DESTINATION ${BIN} PERMISSIONS WORLD_READ WORLD_WRITE WORLD_EXECUTE)
+
+install(TARGETS cs2d_server DESTINATION ${BIN} PERMISSIONS WORLD_READ WORLD_WRITE WORLD_EXECUTE)
+
+install(TARGETS cs2d_editor DESTINATION ${BIN} PERMISSIONS WORLD_READ WORLD_WRITE WORLD_EXECUTE)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/sprites DESTINATION ${RESOURCES})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/maps DESTINATION ${RESOURCES})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/client/qt/resources DESTINATION ${RESOURCES})
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config DESTINATION ${RESOURCES})
 

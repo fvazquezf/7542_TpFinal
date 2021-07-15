@@ -20,7 +20,7 @@ IntroWindow::IntroWindow(QWidget *parent, int width, int heigth) {
 void IntroWindow::run(){
     QDir dir(QDir::currentPath());
     dir.cdUp();
-    playlist->addMedia(QUrl::fromLocalFile(dir.path() + "/client/qt/resources/intro.mp4"));
+    playlist->addMedia(QUrl::fromLocalFile(INTRO_PATH));
     playlist->setCurrentIndex(1);
     player->setPlaylist(playlist);
     player->setVideoOutput(this);

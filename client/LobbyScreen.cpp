@@ -1,11 +1,11 @@
 #include "LobbyScreen.h"
 #include "SoundManager.h"
 
-LobbyScreen::LobbyScreen(SdlWindow &window, SdlTexture& hudButton)
+LobbyScreen::LobbyScreen(SdlWindow &window, SdlTexture& hudButton, YAML::Node& clientConfig)
 : window(window),
-  backgroundTexture("../sprites/gfx/splash.bmp", window),
-  buttonBackgroundTexture("../sprites/gfx/gametitle.png", window),
-  waitingTextScreen("../sprites/fonts/counter_strike.ttf",
+  backgroundTexture(clientConfig["lobby_background"].as<std::string>(), window),
+  buttonBackgroundTexture(clientConfig["game_title"].as<std::string>(), window),
+  waitingTextScreen(clientConfig["cs_ttf"].as<std::string>(),
                     window,
                     30),
   startEarlyButton((window.getWidth() / 2) - 75, 2 * window.getHeight() / 3, 150, 40,
