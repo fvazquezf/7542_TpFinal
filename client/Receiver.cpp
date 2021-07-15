@@ -125,6 +125,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case TT_WIN_ROUND:
             world.updateHudWinner(false);
             break;
+        case SCORE_UPDATE: {
+            auto scores = prot.deserializeScores(msg);
+            break;
+        }
         default:
             break;
     }

@@ -41,6 +41,7 @@
 #define BOMB_EXPLODE_DONE 0x30
 #define TT_WIN_ROUND 0x31
 #define CT_WIN_ROUND 0x32
+#define SCORE_UPDATE 0x33
 
 // update misc
 // login response me manda
@@ -134,6 +135,8 @@ public:
     void updateMapInformation(const std::string& serializedMap, std::function<void(std::vector<unsigned char>)> &callback) const;
     void updateTeams(const std::map<uint8_t, bool> &map, std::function<void(std::vector<unsigned char>)> &callback);
     void updateMoney(uint16_t money, std::function<void(std::vector<unsigned char>)> &callback);
+    void updateScore(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>>& scores,
+                     std::function<void(std::vector<unsigned char>)>& callback);
 
     std::vector<unsigned char> dispatchReceived(uint8_t codeReceived,
                           std::function<std::vector<unsigned char>(size_t)> &receiveCallback);
@@ -152,6 +155,7 @@ public:
     std::tuple<uint8_t, size_t, int16_t, int16_t> deserializeDrop(std::vector<unsigned char>& msg, uint8_t dropType);
     std::map<uint8_t, bool> deserializeTeams(std::vector<unsigned char>& msg);
     std::vector<std::string> deserializeLoginListMessage(std::vector<unsigned char>& msg);
+    std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> deserializeScores(std::vector<unsigned char>& msg);
 
 
     std::vector<unsigned char> handleCreateGame(std::function<std::vector<unsigned char>(size_t)> &callback);

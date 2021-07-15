@@ -65,12 +65,18 @@ add_executable(cs2d_server ./server/main.cpp)
 # Ejecutables editor
 add_executable(cs2d_editor ${EDITOR_QT_SRC})
 
+# testeo de comandos / protocolo
+# add_executable(command_tester ./client/commands/CommandTester.cpp)
+
 #**************************************
 #**********Linking libraries***********
 #**************************************
 
 # Linkage client
 target_link_libraries(cs2d Qt5::Widgets Qt5::Core Qt5::Multimedia Qt5::MultimediaWidgets sdlloop sdlwrapperclasses anim SDL2 SDL2_image SDL2_mixer lib_common commands weapons SDL2_gfx yaml-cpp SDL2_ttf)
+
+# testeo de comandos / protocolo
+# target_link_libraries(command_tester lib_common commands)
 
 # Linkage esqueleto cliente-servidor
 target_link_libraries(cs2d_server lib_server lib_common box2d yaml-cpp)

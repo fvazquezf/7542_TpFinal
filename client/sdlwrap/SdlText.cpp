@@ -1,4 +1,3 @@
-#include <c++/9/iostream>
 #include "SdlText.h"
 
 SdlText::SdlText(const std::string &pathToFont, SdlWindow &window, int pointSize)

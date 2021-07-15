@@ -7,10 +7,13 @@ add_library(commands
         ListGame.cpp
         Move.cpp
         Rotate.cpp 
-	Attack.cpp 
-	ChangeWeapon.cpp 
-	Buy.cpp 
-	Pickup.cpp 
-	Reload.cpp 
-	Plant.cpp 
-	ListMaps.cpp EarlyStart.cpp EarlyStart.h)
+		Attack.cpp
+		ChangeWeapon.cpp
+		Buy.cpp
+		Pickup.cpp
+		Reload.cpp
+		Plant.cpp
+		ListMaps.cpp
+		EarlyStart.cpp
+		#CommandTester.cpp only for testing reasons
+		)

@@ -212,6 +212,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
         case CT_WIN_ROUND: {
             break;
         }
+        case SCORE_UPDATE: {
+            msg = handleStringMsg(receiveCallback);
+            break;
+        }
         default:
             // err, bad code
             throw std::invalid_argument("Bad code received\n");
@@ -558,4 +562,32 @@ std::vector<std::string> Protocol::deserializeLoginListMessage(std::vector<unsig
         ++charEnd;
     }
     return games;
+}
+
+void Protocol::updateScore(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> &scores,
+                           std::function<void(std::vector<unsigned char>)> &callback) {
+    std::vector<unsigned char> scoresSerialized;
+    scoresSerialized.push_back(SCORE_UPDATE);
+    uint16_t sizeMsg = scores.size() * 6; // 4 uint8_t y 1 uint16_t -> 6 bytes
+    serializeMsgLenShort(scoresSerialized, htons(sizeMsg));
+    for (auto& userScore : scores){
+        scoresSerialized.push_back(std::get<0>(userScore));
+        scoresSerialized.push_back(std::get<1>(userScore));
+        scoresSerialized.push_back(std::get<2>(userScore));
+        serializeMsgLenShort(scoresSerialized, htons(std::get<3>(userScore)));
+        scoresSerialized.push_back(std::get<4>(userScore) ? 1 : 0); // ct = 1, tt = 0
+    }
+    callback(std::move(scoresSerialized));
+}
+
+std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>>
+Protocol::deserializeScores(std::vector<unsigned char> &msg) {
+    size_t users = msg.size();
+    std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> usersScores;
+    for (size_t i = 0; i < users; i += 6){
+        uint16_t userMoney = ntohs(msg.at(i + 3) << 8 | msg.at(i + 4));
+        usersScores.emplace_back(msg.at(i), msg.at(i + 1), msg.at(i + 2), userMoney, msg.at(i + 5));
+    }
+
+    return usersScores;
 }

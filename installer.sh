@@ -30,6 +30,9 @@ sudo apt-get install qt5-default -y
 echo "${green}Instalando 'libqt5multimedia5-plugnins'...${reset}"
 sudo apt-get install libqt5multimedia5-plugins -y
 
+echo "${green}Instalando 'libqt5multimedia5-plugnins'...${reset}"
+sudo apt-get install qtmultimedia5-dev -y
+
 echo "\n${green}~INSTALACIÓN DE DEPENDENCIAS: YAML-CPP~\n${reset}"
 
 sudo apt-get install libyaml-cpp-dev -y
@@ -50,7 +53,7 @@ echo "${green}Instalando 'libsdl2-mixer-dev'...${reset}"
 sudo apt-get install libsdl2-mixer-dev -y
 
 echo "${green}Instalando 'libsdl2-ttf-dev'...${reset}"
-sudo apt-get install libsdl2-mixer-dev -y
+sudo apt-get install libsdl2-ttf-dev -y
 
 echo "${green}\n~BUILD DEL JUEGO~\n${reset}"
 mkdir build
@@ -59,6 +62,6 @@ cmake ..
 make
 
 echo "${green}\n~INSTALANDO CS2D~\n${reset}"
-sudo make install -j4
+sudo make install -j 10
 sudo chmod -R 777 /var/cs2d/maps/
 echo "${green} CS2D instalado :D ${reset}"
