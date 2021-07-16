@@ -46,8 +46,8 @@ int Bomb::hit(){
     return damage;
 }
 
-bool Bomb::canShoot(){
-    if (cooldown == 0) {
+bool Bomb::canShoot(bool isAttacking){
+    if (cooldown == 0 && isAttacking) {
         cooldown = firerate;
         return true;
     } else {

@@ -15,6 +15,7 @@ class PlayerModel{
 
     bool isCt;
     bool isFrozen;
+    bool isAttacking;
 
     int maxHp;
     int hp;
@@ -37,6 +38,9 @@ class PlayerModel{
         void startMove(int dir);
         void stopMove(int dir);
 
+        void startAttack();
+        void stopAttack();
+
         void step();
 
         void reposition(MapLayout& mapLayout);
@@ -58,7 +62,7 @@ class PlayerModel{
         bool startDefusing();
         bool stopDefusing();
 
-        void resetCooldown();
+        // void resetCooldown();
 
         int equipWeapon(int weaponType);
         bool buyWeapon(uint8_t weaponCode);
@@ -68,6 +72,7 @@ class PlayerModel{
         void revive();
 
         void changeSide();
+
         bool getSide() const;
         int getHp() const;
         int getMoney() const;

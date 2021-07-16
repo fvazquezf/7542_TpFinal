@@ -13,7 +13,7 @@ class Knife: public Weapon {
         ~Knife() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool canShoot() override;
+        bool canShoot(bool isAttacking) override;
         void resetCooldown() override;
         int hit() override;
         int getClip() override;

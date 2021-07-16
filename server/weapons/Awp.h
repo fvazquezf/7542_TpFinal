@@ -6,8 +6,6 @@
 
 class Awp: public Weapon {
     private:
-        // distancia al hit, sirve para ajustar la precision
-        double hitDistance;
         double accuracy;
         int firerate;
     public:
@@ -15,7 +13,7 @@ class Awp: public Weapon {
         ~Awp() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool canShoot() override;
+        bool canShoot(bool isAttacking) override;
         void resetCooldown() override;
         int hit() override;
 

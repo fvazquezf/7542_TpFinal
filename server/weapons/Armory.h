@@ -35,7 +35,7 @@ class Armory {
         
         std::shared_ptr<Weapon> hit();
 
-        bool canShoot();
+        bool canShoot(bool isAttacking);
 
         void tickCooldown();
 

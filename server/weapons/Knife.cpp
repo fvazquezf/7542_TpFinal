@@ -39,8 +39,8 @@ int Knife::hit(){
     return dmgDist(gen);
 }
 
-bool Knife::canShoot(){
-    if (cooldown == 0) {
+bool Knife::canShoot(bool isAttacking){
+    if (cooldown == 0 && isAttacking) {
         cooldown = firerate;
         return true;
     } else {

@@ -55,8 +55,8 @@ int Shotgun::hit(){
     return damageOutput;
 }
 
-bool Shotgun::canShoot(){
-    if (cooldown == 0 && clip != 0) {
+bool Shotgun::canShoot(bool isAttacking){
+    if (cooldown == 0 && clip != 0 && isAttacking) {
         clip--;
         cooldown = 8000;
         return true;

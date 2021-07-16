@@ -58,8 +58,8 @@ std::shared_ptr<Weapon> Armory::hit(){
     return arsenal[currentWeapon];
 }
 
-bool Armory::canShoot(){
-    return arsenal[currentWeapon]->canShoot();
+bool Armory::canShoot(bool isAttacking){
+    return arsenal[currentWeapon]->canShoot(isAttacking);
 }
 
 void Armory::tickCooldown(){

@@ -43,10 +43,10 @@ int Pistol::hit(){
     return damage;
 }
 
-bool Pistol::canShoot(){
-    if (cooldown == 0 && clip != 0) {
+bool Pistol::canShoot(bool isAttacking){
+    if (cooldown == 0 && clip != 0 && isAttacking) {
         clip--;
-        cooldown = 8000;
+        cooldown = 80000; // Mas ticks que en 10 rondas -> casi infinito
         return true;
     } else {
         return false;

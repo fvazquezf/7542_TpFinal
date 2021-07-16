@@ -16,6 +16,7 @@ armory(dropped, matchConfig){
     dirAmount = 0;
     isCt = false;
     isFrozen = true;
+    isAttacking = false;
 }
 
 PlayerModel::PlayerModel(PlayerModel &&other) noexcept
@@ -46,7 +47,6 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
     other.model = nullptr;
     return *this;
 }
-
 
 void PlayerModel::startMove(int dir){
     if (isFrozen) return;
@@ -90,6 +90,15 @@ void PlayerModel::step(){
     }
 }
 
+void PlayerModel::startAttack(){
+    isAttacking = true;
+}
+
+void PlayerModel::stopAttack(){
+    isAttacking = false;
+    armory.resetCooldown();
+}
+
 void PlayerModel::reposition(MapLayout& mapLayout){
     b2Vec2 newPos;
     if(isCt){
@@ -105,7 +114,6 @@ const b2Vec2& PlayerModel::getPosition() const {
 }
 
 void PlayerModel::setAngle(int16_t newAngle) {
-    // if (isFrozen) return;
     this->angle = newAngle;
 }
 
@@ -136,10 +144,9 @@ bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     }
 }
 
-
 bool PlayerModel::canShoot(){
     if (isFrozen) return false;
-    return armory.canShoot();
+    return armory.canShoot(isAttacking);
 }
 
 void PlayerModel::giveBomb(std::shared_ptr<Weapon> bomb){
@@ -180,13 +187,11 @@ bool PlayerModel::stopDefusing(){
     return false;
 }
 
-
-void PlayerModel::resetCooldown(){
-    armory.resetCooldown();
-}
+// void PlayerModel::resetCooldown(){
+//     armory.resetCooldown();
+// }
 
 int PlayerModel::equipWeapon(int weaponType){
-    // if (weaponType == BOMB && isCt) return false
     return armory.equipWeapon(weaponType);
 }
 
@@ -196,7 +201,6 @@ bool PlayerModel::buyWeapon(uint8_t weaponCode) {
 }
 
 bool PlayerModel::pickUpWeapon(){
-
     return armory.pickUpWeapon(model->GetPosition());
 }
 

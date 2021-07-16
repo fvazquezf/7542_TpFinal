@@ -247,22 +247,18 @@ void WorldModel::plantingLogic(){
 }
 
 void WorldModel::step(){
-	for (auto & playerModel : this->playerModels) {
-		playerModel.second.step();
-	}
-	for (auto id: attackingPlayers) {
-	    // el atacante
-	    auto& attacker = playerModels.at(id);
-        if (!attacker.canShoot()) continue;
-        updatesM.updateAttack(id);
+	for (auto& attacker : this->playerModels) {
+		attacker.second.step();
+        if (!attacker.second.canShoot()) continue;
+        updatesM.updateAttack(attacker.first);
 		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
-		    if (&victim.second == &attacker) continue;
-            if (attacker.attack(victim.second.getPosition())) {
-                if (mapLayout.checkTunneling(attacker.getPosition(), victim.second.getPosition())) continue;
-                if (victim.second.gotHitAndDied(attacker.hit())) {
+		    if (&victim.second == &attacker.second) continue;
+            if (attacker.second.attack(victim.second.getPosition())) {
+                if (mapLayout.checkTunneling(attacker.second.getPosition(), victim.second.getPosition())) continue;
+                if (victim.second.gotHitAndDied(attacker.second.hit())) {
                     victim.second.die();
-                    tally.playerKilledOther(id, victim.first);
+                    tally.playerKilledOther(attacker.first, victim.first);
                     updatesM.updateDead(victim.first);
                     updatesM.updateWeapon(victim.first, KNIFE);
                 } else {
@@ -272,6 +268,28 @@ void WorldModel::step(){
             }
 		}
 	}
+	// for (auto id: attackingPlayers) {
+	//     // el atacante
+	//     auto& attacker = playerModels.at(id);
+    //     if (!attacker.canShoot()) continue;
+    //     updatesM.updateAttack(id);
+	// 	for (auto& victim : playerModels){
+	// 	    // esta condicion es para que no se ataque a si mismo
+	// 	    if (&victim.second == &attacker) continue;
+    //         if (attacker.attack(victim.second.getPosition())) {
+    //             if (mapLayout.checkTunneling(attacker.getPosition(), victim.second.getPosition())) continue;
+    //             if (victim.second.gotHitAndDied(attacker.hit())) {
+    //                 victim.second.die();
+    //                 tally.playerKilledOther(id, victim.first);
+    //                 updatesM.updateDead(victim.first);
+    //                 updatesM.updateWeapon(victim.first, KNIFE);
+    //             } else {
+    //                 updatesM.updateHit(victim.first);
+    //             }
+    //             updatesM.updateHp(victim.first);
+    //         }
+	// 	}
+	// }
     plantingLogic();
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
@@ -292,13 +310,15 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 
 void WorldModel::startAttack(uint8_t id){
 	if (purchaseFase) return;
-	attackingPlayers.insert(id);
+    playerModels.at(id).startAttack();
+	// attackingPlayers.insert(id);
 }
 
 void WorldModel::stopAttack(uint8_t id){
 	if (purchaseFase) return;
-	attackingPlayers.erase(id);
-	playerModels.at(id).resetCooldown();
+    playerModels.at(id).stopAttack();
+	// attackingPlayers.erase(id);
+	// playerModels.at(id).resetCooldown();
 }
 
 void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){

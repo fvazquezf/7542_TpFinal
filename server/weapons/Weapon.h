@@ -24,7 +24,7 @@ public:
 
     virtual bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) = 0;
     
-    virtual bool canShoot() = 0;
+    virtual bool canShoot(bool isAttacking) = 0;
 
     void tickCooldown();
 
