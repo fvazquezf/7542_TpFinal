@@ -104,7 +104,7 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 
 	playerModels.emplace(std::piecewise_construct,
                          std::forward_as_tuple(clave),
-                         std::forward_as_tuple(body, droppedWeapons, matchConfig));
+                         std::forward_as_tuple(body, bomb, droppedWeapons, matchConfig));
 
 	return std::ref(this->usersEvents);
 }
@@ -133,7 +133,7 @@ void WorldModel::run(){
 		if (i == 5) swapTeams();
         resetRound();
         purchaseFase = true;
-        playerModels.at(tally.getTerrorist()).giveBomb(bomb);
+        playerModels.at(tally.getTerrorist()).giveBomb();
         roundPurchase();
 		purchaseFase = false;
         roundPlay();
@@ -268,28 +268,6 @@ void WorldModel::step(){
             }
 		}
 	}
-	// for (auto id: attackingPlayers) {
-	//     // el atacante
-	//     auto& attacker = playerModels.at(id);
-    //     if (!attacker.canShoot()) continue;
-    //     updatesM.updateAttack(id);
-	// 	for (auto& victim : playerModels){
-	// 	    // esta condicion es para que no se ataque a si mismo
-	// 	    if (&victim.second == &attacker) continue;
-    //         if (attacker.attack(victim.second.getPosition())) {
-    //             if (mapLayout.checkTunneling(attacker.getPosition(), victim.second.getPosition())) continue;
-    //             if (victim.second.gotHitAndDied(attacker.hit())) {
-    //                 victim.second.die();
-    //                 tally.playerKilledOther(id, victim.first);
-    //                 updatesM.updateDead(victim.first);
-    //                 updatesM.updateWeapon(victim.first, KNIFE);
-    //             } else {
-    //                 updatesM.updateHit(victim.first);
-    //             }
-    //             updatesM.updateHp(victim.first);
-    //         }
-	// 	}
-	// }
     plantingLogic();
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
@@ -311,14 +289,11 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
 void WorldModel::startAttack(uint8_t id){
 	if (purchaseFase) return;
     playerModels.at(id).startAttack();
-	// attackingPlayers.insert(id);
 }
 
 void WorldModel::stopAttack(uint8_t id){
 	if (purchaseFase) return;
     playerModels.at(id).stopAttack();
-	// attackingPlayers.erase(id);
-	// playerModels.at(id).resetCooldown();
 }
 
 void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){
@@ -338,10 +313,13 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
 }
 
 void WorldModel::pickUpWeapon(uint8_t id){
-	if (playerModels.at(id).pickUpWeapon()){
-		// el weaponType = 0 es el de arma primaria
-		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
-		equipWeapon(id, 0);
+    int weaponCode = playerModels.at(id).pickUpWeapon();
+	if (weaponCode == BOMB){
+		equipWeapon(id, 3);
+    } else if (weaponCode == -1) {
+        return;
+    } else {
+        equipWeapon(id, 0);
     }
 }
 

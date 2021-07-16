@@ -3,8 +3,9 @@
 #include "../../common/ConfigVariables.h"
 
 
-Armory::Armory(DroppedWeapons& droppedWeapons, const std::map<int, int>& matchConfig)
-: dropped(droppedWeapons){
+Armory::Armory(std::shared_ptr<Bomb> bomb, DroppedWeapons& droppedWeapons, const std::map<int, int>& matchConfig)
+: dropped(droppedWeapons),
+  bomb(bomb){
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
                     std::forward_as_tuple(new Pistol(matchConfig.at(PISTOL_AMMO),
@@ -70,8 +71,8 @@ void Armory::resetCooldown(){
     arsenal[currentWeapon]->resetCooldown();
 }
 
-void Armory::giveBomb(std::shared_ptr<Weapon> bomb){
-    arsenal[3] = bomb;
+void Armory::giveBomb(){
+    selectWeapon(BOMB);
 }
 
 bool Armory::startPlanting(){
@@ -106,14 +107,6 @@ int Armory::equipWeapon(int weaponType){
     return arsenal.at(currentWeapon)->getWeaponCode();
 }
 
-void Armory::dropPrimary(const b2Vec2& playerPosition){
-    if (arsenal.count(0) > 0){
-        dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
-        arsenal.erase(0);
-    }
-    currentWeapon = 2;
-}
-
 bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
     int weaponPrice = prices.at(weaponCode);
     if (playerMoney >= weaponPrice){
@@ -127,17 +120,32 @@ bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playe
     return false;
 }
 
-bool Armory::pickUpWeapon(const b2Vec2& position){
+int Armory::pickUpWeapon(const b2Vec2& position, bool isCt){
     int8_t pickedWeapon = dropped.pickUpAnyIfClose(position);
     if (pickedWeapon == -1){
-        return false;
+        return pickedWeapon;
     } else {
-        if (arsenal.count(0) > 0){
+        if (pickedWeapon == BOMB && isCt){
+            dropped.dropWeapon(pickedWeapon, position);
+        }
+        if (arsenal.count(0) > 0 && pickedWeapon != BOMB){
             dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), position);
         }
        selectWeapon(pickedWeapon);
-       return true;
+       return pickedWeapon;
     }
+}
+
+void Armory::dropWeapons(const b2Vec2& playerPosition){
+    if (arsenal.count(0) > 0){
+        dropped.dropWeapon(arsenal.at(0)->getWeaponCode(), playerPosition);
+        arsenal.erase(0);
+    }
+    if (arsenal.count(3) > 0){
+        dropped.dropWeapon(arsenal.at(3)->getWeaponCode(), playerPosition);
+        arsenal.erase(3);
+    }
+    currentWeapon = 2;
 }
 
 int Armory::getClip() const {
@@ -172,6 +180,9 @@ void Armory::selectWeapon(uint8_t weaponCode){
             break;
         case AWP:
             arsenal[0] = awp;
+            break;
+        case BOMB:
+            arsenal[3] = bomb;
             break;
     }
 }

@@ -27,7 +27,7 @@ class PlayerModel{
     void unfreeze();
 
     public:
-        PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
+        PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;
@@ -55,7 +55,7 @@ class PlayerModel{
         bool gotHitAndDied(std::shared_ptr<Weapon> weapon);
         bool canShoot();
 
-        void giveBomb(std::shared_ptr<Weapon> bomb);
+        void giveBomb();
         bool startPlanting();
         bool stopPlanting();
 
@@ -66,9 +66,10 @@ class PlayerModel{
 
         int equipWeapon(int weaponType);
         bool buyWeapon(uint8_t weaponCode);
-        bool pickUpWeapon();
+        int pickUpWeapon();
 
         void die();
+        void kill();
         void revive();
 
         void changeSide();

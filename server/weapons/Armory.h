@@ -22,12 +22,13 @@ class Armory {
     std::shared_ptr<Weapon> awp;
     std::shared_ptr<Weapon> rifle;
     std::shared_ptr<Weapon> shotgun;
+    std::shared_ptr<Weapon> bomb;
 
     int currentWeapon;
 
     void selectWeapon(uint8_t weaponCode);
     public:
-        Armory(DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
+        Armory(std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy);
 
@@ -41,18 +42,18 @@ class Armory {
 
         void resetCooldown();
 
-        void giveBomb(std::shared_ptr<Weapon> bomb);
+        void giveBomb();
 
         bool startPlanting();
         bool stopPlanting();
 
         int equipWeapon(int weaponType);
 
-        void dropPrimary(const b2Vec2& playerPosition);
+        void dropWeapons(const b2Vec2& playerPosition);
 
         bool tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition);
 
-        bool pickUpWeapon(const b2Vec2& position);
+        int pickUpWeapon(const b2Vec2& position, bool isCt);
 
         int getClip() const;
 

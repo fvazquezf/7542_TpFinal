@@ -5,12 +5,12 @@
 #include "weapons/Knife.h"
 #include "../common/ConfigVariables.h"
 
-PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
+PlayerModel::PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
 model(body),
 angle(0),
 maxHp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
-armory(dropped, matchConfig){
+armory(bomb, dropped, matchConfig){
     hp = maxHp;
     this->netForce.SetZero();
     dirAmount = 0;
@@ -149,10 +149,10 @@ bool PlayerModel::canShoot(){
     return armory.canShoot(isAttacking);
 }
 
-void PlayerModel::giveBomb(std::shared_ptr<Weapon> bomb){
+void PlayerModel::giveBomb(){
     // chequeo inecesario pero por si acaso
     if (!isCt){
-        armory.giveBomb(bomb);
+        armory.giveBomb();
     }
 }
 
@@ -200,13 +200,13 @@ bool PlayerModel::buyWeapon(uint8_t weaponCode) {
     return armory.tryBuying(weaponCode, money, model->GetPosition());
 }
 
-bool PlayerModel::pickUpWeapon(){
-    return armory.pickUpWeapon(model->GetPosition());
+int PlayerModel::pickUpWeapon(){
+    return armory.pickUpWeapon(model->GetPosition(), isCt);
 }
 
 void PlayerModel::die() {
     freeze();
-    armory.dropPrimary(model->GetPosition());
+    armory.dropWeapons(model->GetPosition());
 }
 
 void PlayerModel::revive() {
