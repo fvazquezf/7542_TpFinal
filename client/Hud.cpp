@@ -193,3 +193,7 @@ void Hud::showRounds() {
     numberSelector.clear();
 }
 
+void Hud::swapTeamScores() {
+    std::swap(ttRounds, ctRounds);
+}
+

@@ -20,6 +20,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
          clientConfig["cursor_size"].as<int>()),
   bombExplosion(window, clientConfig),
   characterManager(window, clientConfig),
+  score(window, hud, clientConfig),
   lobbyTime(true),
   menuTime(false),
   skinTime(false),
@@ -71,6 +72,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    score.show();
     skins.draw();
     hud.show();
     cursor.draw();
@@ -181,13 +183,15 @@ void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {
     skinTime = true;
     skins.setPlayerTeam(teamMap.at(playerId));
     characterManager.assignTeams(std::move(teamMap));
-
+    // swappea el puntaje de los tts y cts
+    hud.swapTeamScores();
 }
 
 void WorldView::assignPlayer(uint8_t aPlayerId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     playerId = aPlayerId;
     characterManager.setPlayerId(aPlayerId);
+    score.setPlayerId(aPlayerId);
 }
 
 void WorldView::updateHudTime(uint8_t time) {
@@ -281,4 +285,10 @@ void WorldView::selectSkin() {
         skinTime = false;
     } catch (std::exception& e){
     }
+}
+
+void WorldView::setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> &scores) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    score.setScoreData(scores);
+    score.setEnable();
 }

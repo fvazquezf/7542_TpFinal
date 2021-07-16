@@ -54,7 +54,6 @@
 #define LOGIN_BAD 1
 #define LOGIN_LIST_GAMES 0x61
 #define LOGIN_LIST_MAPS 0x62
-#define GAME_INFO
 
 #define BUY_START 0
 #define BUY_END 1

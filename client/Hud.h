@@ -7,6 +7,7 @@
 #include "sdlwrap/SdlTexture.h"
 #include "SoundManager.h"
 #include <yaml-cpp/yaml.h>
+#include <utility>
 
 #define HUD_SYMBOLS 13
 #define HUD_SYMBOL_W 832
@@ -69,6 +70,8 @@ public:
     ~Hud();
 
     void showWinner();
+
+    void swapTeamScores();
 };
 
 

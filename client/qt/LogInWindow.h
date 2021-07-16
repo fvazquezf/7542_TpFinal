@@ -20,7 +20,7 @@ class LogInWindow : public QDialog
 
 public:
     LogInWindow(QWidget *parent, int width, int height, LogInInfo &info);
-    ~LogInWindow();
+    ~LogInWindow() override;
 
 private slots:
     void on_saveButton_clicked();

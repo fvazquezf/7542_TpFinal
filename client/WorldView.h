@@ -23,6 +23,7 @@
 #include "Cursor.h"
 #include "anim/Explosion.h"
 #include "SkinSelector.h"
+#include "ScoreScreen.h"
 
 class WorldView {
 private:
@@ -35,6 +36,7 @@ private:
     Cursor cursor;
     Explosion bombExplosion;
     CharacterManager characterManager;
+    ScoreScreen score;
 
     std::atomic_bool lobbyTime;
     std::atomic_bool menuTime;
@@ -121,6 +123,8 @@ public:
     bool skinSelectionTime();
 
     void selectSkin();
+
+    void setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>>& scores);
 };
 
 

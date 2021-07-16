@@ -40,6 +40,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case LOGIN_RESPONSE:{
             if (msg.at(0) != 255){
                 world.assignPlayer(msg.at(0));
+            } else {
+                // bad response
+                world.signalDone();
+                running = false;
             }
             break;
         }
@@ -125,10 +129,9 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case TT_WIN_ROUND:
             world.updateHudWinner(false);
             break;
-        case SCORE_UPDATE: {
-            auto scores = prot.deserializeScores(msg);
+        case SCORE_UPDATE:
+            world.setScoreData(prot.deserializeScores(msg));
             break;
-        }
         default:
             break;
     }
