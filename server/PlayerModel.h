@@ -62,13 +62,10 @@ class PlayerModel{
         bool startDefusing();
         bool stopDefusing();
 
-        // void resetCooldown();
-
         int equipWeapon(int weaponType);
         bool buyWeapon(uint8_t weaponCode);
         int pickUpWeapon();
 
-        void die();
         void kill();
         void revive();
 

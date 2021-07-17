@@ -21,7 +21,8 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
                                         matchConfig.at(BOMB_DAMAGE),
                                         matchConfig.at(BOMB_FIRERATE),
                                         matchConfig.at(BOMB_FUSE),
-                                        matchConfig.at(BOMB_ACTIVATE_TIME)))),
+                                        matchConfig.at(BOMB_ACTIVATE_TIME),
+                                        matchConfig.at(BOMB_BOUNTY)))),
   tally(bomb),
   updates (updates),
   updatesM(updates, playerModels),
@@ -257,8 +258,9 @@ void WorldModel::step(){
             if (attacker.second.attack(victim.second.getPosition())) {
                 if (mapLayout.checkTunneling(attacker.second.getPosition(), victim.second.getPosition())) continue;
                 if (victim.second.gotHitAndDied(attacker.second.hit())) {
-                    victim.second.die();
                     tally.playerKilledOther(attacker.first, victim.first);
+                    attacker.second.kill();
+                    updatesM.updateMoney(attacker.first);
                     updatesM.updateDead(victim.first);
                     updatesM.updateWeapon(victim.first, KNIFE);
                 } else {

@@ -25,7 +25,7 @@ class Bomb: public Weapon {
         int spread;
 
     public:
-        Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime);
+        Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime, int bounty);
         ~Bomb() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
@@ -56,4 +56,4 @@ class Bomb: public Weapon {
         int getFuse();
 };
 
-#endif
+#endif 

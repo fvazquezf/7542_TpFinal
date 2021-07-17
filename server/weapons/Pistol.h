@@ -8,7 +8,7 @@ class Pistol: public Weapon {
     private:
     double accuracy;
     public:
-        Pistol(int ammo, int range, int accuracy, int damage);
+        Pistol(int ammo, int range, int accuracy, int damage, int bounty);
         ~Pistol() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;

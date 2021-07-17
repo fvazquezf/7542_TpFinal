@@ -1,8 +1,8 @@
 #include "Bomb.h"
 #include <iostream>
 
-Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime):
- Weapon(BOMB, 0, range, damage),
+Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime, int bounty):
+ Weapon(BOMB, 0, range, damage, bounty),
  firerate(firerate),
  spread(spread){
     planting = false;

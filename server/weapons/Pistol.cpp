@@ -1,8 +1,8 @@
 #include "Pistol.h"
 #include <iostream>
 
-Pistol::Pistol(int ammo, int range, int accuracy, int damage)
-: Weapon(PISTOL, ammo, range, damage){
+Pistol::Pistol(int ammo, int range, int accuracy, int damage, int bounty)
+: Weapon(PISTOL, ammo, range, damage, bounty){
     this->accuracy = static_cast<double>(accuracy)/100;
 }
 

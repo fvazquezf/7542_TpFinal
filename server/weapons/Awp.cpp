@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Awp.h"
 
-Awp::Awp(int ammo, int range, int accuracy, int damage, int firerate): 
- Weapon(AWP, ammo, range, damage),
+Awp::Awp(int ammo, int range, int accuracy, int damage, int firerate, int bounty): 
+ Weapon(AWP, ammo, range, damage, bounty),
  firerate(firerate) {
     this->accuracy = static_cast<double>(accuracy)/100;
 }

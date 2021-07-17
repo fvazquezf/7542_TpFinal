@@ -1,8 +1,8 @@
 #include <iostream>
 #include "Rifle.h"
 
-Rifle::Rifle(int ammo, int range, int accuracy, int damage, int firerate)
-: Weapon(RIFLE, ammo, range, damage){
+Rifle::Rifle(int ammo, int range, int accuracy, int damage, int firerate, int bounty)
+: Weapon(RIFLE, ammo, range, damage, bounty){
     this->firerate = firerate;
     this->accuracy = static_cast<double>(accuracy)/100;
     bulletCount = 0;

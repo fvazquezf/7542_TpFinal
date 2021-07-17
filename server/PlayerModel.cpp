@@ -84,7 +84,6 @@ void PlayerModel::stopMove(int dir){
 
 void PlayerModel::step(){
     float vel = this->model->GetLinearVelocity().Length();
-    armory.tickCooldown();
     if (vel < 11){
         this->model->ApplyForceToCenter(this->netForce, true);
     }
@@ -138,6 +137,8 @@ bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
     if (hp <= 0){
         hp = 0;
+        freeze();
+        armory.dropWeapons(model->GetPosition());
         return true;
     } else {
         return false;
@@ -146,6 +147,7 @@ bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
 
 bool PlayerModel::canShoot(){
     if (isFrozen) return false;
+    armory.tickCooldown();
     return armory.canShoot(isAttacking);
 }
 
@@ -187,10 +189,6 @@ bool PlayerModel::stopDefusing(){
     return false;
 }
 
-// void PlayerModel::resetCooldown(){
-//     armory.resetCooldown();
-// }
-
 int PlayerModel::equipWeapon(int weaponType){
     return armory.equipWeapon(weaponType);
 }
@@ -204,9 +202,8 @@ int PlayerModel::pickUpWeapon(){
     return armory.pickUpWeapon(model->GetPosition(), isCt);
 }
 
-void PlayerModel::die() {
-    freeze();
-    armory.dropWeapons(model->GetPosition());
+void PlayerModel::kill() {
+    money += armory.bounty();
 }
 
 void PlayerModel::revive() {

@@ -18,26 +18,22 @@ protected:
     double range;
     int damage;
     int cooldown;
+    int bounty;
     uint8_t weaponCode;
 public:
-    Weapon(uint8_t weaponCode, int ammo, int range, int damage);
+    Weapon(uint8_t weaponCode, int ammo, int range, int damage, int bounty);
 
     virtual bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) = 0;
-    
     virtual bool canShoot(bool isAttacking) = 0;
-
     void tickCooldown();
-
     virtual void resetCooldown() = 0;
-
     void reload();
-
     virtual int hit() = 0;
+    int getBounty();
 
     virtual ~Weapon();
 
     uint8_t getWeaponCode();
-
     virtual int getClip();
 };
 

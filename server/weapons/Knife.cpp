@@ -1,7 +1,7 @@
 #include "Knife.h"
 
-Knife::Knife(int range, int spread, int damage, int firerate):
- Weapon(KNIFE, 0, range, damage),
+Knife::Knife(int range, int spread, int damage, int firerate, int bounty):
+ Weapon(KNIFE, 0, range, damage, bounty),
  firerate(firerate),
  spread(spread){
 }

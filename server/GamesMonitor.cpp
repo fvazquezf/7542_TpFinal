@@ -12,28 +12,32 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::PISTOL_RANGE, config["pistol_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_ACCURACY, config["pistol_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_DAMAGE, config["pistol_damage"].as<int>());
+    matchesConfig.emplace(ConfigVariables::PISTOL_BOUNTY, config["pistol_bounty"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_PRICE, config["awp_price"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_AMMO, config["awp_ammo"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_RANGE, config["awp_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_ACCURACY, config["awp_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_DAMAGE, config["awp_damage"].as<int>());
     matchesConfig.emplace(ConfigVariables::AWP_FIRERATE, config["awp_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::AWP_BOUNTY, config["awp_bounty"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_PRICE, config["rifle_price"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_AMMO, config["rifle_ammo"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_RANGE, config["rifle_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_ACCURACY, config["rifle_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_DAMAGE, config["rifle_damage"].as<int>());
     matchesConfig.emplace(ConfigVariables::RIFLE_FIRERATE, config["rifle_firerate"].as<int>());
+    matchesConfig.emplace(ConfigVariables::RIFLE_BOUNTY, config["rifle_bounty"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_PRICE, config["shotgun_price"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_AMMO, config["shotgun_ammo"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_RANGE, config["shotgun_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_ACCURACY, config["shotgun_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::SHOTGUN_DAMAGE, config["shotgun_damage"].as<int>());     
+    matchesConfig.emplace(ConfigVariables::SHOTGUN_BOUNTY, config["shotgun_bounty"].as<int>());     
     matchesConfig.emplace(ConfigVariables::KNIFE_RANGE, config["knife_range"].as<int>());
     matchesConfig.emplace(ConfigVariables::KNIFE_ACCURACY, config["knife_accuracy"].as<int>());
     matchesConfig.emplace(ConfigVariables::KNIFE_DAMAGE, config["knife_damage"].as<int>());
     matchesConfig.emplace(ConfigVariables::KNIFE_FIRERATE, config["knife_firerate"].as<int>());
-    matchesConfig.emplace(ConfigVariables::MONEY_KILL_ENEMY, config["money_kill_enemy"].as<int>());
+    matchesConfig.emplace(ConfigVariables::KNIFE_BOUNTY, config["knife_bounty"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_WON, config["money_round_won"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
     matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
@@ -43,6 +47,7 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::BOMB_FIRERATE, config["bomb_firerate"].as<int>());
     matchesConfig.emplace(ConfigVariables::BOMB_FUSE, config["bomb_fuse"].as<int>());
     matchesConfig.emplace(ConfigVariables::BOMB_ACTIVATE_TIME, config["bomb_activate_time"].as<int>());
+    matchesConfig.emplace(ConfigVariables::BOMB_BOUNTY, config["bomb_bounty"].as<int>());
 
 
     // iterando el filesytem para cargar los nombres de los mapas

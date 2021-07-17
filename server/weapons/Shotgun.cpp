@@ -1,7 +1,7 @@
 #include "Shotgun.h"
 
-Shotgun::Shotgun(int ammo, int range, int spread, int damage)
-: Weapon(M3, ammo, range, damage),
+Shotgun::Shotgun(int ammo, int range, int spread, int damage, int bounty)
+: Weapon(M3, ammo, range, damage, bounty),
   spread(spread){
     damageOutput = 0;
 }
