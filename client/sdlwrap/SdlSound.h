@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL_mixer.h>
 #include <string>
+#include "../../common/Exception.h"
 
 class SdlSound {
 private:

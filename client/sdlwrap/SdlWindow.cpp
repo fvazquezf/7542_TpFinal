@@ -6,24 +6,25 @@
 SdlWindow::SdlWindow(int width, int height, bool full, std::string title){
 	int err = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
 	if (err){
-		//handle
+		throw Exception("SdlWindow: ", SDL_GetError());
 	}
+
     err = TTF_Init();
 
 	if (err){
-	    //handle
+		throw Exception("SdlWindow: ", TTF_GetError());
 	}
 
     err = Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 
 	if (err){
-	    // handle
+		throw Exception("SdlWindow: ", Mix_GetError());
 	}
 
 	err = SDL_CreateWindowAndRenderer(width, height, SDL_RENDERER_ACCELERATED,
 										  &this->windowPtr, &this->rendererPtr);
 	if (err){
-		// handle
+		throw Exception("SdlWindow: ", SDL_GetError());
 	}
 
 	SDL_SetWindowTitle(this->windowPtr, title.c_str());
@@ -65,7 +66,10 @@ void SdlWindow::render(){
 }
 
 SDL_Texture* SdlWindow::createTexture(SDL_Surface* aSurface){
-	return SDL_CreateTextureFromSurface(rendererPtr, aSurface);
+	auto texture = SDL_CreateTextureFromSurface(rendererPtr, aSurface);
+	if (!texture){
+		throw Exception("SdlWindow: ", SDL_GetError());
+	}
 }
 
 int SdlWindow::handleRender(SDL_Texture* txt,

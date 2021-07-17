@@ -3,7 +3,7 @@
 SdlSound::SdlSound(const std::string &soundPath)
 : effect(Mix_LoadWAV(soundPath.c_str())){
     if (!effect){
-        throw std::exception();
+        throw Exception("SdlSound: ", Mix_GetError());
     }
 }
 

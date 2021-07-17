@@ -7,6 +7,7 @@
 #include <SDL2/SDL_image.h>
 #include "SdlWindow.h"
 #include "Area.h"
+#include "common/Exception.h"
 
 struct Color {
     uint8_t r, g, b;

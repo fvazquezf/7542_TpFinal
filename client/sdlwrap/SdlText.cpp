@@ -9,7 +9,7 @@ SdlText::SdlText(const std::string &pathToFont, SdlWindow &window, int pointSize
   tHeight(0){
     textFont = TTF_OpenFont(pathToFont.c_str(), pointSize);
     if (!textFont){
-        std::cout << TTF_GetError() << std::endl;
+        throw Exception("SdlText: ", TTF_GetError());
     }
 }
 
@@ -40,10 +40,7 @@ void SdlText::setText(const std::string& text) {
     SDL_Surface* srf = TTF_RenderText_Blended_Wrapped(textFont, text.c_str(), c, window.getWidth());
 
     texture = window.createTexture(srf);
-    if (!texture){
-        TTF_CloseFont(textFont);
-        // handle
-    }
+
     TTF_SizeText(textFont, text.c_str(), &tWidth, &tHeight);
     SDL_FreeSurface(srf);
 }

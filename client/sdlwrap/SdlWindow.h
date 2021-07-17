@@ -8,6 +8,7 @@
 #include <SDL2/SDL_audio.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL2_gfxPrimitives.h>
+#include "../../common/Exception.h"
 
 class SdlWindow {
 private:

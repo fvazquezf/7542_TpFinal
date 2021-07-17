@@ -41,7 +41,13 @@ int main(int argc, const char *argv[]){
         std::cout << e.what() << std::endl;
         return -1;
     }
-    Client clientHandler(info, clientConfig);
-    clientHandler.launch();
+
+    try {
+        Client clientHandler(info, clientConfig);
+        clientHandler.launch();
+    } catch (const std::exception& e){
+        std::cout << e.what() << std::endl;
+        return -1;
+    }
     return 0;
 }
