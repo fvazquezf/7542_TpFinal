@@ -34,8 +34,9 @@ void ThReceiver::run() {
     std::vector<unsigned char> msg;
     while (is_running){
         char comm;
-        int r = peer.recv(&comm, 1);
-        if (r < 1){
+        try {
+            peer.recv(&comm, 1);
+        } catch (const std::exception& e){
             break;
         }
         msg = protocol.dispatchReceived(comm, receiverCallback);

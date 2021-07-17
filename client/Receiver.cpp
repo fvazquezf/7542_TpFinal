@@ -15,7 +15,9 @@ void Receiver::run() {
             std::bind(&Receiver::receive, this, std::placeholders::_1);
     while (running){
         char update;
-        if (peer.recv(&update, 1) <= 0){
+        try {
+            peer.recv(&update, 1);
+        } catch (const std::exception& e){
             break;
         }
         std::vector<unsigned char> msg = prot.dispatchReceived(update, cb);
@@ -31,7 +33,11 @@ void Receiver::stop() {
 
 std::vector<unsigned char> Receiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
-    peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    try {
+        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    } catch (const std::exception& e){
+        running = false;
+    }
     return msg;
 }
 

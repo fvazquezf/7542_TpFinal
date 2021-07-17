@@ -4,6 +4,7 @@
 #include <queue>
 #include <mutex>
 #include <utility>
+#include "Exception.h"
 
 template<typename T>
 class ProtectedQueue{
@@ -33,7 +34,7 @@ public:
         // si la q esta vacia no popeo nada
         // catcheo esta excepcion del lado del mundo
         if (q.empty()){
-            throw std::invalid_argument("Queue empty exception\n");
+            throw Exception("Queue empty exception\n");
         }
         T elem = std::move(q.front());
         q.pop(); // bye bye

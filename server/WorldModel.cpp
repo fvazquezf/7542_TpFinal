@@ -300,7 +300,7 @@ void WorldModel::roundCommon() {
             std::unique_ptr<ClientEvent> event = usersEvents.pop();
             event->updatePlayer(*this);
         }
-        catch (const std::invalid_argument& e){
+        catch (const std::exception& e){
             continue;
         }
     }

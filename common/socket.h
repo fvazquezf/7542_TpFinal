@@ -15,6 +15,7 @@
 #include <iostream>
 #include <exception>
 #include <cstdlib>
+#include "Exception.h"
 
 class Socket{
  public:

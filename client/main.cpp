@@ -23,11 +23,16 @@ int main(int argc, const char *argv[]){
         std::cout << e.what();
         return -1;
     }
-
     QApplication a(argc, nullptr);
     LogInInfo info;
     LogInWindow w(nullptr, 640, 400, info);
-    w.show();
+
+    try {
+        w.show();
+    } catch (const std::exception& e){
+        std::cout << e.what() << std::endl;
+        return -1;
+    }
     /*
     Info es una clase con 4 atributos publicos de tipo std::string
     - port

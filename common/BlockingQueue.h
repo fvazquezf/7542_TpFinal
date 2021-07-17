@@ -8,6 +8,7 @@
 #include <thread>
 #include <string>
 #include <utility>
+#include "Exception.h"
 
 // el tipo que entre en la cola tiene que ser movible
 template<typename T>
@@ -53,7 +54,7 @@ public:
         std::unique_lock<std::mutex> lock1(queueMutex);
         while (q.empty()){
             if (closed){
-                throw std::invalid_argument("Queue is closed.\n");
+                throw Exception("Queue is closed.\n");
             }
             cv.wait(lock1);
         }
