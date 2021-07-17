@@ -70,6 +70,7 @@ SDL_Texture* SdlWindow::createTexture(SDL_Surface* aSurface){
 	if (!texture){
 		throw Exception("SdlWindow: ", SDL_GetError());
 	}
+	return texture;
 }
 
 int SdlWindow::handleRender(SDL_Texture* txt,
