@@ -51,7 +51,11 @@ ThReceiver::~ThReceiver() {
 
 std::vector<unsigned char> ThReceiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
-    peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    try {
+        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    } catch (const std::exception& e){
+        is_running = false;
+    }
     return msg;
 }
 

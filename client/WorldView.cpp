@@ -223,7 +223,14 @@ bool WorldView::isDone() {
 
 void WorldView::buildMap(const std::string &mapString) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    map.loadMap(mapString);
+    try {
+        map.loadMap(mapString);
+    } catch (const std::exception& e){
+        SDL_Event quit;
+        quit.type = SDL_QUIT;
+        SDL_PushEvent(&quit);
+        done = true;
+    }
 }
 
 void WorldView::stopLobby() {
