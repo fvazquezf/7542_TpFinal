@@ -32,12 +32,10 @@ walls:
  - ["wall_8" , "/var/cs2d/sprites/map/wall_8.png"]
 
 weapons:
- - ["bomb", "/var/cs2d/sprites/map/weapon_bomb.png"]
- - ["knife", "/var/cs2d/sprites/map/weapon_knife.png"]
- - ["glock", "/var/cs2d/sprites/map/weapon_glock.png"]
  - ["AK-47", "/var/cs2d/sprites/map/weapon_ak47.png"]
  - ["m3", "/var/cs2d/sprites/map/weapon_m3.png"]
  - ["AWP", "/var/cs2d/sprites/map/weapon_awp.png"]
+ 
 zones:
  - ["zoneA", "/var/cs2d/sprites/map/zone_a.png"]
  - ["zoneB", "/var/cs2d/sprites/map/zone_b.png"]
