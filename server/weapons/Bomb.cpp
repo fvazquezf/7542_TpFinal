@@ -92,30 +92,27 @@ int Bomb::tic() {
             plantingTicks++;
             if (plantingTicks == plantingCooldown){
                 state = ACTIVE;
-                return state;
+                return ACTIVATE;
             }
-            break;
+            return state;
         }
         case DEFUSING: {
             remainingTime--;
             if (remainingTime == 0){
                 state = EXPLODED;
-                return state;
             }
             defusingTicks++;
             if (defusingTicks == plantingCooldown){
                 state = DEFUSED;
-                return state;
             }
-            break;
+            return state;
         }
         case ACTIVE: {
             remainingTime--;
             if (remainingTime == 0){
                 state = EXPLODED;
-                return state;
             }
-            break;
+            return state;
         }
         default: 
             return INACTIVE;

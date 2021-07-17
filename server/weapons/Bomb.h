@@ -7,9 +7,10 @@
 #define INACTIVE 0
 #define PLANTING 1
 #define ACTIVE 2
-#define DEFUSING 3
-#define DEFUSED 4
-#define EXPLODED 5
+#define ACTIVATE 3
+#define DEFUSING 4
+#define DEFUSED 5
+#define EXPLODED 6
 
 
 class Bomb: public Weapon {

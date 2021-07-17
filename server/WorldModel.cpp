@@ -217,7 +217,7 @@ void WorldModel::stopBombHandling(uint8_t id){
 void WorldModel::bombStep(){
     int state = bomb->tic();
     switch (state) {
-        case ACTIVE: {
+        case ACTIVATE: {
             stopBombHandling(bomb->getPlanter());
             updatesM.updateBombPlanted(bomb->getPlanter());
             tally.startBombTiming();
