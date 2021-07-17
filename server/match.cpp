@@ -20,7 +20,7 @@ Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
 Match::~Match() {
 }
 
-Match::Match(Match &&other) noexcept
+Match::Match(Match &&other)
 : users(std::move(other.users)),
   matchConfig(other.matchConfig),
   maxUsers(other.maxUsers),
@@ -30,7 +30,7 @@ Match::Match(Match &&other) noexcept
     startEarlyCallback = std::bind(&Match::start, this);
 }
 
-Match &Match::operator=(Match &&other) noexcept {
+Match &Match::operator=(Match &&other)  {
     if (this == &other) {
         return *this;
     }

@@ -59,8 +59,8 @@ class Armory {
         Armory(const Armory& other) = delete;
         Armory& operator=(const Armory& other) = delete;
 
-        Armory(Armory&& other) noexcept;
-        Armory& operator=(Armory&& other) noexcept;
+        Armory(Armory&& other) ;
+        Armory& operator=(Armory&& other) ;
 };
 
 

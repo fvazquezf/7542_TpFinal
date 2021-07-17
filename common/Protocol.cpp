@@ -223,10 +223,10 @@ std::vector<unsigned char> Protocol::dispatchReceived(uint8_t codeReceived,
     return msg;
 }
 
-Protocol::Protocol(Protocol &&other) noexcept {
+Protocol::Protocol(Protocol &&other)  {
 }
 
-Protocol &Protocol::operator=(Protocol &&other) noexcept {
+Protocol &Protocol::operator=(Protocol &&other)  {
     return *this;
 }
 

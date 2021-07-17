@@ -25,11 +25,11 @@ public:
     BlockingQueue(const BlockingQueue& other) = delete;
     BlockingQueue& operator=(const BlockingQueue& other) = delete;
 
-    BlockingQueue(BlockingQueue &&other) noexcept
+    BlockingQueue(BlockingQueue &&other)
     : closed(other.closed), q(std::move(other.q)){
     }
 
-    BlockingQueue &operator=(BlockingQueue &&other)  noexcept {
+    BlockingQueue &operator=(BlockingQueue &&other)   {
         if (this == &other) {
             return *this;
         }

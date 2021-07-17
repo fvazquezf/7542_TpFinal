@@ -96,8 +96,8 @@ public:
     Protocol(const Protocol& other) = delete;
     Protocol& operator=(const Protocol& other) = delete;
 
-    Protocol(Protocol&& other) noexcept;
-    Protocol& operator=(Protocol&& other) noexcept;
+    Protocol(Protocol&& other) ;
+    Protocol& operator=(Protocol&& other) ;
 
                                 //---------------CLIENT---------------//
     void createGame(const std::string& gameName,

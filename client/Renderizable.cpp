@@ -25,7 +25,7 @@ void Renderizable::updateAngle(int16_t newAngle) {
     angle = newAngle;
 }
 
-Renderizable::Renderizable(Renderizable &&other) noexcept
+Renderizable::Renderizable(Renderizable &&other)
 : texture(other.texture),
   sizeW(other.sizeW),
   sizeH(other.sizeH),
@@ -34,7 +34,7 @@ Renderizable::Renderizable(Renderizable &&other) noexcept
   angle(other.angle){
 }
 
-Renderizable &Renderizable::operator=(Renderizable &&other) noexcept {
+Renderizable &Renderizable::operator=(Renderizable &&other)  {
     if (this == &other){
         return *this;
     }

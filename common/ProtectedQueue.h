@@ -16,11 +16,11 @@ public:
     ProtectedQueue(const ProtectedQueue& other) = delete;
     ProtectedQueue& operator=(const ProtectedQueue& other) = delete;
 
-    ProtectedQueue(ProtectedQueue &&other) noexcept
+    ProtectedQueue(ProtectedQueue &&other)
     : q(std::move(other.q)){
     }
 
-    ProtectedQueue &operator=(ProtectedQueue &&other)  noexcept {
+    ProtectedQueue &operator=(ProtectedQueue &&other)   {
         if (this == &other) {
             return *this;
         }

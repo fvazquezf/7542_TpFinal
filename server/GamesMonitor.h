@@ -28,8 +28,8 @@ public:
     GamesMonitor(const GamesMonitor& other) = delete;
     GamesMonitor& operator=(const GamesMonitor& other) = delete;
 
-    GamesMonitor(GamesMonitor&& other) noexcept;
-    GamesMonitor& operator=(GamesMonitor&& other) noexcept;
+    GamesMonitor(GamesMonitor&& other) ;
+    GamesMonitor& operator=(GamesMonitor&& other) ;
 
     bool createMatch(std::string gameName,
                      const std::string& mapName,

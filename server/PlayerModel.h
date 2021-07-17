@@ -31,8 +31,8 @@ class PlayerModel{
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;
 
-        PlayerModel(PlayerModel&& other) noexcept;
-        PlayerModel& operator=(PlayerModel&& other) noexcept;
+        PlayerModel(PlayerModel&& other) ;
+        PlayerModel& operator=(PlayerModel&& other) ;
 
         void startMove(int dir);
         void stopMove(int dir);

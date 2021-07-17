@@ -23,11 +23,11 @@ void Broadcaster::push(uint8_t id, std::shared_ptr<Update> update) {
     clientsQueues.at(id).push(std::move(update));
 }
 
-Broadcaster::Broadcaster(Broadcaster &&other) noexcept
+Broadcaster::Broadcaster(Broadcaster &&other)
 : clientsQueues(std::move(other.clientsQueues)){
 }
 
-Broadcaster &Broadcaster::operator=(Broadcaster &&other) noexcept {
+Broadcaster &Broadcaster::operator=(Broadcaster &&other)  {
     if (this == &other){
         return *this;
     }

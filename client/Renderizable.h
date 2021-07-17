@@ -22,8 +22,8 @@ public:
     Renderizable(const Renderizable& other) = delete;
     Renderizable& operator=(const Renderizable& other) = delete;
 
-    Renderizable(Renderizable&& other) noexcept;
-    Renderizable& operator=(Renderizable&& other) noexcept;
+    Renderizable(Renderizable&& other) ;
+    Renderizable& operator=(Renderizable&& other) ;
 
     virtual void updatePosition(float x, float y);
     void updateAngle(int16_t newAngle);

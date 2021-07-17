@@ -34,8 +34,8 @@ public:
     void loadMap(const std::string& mapFile);
     void render(Camera& cam);
 
-    MapView(MapView&& other) noexcept;
-    MapView& operator=(MapView&& other) noexcept;
+    MapView(MapView&& other) ;
+    MapView& operator=(MapView&& other) ;
 
     ~MapView();
 

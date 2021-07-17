@@ -41,8 +41,8 @@ public:
     SdlTexture(const SdlTexture& other) = delete;
     SdlTexture& operator=(const SdlTexture& other) = delete;
 
-    SdlTexture(SdlTexture&& other) noexcept;
-    SdlTexture& operator=(SdlTexture&& other) noexcept;
+    SdlTexture(SdlTexture&& other) ;
+    SdlTexture& operator=(SdlTexture&& other) ;
 
 	int render(const Area& src, const Area& dest, const SDL_RendererFlip& flipType) const;
     int render(const Area& src, const Area& dest, uint8_t alpha) const;

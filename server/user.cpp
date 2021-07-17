@@ -39,7 +39,7 @@ void User::stop() {
 
 // solo llamado por map.emplace
 // al momento de construir al user
-User::User(User &&other) noexcept
+User::User(User &&other)
 : protocol(std::move(other.protocol)),
   socket(std::move(other.socket)),
   sender(std::move(other.sender)),
@@ -48,7 +48,7 @@ User::User(User &&other) noexcept
   id(other.id){
 }
 
-User &User::operator=(User &&other) noexcept {
+User &User::operator=(User &&other)  {
     if (this == &other) {
         return *this;
     }

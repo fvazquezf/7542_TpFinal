@@ -13,12 +13,12 @@ SdlSound::~SdlSound() {
     }
 }
 
-SdlSound::SdlSound(SdlSound &&other) noexcept
+SdlSound::SdlSound(SdlSound &&other)
 : effect(other.effect){
     other.effect = nullptr;
 }
 
-SdlSound &SdlSound::operator=(SdlSound &&other) noexcept {
+SdlSound &SdlSound::operator=(SdlSound &&other)  {
     if (this == &other){
         return *this;
     }

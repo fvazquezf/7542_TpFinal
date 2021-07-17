@@ -66,12 +66,12 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
     closedir(dp);
 }
 
-GamesMonitor::GamesMonitor(GamesMonitor &&other) noexcept
+GamesMonitor::GamesMonitor(GamesMonitor &&other)
 : matches(std::move(other.matches)),
   matchesConfig(std::move(other.matchesConfig)){
 }
 
-GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other) noexcept {
+GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other)  {
     if (this == &other){
         return *this;
     }

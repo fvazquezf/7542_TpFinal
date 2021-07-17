@@ -41,15 +41,14 @@ void Client::launch() {
     drawer.join();
 }
 
-Client::Client(Client &&other) noexcept
-: clientSocket(std::move(other.clientSocket)),
+Client::Client(Client &&other): clientSocket(std::move(other.clientSocket)),
   clientConfig(other.clientConfig),
   window(clientConfig["width"].as<int>(),
           clientConfig["height"].as<int>(),
                   clientConfig["fullscreen"].as<bool>(), "unaVentana"){
 }
 
-Client &Client::operator=(Client &&other) noexcept {
+Client &Client::operator=(Client &&other) {
     if (this == &other){
         return *this;
     }

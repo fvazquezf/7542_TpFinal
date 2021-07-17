@@ -55,8 +55,8 @@ class WorldModel: public Thread {
         WorldModel(const WorldModel&) = delete;
         WorldModel& operator=(const WorldModel&) = delete;
 
-        WorldModel(WorldModel&& other) noexcept;
-        WorldModel& operator=(WorldModel&& other) noexcept;
+        WorldModel(WorldModel&& other) ;
+        WorldModel& operator=(WorldModel&& other) ;
 
         ProtectedQueue<std::unique_ptr<ClientEvent>>& addPlayer(int clave);
 

@@ -32,7 +32,7 @@ void ThSender::stop() {
     }
 }
 
-ThSender::ThSender(ThSender &&other) noexcept
+ThSender::ThSender(ThSender &&other)
 : is_running(other.is_running.operator bool()),
   peer(other.peer),
   protocol(other.protocol),
@@ -42,7 +42,7 @@ ThSender::ThSender(ThSender &&other) noexcept
     other.is_running = false;
 }
 
-ThSender &ThSender::operator=(ThSender &&other) noexcept {
+ThSender &ThSender::operator=(ThSender &&other)  {
     if (this == &other){
         return *this;
     }

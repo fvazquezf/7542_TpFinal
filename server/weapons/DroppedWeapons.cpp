@@ -36,13 +36,13 @@ int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
 DroppedWeapons::~DroppedWeapons() {
 }
 
-DroppedWeapons::DroppedWeapons(DroppedWeapons &&other) noexcept
+DroppedWeapons::DroppedWeapons(DroppedWeapons &&other)
 : uniquifier(other.uniquifier),
   broadcaster(other.broadcaster),
   droppedWeapons(std::move(other.droppedWeapons)){
 }
 
-DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other) noexcept {
+DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other)  {
     if (this == &other){
         return *this;
     }

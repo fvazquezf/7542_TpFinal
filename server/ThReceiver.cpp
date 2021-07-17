@@ -67,7 +67,7 @@ void ThReceiver::stop() {
     }
 }
 
-ThReceiver::ThReceiver(ThReceiver &&other) noexcept
+ThReceiver::ThReceiver(ThReceiver &&other)
 : peer(other.peer),
   is_running(other.is_running.operator bool()),
   protocol(other.protocol),
@@ -79,7 +79,7 @@ ThReceiver::ThReceiver(ThReceiver &&other) noexcept
     other.is_running = false;
 }
 
-ThReceiver &ThReceiver::operator=(ThReceiver &&other) noexcept {
+ThReceiver &ThReceiver::operator=(ThReceiver &&other)  {
     if (this == &other){
         return *this;
     }

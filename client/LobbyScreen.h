@@ -23,8 +23,8 @@ public:
     LobbyScreen(const LobbyScreen& other) = delete;
     LobbyScreen& operator=(const LobbyScreen& other) = delete;
 
-    LobbyScreen(LobbyScreen&& other) noexcept;
-    LobbyScreen& operator=(LobbyScreen&& other) noexcept;
+    LobbyScreen(LobbyScreen&& other) ;
+    LobbyScreen& operator=(LobbyScreen&& other) ;
 
     void draw();
     void stopPlayingLobbyMusic();

@@ -34,8 +34,8 @@ public:
 	Character(const Character& other) = delete;
     Character& operator=(const Character& other) = delete;
 
-    Character(Character&& other) noexcept;
-    Character& operator=(Character&& other) noexcept;
+    Character(Character&& other) ;
+    Character& operator=(Character&& other) ;
 
     void render(Camera &cam, size_t iteration) override;
 

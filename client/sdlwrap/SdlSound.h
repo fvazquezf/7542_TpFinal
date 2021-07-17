@@ -13,8 +13,8 @@ public:
     SdlSound(const SdlSound& other) = delete;
     SdlSound& operator=(const SdlSound& other) = delete;
 
-    SdlSound(SdlSound&& other) noexcept;
-    SdlSound& operator=(SdlSound&& other) noexcept;
+    SdlSound(SdlSound&& other) ;
+    SdlSound& operator=(SdlSound&& other) ;
 
     // reproduce con cierto volumen
     // en un canal habilitado

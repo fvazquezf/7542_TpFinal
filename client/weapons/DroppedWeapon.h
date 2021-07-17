@@ -26,8 +26,8 @@ public:
     DroppedWeapon(const DroppedWeapon& other) = delete;
     DroppedWeapon& operator=(const DroppedWeapon& other) = delete;
 
-    DroppedWeapon(DroppedWeapon&& other) noexcept;
-    DroppedWeapon& operator=(DroppedWeapon&& other) noexcept;
+    DroppedWeapon(DroppedWeapon&& other) ;
+    DroppedWeapon& operator=(DroppedWeapon&& other) ;
 
     bool isWeaponTypeAndId(uint8_t weaponType, size_t uniqueId);
 

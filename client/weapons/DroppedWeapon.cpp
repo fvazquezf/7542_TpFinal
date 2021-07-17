@@ -24,7 +24,7 @@ void DroppedWeapon::draw(Camera& cam) {
     }
 }
 
-DroppedWeapon::DroppedWeapon(DroppedWeapon &&other) noexcept
+DroppedWeapon::DroppedWeapon(DroppedWeapon &&other)
 : weaponTypeId(other.weaponTypeId),
   uniqueId(other.uniqueId),
   droppedDrawable(std::move(other.droppedDrawable)),
@@ -33,7 +33,7 @@ DroppedWeapon::DroppedWeapon(DroppedWeapon &&other) noexcept
   show(other.show){
 }
 
-DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other) noexcept {
+DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other)  {
     if (this == &other){
         return *this;
     }
