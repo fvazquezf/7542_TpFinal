@@ -6,6 +6,6 @@ StartPlantEvent::StartPlantEvent(uint8_t id)
 }
 
 void StartPlantEvent::updatePlayer(WorldModel &world) {
-    world.startPlanting(clientId);
+    world.startBombHandling(clientId);
 }
 

@@ -149,7 +149,6 @@ void WorldModel::resetRound(){
 	}
     bomb->reset();
     tally.resetRound();
-    attackingPlayers.clear();
 }
 
 void WorldModel::roundPurchase() {
@@ -201,49 +200,34 @@ void WorldModel::roundCommon() {
     usleep(FRAMERATE + elapsed.count());
 }
 
-void WorldModel::startPlanting(uint8_t id){
+void WorldModel::startBombHandling(uint8_t id){
 	if (purchaseFase) return;
-    if (mapLayout.isInSite(playerModels.at(id).getPosition())){
-        if (playerModels.at(id).startPlanting()){
-            equipWeapon(id, 3);
-            bomb->setPlanter(id);
-        }   
-        if (playerModels.at(id).startDefusing()){
-            bomb->startDefusing();
-        }
+    if (playerModels.at(id).startBombHandling(mapLayout, id)){
+        equipWeapon(id, 3);
     }
 }
 
-void WorldModel::stopPlanting(uint8_t id){
+void WorldModel::stopBombHandling(uint8_t id){
     if (purchaseFase) return;
-	if (playerModels.at(id).stopPlanting()){
+	if (playerModels.at(id).stopBombHandling()){
         equipWeapon(id, 2);
     }
-    if (playerModels.at(id).stopDefusing()){
-        bomb->stopDefusing();
-    }
 }
 
-void WorldModel::plantingLogic(){
-    // esto se tiene que refactorizar CLARAMENTE
-    if (bomb->isPlanting()){ // si se esta plantando cuenta 1 tick para el countdown de plantado
-        bomb->tickPlanting();
-        if (bomb->isActive()){
-            int id = bomb->getPlanter();
-            playerModels.at(id).stopPlanting();
-            updatesM.updateBombPlanted(id);
-            equipWeapon(id, 2);
+void WorldModel::bombStep(){
+    int state = bomb->tic();
+    switch (state) {
+        case ACTIVE: {
+            stopBombHandling(bomb->getPlanter());
+            updatesM.updateBombPlanted(bomb->getPlanter());
             tally.startBombTiming();
+            break;
         }
-    }
-    if (bomb->isActive()){
-        bomb->tickFuse();
-    }
-    if (bomb->isBoom()){
-        updatesM.updateBombExplode();
-    }
-    if (bomb->isDefusing()){
-        bomb->tickDefuse();
+        case EXPLODED: {
+            updatesM.updateBombExplode();
+            // agregar calculo del danio
+            break;
+        }
     }
 }
 
@@ -270,7 +254,7 @@ void WorldModel::step(){
             }
 		}
 	}
-    plantingLogic();
+    bombStep();
 	this->world.Step(this->timeStep, this->velocityIterations, this->positionIterations);
 }
 

@@ -158,35 +158,23 @@ void PlayerModel::giveBomb(){
     }
 }
 
-bool PlayerModel::startPlanting(){
-    if (isCt) return false;
-    if (armory.startPlanting()){
-        freeze();
-        return true;
-    }
-    return false;
-}
-
-bool PlayerModel::stopPlanting(){
-    if (isCt) return false;
-    unfreeze();
-    return armory.stopPlanting();
-}
-
-bool PlayerModel::startDefusing(){
+bool PlayerModel::startBombHandling(MapLayout& mapLayout, int id){
+    if (!mapLayout.isInSite(model->GetPosition())) return false;
+    freeze();
     if (isCt) {
-        freeze();
-        return true;
+        return armory.startDefusing();
+    } else {
+        return armory.startPlanting(id);
     }
-    return false;
 }
 
-bool PlayerModel::stopDefusing(){
-    if (isCt) { 
-        unfreeze();
-        return true;
+bool PlayerModel::stopBombHandling(){
+    unfreeze();
+    if (isCt) {
+        return armory.stopDefusing();;
+    } else {
+        return armory.stopPlanting();
     }
-    return false;
 }
 
 int PlayerModel::equipWeapon(int weaponType){

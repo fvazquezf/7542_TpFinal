@@ -22,7 +22,7 @@ class Armory {
     std::shared_ptr<Weapon> awp;
     std::shared_ptr<Weapon> rifle;
     std::shared_ptr<Weapon> shotgun;
-    std::shared_ptr<Weapon> bomb;
+    std::shared_ptr<Bomb> bomb;
 
     int currentWeapon;
 
@@ -41,8 +41,10 @@ class Armory {
 
         void giveBomb();
 
-        bool startPlanting();
+        bool startPlanting(int id);
         bool stopPlanting();
+        bool startDefusing();
+        bool stopDefusing();
 
         int equipWeapon(int weaponType);
         void dropWeapons(const b2Vec2& playerPosition);

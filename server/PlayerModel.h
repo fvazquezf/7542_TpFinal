@@ -56,11 +56,8 @@ class PlayerModel{
         bool canShoot();
 
         void giveBomb();
-        bool startPlanting();
-        bool stopPlanting();
-
-        bool startDefusing();
-        bool stopDefusing();
+        bool startBombHandling(MapLayout& mapLayout, int id);
+        bool stopBombHandling();
 
         int equipWeapon(int weaponType);
         bool buyWeapon(uint8_t weaponCode);

@@ -85,25 +85,33 @@ void Armory::giveBomb(){
     selectWeapon(BOMB);
 }
 
-bool Armory::startPlanting(){
+bool Armory::startPlanting(int id){
     if (arsenal.count(3) == 0) return false;
     currentWeapon = 3;
-    Bomb* bomb = static_cast<Bomb*>(arsenal[3].get());
-    bomb->startPlanting();
+    bomb->startPlanting(id);
     return true;
+}
+
+bool Armory::startDefusing(){
+    bomb->startDefusing();
+    return false;
 }
 
 bool Armory::stopPlanting(){
     if (arsenal.count(3) == 0) return false;
-    Bomb* bomb = static_cast<Bomb*>(arsenal[3].get());
-    if (bomb->isActive()) {
+    if (bomb->getState() == ACTIVE) {
         arsenal.erase(3);
         currentWeapon = 1;
     } 
-    if (bomb->isPlanting()){
+    if (bomb->getState() == PLANTING){
         bomb->stopPlanting();
     }
     return true;
+}
+
+bool Armory::stopDefusing(){
+    bomb->stopDefusing();
+    return false;
 }
 
 int Armory::equipWeapon(int weaponType){

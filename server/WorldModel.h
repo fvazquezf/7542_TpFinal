@@ -26,9 +26,6 @@ class WorldModel: public Thread {
 
     MapLayout mapLayout;
     Tally tally;
-    
-
-    std::unordered_set<int> attackingPlayers;
 
     // ref de la cola de la cual popeamos
     // para obtener los eventos de los clientes
@@ -69,8 +66,8 @@ class WorldModel: public Thread {
         void rotatePlayer(uint8_t id, int16_t angle);
         void startAttack(uint8_t id);
         void stopAttack(uint8_t id);
-        void startPlanting(uint8_t id);
-        void stopPlanting(uint8_t id);
+        void startBombHandling(uint8_t id);
+        void stopBombHandling(uint8_t id);
 
 
         void buyWeapon(uint8_t id, uint8_t weaponCode);
@@ -88,7 +85,7 @@ class WorldModel: public Thread {
         void step();
 
 
-    void plantingLogic();
+    void bombStep();
     void resetRound();
     void disconnectPlayer(uint8_t id);
 };

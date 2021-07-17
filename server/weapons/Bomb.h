@@ -4,13 +4,17 @@
 #include "../../libs/box2d/include/box2d/box2d.h"
 #include "Weapon.h"
 
+#define INACTIVE 0
+#define PLANTING 1
+#define ACTIVE 2
+#define DEFUSING 3
+#define DEFUSED 4
+#define EXPLODED 5
+
+
 class Bomb: public Weapon {
     private:
-        bool planting;
-        bool active;
-        bool exploded;
-        bool defusing;
-        bool defused;
+        int state;
 
         int plantingCooldown;
         int plantingTicks;
@@ -34,24 +38,16 @@ class Bomb: public Weapon {
         int hit() override;
         int getClip() override;
 
-        bool startPlanting();
+        void startPlanting(int id);
         void stopPlanting();
-        void tickPlanting();
-        void tickFuse();
+        void startDefusing();  
+        void stopDefusing();  
+        int tic(); 
 
-        bool startDefusing();  
-        bool stopDefusing();  
-        void tickDefuse();   
-
-        bool isPlanting();
-        bool isActive();
-        bool isDefusing();
-        bool isBoom();
-        bool isDefused();       
+        int getState();    
 
         void reset();
 
-        void setPlanter(int id);
         int getPlanter();
         int getFuse();
 };
