@@ -15,6 +15,7 @@ class PlayerModel{
 
     bool isCt;
     bool isFrozen;
+    bool isAttacking;
 
     int maxHp;
     int hp;
@@ -26,7 +27,7 @@ class PlayerModel{
     void unfreeze();
 
     public:
-        PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
+        PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig);
 
         PlayerModel(const PlayerModel& other) = delete;
         PlayerModel& operator=(const PlayerModel& other) = delete;
@@ -37,13 +38,16 @@ class PlayerModel{
         void startMove(int dir);
         void stopMove(int dir);
 
+        void startAttack();
+        void stopAttack();
+
         void step();
 
         void reposition(MapLayout& mapLayout);
-        const b2Vec2& getPosition();
+        const b2Vec2& getPosition() const;
 
         void setAngle(int16_t newAngle);
-        int16_t getAngle() const;
+        const int16_t getAngle() const;
 
         bool attack(const b2Vec2& enemy);
         void reload();
@@ -51,27 +55,23 @@ class PlayerModel{
         bool gotHitAndDied(std::shared_ptr<Weapon> weapon);
         bool canShoot();
 
-        void giveBomb(std::shared_ptr<Weapon> bomb);
-        bool startPlanting();
-        bool stopPlanting();
-
-        bool startDefusing();
-        bool stopDefusing();
-
-        void resetCooldown();
+        void giveBomb();
+        bool startBombHandling(MapLayout& mapLayout, int id);
+        bool stopBombHandling();
 
         int equipWeapon(int weaponType);
         bool buyWeapon(uint8_t weaponCode);
-        bool pickUpWeapon();
+        int pickUpWeapon();
 
-        void die();
+        void kill();
         void revive();
 
         void changeSide();
-        bool getSide();
-        int getHp();
-        int getMoney();
-        int getClip();
+
+        bool getSide() const;
+        int getHp() const;
+        int getMoney() const;
+        int getClip() const;
 };
 
 #endif

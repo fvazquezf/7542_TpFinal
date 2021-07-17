@@ -1,7 +1,7 @@
 #include "Knife.h"
 
-Knife::Knife(int range, int spread, int damage, int firerate):
- Weapon(KNIFE, 0, range, damage),
+Knife::Knife(int range, int spread, int damage, int firerate, int bounty):
+ Weapon(KNIFE, 0, range, damage, bounty),
  firerate(firerate),
  spread(spread){
 }
@@ -39,8 +39,8 @@ int Knife::hit(){
     return dmgDist(gen);
 }
 
-bool Knife::canShoot(){
-    if (cooldown == 0) {
+bool Knife::canShoot(bool isAttacking){
+    if (cooldown == 0 && isAttacking) {
         cooldown = firerate;
         return true;
     } else {

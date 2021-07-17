@@ -9,11 +9,11 @@ class Knife: public Weapon {
     int firerate;
     int spread;
     public:
-        Knife(int range, int spread, int damage, int firerate);
+        Knife(int range, int spread, int damage, int firerate, int bounty);
         ~Knife() override;
 
         bool attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) override;
-        bool canShoot() override;
+        bool canShoot(bool isAttacking) override;
         void resetCooldown() override;
         int hit() override;
         int getClip() override;

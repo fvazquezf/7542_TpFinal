@@ -6,6 +6,6 @@ StopPlantEvent::StopPlantEvent(uint8_t id)
 }
 
 void StopPlantEvent::updatePlayer(WorldModel &world) {
-    world.stopPlanting(clientId);
+    world.stopBombHandling(clientId);
 }
 

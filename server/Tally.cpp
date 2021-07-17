@@ -50,7 +50,7 @@ bool Tally::tickTime(){
     return false;
 }
 
-int Tally::getTime(){
+int Tally::getTime() const {
     return time;
 }
 
@@ -81,22 +81,23 @@ int Tally::isRoundOver(){
 }
 
 bool Tally::ctWon(){
-    if (bomb->isDefused()) return true;
-    if (bomb->isActive()) return false;
-    if (!bomb->isBoom() && time == 0) return true;
+    int state = bomb->getState();
+    if (state == DEFUSED) return true;
+    if (state == ACTIVE) return false;
+    if (state == INACTIVE && time == 0) return true;
     
-    bool isOver = true;
-    for (auto it = ttSide.begin(); it != ttSide.end() && isOver; it++){
-        isOver = (deaths.find(it->first) != deaths.end());
+    bool allTtDead = true;
+    for (auto it = ttSide.begin(); it != ttSide.end() && allTtDead; it++){
+        allTtDead = (deaths.find(it->first) != deaths.end());
     }
-    return isOver;
+    return allTtDead;
 }
 
 bool Tally::ttWon(){
-    if (bomb->isBoom()) return true;
-    bool isOver = true;
-    for (auto it = ctSide.begin(); it != ctSide.end() && isOver; it++){
-        isOver = (deaths.find(it->first) != deaths.end());
+    if (bomb->getState() == EXPLODED) return true;
+    bool allCtDead = true;
+    for (auto it = ctSide.begin(); it != ctSide.end() && allCtDead; it++){
+        allCtDead = (deaths.find(it->first) != deaths.end());
     }
-    return isOver;
-}
+    return allCtDead;
+} 

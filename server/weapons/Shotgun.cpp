@@ -1,7 +1,7 @@
 #include "Shotgun.h"
 
-Shotgun::Shotgun(int ammo, int range, int spread, int damage)
-: Weapon(M3, ammo, range, damage),
+Shotgun::Shotgun(int ammo, int range, int spread, int damage, int bounty)
+: Weapon(M3, ammo, range, damage, bounty),
   spread(spread){
     damageOutput = 0;
 }
@@ -55,8 +55,8 @@ int Shotgun::hit(){
     return damageOutput;
 }
 
-bool Shotgun::canShoot(){
-    if (cooldown == 0 && clip != 0) {
+bool Shotgun::canShoot(bool isAttacking){
+    if (cooldown == 0 && clip != 0 && isAttacking) {
         clip--;
         cooldown = 8000;
         return true;

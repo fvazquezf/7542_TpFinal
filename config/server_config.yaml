@@ -1,7 +1,7 @@
 # distancias en centimetros
 # tiempo en ticks
 
-player_hp: 100 # vida maxima
+player_hp: 1000 # vida maxima
 starting_money: 2000
 
 match_max_players: 5
@@ -10,10 +10,11 @@ match_max_players: 5
 # accuracy en shorgun/knife determina el spread
 # las armas sin firerate disparan nuevamente cuando se hace click
 
-pistol_ammo: 5
-pistol_range: 1000
-pistol_accuracy: 25
-pistol_damage: 40
+pistol_ammo: 50
+pistol_range: 2000
+pistol_accuracy: 50
+pistol_damage: 10000
+pistol_bounty: 300
 
 awp_price: 500
 awp_ammo: 100
@@ -21,26 +22,29 @@ awp_range: 50000
 awp_accuracy: 25
 awp_damage: 100
 awp_firerate: 60
+awp_bounty: 100
 
 rifle_price: 500
-rifle_ammo: 300
+rifle_ammo: 30
 rifle_range: 10000
 rifle_accuracy: 25
 rifle_damage: 20
-rifle_firerate: 60
+rifle_firerate: 24
+rifle_bounty: 300
 
 shotgun_price: 500
 shotgun_ammo: 200
 shotgun_range: 900
 shotgun_accuracy: 30
 shotgun_damage: 100
+shotgun_bounty: 500
 
 knife_range: 150
 knife_accuracy: 60
 knife_damage: 20
 knife_firerate: 30
+knife_bounty: 1000
 
-money_kill_enemy: 500
 money_round_won: 1000
 money_round_lost: 500
 
@@ -50,4 +54,4 @@ bomb_damage: 20
 bomb_firerate: 30
 bomb_fuse: 300
 bomb_activate_time: 180
-
+bomb_bounty: 50

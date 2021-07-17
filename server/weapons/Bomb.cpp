@@ -1,16 +1,12 @@
 #include "Bomb.h"
 #include <iostream>
 
-Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime):
- Weapon(BOMB, 0, range, damage),
+Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activateTime, int bounty):
+ Weapon(BOMB, 0, range, damage, bounty),
  firerate(firerate),
  spread(spread){
-    planting = false;
-    defusing = false;
-    defused = false;
+    state = INACTIVE;
     planter = -1;
-    active = false;
-    exploded = false;
     plantingCooldown = activateTime;
     plantingTicks = 0;
     defusingTicks = 0;
@@ -46,8 +42,8 @@ int Bomb::hit(){
     return damage;
 }
 
-bool Bomb::canShoot(){
-    if (cooldown == 0) {
+bool Bomb::canShoot(bool isAttacking){
+    if (cooldown == 0 && isAttacking) {
         cooldown = firerate;
         return true;
     } else {
@@ -63,14 +59,67 @@ int Bomb::getClip(){
     return -1;
 }
 
-
-bool Bomb::startPlanting(){
-    planting = true;
-    return true;
+void Bomb::startPlanting(int id){
+    if (state == INACTIVE) {
+        state = PLANTING;
+        planter = id;
+    }
 }
 
-void Bomb::setPlanter(int id){
-    planter = id;
+void Bomb::stopPlanting(){
+    if (state == PLANTING) {
+        state = INACTIVE;
+        plantingTicks = 0;
+    }
+}
+
+void Bomb::startDefusing(){
+    if (state == ACTIVE) {
+        state = DEFUSING;
+    }
+}
+
+void Bomb::stopDefusing(){
+    if (state == DEFUSING) {
+        state = ACTIVE;
+        defusingTicks = 0;
+    }
+}
+
+int Bomb::tic() {
+    switch (state) {
+        case PLANTING: {
+            plantingTicks++;
+            if (plantingTicks == plantingCooldown){
+                state = ACTIVE;
+                return state;
+            }
+            break;
+        }
+        case DEFUSING: {
+            remainingTime--;
+            if (remainingTime == 0){
+                state = EXPLODED;
+                return state;
+            }
+            defusingTicks++;
+            if (defusingTicks == plantingCooldown){
+                state = DEFUSED;
+                return state;
+            }
+            break;
+        }
+        case ACTIVE: {
+            remainingTime--;
+            if (remainingTime == 0){
+                state = EXPLODED;
+                return state;
+            }
+            break;
+        }
+        default: 
+            return INACTIVE;
+    }
 }
 
 int Bomb::getPlanter(){
@@ -81,72 +130,12 @@ int Bomb::getFuse(){
     return (fuse/60);
 }
 
-void Bomb::stopPlanting(){
-    planting = false;
-    plantingTicks = 0;
+int Bomb::getState(){
+    return state;
 }
-
-bool Bomb::isPlanting(){
-    return planting;
-}
-
-void Bomb::tickPlanting(){
-    plantingTicks++;
-    if (plantingTicks == plantingCooldown){
-        active = true;
-        planting = false;
-    }
-}
-
-void Bomb::tickFuse(){
-    remainingTime--;
-    if (remainingTime == 0){
-        exploded = true;
-    }
-}
-
-bool Bomb::isBoom(){
-    return exploded;
-}
-
-bool Bomb::isActive(){
-    return active;
-}
-
-bool Bomb::startDefusing(){
-    if (!active) return false;
-    defusing = true;
-    return true;
-}
-
-bool Bomb::stopDefusing(){
-    defusing = false;
-    defusingTicks = 0;
-    return false;
-}
-
-void Bomb::tickDefuse(){
-    defusingTicks++;
-    if (defusingTicks == plantingCooldown){
-        defused = true;
-    }
-}
-
-bool Bomb::isDefusing(){
-    return defusing;
-}
-
-bool Bomb::isDefused(){
-    return defused;
-}
-
 
 void Bomb::reset(){
-    planting = false;
-    defusing = false;
-    defused = false;
-    active = false;
-    exploded = false;
+    state = INACTIVE;
     plantingTicks = 0;
     defusingTicks = 0;
     remainingTime = fuse;

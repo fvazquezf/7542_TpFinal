@@ -5,17 +5,18 @@
 #include "weapons/Knife.h"
 #include "../common/ConfigVariables.h"
 
-PlayerModel::PlayerModel(b2Body* body, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
+PlayerModel::PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
 model(body),
 angle(0),
 maxHp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
-armory(dropped, matchConfig){
+armory(bomb, dropped, matchConfig){
     hp = maxHp;
     this->netForce.SetZero();
     dirAmount = 0;
     isCt = false;
     isFrozen = true;
+    isAttacking = false;
 }
 
 PlayerModel::PlayerModel(PlayerModel &&other)
@@ -46,7 +47,6 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other)  {
     other.model = nullptr;
     return *this;
 }
-
 
 void PlayerModel::startMove(int dir){
     if (isFrozen) return;
@@ -84,10 +84,18 @@ void PlayerModel::stopMove(int dir){
 
 void PlayerModel::step(){
     float vel = this->model->GetLinearVelocity().Length();
-    armory.tickCooldown();
     if (vel < 11){
         this->model->ApplyForceToCenter(this->netForce, true);
     }
+}
+
+void PlayerModel::startAttack(){
+    isAttacking = true;
+}
+
+void PlayerModel::stopAttack(){
+    isAttacking = false;
+    armory.resetCooldown();
 }
 
 void PlayerModel::reposition(MapLayout& mapLayout){
@@ -100,16 +108,15 @@ void PlayerModel::reposition(MapLayout& mapLayout){
     this->model->SetTransform(newPos, 0);
 }
 
-const b2Vec2& PlayerModel::getPosition(){
+const b2Vec2& PlayerModel::getPosition() const {
     return this->model->GetPosition();
 }
 
 void PlayerModel::setAngle(int16_t newAngle) {
-    // if (isFrozen) return;
     this->angle = newAngle;
 }
 
-int16_t PlayerModel::getAngle() const {
+const int16_t PlayerModel::getAngle() const {
     return angle;
 }
 
@@ -130,63 +137,47 @@ bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
     if (hp <= 0){
         hp = 0;
+        freeze();
+        armory.dropWeapons(model->GetPosition());
         return true;
     } else {
         return false;
     }
 }
 
-
 bool PlayerModel::canShoot(){
     if (isFrozen) return false;
-    return armory.canShoot();
+    armory.tickCooldown();
+    return armory.canShoot(isAttacking);
 }
 
-void PlayerModel::giveBomb(std::shared_ptr<Weapon> bomb){
+void PlayerModel::giveBomb(){
     // chequeo inecesario pero por si acaso
     if (!isCt){
-        armory.giveBomb(bomb);
+        armory.giveBomb();
     }
 }
 
-bool PlayerModel::startPlanting(){
-    if (isCt) return false;
-    if (armory.startPlanting()){
-        freeze();
-        return true;
-    }
-    return false;
-}
-
-bool PlayerModel::stopPlanting(){
-    if (isCt) return false;
-    unfreeze();
-    return armory.stopPlanting();
-}
-
-bool PlayerModel::startDefusing(){
+bool PlayerModel::startBombHandling(MapLayout& mapLayout, int id){
+    if (!mapLayout.isInSite(model->GetPosition())) return false;
+    freeze();
     if (isCt) {
-        freeze();
-        return true;
+        return armory.startDefusing();
+    } else {
+        return armory.startPlanting(id);
     }
-    return false;
 }
 
-bool PlayerModel::stopDefusing(){
-    if (isCt) { 
-        unfreeze();
-        return true;
+bool PlayerModel::stopBombHandling(){
+    unfreeze();
+    if (isCt) {
+        return armory.stopDefusing();;
+    } else {
+        return armory.stopPlanting();
     }
-    return false;
-}
-
-
-void PlayerModel::resetCooldown(){
-    armory.resetCooldown();
 }
 
 int PlayerModel::equipWeapon(int weaponType){
-    // if (weaponType == BOMB && isCt) return false
     return armory.equipWeapon(weaponType);
 }
 
@@ -195,14 +186,12 @@ bool PlayerModel::buyWeapon(uint8_t weaponCode) {
     return armory.tryBuying(weaponCode, money, model->GetPosition());
 }
 
-bool PlayerModel::pickUpWeapon(){
-
-    return armory.pickUpWeapon(model->GetPosition());
+int PlayerModel::pickUpWeapon(){
+    return armory.pickUpWeapon(model->GetPosition(), isCt);
 }
 
-void PlayerModel::die() {
-    freeze();
-    armory.dropPrimary(model->GetPosition());
+void PlayerModel::kill() {
+    money += armory.bounty();
 }
 
 void PlayerModel::revive() {
@@ -216,19 +205,19 @@ void PlayerModel::changeSide(){
     isCt = !isCt;
 }
 
-bool PlayerModel::getSide(){
+bool PlayerModel::getSide() const {
     return isCt;
 }
 
-int PlayerModel::getHp(){
+int PlayerModel::getHp() const {
     return hp;
 }
 
-int PlayerModel::getMoney(){
+int PlayerModel::getMoney() const {
     return money;
 }
 
-int PlayerModel::getClip(){
+int PlayerModel::getClip() const {
     return armory.getClip();
 }
 

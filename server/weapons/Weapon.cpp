@@ -2,10 +2,11 @@
 #include "Weapon.h"
 
 
-Weapon::Weapon(uint8_t weaponCode, int ammo, int range, int damage):
+Weapon::Weapon(uint8_t weaponCode, int ammo, int range, int damage, int bounty):
     ammo(ammo),
     clip(ammo),
     damage(damage),
+    bounty(bounty),
     weaponCode(weaponCode){
     this->range = static_cast<double>(range)/100;
     cooldown = 0;
@@ -21,6 +22,10 @@ void Weapon::tickCooldown(){
 
 void Weapon::reload(){
     clip = ammo;
+}
+
+int Weapon::getBounty(){
+    return bounty;
 }
 
 uint8_t Weapon::getWeaponCode(){

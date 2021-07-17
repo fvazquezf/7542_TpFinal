@@ -31,7 +31,7 @@ public:
 
     void startBombTiming();
     bool tickTime();
-    int getTime();
+    int getTime() const;
     void resetRound();
 
     int getTerrorist();
