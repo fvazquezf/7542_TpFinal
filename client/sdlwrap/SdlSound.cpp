@@ -3,7 +3,7 @@
 SdlSound::SdlSound(const std::string &soundPath)
 : effect(Mix_LoadWAV(soundPath.c_str())){
     if (!effect){
-        throw std::exception();
+        throw Exception("SdlSound: ", Mix_GetError());
     }
 }
 
@@ -13,12 +13,12 @@ SdlSound::~SdlSound() {
     }
 }
 
-SdlSound::SdlSound(SdlSound &&other) noexcept
+SdlSound::SdlSound(SdlSound &&other)
 : effect(other.effect){
     other.effect = nullptr;
 }
 
-SdlSound &SdlSound::operator=(SdlSound &&other) noexcept {
+SdlSound &SdlSound::operator=(SdlSound &&other)  {
     if (this == &other){
         return *this;
     }

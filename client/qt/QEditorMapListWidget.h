@@ -14,7 +14,6 @@ public:
     void update();
 private:
     void setMapItems();
-    void setMapItem(QString &mapName);
     LogInInfo& info;
 
 

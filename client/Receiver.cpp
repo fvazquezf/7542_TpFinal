@@ -15,7 +15,9 @@ void Receiver::run() {
             std::bind(&Receiver::receive, this, std::placeholders::_1);
     while (running){
         char update;
-        if (peer.recv(&update, 1) <= 0){
+        try {
+            peer.recv(&update, 1);
+        } catch (const std::exception& e){
             break;
         }
         std::vector<unsigned char> msg = prot.dispatchReceived(update, cb);
@@ -31,7 +33,11 @@ void Receiver::stop() {
 
 std::vector<unsigned char> Receiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
-    peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    try {
+        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    } catch (const std::exception& e){
+        running = false;
+    }
     return msg;
 }
 
@@ -40,6 +46,10 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         case LOGIN_RESPONSE:{
             if (msg.at(0) != 255){
                 world.assignPlayer(msg.at(0));
+            } else {
+                // bad response
+                world.signalDone();
+                running = false;
             }
             break;
         }
@@ -124,6 +134,9 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
             break;
         case TT_WIN_ROUND:
             world.updateHudWinner(false);
+            break;
+        case SCORE_UPDATE:
+            world.setScoreData(prot.deserializeScores(msg));
             break;
         default:
             break;

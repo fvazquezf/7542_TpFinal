@@ -2,14 +2,14 @@
 #include <sstream>
 #include "Hud.h"
 
-Hud::Hud(SdlWindow &window)
-: symbols(HUD_SYMBOL_PATH, window, {0, 0, 0}),
-  numbers(HUD_NUM_PATH, window, {0, 0, 0}),
-  ctWin(CTWIN_PATH, window),
-  ttWin(TTWIN_PATH, window),
-  ctRoundsTex(CT_ROUNDS_PATH, window),
-  ttRoundsTex(TT_ROUNDS_PATH, window),
-  bar(BAR_PATH, window, {0xff, 0xff, 0xff}),
+Hud::Hud(SdlWindow &window, YAML::Node& config)
+: symbols(config["hud_symbols"].as<std::string>(), window, {0, 0, 0}),
+  numbers(config["hud_numbers"].as<std::string>(), window, {0, 0, 0}),
+  ctWin(config["ct_win"].as<std::string>(), window),
+  ttWin(config["tt_win"].as<std::string>(), window),
+  ctRoundsTex(config["ct_rounds"].as<std::string>(), window),
+  ttRoundsTex(config["tt_rounds"].as<std::string>(), window),
+  bar(config["bar"].as<std::string>(), window, {0xff, 0xff, 0xff}),
   health(0),
   currentClockTick(0),
   clip(0),
@@ -191,5 +191,9 @@ void Hud::showRounds() {
     ctRoundsTex.render(srcCT, dstCT, SDL_FLIP_NONE);
     numbers.render(numberSelector.at(0), roundsCT, SDL_FLIP_NONE);
     numberSelector.clear();
+}
+
+void Hud::swapTeamScores() {
+    std::swap(ttRounds, ctRounds);
 }
 

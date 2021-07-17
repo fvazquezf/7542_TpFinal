@@ -17,8 +17,8 @@ public:
     Client(const Client& other) = delete;
     Client& operator=(const Client& other) = delete;
 
-    Client(Client&& other) noexcept;
-    Client& operator=(Client&& other) noexcept;
+    Client(Client&& other);
+    Client& operator=(Client&& other);
 
     void launch();
 

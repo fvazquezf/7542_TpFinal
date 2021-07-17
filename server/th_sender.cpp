@@ -18,7 +18,7 @@ void ThSender::run() {
         try {
             std::shared_ptr<Update> update = updateQueue.pop();
             update->serialize(cb);
-        } catch (const std::invalid_argument& e){
+        } catch (const std::exception& e){
             break;
         }
     }
@@ -32,7 +32,7 @@ void ThSender::stop() {
     }
 }
 
-ThSender::ThSender(ThSender &&other) noexcept
+ThSender::ThSender(ThSender &&other)
 : is_running(other.is_running.operator bool()),
   peer(other.peer),
   protocol(other.protocol),
@@ -42,7 +42,7 @@ ThSender::ThSender(ThSender &&other) noexcept
     other.is_running = false;
 }
 
-ThSender &ThSender::operator=(ThSender &&other) noexcept {
+ThSender &ThSender::operator=(ThSender &&other)  {
     if (this == &other){
         return *this;
     }
@@ -53,5 +53,9 @@ ThSender &ThSender::operator=(ThSender &&other) noexcept {
 }
 
 void ThSender::send(std::vector<unsigned char> msg) {
-    peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
+    try {
+        peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
+    } catch (const std::exception& e){
+        is_running = false;
+    }
 }

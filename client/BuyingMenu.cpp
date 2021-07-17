@@ -1,16 +1,22 @@
 #include "BuyingMenu.h"
 
-BuyingMenu::BuyingMenu(SdlWindow& window, SdlTexture& hudButton)
+BuyingMenu::BuyingMenu(SdlWindow& window, SdlTexture& hudButton, YAML::Node& clientConfig)
 : window(window),
   buttonSlot(hudButton),
-  menuText("../sprites/fonts/counter_strike.ttf",
+  menuText(clientConfig["cs_ttf"].as<std::string>(),
            window,
            20),
   menuTextArea(325, window.getHeight() / 12, 60, 40){
     // creo las texturas de los botones
-    buttonContTextures.emplace_back(AK_PATH, window, Color{R_KEY, G_KEY, B_KEY});
-    buttonContTextures.emplace_back(M3_PATH, window, Color{R_KEY, G_KEY, B_KEY});
-    buttonContTextures.emplace_back(AWP_PATH, window, Color{R_KEY, G_KEY, B_KEY});
+    buttonContTextures.emplace_back(clientConfig["ak47_menu"].as<std::string>(),
+                                    window,
+                                    Color{R_KEY, G_KEY, B_KEY});
+    buttonContTextures.emplace_back(clientConfig["m3_menu"].as<std::string>(),
+                                    window,
+                                    Color{R_KEY, G_KEY, B_KEY});
+    buttonContTextures.emplace_back(clientConfig["awp_menu"].as<std::string>(),
+                                    window,
+                                    Color{R_KEY, G_KEY, B_KEY});
 
     // creo los botones
     menuButtons.emplace_back(200, 100, 150, 40,

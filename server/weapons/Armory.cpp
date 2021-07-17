@@ -171,14 +171,14 @@ int Armory::getClip() const {
 }
 
 
-Armory::Armory(Armory &&other) noexcept
+Armory::Armory(Armory &&other)
 : arsenal(std::move(other.arsenal)),
   prices(std::move(other.prices)),
   dropped(other.dropped),
   currentWeapon(2){
 }
 
-Armory &Armory::operator=(Armory &&other) noexcept {
+Armory &Armory::operator=(Armory &&other)  {
     if (this == &other){
         return *this;
     }

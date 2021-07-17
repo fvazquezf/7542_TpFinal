@@ -27,8 +27,8 @@ public:
     NonMovable(const NonMovable& other) = delete;
     NonMovable& operator=(const NonMovable& other) = delete;
 
-    NonMovable(NonMovable&& other) noexcept;
-    NonMovable& operator=(NonMovable&& other) noexcept;
+    NonMovable(NonMovable&& other) ;
+    NonMovable& operator=(NonMovable&& other) ;
 
     ~NonMovable() override;
 

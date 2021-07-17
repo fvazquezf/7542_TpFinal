@@ -68,7 +68,7 @@ int SdlTexture::render(const Area &src, const Area &dest, float angle, SDL_Point
     return window.handleRender(texture, srcRect, destRect, angle, center, flip);
 }
 
-SdlTexture::SdlTexture(SdlTexture &&other) noexcept
+SdlTexture::SdlTexture(SdlTexture &&other)
 : window(other.window),
   texture(other.texture){
     other.texture = nullptr;
@@ -104,7 +104,7 @@ void SdlTexture::changeColor(Color color) {
     SDL_SetTextureColorMod(this->texture, color.r, color.g, color.b);
 }
 
-SdlTexture &SdlTexture::operator=(SdlTexture &&other) noexcept {
+SdlTexture &SdlTexture::operator=(SdlTexture &&other)  {
     if (this == &other){
         return *this;
     }

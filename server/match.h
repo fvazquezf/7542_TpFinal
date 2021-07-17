@@ -18,8 +18,8 @@ public:
     Match(const Match& other) = delete;
     Match& operator=(const Match& other) = delete;
 
-    Match(Match&& other) noexcept;
-    Match& operator=(Match&& other) noexcept;
+    Match(Match&& other) ;
+    Match& operator=(Match&& other) ;
 
     ~Match();
 

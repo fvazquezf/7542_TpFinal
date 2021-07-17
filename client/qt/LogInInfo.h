@@ -9,9 +9,6 @@ class LogInInfo
 
 public:
     std::string map;
-    std::string username;
-    std::string ip;
-    std::string port;
     Socket socket;
     LogInInfo();
     ~LogInInfo();

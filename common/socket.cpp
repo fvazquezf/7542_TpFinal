@@ -20,6 +20,10 @@ Socket& Socket::operator=(Socket&& other){
           return *this;
      }
 
+     if (this->sfd != -1){
+         ::close(this->sfd);
+     }
+
      this->sfd = other.sfd;
      other.sfd = -1;
      return *this;
@@ -31,7 +35,7 @@ int Socket::send(const char* buffer, ssize_t len) {
     while (len > total) {
         int bs = ::send(this->sfd, &buffer[total], len-total, MSG_NOSIGNAL);
         if (bs == -1) {
-            return -1;
+            throw Exception("Socket failed at send, errno: ", errno);
         } else if (bs == 0) {
             return total;
         } else {
@@ -45,9 +49,9 @@ int Socket::recv(char* buffer, ssize_t length) {
     int total = 0;
 
     while (length > total) {
-        int bytes_recv = ::recv(this->sfd, &buffer[total], length-total, 0);
+        int bytes_recv = ::recv(this->sfd, &buffer[total], length-total, MSG_NOSIGNAL);
         if (bytes_recv == -1) {
-            return -1;
+            throw Exception("Socket failed at recv, errno: ", errno);
         } else if (bytes_recv == 0) {
             return total;
         } else {
@@ -67,7 +71,7 @@ void Socket::connect(const char* host, const char* service) {
     hints.ai_flags = 0;
     int error = getaddrinfo(host, service, &hints, &server_info);
     if (error != 0) {
-        throw std::invalid_argument("socket unable to connect 1.");
+        throw Exception("socket unable to connect 1.");
     }
 
     for (rp = server_info; rp != NULL; rp = rp->ai_next) {
@@ -80,7 +84,7 @@ void Socket::connect(const char* host, const char* service) {
     }
     freeaddrinfo(server_info);
     if (rp == NULL) {
-        throw std::invalid_argument("socket unable to connect 2.");
+        throw Exception("socket unable to connect 2.");
     }
 }
 
@@ -94,7 +98,7 @@ void Socket::bind(const char* port) {
     int error = getaddrinfo(NULL, port, &hints, &server_info);
 
     if (error != 0)
-        throw std::invalid_argument("socket unable to bind 1.");
+        throw Exception("socket unable to bind 1.");
 
     for (rp = server_info; rp; rp = rp->ai_next) {
         this->sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
@@ -107,7 +111,7 @@ void Socket::bind(const char* port) {
 
     freeaddrinfo(server_info);
     if (rp == NULL)
-        throw std::invalid_argument("socket unable to bind 2.");
+        throw Exception("socket unable to bind 2.");
 }
 
 void Socket::listen() {
@@ -117,7 +121,7 @@ void Socket::listen() {
 Socket Socket::accept() {
     int sfd = ::accept(this->sfd, NULL, NULL);
     if (sfd  == -1) {
-        throw std::invalid_argument("socket unable to accept");
+        throw Exception("socket unable to accept");
     }
     return Socket(sfd);
 }

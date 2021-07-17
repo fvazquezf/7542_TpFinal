@@ -22,8 +22,8 @@ public:
     ThSender(const ThSender&) = delete;
     ThSender& operator=(const ThSender&) = delete;
 
-    ThSender(ThSender&& other) noexcept;
-    ThSender& operator=(ThSender&& other) noexcept;
+    ThSender(ThSender&& other) ;
+    ThSender& operator=(ThSender&& other) ;
 
 private:
     std::atomic<bool> is_running;

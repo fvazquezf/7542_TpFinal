@@ -16,6 +16,12 @@ private:
 public:
     SdlText(const std::string& pathToFont, SdlWindow& window, int pointSize);
 
+    SdlText(const SdlText& other) = delete;
+    SdlText& operator=(const SdlText& other) = delete;
+
+    SdlText(SdlText&& other);
+    SdlText& operator=(SdlText&& other);
+
     void setText(const std::string& text);
 
     void render(const Area& dst);

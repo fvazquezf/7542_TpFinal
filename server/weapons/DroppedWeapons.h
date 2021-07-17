@@ -22,8 +22,8 @@ public:
     DroppedWeapons(const DroppedWeapons& other) = delete;
     DroppedWeapons& operator=(const DroppedWeapons& other) = delete;
 
-    DroppedWeapons(DroppedWeapons&& other) noexcept;
-    DroppedWeapons& operator=(DroppedWeapons&& other) noexcept;
+    DroppedWeapons(DroppedWeapons&& other) ;
+    DroppedWeapons& operator=(DroppedWeapons&& other) ;
 
     void dropWeapon(uint8_t weaponCode, const b2Vec2& position);
     int8_t pickUpAnyIfClose(const b2Vec2& playerPosition);

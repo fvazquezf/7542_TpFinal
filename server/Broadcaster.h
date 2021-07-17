@@ -18,8 +18,8 @@ public:
     Broadcaster(const Broadcaster& other) = delete;
     Broadcaster& operator=(const Broadcaster& other) = delete;
 
-    Broadcaster(Broadcaster&& other) noexcept;
-    Broadcaster& operator=(Broadcaster&& other) noexcept;
+    Broadcaster(Broadcaster&& other) ;
+    Broadcaster& operator=(Broadcaster&& other) ;
 
     void pushAll(const std::shared_ptr<Update>& update);
     void push(uint8_t id, std::shared_ptr<Update> update);

@@ -18,8 +18,9 @@ void ThLogin::run() {
                                          std::placeholders::_1);
     while(!is_logged_in) {
         char comm;
-        size_t received = peer.recv(&comm, 1);
-        if (received == 0){
+        try {
+            peer.recv(&comm, 1);
+        } catch (const std::exception& e){
             break;
         }
         std::vector<unsigned char> msgRecv = prot.dispatchReceived(comm, receiverCallback);
@@ -40,7 +41,11 @@ void ThLogin::stop() {
 
 std::vector<unsigned char> ThLogin::receiveMsgs(size_t msgSize) {
     std::vector<unsigned char> msg(msgSize);
-    peer.recv(reinterpret_cast<char *>(msg.data()), msgSize);
+    try {
+        peer.recv(reinterpret_cast<char *>(msg.data()), msgSize);
+    } catch(const std::exception& e){
+        is_logged_in = true;
+    }
     return msg;
 }
 
@@ -91,7 +96,11 @@ void ThLogin::loginResponse(int8_t id) {
 }
 
 void ThLogin::sendMsgs(std::vector<unsigned char> msg) {
-    peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
+    try {
+        peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
+    } catch (const std::exception& e){
+        is_logged_in = true;
+    }
 }
 
 void ThLogin::loginLister(uint8_t commandId, const std::string& loginList){

@@ -45,7 +45,7 @@ WorldModel::~WorldModel() {
 
 }
 
-WorldModel::WorldModel(WorldModel &&other) noexcept
+WorldModel::WorldModel(WorldModel &&other)
 : world(b2Vec2(0.0f, 0.0f)),
   anchor(nullptr),
   matchConfig(other.matchConfig),
@@ -69,7 +69,7 @@ WorldModel::WorldModel(WorldModel &&other) noexcept
     this->anchor = world.CreateBody(&anchorDef);
 }
 
-WorldModel &WorldModel::operator=(WorldModel &&other) noexcept {
+WorldModel &WorldModel::operator=(WorldModel &&other)  {
     if (this == &other){
         return *this;
     }
@@ -183,7 +183,7 @@ void WorldModel::roundCommon() {
             std::unique_ptr<ClientEvent> event = usersEvents.pop();
             event->updatePlayer(*this);
         }
-        catch (const std::invalid_argument& e){
+        catch (const std::exception& e){
             continue;
         }
     }

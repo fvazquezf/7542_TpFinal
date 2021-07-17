@@ -31,8 +31,8 @@ public:
     ThReceiver(const ThReceiver& other) = delete;
     ThReceiver& operator=(const ThReceiver& other) = delete;
 
-    ThReceiver(ThReceiver&& other) noexcept;
-    ThReceiver& operator=(ThReceiver&& other) noexcept;
+    ThReceiver(ThReceiver&& other) ;
+    ThReceiver& operator=(ThReceiver&& other) ;
 
     void run() override;
 

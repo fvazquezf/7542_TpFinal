@@ -1,0 +1,100 @@
+width: 800
+height: 600
+fullscreen: false
+
+stencil_on: true # turns on or off stencil buffer filter
+stencil_radius: 20 # pixels
+stencil_opacity: 50 # higher is darker
+stencil_angle: 45 # stencil triangle angle, higher means fov is increased
+stencil_triangle_brightness: 80 # higher will make fov brighter
+
+sound_on: true # FLAG PARA MATAR AL SONIDO :D
+# obs: si se usa para propositos de testing
+# primero levantar un cliente con el flag de sound en true
+# luego modificar el flag 
+# y recien ahi levantar otros clientes
+# ya que el archivo se carga ni bien se levanta el cliente
+
+cursor_type: 2 # de 0 a 3
+cursor_size: 23 # pixeles
+
+################### PATHS #######################
+cursor_source_file: "/var/cs2d/sprites/gfx/pointer.bmp"
+
+hud_symbols: "/var/cs2d/sprites/gfx/hud_symbols.png"
+hud_numbers: "/var/cs2d/sprites/gfx/hud_nums.bmp"
+ct_win: "/var/cs2d/sprites/gfx/ctWinRound.bmp"
+tt_win: "/var/cs2d/sprites/gfx/ttWinRound.bmp"
+ct_rounds: "/var/cs2d/sprites/gfx/CT.bmp"
+tt_rounds: "/var/cs2d/sprites/gfx/tt.bmp"
+bar: "/var/cs2d/sprites/gfx/barr.bmp"
+hud_button: "/var/cs2d/sprites/gfx/hud_slot.bmp"
+
+seal_force: "/var/cs2d/sprites/gfx/player/ct1.bmp"
+gsg-9: "/var/cs2d/sprites/gfx/player/ct2.bmp"
+sas: "/var/cs2d/sprites/gfx/player/ct3.bmp"
+gign: "/var/cs2d/sprites/gfx/player/ct4.bmp"
+
+pheonix: "/var/cs2d/sprites/gfx/player/t1.bmp"
+l337: "/var/cs2d/sprites/gfx/player/t2.bmp"
+artic: "/var/cs2d/sprites/gfx/player/t3.bmp"
+guerilla: "/var/cs2d/sprites/gfx/player/t4.bmp"
+
+blood: "/var/cs2d/sprites/gfx/fragments.bmp"
+legs: "/var/cs2d/sprites/gfx/player/legs.bmp"
+explosion: "/var/cs2d/sprites/gfx/explosion.png"
+knife: "/var/cs2d/sprites/gfx/weapons/knife.bmp"
+glock: "/var/cs2d/sprites/gfx/weapons/glock.bmp"
+ak47: "/var/cs2d/sprites/gfx/weapons/ak47.bmp"
+m3: "/var/cs2d/sprites/gfx/weapons/m3.bmp"
+awp: "/var/cs2d/sprites/gfx/weapons/awp.bmp"
+bomb: "/var/cs2d/sprites/gfx/weapons/bomb.bmp"
+
+ak47_drop: "/var/cs2d/sprites/gfx/weapons/ak47_d.bmp"
+m3_drop: "/var/cs2d/sprites/gfx/weapons/m3_d.bmp"
+awp_drop: "/var/cs2d/sprites/gfx/weapons/awp_d.bmp"
+bomb_drop: "/var/cs2d/sprites/gfx/weapons/bomb_d.bmp"
+
+ak47_menu: "/var/cs2d/sprites/gfx/weapons/ak47_m.bmp"
+m3_menu: "/var/cs2d/sprites/gfx/weapons/m3_m.bmp"
+awp_menu: "/var/cs2d/sprites/gfx/weapons/awp_m.bmp"
+
+cs_ttf: "/var/cs2d/sprites/fonts/counter_strike.ttf"
+game_title: "/var/cs2d/sprites/gfx/gametitle.png"
+lobby_background: "/var/cs2d/sprites/gfx/splash.bmp"
+
+background:
+ - ["aztec", "/var/cs2d/sprites/gfx/backgrounds/aztec.png"]
+ - ["inferno", "/var/cs2d/sprites/gfx/backgrounds/inferno.png"]
+ - ["office", "/var/cs2d/sprites/gfx/backgrounds/office.png"]
+ - ["space", "/var/cs2d/sprites/gfx/backgrounds/space.jpg"]
+ - ["water2", "/var/cs2d/sprites/gfx/backgrounds/water2.jpg"]
+ - ["blood", "/var/cs2d/sprites/gfx/backgrounds/blood.jpg"]
+ - ["lava", "/var/cs2d/sprites/gfx/backgrounds/lava.jpg"]
+ - ["sand1", "/var/cs2d/sprites/gfx/backgrounds/sand1.jpg"]
+ - ["stone1", "/var/cs2d/sprites/gfx/backgrounds/stone1.jpg"]
+ - ["water3", "/var/cs2d/sprites/gfx/backgrounds/water3.jpg"]
+ - ["dust", "/var/cs2d/sprites/gfx/backgrounds/dust.png"]
+ - ["mars", "/var/cs2d/sprites/gfx/backgrounds/mars.png"]
+ - ["sand1-night", "/var/cs2d/sprites/gfx/backgrounds/sand1-night.jpg"]
+ - ["toxic", "/var/cs2d/sprites/gfx/backgrounds/toxic.jpg"]
+ - ["water4", "/var/cs2d/sprites/gfx/backgrounds/water4.jpg"]
+ - ["gras1", "/var/cs2d/sprites/gfx/backgrounds/gras1.jpg"]
+ - ["nuke", "/var/cs2d/sprites/gfx/backgrounds/nuke.png"]
+ - ["snow", "/var/cs2d/sprites/gfx/backgrounds/snow.jpg"]
+ - ["water1", "/var/cs2d/sprites/gfx/backgrounds/water1.jpg"]
+
+walls:
+ - ["wall_1" , "/var/cs2d/sprites/map/wall_1_client.png"]
+ - ["wall_2" , "/var/cs2d/sprites/map/wall_2_client.png"]
+ - ["wall_3" , "/var/cs2d/sprites/map/wall_3_client.png"]
+ - ["wall_4" , "/var/cs2d/sprites/map/wall_4_client.png"]
+ - ["wall_5" , "/var/cs2d/sprites/map/wall_5_client.png"]
+ - ["wall_6" , "/var/cs2d/sprites/map/wall_6_client.png"]
+ - ["wall_7" , "/var/cs2d/sprites/map/wall_7_client.png"]
+ - ["wall_8" , "/var/cs2d/sprites/map/wall_8_client.png"]
+
+zones:
+ - ["zoneA", "/var/cs2d/sprites/map/zone_a_client.png"]
+ - ["zoneB", "/var/cs2d/sprites/map/zone_b_client.png"]
+ - ["zoneBomb", "/var/cs2d/sprites/map/zone_bomb_client.png"]

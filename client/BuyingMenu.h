@@ -4,11 +4,7 @@
 #include <vector>
 #include "Button.h"
 #include "sdlwrap/SdlText.h"
-
-// paths a las texturas del menu (_m)
-#define AK_PATH "../sprites/gfx/weapons/ak47_m.bmp"
-#define M3_PATH "../sprites/gfx/weapons/m3_m.bmp"
-#define AWP_PATH "../sprites/gfx/weapons/awp_m.bmp"
+#include <yaml-cpp/yaml.h>
 
 // con gimp encontramos los parametros para Color Key
 #define R_KEY 0xff
@@ -29,7 +25,7 @@ private:
     SdlText menuText;
     Area menuTextArea;
 public:
-    BuyingMenu(SdlWindow& window, SdlTexture& hudButton);
+    BuyingMenu(SdlWindow& window, SdlTexture& hudButton, YAML::Node& clientConfig);
 
     void showMenu();
 

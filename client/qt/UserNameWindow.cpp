@@ -26,7 +26,6 @@ void UserNameWindow::setUpAll() {
     mainLayout = new QVBoxLayout();
     this->setLayout(mainLayout);
     this->setMainTitle();
-    //this->setEditLinesLayout();
     this->setButtonsLayout();
 }
 
@@ -36,39 +35,18 @@ void UserNameWindow::setMainTitle() {
     mainLayout->addWidget(titleLabel);
 }
 
-
-void UserNameWindow::setEditLinesLayout() {
-
-    QHBoxLayout* usernameLayout = new QHBoxLayout();
-
-    QLabel* userLabel = new QLabel();
-    userLabel->setText("USERNAME");
-
-    usernameLineEdit = new QLineEdit();
-
-    usernameLayout->addWidget(userLabel);
-
-    usernameLayout->addWidget(usernameLineEdit);
-
-    mainLayout->addLayout(usernameLayout);
-}
-
 void UserNameWindow::setButtonsLayout() {
     QVBoxLayout* vLayout = new QVBoxLayout();
     mainLayout->addLayout(vLayout);
     QHBoxLayout* buttonsLayout = new QHBoxLayout();
     buttonsLayout->addWidget(&createGame);
     buttonsLayout->addWidget(&joinGame);
-    //saveButton = new QPushButton();
-    //saveButton->setText("continue");
-   // buttonsLayout->addWidget(saveButton);
-    //connect(saveButton, SIGNAL(clicked()), this, SLOT(on_saveButton_clicked()));
-    connect(&createGame, SIGNAL(clicked()), this, SLOT(on_saveButton_clicked()));
+    connect(&createGame, SIGNAL(clicked()), this, SLOT(on_createButton_clicked()));
     connect(&joinGame, SIGNAL(clicked()), this, SLOT(on_joinButton_clicked()));
     mainLayout->addLayout(buttonsLayout);
 }
 
-void UserNameWindow::on_saveButton_clicked()
+void UserNameWindow::on_createButton_clicked()
 {
     Protocol prot;
     std::unique_ptr<Command> listMaps = std::unique_ptr<Command>(new ListMaps());
@@ -79,9 +57,6 @@ void UserNameWindow::on_saveButton_clicked()
     MapConfigWindow* mapWindow = new MapConfigWindow(nullptr, width, height, info, true);
     this->close();
     mapWindow->show();
-}
-
-void UserNameWindow::on_createButton_clicked() {
 }
 
 void UserNameWindow::on_joinButton_clicked() {
@@ -100,5 +75,3 @@ void UserNameWindow::on_joinButton_clicked() {
 void UserNameWindow::send(std::vector<unsigned char> msg) {
     info.socket.send(reinterpret_cast<const char *>(msg.data()), msg.size());
 }
-
-

@@ -66,7 +66,7 @@ void Character::render(Camera &cam, size_t iteration) {
 Character::~Character() {
 }
 
-Character::Character(Character &&other) noexcept
+Character::Character(Character &&other)
 : Renderizable(std::move(other)),
   player(other.player),
   weapon(std::move(other.weapon)),
@@ -78,7 +78,7 @@ Character::Character(Character &&other) noexcept
     other.player = false;
 }
 
-Character &Character::operator=(Character &&other) noexcept {
+Character &Character::operator=(Character &&other)  {
     if (this == &other) {
         return *this;
     }

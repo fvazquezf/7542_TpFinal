@@ -13,27 +13,27 @@ CharacterManager::CharacterManager(SdlWindow& window, YAML::Node& config)
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/ak47.bmp", window)));
+                            SdlTexture(config["ak47"].as<std::string>(), window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(1),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/m3.bmp", window)));
+                            SdlTexture(config["m3"].as<std::string>(), window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(2),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/awp.bmp", window)));
+                            SdlTexture(config["awp"].as<std::string>(), window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(3),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/knife.bmp", window)));
+                            SdlTexture(config["knife"].as<std::string>(), window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(4),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/glock.bmp", window)));
+                            SdlTexture(config["glock"].as<std::string>(), window)));
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(5),
                     std::forward_as_tuple(
-                            SdlTexture("../sprites/gfx/weapons/bomb.bmp", window)));
+                            SdlTexture(config["bomb"].as<std::string>(), window)));
 }
 
 void CharacterManager::assignTeams(std::map<uint8_t, bool> teamMap) {

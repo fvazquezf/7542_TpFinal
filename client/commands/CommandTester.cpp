@@ -67,6 +67,9 @@ void callback(std::vector<unsigned char> msg){
         case ROTATE: {
             break;
         }
+        case SCORE_UPDATE:{
+            break;
+        }
     }
     for (unsigned char & it : msg){
         printf("%x ", it);
@@ -126,4 +129,24 @@ int main(){
     // float 0.4
     float respuesta = prot.deserializePosition(unFloat);
     printf("Ultimo float: %f\n", respuesta);*/
+    printf("SCORE UPDATE TESTER:\n");
+    std::vector<std::tuple<uint8_t , uint8_t, uint8_t, uint16_t, bool>> scores;
+    scores.emplace_back(std::make_tuple(1, 20, 10, 10000, 0));
+    scores.emplace_back(std::make_tuple(2, 10, 5, 1500, 1));
+    prot.updateScore(scores, f);
+    std::vector<unsigned char> scoresSerialized{
+        0x1, 0x14, 0xa, 0x10, 0x27, 0x0, 0x2, 0xa, 0x5, 0xdc, 0x5, 0x1
+    };
+    // se esperaria que me devuelva 2 tuplas
+    // su contenido siendo (1, 20, 10, 10000, 0) y (2, 10, 5, 1500, 1)
+    auto scoresBack = prot.deserializeScores(scoresSerialized);
+    for (auto& score : scoresBack) {
+        printf("SCORE: %u %u %u %u %u\n",
+               std::get<0>(score),
+               std::get<1>(score),
+               std::get<2>(score),
+               std::get<3>(score),
+               std::get<4>(score));
+    }
+    // pasa la prueba de fuego (cppunit 0 | commandTester 1)
 }

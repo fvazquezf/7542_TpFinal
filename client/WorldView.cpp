@@ -12,37 +12,38 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
           clientConfig["stencil_radius"].as<float>(),
           clientConfig["stencil_opacity"].as<int>(),
           clientConfig["stencil_triangle_brightness"].as<int>()),
-  hud(window),
+  hud(window, clientConfig),
   map(window, clientConfig),
   cursor(clientConfig["cursor_type"].as<int>(),
          window,
          clientConfig["cursor_source_file"].as<std::string>(),
          clientConfig["cursor_size"].as<int>()),
-  bombExplosion(window),
+  bombExplosion(window, clientConfig),
   characterManager(window, clientConfig),
+  score(window, hud, clientConfig),
   lobbyTime(true),
   menuTime(false),
   skinTime(false),
   done(false),
   hudButton(clientConfig["hud_button"].as<std::string>(), window),
-  lobby(window, hudButton),
-  menu(window, hudButton),
+  lobby(window, hudButton, clientConfig),
+  menu(window, hudButton, clientConfig),
   skins(window, clientConfig, hudButton, true, characterManager){
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(0),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/ak47_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["ak47_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(1),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/m3_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["m3_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                          std::forward_as_tuple(2),
-                         std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/awp_d.bmp", window)));
+                         std::forward_as_tuple(SdlTexture(clientConfig["awp_drop"].as<std::string>(), window)));
 
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(5),
-                  std::forward_as_tuple(SdlTexture("../sprites/gfx/weapons/bomb_d.bmp", window)));
+                  std::forward_as_tuple(SdlTexture(clientConfig["bomb_drop"].as<std::string>(), window)));
     SDL_ShowCursor(SDL_DISABLE);
     SoundManager::playMusic();
 }
@@ -71,6 +72,7 @@ void WorldView::render(size_t iteration) {
     if (menuTime){
         menu.showMenu();
     }
+    score.show();
     skins.draw();
     hud.show();
     cursor.draw();
@@ -181,13 +183,15 @@ void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {
     skinTime = true;
     skins.setPlayerTeam(teamMap.at(playerId));
     characterManager.assignTeams(std::move(teamMap));
-
+    // swappea el puntaje de los tts y cts
+    hud.swapTeamScores();
 }
 
 void WorldView::assignPlayer(uint8_t aPlayerId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     playerId = aPlayerId;
     characterManager.setPlayerId(aPlayerId);
+    score.setPlayerId(aPlayerId);
 }
 
 void WorldView::updateHudTime(uint8_t time) {
@@ -219,7 +223,14 @@ bool WorldView::isDone() {
 
 void WorldView::buildMap(const std::string &mapString) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    map.loadMap(mapString);
+    try {
+        map.loadMap(mapString);
+    } catch (const std::exception& e){
+        SDL_Event quit;
+        quit.type = SDL_QUIT;
+        SDL_PushEvent(&quit);
+        done = true;
+    }
 }
 
 void WorldView::stopLobby() {
@@ -281,4 +292,10 @@ void WorldView::selectSkin() {
         skinTime = false;
     } catch (std::exception& e){
     }
+}
+
+void WorldView::setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> &scores) {
+    std::lock_guard<std::mutex> lock(worldMutex);
+    score.setScoreData(scores);
+    score.setEnable();
 }

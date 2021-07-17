@@ -6,6 +6,7 @@
 #include <QMediaPlaylist>
 #include <QVideoWidget>
 #include <QUrl>
+#define INTRO_PATH "/var/cs2d/resources/intro.mp4"
 
 class IntroWindow : public QVideoWidget
 {

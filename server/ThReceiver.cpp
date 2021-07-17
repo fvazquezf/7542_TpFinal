@@ -34,8 +34,9 @@ void ThReceiver::run() {
     std::vector<unsigned char> msg;
     while (is_running){
         char comm;
-        int r = peer.recv(&comm, 1);
-        if (r < 1){
+        try {
+            peer.recv(&comm, 1);
+        } catch (const std::exception& e){
             break;
         }
         msg = protocol.dispatchReceived(comm, receiverCallback);
@@ -50,7 +51,11 @@ ThReceiver::~ThReceiver() {
 
 std::vector<unsigned char> ThReceiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
-    peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    try {
+        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+    } catch (const std::exception& e){
+        is_running = false;
+    }
     return msg;
 }
 
@@ -67,7 +72,7 @@ void ThReceiver::stop() {
     }
 }
 
-ThReceiver::ThReceiver(ThReceiver &&other) noexcept
+ThReceiver::ThReceiver(ThReceiver &&other)
 : peer(other.peer),
   is_running(other.is_running.operator bool()),
   protocol(other.protocol),
@@ -79,7 +84,7 @@ ThReceiver::ThReceiver(ThReceiver &&other) noexcept
     other.is_running = false;
 }
 
-ThReceiver &ThReceiver::operator=(ThReceiver &&other) noexcept {
+ThReceiver &ThReceiver::operator=(ThReceiver &&other)  {
     if (this == &other){
         return *this;
     }

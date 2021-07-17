@@ -26,12 +26,12 @@ void Weapon::draw(float x, float y, float angle, Camera &cam) {
                      weaponTextureMap.at(currentWeapon));
 }
 
-Weapon::Weapon(Weapon &&other) noexcept
+Weapon::Weapon(Weapon &&other)
 : weaponTextureMap(other.weaponTextureMap),
   currentWeapon(other.currentWeapon){
 }
 
-Weapon &Weapon::operator=(Weapon &&other) noexcept {
+Weapon &Weapon::operator=(Weapon &&other)  {
     if (this == &other){
         return *this;
     }

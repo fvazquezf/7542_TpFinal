@@ -19,7 +19,7 @@ armory(bomb, dropped, matchConfig){
     isAttacking = false;
 }
 
-PlayerModel::PlayerModel(PlayerModel &&other) noexcept
+PlayerModel::PlayerModel(PlayerModel &&other)
 : model(other.model),
   netForce(other.netForce),
   angle(other.angle),
@@ -31,7 +31,7 @@ PlayerModel::PlayerModel(PlayerModel &&other) noexcept
     other.model = nullptr;
 }
 
-PlayerModel &PlayerModel::operator=(PlayerModel &&other) noexcept {
+PlayerModel &PlayerModel::operator=(PlayerModel &&other)  {
     if (this == &other){
         return *this;
     }

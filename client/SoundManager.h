@@ -1,6 +1,6 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
-#define SOUND_PATH "../sprites/sfx/"
+#define SOUND_PATH "/var/cs2d/sprites/sfx/"
 
 #include <map>
 #include "sdlwrap/SdlSound.h"

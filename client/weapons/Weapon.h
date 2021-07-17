@@ -43,8 +43,8 @@ public:
     Weapon(const Weapon& other) = delete;
     Weapon& operator=(const Weapon& other) = delete;
 
-    Weapon(Weapon&& other) noexcept;
-    Weapon& operator=(Weapon&& other) noexcept;
+    Weapon(Weapon&& other) ;
+    Weapon& operator=(Weapon&& other) ;
 
     void draw(float x, float y, float angle, Camera& cam);
     bool changeWeapon(uint8_t id);

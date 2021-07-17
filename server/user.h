@@ -34,8 +34,8 @@ public:
     User(const User& other) = delete;
     User& operator=(const User& other) = delete;
 
-    User(User&& other) noexcept;
-    User& operator=(User&& other) noexcept;
+    User(User&& other) ;
+    User& operator=(User&& other) ;
 
     void start();
     void join();

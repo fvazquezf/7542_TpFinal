@@ -9,6 +9,7 @@
 #include "PositionVector.h"
 #include <vector>
 #include <utility>
+#include <yaml-cpp/yaml.h>
 
 class Explosion {
 private:
@@ -24,7 +25,7 @@ private:
 	int maxMiniExplosions;
 	int currentExplosions;
 public:
-	explicit Explosion(SdlWindow& window);
+	Explosion(SdlWindow& window, YAML::Node& config);
 
 	void setExplosion(float posX, float posY);
 	void render(Camera& cam, size_t iteration);

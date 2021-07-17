@@ -1,6 +1,5 @@
 #include <yaml-cpp/node/node.h>
 #include <yaml-cpp/node/parse.h>
-#include <c++/9/iostream>
 #include "MapView.h"
 #include "Camera.h"
 
@@ -16,9 +15,7 @@ void MapView::loadMap(const std::string &mapFile) {
     try {
         map = YAML::Load(mapFile);
     } catch (const std::exception& e){
-        // si no puede cargar el mapa
-        // rip, nos desconectamos
-        // handlear
+        throw e;
     }
 
     columns = map["size_columns"].as<size_t>();

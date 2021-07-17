@@ -67,41 +67,46 @@ Flags soportados y su comportamiento:
 - `--yaml`:  borra las dependencias de yaml-cpp
 - `--cpp`:  borra las dependencias: clang, cmake, make y build-essential
 - `--repo`:  elimina el repositorio
-- `--all`:  borra las dependencias de qt, sdl2, yaml-cpp, clang, cmake, make y build-essentials, y elimina el repositorio
+- `--box2d`: elimina box2d
+- `--cs2d`: borra el contenido del juego (puede encontrarse en `/var/cs2d/`)
+- `--all`:  borra las dependencias de qt, sdl2, yaml-cpp, clang, cmake, make y build-essentials, elimina el repositorio, el juego y box2d
  
 ### Ejecución
 
-Luego de la "Instalacion", se generan tres ejecutables: `esqueleto_server`, `client_main` y `editor_main`.
+Luego de la "Instalacion", se generan tres ejecutables: `cs2d_server`, `cs2d` y `cs2d_editor`.
 
-Para acceder a ellos se debe ingresar a la carpeta build dentro de la carpeta "7542_TpFinal". Para ello, se debe escribir en la consola:
+Al estar localizados en `/usr/bin`, podemos ejecutarlos globalmente (no necesitamos acceder a la carpeta build del repo).
 
-```console
-cd build
-```
-El primer ejecutable, es el servidor del juego. Este requiere como parametro el puerto donde se realizara la conexión y la dirección del archivo de configuración cuya ruta es "../config.yaml". Para ello, se debe escribir en la consola:
+El primer ejecutable, es el servidor del juego. Este requiere como parametro el puerto donde se realizara la conexión.
 
 ```console
-./esqueleto_server <puerto> ../config.yaml
+cs2d_server <puerto>
+``` 
+El archivo de configuracion del server lo podemos localizar en la ruta `/var/cs2d/config/` bajo el nombre `server_config.yaml`.
+En este archivo podemos encontrar configuraciones del juego en si (vida de los jugadores, plata inicial, velocidad de disparo de armas...).
+
+El segundo ejecutable es el cliente. No requiere ningun parámetro adicional.
+
+```console
+cs2d
 ``` 
 
-El segundo ejecutable, es el cliente/ Este requiere del archivo de configuracion del cliente cuya ruta es "../client_config.yaml". Para ello, se debe escribir en la consola:
+Podemos localizar el archivo de configuracion del cliente en `/var/cs2d/config` con el nombre `client_config.yaml`.
+En el, podremos seleccionar la resolucion del juego, si es fullscreen o no, podremos desactivar el sonido, configurar el stencil y muchas cosas mas.
+
+Finalmente, el ultimo ejecutable es el editor de mapas del juego. Para ello, se debe escribir en la consola:
 
 ```console
-./client_main ../client_config.yaml
-``` 
-Finalemente, el ultimo ejecutable es el editor de mapas del juego. Para ello, se debe escribir en la consola:
-
-```console
-./editor_main 
+cs2d_editor 
 ``` 
 
 ## Manual de usuario
  
 ### Ciclo del juego
 
-Una ves que se levanta el servidor, se pueden correr clientes. Estos se levantan con el comando indicado. Esto abre una ventana donde se debe introducir el puerto y el ip. Luego se puede elegir entre crear o unirse a una partida.
-Si se elije crear una partida, indicar el mapa a utilizar y el nombre de la misma. Después de esto se debe esperar a que se complete la partida de jugadores.
-Si se elige unirse a una partida. Selecciona la partida a la que se desea unir. La partida comenzara cuando la misma este completa
+Una vez que se levanta el servidor, se pueden correr clientes. Estos se levantan con el comando indicado. Esto abre una ventana donde se debe introducir el puerto y el ip. Luego se puede elegir entre crear o unirse a una partida.
+Si se elige crear una partida, indicar el mapa a utilizar y el nombre de la misma. Después de esto se debe esperar a que se conecte al menos un jugador.
+Si se elige unirse a una partida, selecciona la partida a la que quieras unirte. En cualquier caso, podes tocar el boton de empezar la partida para que inicie con menos jugadores de los que hay. 
 
 ### Controles
 
@@ -109,8 +114,8 @@ Si se elige unirse a una partida. Selecciona la partida a la que se desea unir. 
 - Recarga de armas con `R`
 - Plant/defuse de la bomba con `ESPACIO`
 - Cambio de armas con 1, 2, 3, 4:
-  - `1` = arma principal ( Awp, Ak47, shotgun)
-  - `2` = arma secundaria (pistola)\
+  - `1` = arma principal (Awp, Ak47, Shotgun)
+  - `2` = arma secundaria (pistola)
   - `3` = cuchillo
   - `4` = bomba (solo para Terroristas)
 - PickUp de arma con `E`
@@ -127,7 +132,7 @@ El juego provee un "Editor de mapas" que consiste en un programa que permite a l
 Este programa se ejecuta con el siguiente comando:
  
 ```console
-./editor_main
+cs2d_editor
 ```
  
 Luego, aparece una pantalla donde se van a visualizar los mapas ya creados.
@@ -153,6 +158,7 @@ Si se desea editar algún mapa ya existente se debe clickear el nombre de tal ma
 ![Alt Text](readme_img/editor_edit.gif)
  
 Cuando se quiera guardar los cambios se debe clickear en el botón "Save".
+Los mapas se van a guardar en el directorio `/var/cs2d/maps`.
  
 #### Insertar y mover elementos en el mapa mapa
  
@@ -180,7 +186,7 @@ Para configurar aquello, se debe indicar con cuatro marcas en el mapa tal que se
  
 ### Configuración
  
-Para configurar los parámetros de juego debe acceder al archivo config.yaml.
+Para configurar los parámetros de juego debe acceder al archivo `server_config.yaml` (`/var/cs2d/config/server_config.yaml`).
 Actualmente, se puede modificar la vida de los jugadores, el dinero inicial y la cantidad de jugadores por partida. Ademas de los parámetros de las armas. Las distancias de los mismos están configurados en centímetros, y los tiempos en tics del mundo (actualmente 60 por segundo)
 Parámetros de las armas:
 
@@ -188,7 +194,7 @@ Parámetros de las armas:
 - range: rango de disparo. Distancia máxima que registra un golpe.
 - pistol/shotgun/bomb_accuracy: Angulo/2 que registra el golpe. El area de acierto se determina por una sección de circunferencia, la accuracy de estas armas determinan que tan amplio es este circulo. Los valores van de 0 (nunca pega) a 180 (todo el circulo, pega hasta atrás del jugador).
 - rifle/awp/pistol_accuracy: distancia de la trayectoria al centro del jugador enemigo. Mientras mas grande este numero, mas probable es que le pegue al jugador enemigo. Valor mínimo: 0.
-- damage: daño que inflige el arma al acertar.
+- damage: daño que inflinge el arma al acertar.
 - firerate: Tiempo entre un golpe y el próximo. Las armas que no tienen esta variable golpean siempre que se hace click.
 - bomb_fuse: tiempo que tarda la bomba en explotar
 - bomb_activate_time: tiempo que tarda la bomba en plantarse/defusearse.

@@ -6,20 +6,16 @@
 #include "sdlwrap/SdlWindow.h"
 #include "sdlwrap/SdlTexture.h"
 #include "SoundManager.h"
+#include <yaml-cpp/yaml.h>
+#include <utility>
 
 #define HUD_SYMBOLS 13
 #define HUD_SYMBOL_W 832
 #define HUD_SYMBOL_H 64
-#define HUD_SYMBOL_PATH "../sprites/gfx/hud_symbols.png"
 #define HUD_NUMS 11
 #define HUD_NUM_W 528 // sacado con gimp -> hay 12 simbolos, pero 1 de ellos no tiene el mismo tamaño al resto
 #define HUD_NUM_H 66
-#define HUD_NUM_PATH "../sprites/gfx/hud_nums.bmp"
-#define CTWIN_PATH "../sprites/gfx/ctWinRound.bmp"
-#define TTWIN_PATH "../sprites/gfx/ttWinRound.bmp"
-#define CT_ROUNDS_PATH "../sprites/gfx/CT.bmp"
-#define TT_ROUNDS_PATH "../sprites/gfx/tt.bmp"
-#define BAR_PATH "../sprites/gfx/barr.bmp"
+
 #define CT_ROUND_W 219
 #define CT_ROUND_H 167
 #define TT_ROUND_W 233
@@ -60,7 +56,7 @@ private:
     Area areaFromIdxPosition(uint8_t idx) const; // los bmp son horizontales, solo me muevo en "x"
     void loadNumberVector(int number);
 public:
-    explicit Hud(SdlWindow& window);
+    explicit Hud(SdlWindow& window, YAML::Node& config);
 
     void show();
     void updateHealth(uint8_t healthPoints);
@@ -74,6 +70,8 @@ public:
     ~Hud();
 
     void showWinner();
+
+    void swapTeamScores();
 };
 
 

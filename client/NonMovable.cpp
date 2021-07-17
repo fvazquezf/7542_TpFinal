@@ -20,12 +20,12 @@ NonMovable::~NonMovable() {
 
 }
 
-NonMovable::NonMovable(NonMovable &&other) noexcept
+NonMovable::NonMovable(NonMovable &&other)
 : Renderizable(std::move(other)),
   rescaling(other.rescaling){
 }
 
-NonMovable &NonMovable::operator=(NonMovable &&other) noexcept {
+NonMovable &NonMovable::operator=(NonMovable &&other)  {
     if (this == &other){
         return *this;
     }
