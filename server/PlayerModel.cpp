@@ -139,6 +139,7 @@ bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
         hp = 0;
         freeze();
         armory.dropWeapons(model->GetPosition());
+        model->SetEnabled(false);
         return true;
     } else {
         return false;
@@ -196,8 +197,8 @@ void PlayerModel::kill() {
 
 void PlayerModel::revive() {
     unfreeze();
+    model->SetEnabled(true);
     hp = maxHp;
-    reload();
 }
 
 

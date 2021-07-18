@@ -235,14 +235,17 @@ void WorldModel::bombStep(){
 
 void WorldModel::step(){
 	for (auto& attacker : this->playerModels) {
-		attacker.second.step();
+        attacker.second.step();
         if (!attacker.second.canShoot()) continue;
         updatesM.updateAttack(attacker.first);
 		for (auto& victim : playerModels){
 		    // esta condicion es para que no se ataque a si mismo
 		    if (&victim.second == &attacker.second) continue;
+            // esta condicion chequea que haya un hit
             if (attacker.second.attack(victim.second.getPosition())) {
+                // esta condicion chequea que no se atraviesen paredes
                 if (mapLayout.checkTunneling(attacker.second.getPosition(), victim.second.getPosition())) continue;
+                // esta condicion chequea si murio, o si solo hubo impacto
                 if (victim.second.gotHitAndDied(attacker.second.hit())) {
                     tally.playerKilledOther(attacker.first, victim.first);
                     attacker.second.kill();
@@ -317,8 +320,6 @@ void WorldModel::reloadWeapon(uint8_t id){
 }
 
 void WorldModel::disconnectPlayer(uint8_t id) {
-    // primero, hacemos que haga drop de todas sus armas
-    // aca vendria el drop si estuviese implementado
     // luego, le decimos al broadcaster que cierre su q
     // de esa manera mata al sender
     // hasta este punto del recorrido, receiver murio, sender esta vivo

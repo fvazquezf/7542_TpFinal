@@ -46,6 +46,7 @@ void DroppedWeapons::removeBomb(){
                                                                              false)));
             return;
         }
+        ++weapon;
     }
 }
 
@@ -66,9 +67,4 @@ DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other)  {
     uniquifier = std::move(other.uniquifier);
     droppedWeapons = std::move(other.droppedWeapons);
     return *this;
-}
-	modified:   ../server/WorldModel.cpp
-	modified:   ../server/weapons/Armory.h
-	modified:   ../server/weapons/DroppedWeapons.cpp
-	modified:   ../server/weapons/DroppedWeapons.h
-	modified:   ../server/weapons/Weapon.h
+} 
