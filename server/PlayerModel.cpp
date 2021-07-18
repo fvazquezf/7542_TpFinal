@@ -9,9 +9,10 @@ PlayerModel::PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapon
 model(body),
 angle(0),
 maxHp(matchConfig.at(PLAYER_HP)),
+hp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
+totalMoney(matchConfig.at(STARTING_MONEY)),
 armory(bomb, dropped, matchConfig){
-    hp = maxHp;
     this->netForce.SetZero();
     dirAmount = 0;
     isCt = false;
@@ -193,6 +194,7 @@ int PlayerModel::pickUpWeapon(){
 
 void PlayerModel::kill() {
     money += armory.bounty();
+    totalMoney += armory.bounty();
 }
 
 void PlayerModel::revive() {
@@ -216,6 +218,10 @@ int PlayerModel::getHp() const {
 
 int PlayerModel::getMoney() const {
     return money;
+}
+
+int PlayerModel::getTotalMoney() const {
+    return totalMoney;
 }
 
 int PlayerModel::getClip() const {

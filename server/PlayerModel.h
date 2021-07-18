@@ -20,6 +20,7 @@ class PlayerModel{
     int maxHp;
     int hp;
     int money;
+    int totalMoney;
 
     Armory armory;
 
@@ -71,6 +72,7 @@ class PlayerModel{
         bool getSide() const;
         int getHp() const;
         int getMoney() const;
+        int getTotalMoney() const;
         int getClip() const;
 };
 
