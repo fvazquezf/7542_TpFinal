@@ -27,6 +27,7 @@ public:
 
     void dropWeapon(uint8_t weaponCode, const b2Vec2& position);
     int8_t pickUpAnyIfClose(const b2Vec2& playerPosition);
+    void removeBomb();
 
 
     ~DroppedWeapons();

@@ -13,6 +13,12 @@
 #include "Bomb.h"
 #include "DroppedWeapons.h"
 
+// WeaponTypes, las armas que puede tener un jugador al mismo tiempo
+#define PRIMARY 0
+#define SECONDARY 1
+#define MELEE 2
+#define EXPLOSIVE 3
+
 
 class Armory {
     std::map<int, std::shared_ptr<Weapon>> arsenal;

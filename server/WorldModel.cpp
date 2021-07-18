@@ -1,5 +1,6 @@
 #include "WorldModel.h"
 #include "PlayerModel.h"
+#include "weapons/Armory.h"
 #include <cstdlib>
 #include <chrono>
 #include <unistd.h>
@@ -148,6 +149,7 @@ void WorldModel::resetRound(){
 		playerModel.second.reposition(mapLayout);
 	}
     bomb->reset();
+    droppedWeapons.removeBomb();
     tally.resetRound();
 }
 
@@ -203,14 +205,14 @@ void WorldModel::roundCommon() {
 void WorldModel::startBombHandling(uint8_t id){
 	if (purchaseFase) return;
     if (playerModels.at(id).startBombHandling(mapLayout, id)){
-        equipWeapon(id, 3);
+        equipWeapon(id, EXPLOSIVE);
     }
 }
 
 void WorldModel::stopBombHandling(uint8_t id){
     if (purchaseFase) return;
 	if (playerModels.at(id).stopBombHandling()){
-        equipWeapon(id, 2);
+        equipWeapon(id, MELEE);
     }
 }
 
@@ -293,7 +295,7 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
     if (playerModels.at(id).buyWeapon(weaponCode)){
 		// el weaponType = 0 es el de arma primaria
 		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
-		equipWeapon(id, 0);
+		equipWeapon(id, PRIMARY);
         updatesM.updateMoney(id);
     }
 }
@@ -301,11 +303,11 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
 void WorldModel::pickUpWeapon(uint8_t id){
     int weaponCode = playerModels.at(id).pickUpWeapon();
 	if (weaponCode == BOMB){
-		equipWeapon(id, 3);
+		equipWeapon(id, EXPLOSIVE);
     } else if (weaponCode == -1) {
         return;
     } else {
-        equipWeapon(id, 0);
+        equipWeapon(id, PRIMARY);
     }
 }
 

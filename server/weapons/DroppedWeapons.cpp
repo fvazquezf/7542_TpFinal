@@ -1,5 +1,6 @@
 #include "DroppedWeapons.h"
 #include "../updates/WeaponDropUpdate.h"
+#include "Weapon.h"
 
 DroppedWeapons::DroppedWeapons(Broadcaster &updates)
 : uniquifier(0),
@@ -33,6 +34,21 @@ int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
     return code;
 }
 
+void DroppedWeapons::removeBomb(){
+    auto weapon = droppedWeapons.begin();
+    while (weapon != droppedWeapons.end()){
+        if (std::get<0>(*weapon) == BOMB) {
+            droppedWeapons.erase(weapon);
+            broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(std::get<0>(*weapon),
+                                                                             std::get<1>(*weapon),
+                                                                             std::get<2>(*weapon).x,
+                                                                             std::get<2>(*weapon).y,
+                                                                             false)));
+            return;
+        }
+    }
+}
+
 DroppedWeapons::~DroppedWeapons() {
 }
 
@@ -51,3 +67,8 @@ DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other)  {
     droppedWeapons = std::move(other.droppedWeapons);
     return *this;
 }
+	modified:   ../server/WorldModel.cpp
+	modified:   ../server/weapons/Armory.h
+	modified:   ../server/weapons/DroppedWeapons.cpp
+	modified:   ../server/weapons/DroppedWeapons.h
+	modified:   ../server/weapons/Weapon.h

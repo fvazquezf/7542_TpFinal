@@ -4,6 +4,7 @@
 #include <memory>
 #include "../../libs/box2d/include/box2d/box2d.h"
 
+// WeaponCodes, los codigos de cada arma.
 #define RIFLE 0
 #define M3 1
 #define AWP 2
