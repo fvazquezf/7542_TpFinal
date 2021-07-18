@@ -38,12 +38,12 @@ void DroppedWeapons::removeBomb(){
     auto weapon = droppedWeapons.begin();
     while (weapon != droppedWeapons.end()){
         if (std::get<0>(*weapon) == BOMB) {
-            droppedWeapons.erase(weapon);
             broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(std::get<0>(*weapon),
                                                                              std::get<1>(*weapon),
                                                                              std::get<2>(*weapon).x,
                                                                              std::get<2>(*weapon).y,
                                                                              false)));
+            droppedWeapons.erase(weapon);
             return;
         }
         ++weapon;

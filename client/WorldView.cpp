@@ -144,6 +144,7 @@ void WorldView::setMenu(bool isIt) {
         // GO, GO, GO!
         SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
     }
+    bomb.clear();
     characterManager.reviveAll();
 }
 
@@ -203,7 +204,6 @@ void WorldView::updateHudTime(uint8_t time) {
 void WorldView::updateHudHealth(uint8_t health) {
     std::lock_guard<std::mutex> lock(worldMutex);
     hud.updateHealth(health);
-    bomb.clear();
 }
 
 void WorldView::updateHudMoney(uint16_t money) {
@@ -268,7 +268,7 @@ void WorldView::blowBomb() {
     while (dropped != bomb.end()){
         if (dropped->isWeaponTypeAndId(BOMB, 0)){
             pos = dropped->getPosition();
-            droppedWeapons.clear();
+            bomb.clear();
             break;
         }
         ++dropped;
