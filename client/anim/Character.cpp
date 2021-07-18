@@ -17,6 +17,7 @@ Character::Character(SdlTexture &texture,
   bleeding(false),
   wasHit(false),
   moving(false),
+  dead(false),
   lastIter(0),
   weapon(weapons),
   movementAnimation(texture, 6, 2, 3, 32, 32),
@@ -40,6 +41,10 @@ Character::Character(SdlTexture &texture,
 void Character::render(Camera &cam, size_t iteration) {
     if (player){
         cam.setLogicalCenter(posX, posY);
+    }
+
+    if (dead){
+        return;
     }
 
     if (moving){
@@ -97,6 +102,7 @@ Character &Character::operator=(Character &&other)  {
 
 void Character::die(float distanceToCenter) {
     SoundManager::playSound(SoundManager::soundRepertoire::DIE1, distanceToCenter);
+    dead = true;
 }
 
 void Character::hit(float distanceToCenter) {
@@ -143,4 +149,8 @@ void Character::move(float distanceToCenter) const {
     if (moving && (currentMovingUpdates % 25) == 0){
         SoundManager::playSound(SoundManager::STEP1, distanceToCenter);
     }
+}
+
+void Character::revive() {
+    dead = false;
 }

@@ -76,7 +76,7 @@ void PlayerModel::stopMove(int dir){
                 break;
         case 3: this->netForce += b2Vec2(-15, 0);
                 break;
-        case 5: this->netForce.SetZero();
+        case 5: this->netForce -= 2 * this->netForce;
                 break;
         default: break;
     }

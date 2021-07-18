@@ -30,6 +30,7 @@ public:
     DroppedWeapon& operator=(DroppedWeapon&& other) ;
 
     bool isWeaponTypeAndId(uint8_t weaponType, size_t uniqueId);
+    bool isVisible() const;
 
     void draw(Camera& cam);
 

@@ -11,6 +11,7 @@ private:
     bool bleeding;
     bool wasHit;
     bool moving;
+    bool dead;
     size_t lastIter;
     Weapon weapon;
     // animacion de movimiento
@@ -54,6 +55,8 @@ public:
     void pushPositionOffset(std::tuple<float, float, int> positionOffset);
 
     std::pair<float, float> getPosition();
+
+    void revive();
 };
 
 #endif

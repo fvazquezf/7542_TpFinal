@@ -129,11 +129,17 @@ void CharacterManager::changeWeapon(uint8_t weaponCode, uint8_t playerId) {
 }
 
 void CharacterManager::plantBomb(uint8_t planterId,
-                                 std::vector<DroppedWeapon> &droppedWeapons,
+                                 std::vector<DroppedWeapon> &bombDrop,
                                  SdlTexture& droppedBomb) {
     auto planterPosition = entities.at(planterId).getPosition();
-    droppedWeapons.emplace_back(droppedBomb, BOMB, 0,
+    bombDrop.emplace_back(droppedBomb, BOMB, 0,
                                 100 * planterPosition.first,
                                 100 * planterPosition.second);
     SoundManager::playSound(SoundManager::soundRepertoire::BOMB_PLANTED, 0);
+}
+
+void CharacterManager::reviveAll() {
+    for (auto& character : entities){
+        character.second.revive();
+    }
 }

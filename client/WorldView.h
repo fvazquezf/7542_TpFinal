@@ -53,6 +53,7 @@ private:
     std::map<uint8_t, SdlTexture> dropTextures;
 
     std::vector<DroppedWeapon> droppedWeapons; // va a mapView
+    std::vector<DroppedWeapon> bomb; // seteo las bombas aparte
 
     // varios hilos acceden de manera concurrente a la view
     // SDL, Drawer, Receiver

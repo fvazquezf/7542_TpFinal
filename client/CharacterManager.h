@@ -38,7 +38,8 @@ public:
 
     ~CharacterManager();
 
-    void plantBomb(uint8_t dropperId, std::vector<DroppedWeapon> &droppedWeapons, SdlTexture& droppedBomb);
+    void plantBomb(uint8_t dropperId, std::vector<DroppedWeapon> &bombDrop, SdlTexture& droppedBomb);
+    void reviveAll();
 };
 
 

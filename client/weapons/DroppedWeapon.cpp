@@ -58,3 +58,7 @@ void DroppedWeapon::doNotShow() {
 std::pair<float, float> DroppedWeapon::getPosition() {
     return std::make_pair(posXmm / 100, posYmm / 100);
 }
+
+bool DroppedWeapon::isVisible() const {
+    return show;
+}

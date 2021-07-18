@@ -61,9 +61,15 @@ void WorldView::render(size_t iteration) {
         return;
     }
     map.render(camera);
+
     for (auto& weapon : droppedWeapons){
         weapon.draw(camera);
     }
+
+    for (auto& b : bomb){
+        b.draw(camera);
+    }
+
     characterManager.draw(camera, iteration);
     stencil.createStencilTexture(camera.angleFromMouse());
 
@@ -138,6 +144,7 @@ void WorldView::setMenu(bool isIt) {
         // GO, GO, GO!
         SoundManager::playSound(SoundManager::soundRepertoire::GO, 0);
     }
+    characterManager.reviveAll();
 }
 
 bool WorldView::isMenuTime() const {
@@ -160,19 +167,13 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     std::lock_guard<std::mutex> lock(worldMutex);
     uint8_t weaponType = std::get<0>(weaponId);
     size_t uniqueIdentifier = std::get<1>(weaponId);
-    // por que no lo borro?
-    // porque los iteradores serian invalidados por el receiver
-    // y puede que el drawer este descheduled en draw, justamente dibujando las armas
-    // al suceder el context switch...
-    // va a levantar iteradores con "basura" (invalidos al fin)
-    // por ende, no los puedo eliminar aca
     std::pair<float, float> pos;
-    for (auto& it : droppedWeapons){
-        if (it.isWeaponTypeAndId(weaponType, uniqueIdentifier)){
-            it.doNotShow();
-            pos = it.getPosition();
-            break;
+    auto weapon = droppedWeapons.begin();
+    while (weapon != droppedWeapons.end()){
+        if (weapon->isWeaponTypeAndId(weaponType, uniqueIdentifier)) {
+            weapon->doNotShow();
         }
+        ++weapon;
     }
     float distance = camera.calculateDistanceToCenter(pos.first, pos.second);
     SoundManager::playSound(SoundManager::soundRepertoire::PICKUP_WEAPON, distance);
@@ -202,6 +203,7 @@ void WorldView::updateHudTime(uint8_t time) {
 void WorldView::updateHudHealth(uint8_t health) {
     std::lock_guard<std::mutex> lock(worldMutex);
     hud.updateHealth(health);
+    bomb.clear();
 }
 
 void WorldView::updateHudMoney(uint16_t money) {
@@ -256,17 +258,17 @@ void WorldView::updateHudClip(uint8_t clip) {
 
 void WorldView::plantBomb(uint8_t planterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    characterManager.plantBomb(planterId, droppedWeapons, dropTextures.at(BOMB));
+    characterManager.plantBomb(planterId, bomb, dropTextures.at(BOMB));
 }
 
 void WorldView::blowBomb() {
     std::lock_guard<std::mutex> lock(worldMutex);
     std::pair<float, float> pos;
-    auto dropped = droppedWeapons.begin();
-    while (dropped != droppedWeapons.end()){
+    auto dropped = bomb.begin();
+    while (dropped != bomb.end()){
         if (dropped->isWeaponTypeAndId(BOMB, 0)){
             pos = dropped->getPosition();
-            dropped = droppedWeapons.erase(dropped);
+            droppedWeapons.clear();
             break;
         }
         ++dropped;
