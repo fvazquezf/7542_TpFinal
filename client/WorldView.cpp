@@ -118,6 +118,7 @@ void WorldView::attack(uint8_t id) {
 void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     characterManager.changeWeapon(weaponCode, characterId);
+    hud.updateCurrentWeapon(weaponCode);
 }
 
 bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
@@ -213,6 +214,10 @@ void WorldView::updateHudMoney(uint16_t money) {
 
 void WorldView::signalDone() {
     std::lock_guard<std::mutex> lock(worldMutex);
+    shutdown();
+}
+
+void WorldView::shutdown() {
     SDL_Event quit;
     quit.type = SDL_QUIT;
     SDL_PushEvent(&quit);
@@ -228,10 +233,7 @@ void WorldView::buildMap(const std::string &mapString) {
     try {
         map.loadMap(mapString);
     } catch (const std::exception& e){
-        SDL_Event quit;
-        quit.type = SDL_QUIT;
-        SDL_PushEvent(&quit);
-        done = true;
+        shutdown();
     }
 }
 

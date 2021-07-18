@@ -140,6 +140,9 @@ void WorldModel::run(){
 		purchaseFase = false;
         roundPlay();
     }
+    if (!is_running){
+        return;
+    }
     updatesM.updateScore(tally);
     usleep(FRAMERATE * 600);
     updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
@@ -172,6 +175,11 @@ void WorldModel::roundPlay() {
     while (!tally.isRoundOver() && is_running){
         roundCommon();
     }
+
+    if (!is_running){
+        return;
+    }
+
     if (tally.isRoundOver() == 1) {
         updatesM.updateCtWinRound();
     } else if (tally.isRoundOver() == -1) {
@@ -182,7 +190,7 @@ void WorldModel::roundPlay() {
 
 void WorldModel::roundCommon() {
     auto start = std::chrono::system_clock::now();
-    for (int j = 0; j < 50; ++j){
+    for (int j = 0; j < 50 && is_running; ++j){
         try {
             std::unique_ptr<ClientEvent> event = usersEvents.pop();
             event->updatePlayer(*this);
@@ -191,6 +199,11 @@ void WorldModel::roundCommon() {
             continue;
         }
     }
+
+    if (!is_running){
+        return;
+    }
+    
     this->step();
 
     if (tally.tickTime()){

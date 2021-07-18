@@ -61,6 +61,8 @@ private:
 
     std::mutex worldMutex;
     uint8_t playerId;
+
+    void shutdown();
 public:
     WorldView(SdlWindow& window, YAML::Node& clientConfig);
 
@@ -126,6 +128,7 @@ public:
     void selectSkin();
 
     void setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>>& scores);
+
 };
 
 

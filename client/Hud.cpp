@@ -15,6 +15,7 @@ Hud::Hud(SdlWindow &window, YAML::Node& config)
   clip(0),
   ttRounds(0),
   ctRounds(0),
+  weapon(0),
   winnerTime(false),
   ctWon(false),
   w(window.getWidth()),
@@ -125,6 +126,10 @@ void Hud::showMoney() {
 }
 
 void Hud::showClip() {
+    if (weapon == KNIFE || weapon == BOMB){
+        showInfinitySymbol();
+        return;
+    }
     loadNumberVector(clip);
     setNumberColors({0, 0xff, 0});
     for (size_t i = 0; i < numberSelector.size(); ++i) {
@@ -195,5 +200,15 @@ void Hud::showRounds() {
 
 void Hud::swapTeamScores() {
     std::swap(ttRounds, ctRounds);
+}
+
+void Hud::updateCurrentWeapon(uint8_t weaponCode) {
+    weapon = weaponCode;
+}
+
+void Hud::showInfinitySymbol() {
+    Area srcInf(11 * HUD_SYMBOL_W / HUD_SYMBOLS + 1, 0, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H);
+    Area dstInf(w - HUD_SYMBOL_W / HUD_SYMBOLS, h - HUD_SYMBOL_H, HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H);
+    symbols.render(srcInf, dstInf, SDL_FLIP_NONE);
 }
 

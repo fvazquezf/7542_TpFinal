@@ -8,6 +8,7 @@
 #include "SoundManager.h"
 #include <yaml-cpp/yaml.h>
 #include <utility>
+#include "weapons/Weapon.h"
 
 #define HUD_SYMBOLS 13
 #define HUD_SYMBOL_W 832
@@ -43,6 +44,7 @@ private:
     uint8_t clip;
     uint8_t ttRounds;
     uint8_t ctRounds;
+    uint8_t weapon;
     bool winnerTime;
     bool ctWon;
     int w;
@@ -55,6 +57,7 @@ private:
     void setNumberColors(Color colors);
     Area areaFromIdxPosition(uint8_t idx) const; // los bmp son horizontales, solo me muevo en "x"
     void loadNumberVector(int number);
+    void showInfinitySymbol();
 public:
     explicit Hud(SdlWindow& window, YAML::Node& config);
 
@@ -72,6 +75,9 @@ public:
     void showWinner();
 
     void swapTeamScores();
+
+    void updateCurrentWeapon(uint8_t weaponCode);
+
 };
 
 
