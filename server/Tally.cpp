@@ -101,3 +101,24 @@ bool Tally::ttWon(){
     }
     return allCtDead;
 } 
+
+std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> Tally::getScores(const std::map<int, PlayerModel>& playerModels){
+    std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> scores;
+    for (auto player: ctSide) {
+        int id = player.first;
+        int kills = player.second.first;
+        int deaths = player.second.second;
+        int money = playerModels.at(id).getTotalMoney();
+        bool side = true; // es Ct
+        scores.emplace_back(id, kills, deaths, money, side);
+    }  
+    for (auto player: ttSide) {
+        int id = player.first;
+        int kills = player.second.first;
+        int deaths = player.second.second;
+        int money = playerModels.at(id).getTotalMoney();
+        bool side = false; // es Tt
+        scores.emplace_back(id, kills, deaths, money, side);
+    }  
+    return scores;
+}

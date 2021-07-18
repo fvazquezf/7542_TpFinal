@@ -16,6 +16,7 @@
 #include "CtWinRoundUpdate.h"
 #include "TtWinRoundUpdate.h"
 #include "BombExplodeUpdate.h"
+#include "FinalScreenUpdate.h"
 
 
 UpdateManager::UpdateManager(Broadcaster& broadcaster, const std::map<int, PlayerModel>& playerModels):
@@ -126,4 +127,9 @@ void UpdateManager::updateClip(int id){
     }
 }
 
-
+void UpdateManager::updateScore(Tally& tally){
+    std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> scores;
+    scores = std::move(tally.getScores(playerModels));
+    std::shared_ptr<Update> updatePtr(new FinalScreenUpdate(std::move(scores)));
+    updatesQ.pushAll(updatePtr);
+}

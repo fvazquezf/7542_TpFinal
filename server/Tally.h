@@ -3,11 +3,15 @@
 
 #include <map>
 #include <unordered_set>
+#include <vector>
+#include <tuple>
 #include <memory>
 #include "../libs/box2d/include/box2d/box2d.h"
 #include "weapons/Bomb.h"
+#include "PlayerModel.h"
 
 class Tally {
+    // los enteros del par son kills/deaths de cada jugador
     std::map<int, std::pair<int, int>> ctSide;
     std::map<int, std::pair<int, int>> ttSide;
     std::unordered_set<int> deaths;
@@ -37,6 +41,8 @@ public:
     int getTerrorist();
 
     int isRoundOver();
+
+    std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> getScores(const std::map<int, PlayerModel>& playerModels);
 
 protected:
     bool ctWon();

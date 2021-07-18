@@ -140,6 +140,8 @@ void WorldModel::run(){
 		purchaseFase = false;
         roundPlay();
     }
+    updatesM.updateScore(tally);
+    usleep(FRAMERATE * 600);
     updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
 }
 

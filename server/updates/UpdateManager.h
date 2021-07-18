@@ -30,8 +30,7 @@ public:
     void updateTtWinRound();
     void updateBombExplode();
     void updateClip(int id);
-
-    // ~UpdateManager();
+    void updateScore(Tally& tally);
 };
 
 

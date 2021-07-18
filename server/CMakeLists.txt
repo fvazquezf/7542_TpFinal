@@ -56,6 +56,7 @@ add_library(lib_server
     updates/CtWinRoundUpdate.cpp
     updates/TtWinRoundUpdate.cpp
     updates/BombExplodeUpdate.cpp
-    updates/UpdateManager.cpp)
+    updates/UpdateManager.cpp
+    updates/FinalScreenUpdate.cpp)
 
 
