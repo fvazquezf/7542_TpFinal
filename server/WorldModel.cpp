@@ -242,7 +242,13 @@ void WorldModel::bombStep(){
         }
         case EXPLODED: {
             updatesM.updateBombExplode();
-            // agregar calculo del danio
+            for (auto& victim: this->playerModels) {
+                if (bomb->explosionDamage(victim.second.getPosition())){
+                    tally.playerKilledOther(bomb->getPlanter(), victim.first);
+                    updatesM.updateDead(victim.first);
+                    updatesM.updateWeapon(victim.first, KNIFE);
+                }
+            }
             break;
         }
     }

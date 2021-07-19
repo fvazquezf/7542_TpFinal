@@ -166,7 +166,7 @@ bool PlayerModel::startBombHandling(MapLayout& mapLayout, int id){
     if (isCt) {
         return armory.startDefusing();
     } else {
-        return armory.startPlanting(id);
+        return armory.startPlanting(id, model->GetPosition());
     }
 }
 

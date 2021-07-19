@@ -12,6 +12,8 @@ Bomb::Bomb(int range, int spread, int damage, int firerate, int fuse, int activa
     defusingTicks = 0;
     this->fuse = fuse;
     remainingTime = fuse;
+    explosionRange = 10;
+    position = b2Vec2(0, 0);
 }
 
 Bomb::~Bomb(){
@@ -59,10 +61,11 @@ int Bomb::getClip(){
     return -1;
 }
 
-void Bomb::startPlanting(int id){
+void Bomb::startPlanting(int id, const b2Vec2& pos){
     if (state == INACTIVE) {
         state = PLANTING;
         planter = id;
+        position = pos;
     }
 }
 
@@ -118,6 +121,15 @@ int Bomb::tic() {
             return INACTIVE;
     }
 }
+
+bool Bomb::explosionDamage(const b2Vec2& victim) {
+    double dist = static_cast<double>((victim - position).Length());
+    if (dist < explosionRange) {
+        return true;
+    }
+    return false;
+}
+
 
 int Bomb::getPlanter(){
     return planter;

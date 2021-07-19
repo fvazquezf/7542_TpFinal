@@ -83,7 +83,7 @@ int Tally::isRoundOver(){
 bool Tally::ctWon(){
     int state = bomb->getState();
     if (state == DEFUSED) return true;
-    if (state == ACTIVE) return false;
+    if (state == ACTIVE || state == EXPLODED) return false;
     if (state == INACTIVE && time == 0) return true;
     
     bool allTtDead = true;

@@ -85,10 +85,10 @@ void Armory::giveBomb(){
     selectWeapon(BOMB);
 }
 
-bool Armory::startPlanting(int id){
+bool Armory::startPlanting(int id, const b2Vec2& pos){
     if (arsenal.count(EXPLOSIVE) == 0) return false;
     currentWeapon = EXPLOSIVE;
-    bomb->startPlanting(id);
+    bomb->startPlanting(id, pos);
     return true;
 }
 

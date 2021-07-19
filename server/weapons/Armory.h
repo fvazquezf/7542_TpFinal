@@ -47,7 +47,7 @@ class Armory {
 
         void giveBomb();
 
-        bool startPlanting(int id);
+        bool startPlanting(int id, const b2Vec2& pos);
         bool stopPlanting();
         bool startDefusing();
         bool stopDefusing();
