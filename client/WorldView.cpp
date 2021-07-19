@@ -118,7 +118,9 @@ void WorldView::attack(uint8_t id) {
 void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     characterManager.changeWeapon(weaponCode, characterId);
-    hud.updateCurrentWeapon(weaponCode);
+    if (characterId == playerId){
+        hud.updateCurrentWeapon(weaponCode);
+    }
 }
 
 bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
