@@ -217,20 +217,6 @@ void WorldModel::roundCommon() {
     usleep(FRAMERATE + elapsed.count());
 }
 
-void WorldModel::startBombHandling(uint8_t id){
-	if (purchaseFase) return;
-    if (playerModels.at(id).startBombHandling(mapLayout, id)){
-        equipWeapon(id, EXPLOSIVE);
-    }
-}
-
-void WorldModel::stopBombHandling(uint8_t id){
-    if (purchaseFase) return;
-	if (playerModels.at(id).stopBombHandling()){
-        equipWeapon(id, MELEE);
-    }
-}
-
 void WorldModel::bombStep(){
     int state = bomb->tic();
     switch (state) {
@@ -244,7 +230,8 @@ void WorldModel::bombStep(){
             updatesM.updateBombExplode();
             for (auto& victim: this->playerModels) {
                 if (bomb->explosionDamage(victim.second.getPosition())){
-                    tally.playerKilledOther(bomb->getPlanter(), victim.first);
+                    tally.addDeath(victim.first);
+                    victim.second.die();
                     updatesM.updateDead(victim.first);
                     updatesM.updateWeapon(victim.first, KNIFE);
                 }
@@ -307,6 +294,20 @@ void WorldModel::startAttack(uint8_t id){
 void WorldModel::stopAttack(uint8_t id){
 	if (purchaseFase) return;
     playerModels.at(id).stopAttack();
+}
+
+void WorldModel::startBombHandling(uint8_t id){
+	if (purchaseFase) return;
+    if (playerModels.at(id).startBombHandling(mapLayout, id)){
+        equipWeapon(id, EXPLOSIVE);
+    }
+}
+
+void WorldModel::stopBombHandling(uint8_t id){
+    if (purchaseFase) return;
+	if (playerModels.at(id).stopBombHandling()){
+        equipWeapon(id, MELEE);
+    }
 }
 
 void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){

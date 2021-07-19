@@ -37,6 +37,15 @@ void Tally::playerKilledOther(int id, int other){
     }
 }
 
+void Tally::addDeath(int id) {
+    if (ctSide.find(id) != ctSide.end()){ 
+        ctSide[id].second++;
+    } else {
+        ttSide[id].second++;
+    }
+}
+
+
 void Tally::startBombTiming(){
     time = bomb->getFuse();
 }

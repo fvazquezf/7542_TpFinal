@@ -32,6 +32,7 @@ public:
     void swapTeams();
     
     void playerKilledOther(int id, int other);
+    void addDeath(int id);
 
     void startBombTiming();
     bool tickTime();
