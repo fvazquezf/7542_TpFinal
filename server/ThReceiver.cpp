@@ -35,7 +35,9 @@ void ThReceiver::run() {
     while (is_running){
         char comm;
         try {
-            peer.recv(&comm, 1);
+            if (!peer.recv(&comm, 1)){
+                break;
+            }
         } catch (const std::exception& e){
             break;
         }
@@ -52,7 +54,10 @@ ThReceiver::~ThReceiver() {
 std::vector<unsigned char> ThReceiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
     try {
-        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+        if (!peer.recv(reinterpret_cast<char *>(msg.data()), size)){
+            is_running = false;
+            return msg;
+        }
     } catch (const std::exception& e){
         is_running = false;
     }

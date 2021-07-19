@@ -16,7 +16,9 @@ void Receiver::run() {
     while (running){
         char update;
         try {
-            peer.recv(&update, 1);
+            if (!peer.recv(&update, 1)){
+                break;
+            }
         } catch (const std::exception& e){
             break;
         }
@@ -34,7 +36,10 @@ void Receiver::stop() {
 std::vector<unsigned char> Receiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
     try {
-        peer.recv(reinterpret_cast<char *>(msg.data()), size);
+        if (!peer.recv(reinterpret_cast<char *>(msg.data()), size)){
+            running = false;
+            return msg;
+        }
     } catch (const std::exception& e){
         running = false;
     }

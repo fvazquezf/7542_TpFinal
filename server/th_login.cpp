@@ -19,7 +19,10 @@ void ThLogin::run() {
     while(!is_logged_in) {
         char comm;
         try {
-            peer.recv(&comm, 1);
+            if (!peer.recv(&comm, 1)){
+                is_logged_in = true;
+                break;
+            }
         } catch (const std::exception& e){
             break;
         }
@@ -42,7 +45,10 @@ void ThLogin::stop() {
 std::vector<unsigned char> ThLogin::receiveMsgs(size_t msgSize) {
     std::vector<unsigned char> msg(msgSize);
     try {
-        peer.recv(reinterpret_cast<char *>(msg.data()), msgSize);
+        if (peer.recv(reinterpret_cast<char *>(msg.data()), msgSize)){
+            is_logged_in = true;
+            return msg;
+        }
     } catch(const std::exception& e){
         is_logged_in = true;
     }
