@@ -50,6 +50,11 @@ void DroppedWeapons::removeBomb(){
     }
 }
 
+void DroppedWeapons::clear(){
+    droppedWeapons.clear();
+}
+
+
 DroppedWeapons::~DroppedWeapons() {
 }
 

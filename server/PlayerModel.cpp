@@ -137,10 +137,6 @@ std::shared_ptr<Weapon> PlayerModel::hit(){
 bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
     hp -= weapon->hit();
     if (hp <= 0){
-        hp = 0;
-        freeze();
-        armory.dropWeapons(model->GetPosition());
-        model->SetEnabled(false);
         return true;
     } else {
         return false;
@@ -195,6 +191,13 @@ int PlayerModel::pickUpWeapon(){
 void PlayerModel::kill() {
     money += armory.bounty();
     totalMoney += armory.bounty();
+}
+
+void PlayerModel::die() {
+    hp = 0;
+    freeze();
+    armory.dropWeapons(model->GetPosition());
+    model->SetEnabled(false);
 }
 
 void PlayerModel::revive() {

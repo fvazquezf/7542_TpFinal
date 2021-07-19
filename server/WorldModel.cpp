@@ -269,6 +269,7 @@ void WorldModel::step(){
                 // esta condicion chequea si murio, o si solo hubo impacto
                 if (victim.second.gotHitAndDied(attacker.second.hit())) {
                     tally.playerKilledOther(attacker.first, victim.first);
+                    victim.second.die();
                     attacker.second.kill();
                     updatesM.updateMoney(attacker.first);
                     updatesM.updateDead(victim.first);
@@ -352,9 +353,11 @@ void WorldModel::disconnectPlayer(uint8_t id) {
 void WorldModel::swapTeams(){
     for (auto & playerModel : this->playerModels){
         playerModel.second.changeSide();
+        playerModel.second.die();
     }
     tally.swapTeams();
     updatesM.updateTeams();
+    droppedWeapons.clear();
 }
 
 void WorldModel::reviveAll(){
