@@ -187,7 +187,10 @@ void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     skinTime = true;
     skins.setPlayerTeam(teamMap.at(playerId));
-    characterManager.assignTeams(std::move(teamMap));
+    if (characterManager.assignTeams(std::move(teamMap))){
+        droppedWeapons.clear();
+        bomb.clear();
+    }
     // swappea el puntaje de los tts y cts
     hud.swapTeamScores();
 }

@@ -36,12 +36,14 @@ CharacterManager::CharacterManager(SdlWindow& window, YAML::Node& config)
                             SdlTexture(config["bomb"].as<std::string>(), window)));
 }
 
-void CharacterManager::assignTeams(std::map<uint8_t, bool> teamMap) {
+bool CharacterManager::assignTeams(std::map<uint8_t, bool> teamMap) {
     if (!teams.empty()) {
         teams = std::move(teamMap);
         changeSides();
+        return true; // change sides
     } else {
         teams = std::move(teamMap);
+        return false;
     }
 }
 
