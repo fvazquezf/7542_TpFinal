@@ -43,6 +43,16 @@ class WorldModel: public Thread {
     bool purchaseFase;
     bool is_running;
     
+    void roundPurchase();
+    void roundCommon();
+    void roundPlay();
+
+    void swapTeams();
+    void reviveAll();
+
+    void bombStep();
+    void resetRound();
+    
     public:
         WorldModel(Broadcaster& updates, const std::map<int, int>& matchConfig);
 
@@ -69,25 +79,13 @@ class WorldModel: public Thread {
         void startBombHandling(uint8_t id);
         void stopBombHandling(uint8_t id);
 
-
         void buyWeapon(uint8_t id, uint8_t weaponCode);
         void equipWeapon(uint8_t id, uint8_t weaponType);
         void pickUpWeapon(uint8_t id);
         void reloadWeapon(uint8_t id);
 
-        void roundPurchase();
-        void roundCommon();
-        void roundPlay();
-
-        void swapTeams();
-        void reviveAll();
-
         void step();
-
-
-    void bombStep();
-    void resetRound();
-    void disconnectPlayer(uint8_t id);
+        void disconnectPlayer(uint8_t id);
 };
 
 #endif

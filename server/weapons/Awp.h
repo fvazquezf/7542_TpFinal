@@ -16,8 +16,6 @@ class Awp: public Weapon {
         bool canShoot(bool isAttacking) override;
         void resetCooldown() override;
         int hit() override;
-
-
 };
 
 #endif

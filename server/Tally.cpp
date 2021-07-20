@@ -1,5 +1,5 @@
 #include "Tally.h"
-
+#include <algorithm>
 #include <utility>
 
 Tally::Tally(std::shared_ptr<Bomb> bomb): 
@@ -128,6 +128,10 @@ std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> Tally::getSco
         int money = playerModels.at(id).getTotalMoney();
         bool side = false; // es Tt
         scores.emplace_back(id, kills, deaths, money, side);
-    }  
+    }
+    std::sort(scores.begin(), scores.end(), [&](const std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>& player1, 
+                                                const std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>& player2){
+        return (std::get<1>(player1) > std::get<1>(player2));
+    });
     return scores;
 }
