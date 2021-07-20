@@ -131,7 +131,9 @@ El primer ejecutable, es el servidor del juego. Este requiere como parametro el 
 ```console
 cs2d_server <puerto>
 ``` 
+
 ![Alt Text](readme_img/server_startup.gif)
+
 El archivo de configuracion del server lo podemos localizar en la ruta `/var/cs2d/config/` bajo el nombre `server_config.yaml`.
 En este archivo podemos encontrar configuraciones del juego en si (vida de los jugadores, plata inicial, velocidad de disparo de armas...).
 
@@ -141,6 +143,7 @@ El segundo ejecutable es el cliente. No requiere ningun parámetro adicional.
 cs2d
 ``` 
 Nos encontraremos con la siguiente pantalla, en donde podremos ingresar la ip y el puerto correspondientes al servidor.
+
 ![Alt Text](readme_img/login.gif)
 
 Podemos localizar el archivo de configuracion del cliente en `/var/cs2d/config` con el nombre `client_config.yaml`.
@@ -159,8 +162,12 @@ Una vez que se levanta el servidor, se pueden correr clientes. Se puede elegir e
 ![Alt Text](readme_img/client_create_join_window.gif)
 
 Si se elige crear una partida, indicar el mapa a utilizar y el nombre de la misma. Después de esto se debe esperar a que se conecte al menos un jugador.
+
 ![Alt Text](readme_img/client_create.gif)
+
 Si se elige unirse a una partida, selecciona la partida a la que quieras unirte. En cualquier caso, podes tocar el boton de empezar la partida para que inicie con menos jugadores de los que hay. 
+
+![Alt Text](readme_img/client_join.gif)
 
 El juego consiste en una R cantidad configurable de rondas. Un equipo juega la mitad de rondas en un bando como terrorista y la otra mitad anti-terroristas y viceversa.
 
@@ -174,11 +181,13 @@ Una ronda posee dos fases: la fase de preparación y la fase final.
 
 ##### Fase de preparación
 
-La primer fase consiste en la 'preparación' o una cantidad de segunodos en la que ningún jugador puede moverse para comprar el armamento necesario y las balas de estas armas para la ronda.
+La primer fase consiste en la 'preparación' o una cantidad de segundos en la que ningún jugador puede moverse para comprar el armamento necesario para la ronda. Tambien puede seleccionar el skin con el que quiera ver a su equipo.
+
+![Alt Text](readme_img/buying.gif)
 
 Cada arma posee un precio a excepción del cuchillo y pistola que representan el equipamiento default del personaje.
 
-Cada jugador puede poseer tres armas: la pistola el, cuchillo y un arma extra.
+Cada jugador puede poseer tres armas: la pistola, el cuchillo y un arma extra.
 
 Las armas tienen un precio. Un jugador puede tener 3 armas en su equipo (4 si son terroristas con la
 bomba): el cuchillo, la pistola y un arma principal extra que puede comprar o levantar si se encuentra como drop en el mapa.
