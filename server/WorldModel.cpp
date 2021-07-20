@@ -131,7 +131,7 @@ void WorldModel::run(){
         updatesM.updateWeapon(playerModel.first, KNIFE);
 	}
     // Ciclo de juego, 10 rondas
-    for (int i = 0; i < 1 && is_running; i++){
+    for (int i = 0; i < 10 && is_running; i++){
 		if (i == 5) swapTeams();
         resetRound();
         purchaseFase = true;
