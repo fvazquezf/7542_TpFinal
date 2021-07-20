@@ -194,6 +194,8 @@ bomba): el cuchillo, la pistola y un arma principal extra que puede comprar o le
 
 El equipamiento que jugador posee en una ronda se conserva entre las distintas rondas si este no fue asesinado. En el caso de que efectivamente haya sido asesinado, si posee arma extra, esta es dejada en el mapa forma de drop.
 
+![Alt Text](readme_img/drop_dead.gif)
+
 Las armas cuestan dinero, cada jugador cuenta con un saldo, que va aumentando en cada ronda con una suma inicial, y también cuenta con bonificaciones. Estas bonificaciones son obtenidas al ganar una ronda, o al matar a un rival.
 
 ##### Fase de final
@@ -203,6 +205,8 @@ Luego de la fase preparación, viene la fase final. La fase final finaliza cuand
 - Todo el equipo contrario muere.
 - Los terroristas activaron la bomba en los monumentos, y esta explota.
 - Los anti-terroristas desactivan la bomba.
+
+![Alt Text](readme_img/bomb_blow.gif)
 
 ### Controles
 
