@@ -14,12 +14,14 @@ private:
     uint8_t triangleBrightness;
     float height;
     float base;
+    bool stencilOn;
 public:
     Stencil(SdlWindow& window,
             uint16_t coneAngle,
             float circleRadius,
             uint8_t opacity,
-            uint8_t triangleBrightness);
+            uint8_t triangleBrightness,
+            bool stencilOn);
     void createStencilTexture(int16_t playerAngle);
 
     ~Stencil();
