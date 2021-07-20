@@ -2,18 +2,18 @@
 #include "Rifle.h"
 
 Rifle::Rifle(int ammo, int range, int accuracy, int damage, int firerate, int bounty)
-: Weapon(RIFLE, ammo, range, damage, bounty){
+: Weapon(RIFLE, ammo, range, damage, bounty) {
     this->firerate = firerate;
     this->accuracy = static_cast<double>(accuracy)/100;
     bulletCount = 0;
 }
 
 
-Rifle::~Rifle(){
+Rifle::~Rifle() {
 
 }
 
-bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
+bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) {
     b2Vec2 bulletPosition(player);
 
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
@@ -21,7 +21,7 @@ bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     double currDist;
     double bulletTravelledDistance = 0;
 
-    while (bulletTravelledDistance < range){
+    while (bulletTravelledDistance < range) {
         bulletTravelledDistance+= bulletDirection.Length();
         bulletPosition.operator+=(bulletDirection);
 
@@ -33,11 +33,11 @@ bool Rifle::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     return false;
 }
 
-int Rifle::hit(){
+int Rifle::hit() {
     return damage;
 }
 
-bool Rifle::canShoot(bool isAttacking){
+bool Rifle::canShoot(bool isAttacking) {
     if (isAttacking || bulletCount != 0) {
         if (cooldown == 0 && clip != 0) {
             if (bulletCount == 3) {
@@ -53,6 +53,6 @@ bool Rifle::canShoot(bool isAttacking){
     return false;
 }
 
-void Rifle::resetCooldown(){
+void Rifle::resetCooldown() {
 
 }

@@ -2,7 +2,7 @@
 #include "../WorldModel.h"
 
 StartAttackEvent::StartAttackEvent(uint8_t id)
-: ClientEvent(id){
+: ClientEvent(id) {
 }
 
 void StartAttackEvent::updatePlayer(WorldModel &world) {

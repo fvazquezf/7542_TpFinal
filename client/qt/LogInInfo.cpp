@@ -5,7 +5,7 @@
 #include <client/commands/CreateGame.h>
 #include "LogInInfo.h"
 
-LogInInfo::LogInInfo(){}
+LogInInfo::LogInInfo() {}
 
 LogInInfo::~LogInInfo() {}
 

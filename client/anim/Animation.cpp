@@ -19,15 +19,15 @@ Animation::Animation(SdlTexture &texture,
   numFramesW(framesW),
   frameOffset(0),
   ticksToChangeFrame(0),
-  startingFrom(startingIteration){
-    for (int i = 0; i < framesH; ++i){
-        for (int j = 0; j < framesW; ++j){
+  startingFrom(startingIteration) {
+    for (int i = 0; i < framesH; ++i) {
+        for (int j = 0; j < framesW; ++j) {
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
         }
     }
 }
 
-Animation::~Animation(){
+Animation::~Animation() {
 }
 
 // para frames cuadrados
@@ -45,7 +45,7 @@ Animation::Animation(SdlTexture &texture,
   numFramesW(framesW),
   frameOffset(0),
   ticksToChangeFrame(0),
-  startingFrom(startingIteration){
+  startingFrom(startingIteration) {
     for (int i = 0; i < framesW; ++i) {
         for (int j = 0; j < framesW; ++j) {
             frames.push_back(SDL_Rect{j * sizeW, i * sizeH, sizeW, sizeH});
@@ -80,12 +80,12 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
     float newPosY = posY;
     int16_t newAngle = angle;
     auto frame = frames.at(currentFrame);
-    if (!modifiedState.empty()){
+    if (!modifiedState.empty()) {
         auto state = modifiedState.front();
         newPosX += std::get<0>(state);
         newPosY += std::get<1>(state);
         newAngle += std::get<2>(state);
-        if (newAngle >= 360){
+        if (newAngle >= 360) {
             newAngle -= 360;
         }
         modifiedState.pop();
@@ -99,14 +99,14 @@ std::tuple<float, float, int16_t> Animation::renderOne(Camera &camera,
 
 bool Animation::renderOld(Camera &camera, int maxNumFrames) {
     auto it = oldRenders.begin();
-    while (it != oldRenders.end()){
+    while (it != oldRenders.end()) {
         Area src(std::get<3>(*it).x, std::get<3>(*it).y, std::get<3>(*it).w, std::get<3>(*it).h);
         camera.renderWithAlpha(texture,
                                src,
                                std::get<0>(*it),
                                std::get<1>(*it),
                            (maxNumFrames - std::get<2>(*it)));
-        if (!(maxNumFrames - std::get<2>(*it))){
+        if (!(maxNumFrames - std::get<2>(*it))) {
             it = oldRenders.erase(it);
         } else {
             ++std::get<2>(*it);
@@ -125,7 +125,7 @@ void Animation::renderOneAndKeep(Camera &camera, float posX, float posY) {
 
 void Animation::advanceFrame() {
     ++currentFrame;
-    if (currentFrame == numFrames){
+    if (currentFrame == numFrames) {
         currentFrame = frameOffset;
     }
 }
@@ -162,7 +162,7 @@ Animation::Animation(Animation &&other)
   modifiedState(std::move(other.modifiedState)),
   frameOffset(other.frameOffset),
   ticksToChangeFrame(other.ticksToChangeFrame),
-  startingFrom(other.startingFrom){
+  startingFrom(other.startingFrom) {
 }
 
 Animation &Animation::operator=(Animation &&other) {

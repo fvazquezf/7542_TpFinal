@@ -1,6 +1,6 @@
 #include "ChangeWeapon.h"
 
-ChangeWeapon::ChangeWeapon(SDL_Keycode changeCode){
+ChangeWeapon::ChangeWeapon(SDL_Keycode changeCode) {
     code = changeMap.at(changeCode);
 }
 

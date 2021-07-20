@@ -11,7 +11,7 @@ DroppedWeapon::DroppedWeapon(SdlTexture &texture, uint8_t weaponType, size_t uni
                   posY / 100),
   posXmm(posX),
   posYmm(posY),
-  show(true){
+  show(true) {
 }
 
 bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifier) {
@@ -19,7 +19,7 @@ bool DroppedWeapon::isWeaponTypeAndId(uint8_t weaponType, size_t uniqueIdentifie
 }
 
 void DroppedWeapon::draw(Camera& cam) {
-    if (show){
+    if (show) {
         droppedDrawable.render(cam, 0);
     }
 }
@@ -30,11 +30,11 @@ DroppedWeapon::DroppedWeapon(DroppedWeapon &&other)
   droppedDrawable(std::move(other.droppedDrawable)),
   posXmm(other.posXmm),
   posYmm(other.posYmm),
-  show(other.show){
+  show(other.show) {
 }
 
 DroppedWeapon &DroppedWeapon::operator=(DroppedWeapon &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 

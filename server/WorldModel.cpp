@@ -27,7 +27,7 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
   tally(bomb),
   updates (updates),
   updatesM(updates, playerModels),
-  droppedWeapons(updates){
+  droppedWeapons(updates) {
 	this->timeStep = 1.0f / 60.0f;
 	this->velocityIterations = 6;
 	this->positionIterations = 2;
@@ -60,7 +60,7 @@ WorldModel::WorldModel(WorldModel &&other)
   bomb(other.bomb),
   tally(other.tally),
   is_running(other.is_running),
-  updatesM(other.updatesM){
+  updatesM(other.updatesM) {
     // tengo que crearlo asi pq
     // en box2d el world
     // no tiene construccion por movimiento
@@ -71,7 +71,7 @@ WorldModel::WorldModel(WorldModel &&other)
 }
 
 WorldModel &WorldModel::operator=(WorldModel &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -82,7 +82,7 @@ void WorldModel::stop() {
     is_running = false;
 }
 
-ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
+ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave) {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(std::rand()%50, std::rand()%50);
@@ -111,27 +111,27 @@ ProtectedQueue<std::unique_ptr<ClientEvent>>& WorldModel::addPlayer(int clave){
 	return std::ref(this->usersEvents);
 }
 
-void WorldModel::loadMap(YAML::Node& mapInfo){
+void WorldModel::loadMap(YAML::Node& mapInfo) {
     mapLayout.loadMap(world, mapInfo);
 }
 
-void WorldModel::run(){
+void WorldModel::run() {
 	is_running = true;
     // division en equipos
-    for (int i = 0; i < (int)playerModels.size()/2; i++){
+    for (int i = 0; i < (int)playerModels.size()/2; i++) {
         playerModels.at(i).changeSide();
     }
     updatesM.updateTeams();  
     updatesM.updateTime(tally);
     // Setup inicial
-    for (auto & playerModel : this->playerModels){
+    for (auto & playerModel : this->playerModels) {
 		tally.placeInTeam(playerModel.first, playerModel.second.getSide());
         updatesM.updateMoney(playerModel.first);
         updatesM.updateHp(playerModel.first);
         updatesM.updateWeapon(playerModel.first, KNIFE);
 	}
     // Ciclo de juego, 10 rondas
-    for (int i = 0; i < 10 && is_running; i++){
+    for (int i = 0; i < 10 && is_running; i++) {
 		if (i == 5) swapTeams();
         resetRound();
         purchaseFase = true;
@@ -140,7 +140,7 @@ void WorldModel::run(){
 		purchaseFase = false;
         roundPlay();
     }
-    if (!is_running){
+    if (!is_running) {
         return;
     }
     updatesM.updateScore(tally);
@@ -148,9 +148,9 @@ void WorldModel::run(){
     updates.pushAll(std::unique_ptr<Update>(new GameDoneUpdate()));
 }
 
-void WorldModel::resetRound(){
+void WorldModel::resetRound() {
     reviveAll();
-    for (auto & playerModel : this->playerModels){
+    for (auto & playerModel : this->playerModels) {
 		playerModel.second.reposition(mapLayout);
 	}
     bomb->reset();
@@ -163,7 +163,7 @@ void WorldModel::roundPurchase() {
     updatesM.updatePositions();
     usleep(FRAMERATE);
     // 600 ticks, 10 segundos
-    for (size_t i = 0; i < 600 && is_running; ++i){
+    for (size_t i = 0; i < 600 && is_running; ++i) {
         roundCommon();
     }
     updatesM.updateBuying(false);
@@ -172,11 +172,11 @@ void WorldModel::roundPurchase() {
 void WorldModel::roundPlay() {
     // no queremos ningun evento residual
     usersEvents.clear();
-    while (!tally.isRoundOver() && is_running){
+    while (!tally.isRoundOver() && is_running) {
         roundCommon();
     }
 
-    if (!is_running){
+    if (!is_running) {
         return;
     }
 
@@ -190,23 +190,23 @@ void WorldModel::roundPlay() {
 
 void WorldModel::roundCommon() {
     auto start = std::chrono::system_clock::now();
-    for (int j = 0; j < 50 && is_running; ++j){
+    for (int j = 0; j < 50 && is_running; ++j) {
         try {
             std::unique_ptr<ClientEvent> event = usersEvents.pop();
             event->updatePlayer(*this);
         }
-        catch (const std::exception& e){
+        catch (const std::exception& e) {
             continue;
         }
     }
 
-    if (!is_running){
+    if (!is_running) {
         return;
     }
     
     this->step();
 
-    if (tally.tickTime()){
+    if (tally.tickTime()) {
         updatesM.updateTime(tally);
     }
     updatesM.updatePositions();
@@ -217,7 +217,7 @@ void WorldModel::roundCommon() {
     usleep(FRAMERATE + elapsed.count());
 }
 
-void WorldModel::bombStep(){
+void WorldModel::bombStep() {
     int state = bomb->tic();
     switch (state) {
         case ACTIVATE: {
@@ -229,7 +229,7 @@ void WorldModel::bombStep(){
         case EXPLODED: {
             updatesM.updateBombExplode();
             for (auto& victim: this->playerModels) {
-                if (bomb->explosionDamage(victim.second.getPosition())){
+                if (bomb->explosionDamage(victim.second.getPosition())) {
                     tally.addDeath(victim.first);
                     victim.second.die();
                     updatesM.updateDead(victim.first);
@@ -241,12 +241,12 @@ void WorldModel::bombStep(){
     }
 }
 
-void WorldModel::step(){
+void WorldModel::step() {
 	for (auto& attacker : this->playerModels) {
         attacker.second.step();
         if (!attacker.second.canShoot()) continue;
         updatesM.updateAttack(attacker.first);
-		for (auto& victim : playerModels){
+		for (auto& victim : playerModels) {
 		    // esta condicion es para que no se ataque a si mismo
 		    if (&victim.second == &attacker.second) continue;
             // esta condicion chequea que haya un hit
@@ -286,39 +286,39 @@ void WorldModel::rotatePlayer(uint8_t id, int16_t angle) {
     playerModels.at(id).setAngle(angle);
 }
 
-void WorldModel::startAttack(uint8_t id){
+void WorldModel::startAttack(uint8_t id) {
 	if (purchaseFase) return;
     playerModels.at(id).startAttack();
 }
 
-void WorldModel::stopAttack(uint8_t id){
+void WorldModel::stopAttack(uint8_t id) {
 	if (purchaseFase) return;
     playerModels.at(id).stopAttack();
 }
 
-void WorldModel::startBombHandling(uint8_t id){
+void WorldModel::startBombHandling(uint8_t id) {
 	if (purchaseFase) return;
-    if (playerModels.at(id).startBombHandling(mapLayout, id)){
+    if (playerModels.at(id).startBombHandling(mapLayout, id)) {
         equipWeapon(id, EXPLOSIVE);
     }
 }
 
-void WorldModel::stopBombHandling(uint8_t id){
+void WorldModel::stopBombHandling(uint8_t id) {
     if (purchaseFase) return;
-	if (playerModels.at(id).stopBombHandling()){
+	if (playerModels.at(id).stopBombHandling()) {
         equipWeapon(id, MELEE);
     }
 }
 
-void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType){
+void WorldModel::equipWeapon(uint8_t id, uint8_t weaponType) {
     int weaponId = -1;
-	if ((weaponId = playerModels.at(id).equipWeapon(weaponType)) != -1){
+	if ((weaponId = playerModels.at(id).equipWeapon(weaponType)) != -1) {
 		updatesM.updateWeapon(id, weaponId);
 	}
 }
 
 void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
-    if (playerModels.at(id).buyWeapon(weaponCode)){
+    if (playerModels.at(id).buyWeapon(weaponCode)) {
 		// el weaponType = 0 es el de arma primaria
 		// solo podes comprar armas primarias, asi que si compraste equipas la primaria
 		equipWeapon(id, PRIMARY);
@@ -326,9 +326,9 @@ void WorldModel::buyWeapon(uint8_t id, uint8_t weaponCode) {
     }
 }
 
-void WorldModel::pickUpWeapon(uint8_t id){
+void WorldModel::pickUpWeapon(uint8_t id) {
     int weaponCode = playerModels.at(id).pickUpWeapon();
-	if (weaponCode == BOMB){
+	if (weaponCode == BOMB) {
 		equipWeapon(id, EXPLOSIVE);
     } else if (weaponCode == -1) {
         return;
@@ -337,7 +337,7 @@ void WorldModel::pickUpWeapon(uint8_t id){
     }
 }
 
-void WorldModel::reloadWeapon(uint8_t id){
+void WorldModel::reloadWeapon(uint8_t id) {
     playerModels.at(id).reload();
     updatesM.updateClip(id);
 }
@@ -351,8 +351,8 @@ void WorldModel::disconnectPlayer(uint8_t id) {
     // deberia mandarse un update al resto de los jugadores
 }
 
-void WorldModel::swapTeams(){
-    for (auto & playerModel : this->playerModels){
+void WorldModel::swapTeams() {
+    for (auto & playerModel : this->playerModels) {
         playerModel.second.changeSide();
         playerModel.second.die();
     }
@@ -361,8 +361,8 @@ void WorldModel::swapTeams(){
     droppedWeapons.clear();
 }
 
-void WorldModel::reviveAll(){
-    for (auto& it : playerModels){
+void WorldModel::reviveAll() {
+    for (auto& it : playerModels) {
         it.second.revive();
         updatesM.updateHp(it.first);
     }

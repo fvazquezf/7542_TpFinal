@@ -1,7 +1,7 @@
 #include "Buy.h"
 
 Buy::Buy(uint8_t weaponCode)
-: weaponCode(weaponCode){
+: weaponCode(weaponCode) {
 }
 
 void Buy::serialize(std::function<void(std::vector<unsigned char>)> &callback, const Protocol &protocol) {

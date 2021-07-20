@@ -5,7 +5,7 @@ WeaponDropUpdate::WeaponDropUpdate(uint8_t code, size_t dropIdentifier, float po
   dropIdentifier(dropIdentifier),
   x(posX),
   y(posY),
-  drop(drop){
+  drop(drop) {
 }
 
 WeaponDropUpdate::~WeaponDropUpdate() {

@@ -17,7 +17,7 @@ IntroWindow::IntroWindow(QWidget *parent, int width, int heigth) {
     this->setWindowTitle("Counter Strike 2D");
 }
 
-void IntroWindow::run(){
+void IntroWindow::run() {
     QDir dir(QDir::currentPath());
     dir.cdUp();
     playlist->addMedia(QUrl::fromLocalFile(INTRO_PATH));

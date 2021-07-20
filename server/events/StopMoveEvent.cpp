@@ -2,11 +2,11 @@
 #include "../WorldModel.h"
 
 StopMoveEvent::StopMoveEvent(int id, int dir):
-    ClientEvent(id){
+    ClientEvent(id) {
     this->dir = dir;
 }
 
 
-void StopMoveEvent::updatePlayer(WorldModel &world){
+void StopMoveEvent::updatePlayer(WorldModel &world) {
     world.stopMovingPlayer(clientId, dir);
 }

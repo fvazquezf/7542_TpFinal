@@ -5,7 +5,7 @@ ScoreScreen::ScoreScreen(SdlWindow &window, Hud &hud, YAML::Node& config)
   hud(hud),
   font(config["cs_ttf"].as<std::string>()),
   playerId(0),
-  draw(false){
+  draw(false) {
     summaryDataCts.reserve(4);
     summaryDataTts.reserve(4);
     summaryDataCts.emplace_back(font, window, 30);
@@ -32,13 +32,13 @@ ScoreScreen::ScoreScreen(SdlWindow &window, Hud &hud, YAML::Node& config)
             };
 }
 
-void ScoreScreen::setPlayerId(uint8_t id){
+void ScoreScreen::setPlayerId(uint8_t id) {
     playerId = id;
 }
 
 void ScoreScreen::setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> &scoreData) {
     // TODO: separar por teams
-    for (auto& score : scoreData){
+    for (auto& score : scoreData) {
         // si es ct
         if (std::get<4>(score)) {
             setPlayerScore(ctTtScoreStrings.at(true), score);
@@ -57,18 +57,18 @@ void ScoreScreen::setScoreData(const std::vector<std::tuple<uint8_t, uint8_t, ui
 }
 
 void ScoreScreen::show() {
-    if (!draw){
+    if (!draw) {
         return;
     }
 
     size_t i = 0;
-    for (auto& scoreText : summaryDataCts){
+    for (auto& scoreText : summaryDataCts) {
         Area dst3(window.getWidth() / 8, window.getHeight() / 5 + 50 * i, 100, 50);
         scoreText.render(dst3);
         ++i;
     }
     i = 0;
-    for (auto& scoreText : summaryDataTts){
+    for (auto& scoreText : summaryDataTts) {
         Area dst3(window.getWidth() / 8,3 * window.getHeight() / 5 + 50 * i, 100, 50);
         scoreText.render(dst3);
         ++i;
@@ -94,7 +94,7 @@ ScoreScreen::ScoreScreen(ScoreScreen &&other)
   font(std::move(other.font)),
   summaryDataCts(std::move(other.summaryDataCts)),
   summaryDataTts(std::move(other.summaryDataTts)),
-  playerId(other.playerId){
+  playerId(other.playerId) {
 }
 
 ScoreScreen &ScoreScreen::operator=(ScoreScreen &&other) {

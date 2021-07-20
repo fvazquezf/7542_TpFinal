@@ -89,7 +89,7 @@ void LogInWindow::on_saveButton_clicked()
     }
     try {
         info.socket.connect(ip.c_str(), port.c_str());
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         QMessageBox::warning(this, tr("Configuration error"),
                              tr("Error trying to connect to server."),
                              QMessageBox::Close);

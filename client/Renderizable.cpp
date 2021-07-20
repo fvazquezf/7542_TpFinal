@@ -10,10 +10,10 @@ Renderizable::Renderizable(SdlTexture& texture,
   sizeH(sizeH),
   posX(posX),
   posY(posY),
-  angle(0){
+  angle(0) {
 }
 
-Renderizable::~Renderizable(){
+Renderizable::~Renderizable() {
 }
 
 void Renderizable::updatePosition(float x, float y) {
@@ -31,11 +31,11 @@ Renderizable::Renderizable(Renderizable &&other)
   sizeH(other.sizeH),
   posX(other.posX),
   posY(other.posY),
-  angle(other.angle){
+  angle(other.angle) {
 }
 
 Renderizable &Renderizable::operator=(Renderizable &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 

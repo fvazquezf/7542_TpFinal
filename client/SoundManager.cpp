@@ -1,7 +1,7 @@
 #include "SoundManager.h"
 
 SoundManager::SoundManager()
-: chunksPlaying(0){
+: chunksPlaying(0) {
 
 }
 
@@ -23,15 +23,15 @@ void SoundManager::pPlaySound(int code, float distance) {
         return;
     }
 
-    if (soundMap.count(code) == 0){
+    if (soundMap.count(code) == 0) {
         return; // no existe el sonido
     }
 
-    if (distance > MAX_SOUND_DISTANCE){
+    if (distance > MAX_SOUND_DISTANCE) {
         return;
     }
 
-    if (chunksPlaying == MAX_CHUNKS){
+    if (chunksPlaying == MAX_CHUNKS) {
         return;
     }
 
@@ -120,7 +120,7 @@ void SoundManager::pPlayMusic() {
     if (!on) {
         return;
     }
-    if (music == nullptr){
+    if (music == nullptr) {
         return;
     }
 
@@ -136,7 +136,7 @@ void SoundManager::pStopMusic() {
         return;
     }
 
-    if (!Mix_FadeOutMusic(1000)){
+    if (!Mix_FadeOutMusic(1000)) {
         throw std::exception();
     }
 }

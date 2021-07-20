@@ -31,7 +31,7 @@ class Socket{
     Socket accept();
     void connect(const char* host, const char* service);
     void close();
-    void shutdown(int channel);
+    void shutdown(int channel) const;
     ~Socket();
 
  protected:

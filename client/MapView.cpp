@@ -8,13 +8,13 @@ MapView::MapView(SdlWindow& window,
 : window(window),
   clientConfig(clientConfig),
   columns(0),
-  rows(0){
+  rows(0) {
 }
 
 void MapView::loadMap(const std::string &mapFile) {
     try {
         map = YAML::Load(mapFile);
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         throw e;
     }
 
@@ -29,14 +29,14 @@ void MapView::loadBackground() {
     std::string background = map["background"].as<std::string>();
     std::string backgroundPath;
     auto backgrounds = clientConfig["background"].as<std::vector<std::vector<std::string>>>();
-    for (auto& it : backgrounds){
-        if (it[0] == background){
+    for (auto& it : backgrounds) {
+        if (it[0] == background) {
             backgroundPath = it[1];
             break;
         }
     }
 
-    if (backgroundPath.empty()){
+    if (backgroundPath.empty()) {
         // tirar excepcion
     }
 
@@ -54,8 +54,8 @@ void MapView::loadBackground() {
 
 void MapView::loadWalls() {
     auto wallInformation = clientConfig["walls"].as<std::vector<std::vector<std::string>>>();
-    for (auto& wall : wallInformation){
-        if (map[wall[0]]){ // si hay informacion sobre esa pared, creo y guardo la textura
+    for (auto& wall : wallInformation) {
+        if (map[wall[0]]) { // si hay informacion sobre esa pared, creo y guardo la textura
             auto wallPositions = map[wall[0]].as<std::vector<std::pair<int, int>>>();
             textureHolder.emplace(std::piecewise_construct,
                                   std::forward_as_tuple(wall[0]),
@@ -97,15 +97,15 @@ MapView::~MapView() {
 }
 
 void MapView::render(Camera &cam) {
-    for (auto& tile : backgroundTiles){
+    for (auto& tile : backgroundTiles) {
         cam.render(tile, 0);
     }
 
-    for (auto& wall : walls){
+    for (auto& wall : walls) {
         cam.render(wall, 0);
     }
 
-    for (auto& zone : zones){
+    for (auto& zone : zones) {
         cam.render(zone, 0);
     }
 }

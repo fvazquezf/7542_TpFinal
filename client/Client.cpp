@@ -13,7 +13,7 @@ Client::Client(LogInInfo& login, YAML::Node& clientConfig)
   clientConfig(clientConfig),
   window(clientConfig["width"].as<int>(),
          clientConfig["height"].as<int>(),
-         clientConfig["fullscreen"].as<bool>(), "CS2D"){
+         clientConfig["fullscreen"].as<bool>(), "CS2D") {
 }
 
 void Client::launch() {
@@ -45,11 +45,11 @@ Client::Client(Client &&other): clientSocket(std::move(other.clientSocket)),
   clientConfig(other.clientConfig),
   window(clientConfig["width"].as<int>(),
           clientConfig["height"].as<int>(),
-                  clientConfig["fullscreen"].as<bool>(), "unaVentana"){
+                  clientConfig["fullscreen"].as<bool>(), "unaVentana") {
 }
 
 Client &Client::operator=(Client &&other) {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 

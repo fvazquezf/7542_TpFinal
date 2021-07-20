@@ -12,13 +12,13 @@ private:
     std::queue<T> q;
     std::mutex queueMutex;
 public:
-    ProtectedQueue(){}
+    ProtectedQueue() {}
 
     ProtectedQueue(const ProtectedQueue& other) = delete;
     ProtectedQueue& operator=(const ProtectedQueue& other) = delete;
 
     ProtectedQueue(ProtectedQueue &&other)
-    : q(std::move(other.q)){
+    : q(std::move(other.q)) {
     }
 
     ProtectedQueue &operator=(ProtectedQueue &&other)   {
@@ -29,11 +29,10 @@ public:
         return *this;
     }
 
-    T pop(){
+    T pop() {
         std::unique_lock<std::mutex> lock1(queueMutex);
         // si la q esta vacia no popeo nada
-        // catcheo esta excepcion del lado del mundo
-        if (q.empty()){
+        if (q.empty()) {
             throw Exception("Queue empty exception\n");
         }
         T elem = std::move(q.front());
@@ -41,12 +40,12 @@ public:
         return elem;
     }
 
-    void push(T queueElement){
+    void push(T queueElement) {
         std::unique_lock<std::mutex> lock1(queueMutex);
         q.push(std::move(queueElement));
     }
 
-    void clear(){
+    void clear() {
         std::unique_lock<std::mutex> lock1(queueMutex);
         std::queue<T> empty;
         std::swap(q, empty);

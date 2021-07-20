@@ -20,7 +20,7 @@
 
 
 UpdateManager::UpdateManager(Broadcaster& broadcaster, const std::map<int, PlayerModel>& playerModels):
- updatesQ(broadcaster), playerModels(playerModels){
+ updatesQ(broadcaster), playerModels(playerModels) {
 
 }
 
@@ -37,30 +37,30 @@ void UpdateManager::updatePositions() {
 
 void UpdateManager::updateAngles() {
     std::map<uint8_t, int16_t> angles;
-    for (auto& it : playerModels){
+    for (auto& it : playerModels) {
         angles.insert({it.first, it.second.getAngle()});
     }
     std::shared_ptr<Update> updatePtr(std::shared_ptr<Update>(new AngleUpdate(std::move(angles))));
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateAttack(int id){
+void UpdateManager::updateAttack(int id) {
 	std::shared_ptr<Update> updatePtr(new AttackUpdate(id));
     updatesQ.pushAll(updatePtr);
     updateClip(id);
 }
 
-void UpdateManager::updateHit(int id){
+void UpdateManager::updateHit(int id) {
 	std::shared_ptr<Update> updatePtr(new HitUpdate(id));
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateDead(int id){
+void UpdateManager::updateDead(int id) {
 	std::shared_ptr<Update> updatePtr(new DeadUpdate(id));
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateWeapon(uint8_t id, uint8_t weaponCode){
+void UpdateManager::updateWeapon(uint8_t id, uint8_t weaponCode) {
 	std::shared_ptr<Update> updatePtr(new WeaponUpdate(id, weaponCode));
     updatesQ.pushAll(updatePtr);
     updateClip(id);
@@ -70,9 +70,9 @@ void UpdateManager::updateBuying(bool buying) {
     updatesQ.pushAll(std::shared_ptr<Update>(new BuyTimeUpdate(buying)));
 }
 
-void UpdateManager::updateTeams(){
+void UpdateManager::updateTeams() {
     std::map<uint8_t, bool> teams;
-    for (auto & playerModel : playerModels){
+    for (auto & playerModel : playerModels) {
         int id = playerModel.first;
         bool team = playerModel.second.getSide();
         teams[id] = team;
@@ -81,45 +81,45 @@ void UpdateManager::updateTeams(){
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateHp(int id){
+void UpdateManager::updateHp(int id) {
     int hp = playerModels.at(id).getHp();
     std::shared_ptr<Update> updatePtr(new HpUpdate(hp));
     updatesQ.push(id, updatePtr);
 }
 
-void UpdateManager::updateMoney(int id){
+void UpdateManager::updateMoney(int id) {
     int money = playerModels.at(id).getMoney();
     std::shared_ptr<Update> updatePtr(new MoneyUpdate(money));
     updatesQ.push(id, updatePtr);
 }
 
-void UpdateManager::updateTime(Tally& tally){
+void UpdateManager::updateTime(Tally& tally) {
     int time = tally.getTime();
     std::shared_ptr<Update> updatePtr(new TimeUpdate(time));
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateBombPlanted(int id){
+void UpdateManager::updateBombPlanted(int id) {
     std::shared_ptr<Update> updatePtr(new BombPlantUpdate(id));
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateCtWinRound(){
+void UpdateManager::updateCtWinRound() {
     std::shared_ptr<Update> updatePtr(new CtWinRoundUpdate());
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateTtWinRound(){
+void UpdateManager::updateTtWinRound() {
     std::shared_ptr<Update> updatePtr(new TtWinRoundUpdate());
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateBombExplode(){
+void UpdateManager::updateBombExplode() {
     std::shared_ptr<Update> updatePtr(new BombExplodeUpdate());
     updatesQ.pushAll(updatePtr);
 }
 
-void UpdateManager::updateClip(int id){
+void UpdateManager::updateClip(int id) {
     int clip = playerModels.at(id).getClip();
     if (clip != -1) {
         std::shared_ptr<Update> updatePtr(new ClipUpdate(clip));
@@ -127,7 +127,7 @@ void UpdateManager::updateClip(int id){
     }
 }
 
-void UpdateManager::updateScore(Tally& tally){
+void UpdateManager::updateScore(Tally& tally) {
     std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> scores;
     scores = std::move(tally.getScores(playerModels));
     std::shared_ptr<Update> updatePtr(new FinalScreenUpdate(std::move(scores)));

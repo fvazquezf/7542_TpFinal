@@ -19,11 +19,11 @@ void ThLogin::run() {
     while(!is_logged_in) {
         char comm;
         try {
-            if (!peer.recv(&comm, 1)){
+            if (!peer.recv(&comm, 1)) {
                 is_logged_in = true;
                 break;
             }
-        } catch (const std::exception& e){
+        } catch (const std::exception& e) {
             break;
         }
         std::vector<unsigned char> msgRecv = prot.dispatchReceived(comm, receiverCallback);
@@ -45,11 +45,11 @@ void ThLogin::stop() {
 std::vector<unsigned char> ThLogin::receiveMsgs(size_t msgSize) {
     std::vector<unsigned char> msg(msgSize);
     try {
-        if (peer.recv(reinterpret_cast<char *>(msg.data()), msgSize)){
+        if (peer.recv(reinterpret_cast<char *>(msg.data()), msgSize)) {
             is_logged_in = true;
             return msg;
         }
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         is_logged_in = true;
     }
     return msg;
@@ -94,7 +94,7 @@ Socket ThLogin::handOver() {
 void ThLogin::loginResponse(int8_t id) {
     std::function<void(std::vector<unsigned char>)> sender =
             std::bind(&ThLogin::sendMsgs, this, std::placeholders::_1);
-    if (id < 0){
+    if (id < 0) {
         prot.loginResponse(LOGIN_BAD, sender);
     } else {
         prot.loginResponse(LOGIN_OK, sender, id);
@@ -104,12 +104,12 @@ void ThLogin::loginResponse(int8_t id) {
 void ThLogin::sendMsgs(std::vector<unsigned char> msg) {
     try {
         peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         is_logged_in = true;
     }
 }
 
-void ThLogin::loginLister(uint8_t commandId, const std::string& loginList){
+void ThLogin::loginLister(uint8_t commandId, const std::string& loginList) {
     std::function<void(std::vector<unsigned char>)> sender =
             std::bind(&ThLogin::sendMsgs, this, std::placeholders::_1);
     prot.loginLister(commandId, loginList, sender);

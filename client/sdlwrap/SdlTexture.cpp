@@ -4,9 +4,9 @@
 
 SdlTexture::SdlTexture(const std::string& filename, SdlWindow& window)
 : window(window),
-  texture(nullptr){
+  texture(nullptr) {
 	SDL_Surface* tmp = IMG_Load(filename.c_str());
-	if (!tmp){
+	if (!tmp) {
 		return;
 	}
 
@@ -30,17 +30,17 @@ int SdlTexture::render(const Area& src, const Area& dest, float angle, const SDL
 }
 
 
-SdlTexture::~SdlTexture(){
-    if (this->texture != nullptr){
+SdlTexture::~SdlTexture() {
+    if (this->texture != nullptr) {
         SDL_DestroyTexture(this->texture);
     }
 }
 
 SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key)
 : window(window),
-  texture(nullptr){
+  texture(nullptr) {
     SDL_Surface* tmp = IMG_Load(filename.c_str());
-    if (!tmp){
+    if (!tmp) {
         return;
     }
 
@@ -56,7 +56,7 @@ SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key
 
 SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key, SDL_BlendMode blending,
                        uint8_t alpha)
-: SdlTexture(filename, window, key){
+: SdlTexture(filename, window, key) {
     SDL_SetTextureBlendMode(this->texture, blending);
     SDL_SetTextureAlphaMod(this->texture, alpha);
 }
@@ -70,7 +70,7 @@ int SdlTexture::render(const Area &src, const Area &dest, float angle, SDL_Point
 
 SdlTexture::SdlTexture(SdlTexture &&other)
 : window(other.window),
-  texture(other.texture){
+  texture(other.texture) {
     other.texture = nullptr;
     this->width = other.width;
     this->height = other.height;
@@ -78,9 +78,9 @@ SdlTexture::SdlTexture(SdlTexture &&other)
 
 SdlTexture::SdlTexture(const std::string &filename, SdlWindow &window, Color key, Color surfaceColor)
 : window(window),
-  texture(nullptr){
+  texture(nullptr) {
     SDL_Surface* tmp = IMG_Load(filename.c_str());
-    if (!tmp){
+    if (!tmp) {
         return;
     }
 
@@ -105,11 +105,11 @@ void SdlTexture::changeColor(Color color) {
 }
 
 SdlTexture &SdlTexture::operator=(SdlTexture &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
-    if (texture != nullptr){
+    else if ((texture != nullptr) && (texture != other.texture)) {
         SDL_DestroyTexture(texture);
     }
 

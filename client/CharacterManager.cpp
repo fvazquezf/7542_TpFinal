@@ -9,7 +9,7 @@ CharacterManager::CharacterManager(SdlWindow& window, YAML::Node& config)
   legs(config["legs"].as<std::string>(), window),
   terrorist(nullptr),
   counterTerrorist(nullptr),
-  playerId(0){
+  playerId(0) {
     weapons.emplace(std::piecewise_construct,
                     std::forward_as_tuple(0),
                     std::forward_as_tuple(
@@ -48,8 +48,8 @@ bool CharacterManager::assignTeams(std::map<uint8_t, bool> teamMap) {
 }
 
 void CharacterManager::createCharacters(SdlTexture& terroristTex, SdlTexture& counterTex) {
-    for (auto& entity : teams){
-        if (entity.second){
+    for (auto& entity : teams) {
+        if (entity.second) {
             entities.emplace(std::piecewise_construct,
                              std::forward_as_tuple(entity.first),
                              std::forward_as_tuple(counterTex, 0, 0,
@@ -82,16 +82,16 @@ void CharacterManager::updatePositions(std::map<uint8_t, std::pair<float, float>
             Character& character = entities.at(it.first);
             character.updatePosition(it.second.first, it.second.second);
             character.move(camera.calculateDistanceToCenter(it.second.first, it.second.second));
-        } catch (const std::exception& e){
+        } catch (const std::exception& e) {
         }
     }
 }
 
 void CharacterManager::updateAngles(std::map<uint8_t, int16_t> &angles) {
-    for (auto& it : angles){
+    for (auto& it : angles) {
         try {
             entities.at(it.first).updateAngle(it.second);
-        } catch (const std::exception& e){
+        } catch (const std::exception& e) {
         }
     }
 }
@@ -118,7 +118,7 @@ CharacterManager::~CharacterManager() {
 }
 
 void CharacterManager::draw(Camera& camera, size_t iteration) {
-    for (auto& entity : entities){
+    for (auto& entity : entities) {
         camera.render(entity.second, iteration);
     }
 }
@@ -126,7 +126,7 @@ void CharacterManager::draw(Camera& camera, size_t iteration) {
 void CharacterManager::changeWeapon(uint8_t weaponCode, uint8_t playerId) {
     try {
         entities.at(playerId).changeWeapon(weaponCode);
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
     }
 }
 
@@ -141,7 +141,7 @@ void CharacterManager::plantBomb(uint8_t planterId,
 }
 
 void CharacterManager::reviveAll() {
-    for (auto& character : entities){
+    for (auto& character : entities) {
         character.second.revive();
     }
 }

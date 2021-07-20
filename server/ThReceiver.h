@@ -21,6 +21,8 @@ private:
     // a quien debo llamar si el user quiere empezar antes de que los jugadores se hayan unido?
     std::function<void()>& earlyStartCallback;
     void handleReceived(uint8_t code, std::vector<unsigned char>& msg);
+    void run() override;
+    std::vector<unsigned char> receive(size_t size);
 public:
     explicit ThReceiver(Socket& peer,
                         Protocol& protocol,
@@ -33,10 +35,6 @@ public:
 
     ThReceiver(ThReceiver&& other) ;
     ThReceiver& operator=(ThReceiver&& other) ;
-
-    void run() override;
-
-    std::vector<unsigned char> receive(size_t size);
 
     void stop();
 

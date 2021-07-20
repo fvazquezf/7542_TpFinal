@@ -3,7 +3,7 @@
 
 RotateEvent::RotateEvent(uint8_t id, int16_t angle)
 : ClientEvent(id),
-  angle(angle){
+  angle(angle) {
 }
 
 void RotateEvent::updatePlayer(WorldModel &world) {

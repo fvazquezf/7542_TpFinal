@@ -2,7 +2,7 @@
 
 WeaponUpdate::WeaponUpdate(uint8_t id, uint8_t weaponId)
 : id(id),
-  weaponId(weaponId){
+  weaponId(weaponId) {
 }
 
 void WeaponUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

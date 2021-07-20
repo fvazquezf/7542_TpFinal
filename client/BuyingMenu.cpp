@@ -6,7 +6,7 @@ BuyingMenu::BuyingMenu(SdlWindow& window, SdlTexture& hudButton, YAML::Node& cli
   menuText(clientConfig["cs_ttf"].as<std::string>(),
            window,
            20),
-  menuTextArea(325, window.getHeight() / 12, 60, 40){
+  menuTextArea(325, window.getHeight() / 12, 60, 40) {
     // creo las texturas de los botones
     buttonContTextures.emplace_back(clientConfig["ak47_menu"].as<std::string>(),
                                     window,
@@ -46,14 +46,14 @@ BuyingMenu::~BuyingMenu() {
 void BuyingMenu::showMenu() {
     window.drawRectangle(50, 150, window.getHeight() / 12, 500, 550);
     menuText.render(menuTextArea);
-    for (auto& it : menuButtons){
+    for (auto& it : menuButtons) {
         it.show();
     }
 }
 
 bool BuyingMenu::isButtonPressed(int mouseX, int mouseY) {
-    for (auto& it : menuButtons){
-        if (it.checkPressed(mouseX, mouseY)){
+    for (auto& it : menuButtons) {
+        if (it.checkPressed(mouseX, mouseY)) {
             lastButtonPressed = it.getCode();
             return true;
         }

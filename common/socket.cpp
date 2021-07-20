@@ -15,12 +15,12 @@ Socket::Socket(Socket&& other) {
 	other.sfd = -1;
 }
 
-Socket& Socket::operator=(Socket&& other){
+Socket& Socket::operator=(Socket&& other) {
      if (this == &other) {
           return *this;
      }
 
-     if (this->sfd != -1){
+     if (this->sfd != -1) {
          ::close(this->sfd);
      }
 
@@ -74,7 +74,7 @@ void Socket::connect(const char* host, const char* service) {
         throw Exception("socket unable to connect 1.");
     }
 
-    for (rp = server_info; rp != NULL; rp = rp->ai_next) {
+    for (rp = server_info; rp != nullptr; rp = rp->ai_next) {
         this->sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
         if (this->sfd == -1)
             continue;
@@ -83,7 +83,7 @@ void Socket::connect(const char* host, const char* service) {
         ::close(this->sfd);
     }
     freeaddrinfo(server_info);
-    if (rp == NULL) {
+    if (rp == nullptr) {
         throw Exception("socket unable to connect 2.");
     }
 }
@@ -95,7 +95,7 @@ void Socket::bind(const char* port) {
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = 0;
-    int error = getaddrinfo(NULL, port, &hints, &server_info);
+    int error = getaddrinfo(nullptr, port, &hints, &server_info);
 
     if (error != 0)
         throw Exception("socket unable to bind 1.");
@@ -110,7 +110,7 @@ void Socket::bind(const char* port) {
     }
 
     freeaddrinfo(server_info);
-    if (rp == NULL)
+    if (rp == nullptr)
         throw Exception("socket unable to bind 2.");
 }
 
@@ -119,23 +119,23 @@ void Socket::listen() {
 }
 
 Socket Socket::accept() {
-    int sfd = ::accept(this->sfd, NULL, NULL);
-    if (sfd  == -1) {
-        throw Exception("socket unable to accept");
+    int fileDescriptor = ::accept(this->sfd, nullptr, nullptr);
+    if (fileDescriptor == -1) {
+        throw Exception("Socket will not continue accepting");
     }
-    return Socket(sfd);
+    return Socket(fileDescriptor);
 }
 
 void Socket::close() {
-    if (this->sfd != -1){
+    if (this->sfd != -1) {
         ::shutdown(this->sfd, SHUT_RDWR);
         ::close(this->sfd);
         this->sfd = -1;
     }
 }
 
-void Socket::shutdown(int channel) {
-    if (this->sfd != -1){
+void Socket::shutdown(int channel) const {
+    if (this->sfd != -1) {
         ::shutdown(this->sfd, channel);
     }
 }

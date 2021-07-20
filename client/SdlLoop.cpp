@@ -13,7 +13,7 @@
 #include <commands/EarlyStart.h>
 
 SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& world)
-: done(false), commands(commandsQ), world(world){
+: done(false), commands(commandsQ), world(world) {
     eventMap[SDL_KEYDOWN] = std::bind(&SdlLoop::handleKeyDown, this);
     eventMap[SDL_KEYUP] = std::bind(&SdlLoop::handleKeyUp, this);
     eventMap[SDL_MOUSEBUTTONDOWN] = std::bind(&SdlLoop::handleMouseButtonDown, this);
@@ -41,10 +41,10 @@ SdlLoop::SdlLoop(BlockingQueue<std::unique_ptr<Command>> &commandsQ, WorldView& 
 void SdlLoop::run() {
     Uint32 delay = 20;
     SDL_TimerID my_timer_id = SDL_AddTimer(delay, SdlLoop::issueSynchronousEvent, this);
-    while (!done && SDL_WaitEvent(&currentEvent)){
+    while (!done && SDL_WaitEvent(&currentEvent)) {
         try {
             eventMap.at(currentEvent.type)();
-        } catch(const std::exception& e){
+        } catch(const std::exception& e) {
             continue;
         }
     }
@@ -63,7 +63,7 @@ bool SdlLoop::isDone() {
 void SdlLoop::handleKeyDown() {
     try {
         handleKey(true, currentEvent.key.keysym.sym);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         return;
     }
 }
@@ -71,7 +71,7 @@ void SdlLoop::handleKeyDown() {
 void SdlLoop::handleKeyUp() {
     try {
         handleKey(false, currentEvent.key.keysym.sym);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         return;
     }
 }
@@ -79,7 +79,7 @@ void SdlLoop::handleKeyUp() {
 void SdlLoop::handleMouseButtonDown() {
     try {
         mouseButton(true, currentEvent.button.button);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         return;
     }
 }
@@ -87,18 +87,18 @@ void SdlLoop::handleMouseButtonDown() {
 void SdlLoop::handleMouseButtonUp() {
     try {
         mouseButton(false, currentEvent.button.button);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         return;
     }
 }
 
-void SdlLoop::handleQuit(){
+void SdlLoop::handleQuit() {
     done = true;
 }
 
-void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
-    if (world.isMenuTime()){
-        if (menuPresses.count(key)){
+void SdlLoop::handleKey(bool pressed, SDL_Keycode key) {
+    if (world.isMenuTime()) {
+        if (menuPresses.count(key)) {
             menuPresses.erase(key);
         } else {
             menuPresses.emplace(key, pressed);
@@ -108,29 +108,29 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
 
     // bug de movimiento infinito despues del tiempo de menu
     // es tan solo un hotfix
-    if (!menuPresses.empty()){
+    if (!menuPresses.empty()) {
         try {
             bool wasPressed = menuPresses.at(key);
-            if (wasPressed != pressed){
+            if (wasPressed != pressed) {
                 menuPresses.erase(key);
                 return;
             }
-        } catch (const std::exception& e){
+        } catch (const std::exception& e) {
             return;
         }
     }
 
-    if (pressed && (miscPresses.find(key) != miscPresses.end()) && !miscPresses.at(key)){
+    if (pressed && (miscPresses.find(key) != miscPresses.end()) && !miscPresses.at(key)) {
         if (key == SDLK_e) {
             commands.push(std::unique_ptr<Command>(new Pickup()));
         } else if (key == SDLK_SPACE) {
             commands.push(std::unique_ptr<Command>(new Plant(true)));
-        } else if (key == SDLK_r){
+        } else if (key == SDLK_r) {
             commands.push(std::unique_ptr<Command>(new Reload()));
         }
         miscPresses.at(key) = true;
         return;
-    } else if (!pressed && (miscPresses.find(key) != miscPresses.end()) &&miscPresses.at(key)){
+    } else if (!pressed && (miscPresses.find(key) != miscPresses.end()) &&miscPresses.at(key)) {
         if (key == SDLK_SPACE) {
             commands.push(std::unique_ptr<Command>(new Plant(false)));
         }
@@ -138,36 +138,36 @@ void SdlLoop::handleKey(bool pressed, SDL_Keycode key){
         return;
     }
 
-    if (pressed && (numbers.find(key) != numbers.end())){
+    if (pressed && (numbers.find(key) != numbers.end())) {
         commands.push(std::unique_ptr<Command>(new ChangeWeapon(key)));
         return;
     }
 
-    if (pressed && !movePresses.at(key)){
+    if (pressed && !movePresses.at(key)) {
         movePresses.at(key) = true;
         commands.push(std::unique_ptr<Command>(new Move(key)));
-    } else if (!pressed){
+    } else if (!pressed) {
         movePresses.at(key) = false;
         commands.push(std::unique_ptr<Command>(new Move(key, true)));
     }
 }
 
-void SdlLoop::mouseButton(bool pressed, uint8_t button){
+void SdlLoop::mouseButton(bool pressed, uint8_t button) {
     int mouseX, mouseY = 0;
     SDL_GetMouseState(&mouseX, &mouseY);
-    if (pressed && !world.skinSelectionTime() && world.menuButtonPressed(mouseX, mouseY) ){
+    if (pressed && !world.skinSelectionTime() && world.menuButtonPressed(mouseX, mouseY) ) {
         commands.push(std::unique_ptr<Command>(new Buy(world.getPressedButtonCode())));
         return;
-    } else if (pressed && world.lobbyButtonPressed(mouseX, mouseY)){
+    } else if (pressed && world.lobbyButtonPressed(mouseX, mouseY)) {
         commands.push(std::unique_ptr<Command>(new EarlyStart()));
         return;
-    } else if (pressed && world.skinSelectionTime()){
+    } else if (pressed && world.skinSelectionTime()) {
         world.selectSkin();
         return;
-    } else if (pressed && !mousePresses.at(button)){
+    } else if (pressed && !mousePresses.at(button)) {
         mousePresses.at(button) = true;
         commands.push(std::unique_ptr<Command>(new Attack()));
-    } else if (!pressed){
+    } else if (!pressed) {
         mousePresses.at(button) = false;
         commands.push(std::unique_ptr<Command>(new Attack(true)));
     }

@@ -29,7 +29,7 @@ MapEditor::~MapEditor()
 
 void MapEditor::handleSaveButton()
 {
-    if(qMapEditorWidget->hasValidZones()){
+    if(qMapEditorWidget->hasValidZones()) {
         qMapEditorWidget->updateMapLFile();
         this->close();
         return;

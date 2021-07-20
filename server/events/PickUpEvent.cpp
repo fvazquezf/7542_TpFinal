@@ -3,7 +3,7 @@
 #include "../WorldModel.h"
 
 PickUpEvent::PickUpEvent(uint8_t id)
-: ClientEvent(id){
+: ClientEvent(id) {
 }
 
 void PickUpEvent::updatePlayer(WorldModel &world) {

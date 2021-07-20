@@ -10,7 +10,7 @@ Stencil::Stencil(SdlWindow &window,
 : window(window),
   circleRadius(circleRadius),
   stencilOpacity(opacity),
-  triangleBrightness(triangleBrightness){
+  triangleBrightness(triangleBrightness) {
     height = std::sqrt(std::pow(window.getHeight(), 2) + std::pow(window.getWidth(), 2));
     base = 2 * height * tan((coneAngle * 3.1415 / 180) / 2);
 }

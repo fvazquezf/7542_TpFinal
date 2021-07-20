@@ -2,7 +2,7 @@
 #include <iostream>
 
 Move::Move(SDL_Keycode key, bool isDone)
-: isDoneMove(isDone){
+: isDoneMove(isDone) {
     dir = directionMap.at(key);
 }
 

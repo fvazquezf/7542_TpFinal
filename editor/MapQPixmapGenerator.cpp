@@ -39,7 +39,7 @@ void MapQPixmapGenerator::setPixmaps(std::string &type) {
 
 
 QPixmap MapQPixmapGenerator::getPixmap(std::string &name) {
-    if(pixmaps.find(name) == pixmaps.end()){
+    if(pixmaps.find(name) == pixmaps.end()) {
         return QPixmap();
     }
     return pixmaps[name];

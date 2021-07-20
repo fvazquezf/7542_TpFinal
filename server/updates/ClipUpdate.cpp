@@ -1,7 +1,7 @@
 #include "ClipUpdate.h"
 
 ClipUpdate::ClipUpdate(uint8_t clip)
-: clip(clip){
+: clip(clip) {
 }
 
 void ClipUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

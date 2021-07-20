@@ -2,13 +2,13 @@
 #define BUTTON_H
 
 
-#include <SDL2/SDL_rect.h>
+#include "sdlwrap/Area.h"
 #include "sdlwrap/SdlTexture.h"
 
 class Button {
 private:
     // dimension y posicion
-    SDL_Rect box;
+    Area box;
 
     SdlTexture& hudTexture;
     // textura a mostrar en el boton

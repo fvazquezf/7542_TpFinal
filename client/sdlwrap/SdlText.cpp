@@ -6,9 +6,9 @@ SdlText::SdlText(const std::string &pathToFont, SdlWindow &window, int pointSize
   textFont(nullptr),
   texture(nullptr),
   tWidth(0),
-  tHeight(0){
+  tHeight(0) {
     textFont = TTF_OpenFont(pathToFont.c_str(), pointSize);
-    if (!textFont){
+    if (!textFont) {
         throw Exception("SdlText: ", TTF_GetError());
     }
 }
@@ -48,7 +48,7 @@ void SdlText::setText(const std::string& text) {
 SdlText::SdlText(SdlText &&other)
 : window(other.window),
   tWidth(other.tWidth),
-  tHeight(other.tHeight){
+  tHeight(other.tHeight) {
     if (this->textFont) {
         TTF_CloseFont(this->textFont);
     }
@@ -69,14 +69,14 @@ SdlText &SdlText::operator=(SdlText &&other) {
         return *this;
     }
 
-    if (this->textFont) {
+    if ((textFont != nullptr) && (textFont != other.textFont)) {
         TTF_CloseFont(this->textFont);
     }
 
     this->textFont = other.textFont;
     other.textFont = nullptr;
 
-    if (this->texture) {
+    if ((texture != nullptr) && texture != other.texture)) {
         SDL_DestroyTexture(this->texture);
     }
 

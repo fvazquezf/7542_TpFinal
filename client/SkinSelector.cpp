@@ -9,7 +9,7 @@ SkinSelector::SkinSelector(SdlWindow &window,
   isPlayerCt(isPlayerCt),
   characterManager(characterManager),
   ttId(-1),
-  ctId(-1){
+  ctId(-1) {
     skinTexturesCt.emplace(std::piecewise_construct,
                          std::forward_as_tuple(0),
                          std::forward_as_tuple(config["seal_force"].as<std::string>(),
@@ -42,7 +42,7 @@ SkinSelector::SkinSelector(SdlWindow &window,
                            std::forward_as_tuple(3),
                            std::forward_as_tuple(config["guerilla"].as<std::string>(),
                                                  window));
-    for (size_t i = 0; i < 4; ++i){
+    for (size_t i = 0; i < 4; ++i) {
         counterButtons.emplace_back(400, 100 + 50 * i, 32,  32,
                                     hudButton,
                                     skinTexturesCt.at(i),
@@ -66,11 +66,11 @@ void SkinSelector::draw() {
     }
 
     if (isPlayerCt) {
-        for (auto& ctButton: counterButtons){
+        for (auto& ctButton: counterButtons) {
             ctButton.show();
         }
     } else {
-        for (auto& ttButton: terroristButtons){
+        for (auto& ttButton: terroristButtons) {
             ttButton.show();
         }
     }
@@ -79,17 +79,17 @@ void SkinSelector::draw() {
 void SkinSelector::assignTexturesFromButtonPressed() {
     int mX, mY;
     SDL_GetMouseState(&mX, &mY);
-    if (isPlayerCt){
-        for (auto& button : counterButtons){
-            if (button.checkPressed(mX, mY)){
+    if (isPlayerCt) {
+        for (auto& button : counterButtons) {
+            if (button.checkPressed(mX, mY)) {
                 ctId = button.getCode();
                 ttId = selectRandomFrom(skinTexturesTt);
                 break;
             }
         }
     } else {
-        for (auto& button : terroristButtons){
-            if (button.checkPressed(mX, mY)){
+        for (auto& button : terroristButtons) {
+            if (button.checkPressed(mX, mY)) {
                 ttId = button.getCode();
                 ctId = selectRandomFrom(skinTexturesCt);
                 break;
@@ -100,7 +100,7 @@ void SkinSelector::assignTexturesFromButtonPressed() {
     // si no los presiono, lanzo una exp
     // por como esta el codigo
     // no puede ser que alguno sea -1
-    if (ctId == -1 && ttId == -1){
+    if (ctId == -1 && ttId == -1) {
         throw std::exception();
     }
 
@@ -114,7 +114,7 @@ uint8_t SkinSelector::selectRandomFrom(std::unordered_map<uint8_t, SdlTexture> &
 }
 
 void SkinSelector::setRandomSkinsIfNotSelected() {
-    if (ctId != -1 && ttId != -1){
+    if (ctId != -1 && ttId != -1) {
         return;
     }
     ctId = selectRandomFrom(skinTexturesCt);
@@ -124,7 +124,7 @@ void SkinSelector::setRandomSkinsIfNotSelected() {
 }
 
 void SkinSelector::setPlayerTeam(bool isCt) {
-    if (ctId == -1 && ttId == -1){
+    if (ctId == -1 && ttId == -1) {
         isPlayerCt = isCt;
     }
 }

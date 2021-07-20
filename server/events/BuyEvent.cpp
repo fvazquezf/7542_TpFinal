@@ -4,7 +4,7 @@
 
 BuyEvent::BuyEvent(uint8_t id, uint8_t weaponCode)
 : ClientEvent(id),
-  weaponCode(weaponCode){
+  weaponCode(weaponCode) {
 }
 
 void BuyEvent::updatePlayer(WorldModel &world) {

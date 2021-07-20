@@ -7,7 +7,7 @@
 #include "../sdlwrap/Area.h"
 #include "../Camera.h"
 
-#define FRAMERATE 1000000 / 60
+#define FRAMERATE 1000000 / 30
 
 class Animation {
 public:

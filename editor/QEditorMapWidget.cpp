@@ -185,7 +185,7 @@ void QEditorMapWidget::updateMapLFile() {
 }
 
 void QEditorMapWidget::setItem(std::string &item) {
-    if(std::count(e.elements.begin(), e.elements.end(), item)){
+    if(std::count(e.elements.begin(), e.elements.end(), item)) {
         this->selectedItem = item;
     } else {
         this->selectedBackground = item;

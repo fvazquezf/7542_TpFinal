@@ -8,8 +8,8 @@
 #include <memory>
 
 // test pavo para ver si funca el protocolo
-void callback(std::vector<unsigned char> msg){
-    switch (msg.at(0)){
+void callback(std::vector<unsigned char> msg) {
+    switch (msg.at(0)) {
         case LIST:
             puts("Message: list");
             puts("First Expected: 0x6c");
@@ -30,7 +30,7 @@ void callback(std::vector<unsigned char> msg){
         }
         case MOVE: {
             puts("Message: move");
-            switch(msg.at(1)){
+            switch(msg.at(1)) {
                 case Move::Direction::UP:
                     puts("Direction: UP");
                     break;
@@ -48,7 +48,7 @@ void callback(std::vector<unsigned char> msg){
         }
         case STOP_MOVE: {
             puts("Message: stop move");
-            switch(msg.at(1)){
+            switch(msg.at(1)) {
                 case Move::Direction::UP:
                     puts("Direction: UP");
                     break;
@@ -71,14 +71,14 @@ void callback(std::vector<unsigned char> msg){
             break;
         }
     }
-    for (unsigned char & it : msg){
+    for (unsigned char & it : msg) {
         printf("%x ", it);
     }
     puts("");
 }
 
 
-int main(){
+int main() {
     std::string game = "Hola, una partidusqui";
     /*auto create = std::unique_ptr<Command>(new CreateGame(game));
     auto join = std::unique_ptr<Command>(new JoinGame(game));
@@ -105,7 +105,7 @@ int main(){
     //std::vector<unsigned char> positions = {1, 0x00, 0x00, 0x04, 0xd2, 0x00, 0x00, 0x0e, 0x5e,
     //                                        2, 0x00, 0x00, 0x09, 0x0a, 0x00, 0x00, 0x85, 0xb7};
     //auto m2 = prot.deserializePositions(positions);
-    //for (auto& it : m2){
+    //for (auto& it : m2) {
     //    printf("%d %f %f", it.first, it.second.first, it.second.second);
     //}
     /*create->serialize(f, prot);
@@ -122,7 +122,7 @@ int main(){
 
     /*std::vector<unsigned char> unFloat;
     prot.serializePosition(unFloat, 3.455413413f);
-    for (auto& it : unFloat){
+    for (auto& it : unFloat) {
         printf("%d ", it);
     }
     puts("");

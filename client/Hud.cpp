@@ -19,7 +19,7 @@ Hud::Hud(SdlWindow &window, YAML::Node& config)
   winnerTime(false),
   ctWon(false),
   w(window.getWidth()),
-  h(window.getHeight()){
+  h(window.getHeight()) {
 }
 
 Hud::~Hud() {
@@ -31,7 +31,7 @@ void Hud::show() {
     showLife();
     showClip();
     showRounds();
-    if (winnerTime){
+    if (winnerTime) {
         showWinner();
     }
 }
@@ -50,7 +50,7 @@ void Hud::showClock() {
     Area dstColon(w/2 - 15, h - HUD_NUM_H + 15, HUD_NUM_W / HUD_NUMS* 2/3, HUD_NUM_H* 2/3);
     numbers.render(srcColon, dstColon, SDL_FLIP_NONE);
     symbols.render(srcClock, dstClock, SDL_FLIP_NONE);
-    for (size_t i = 0; i < numberSelector.size(); ++i){
+    for (size_t i = 0; i < numberSelector.size(); ++i) {
         Area dst( w/2 - 48 + i * 48, h - HUD_NUM_H + 20, HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H * 2/3);
         numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
     }
@@ -71,15 +71,15 @@ void Hud::showLife() {
     Area dstHealth(10, h - HUD_SYMBOL_H + 20,
                   HUD_SYMBOL_W / HUD_SYMBOLS, HUD_SYMBOL_H * 2/3);
 
-    if (health >= 70){
+    if (health >= 70) {
         setNumberColors({0, 255, 0});
-    } else if (health > 30 && health < 70){
+    } else if (health > 30 && health < 70) {
         setNumberColors({255, 255, 0});
     } else {
         setNumberColors({255, 0, 0});
     }
 
-    for (size_t i = 0; i < numberSelector.size(); ++i){
+    for (size_t i = 0; i < numberSelector.size(); ++i) {
         Area dst(HUD_SYMBOL_W / HUD_SYMBOLS +  i * 48, h - HUD_NUM_H + 20,
                  HUD_NUM_W / HUD_NUMS * 2/3, HUD_NUM_H * 2/3);
         numbers.render(numberSelector.at(i), dst, SDL_FLIP_NONE);
@@ -102,7 +102,7 @@ void Hud::loadNumberVector(int number) {
     std::ostringstream os;
     os << number;
     std::string digits = os.str();
-    for (auto& it : digits){
+    for (auto& it : digits) {
         numberSelector.emplace_back(areaFromIdxPosition(it - '0'));
     }
 }
@@ -126,7 +126,7 @@ void Hud::showMoney() {
 }
 
 void Hud::showClip() {
-    if (weapon == KNIFE || weapon == BOMB){
+    if (weapon == KNIFE || weapon == BOMB) {
         showInfinitySymbol();
         return;
     }
@@ -161,7 +161,7 @@ void Hud::showWinner() {
 void Hud::updateWinner(bool ctIsWinner) {
     winnerTime = true;
     ctWon = ctIsWinner;
-    if (ctWon){
+    if (ctWon) {
         ++ctRounds;
         SoundManager::playSound(SoundManager::soundRepertoire::CT_WIN, 0);
     } else {
