@@ -117,6 +117,25 @@ Parámetros de las armas:
 - bomb_fuse: tiempo que tarda la bomba en explotar
 - bomb_activate_time: tiempo que tarda la bomba en plantarse/defusearse.
 
+Para configurar los parámetros de cliente accedemos al archivo `client_config.yaml` (`/var/cs2d/config/client_config.yaml`).
+Podemos modificar la resolución, parametros del stencil como la opacidad, si esta activo o no, si queremos o no sonido y si queremos jugar en fullscreen.
+
+```
+width: ancho de la pantalla
+height: alto de la pantalla
+fullscreen: true para pantalla completa, false para ventana
+
+stencil_on: true para activar el stencil, false para desactivarlo
+stencil_radius: radio del circulo del stencil en pixeles
+stencil_opacity: opacidad del filtro del stencil (a mayor valor mas opaco y menos se ve)
+stencil_angle: angulo del triangulo del stencil en grados (fov).
+stencil_triangle_brightness: brillo del triangulo del stencil (a mayor valor mas brillo).
+
+sound_on: true para sonidos, false en otro caso.
+
+cursor_type: 0, 1 o 2 para elegir algun tipo de cursor
+cursor_size: tamaño del cursor en pixeles
+```
 
 ## Forma de uso
 
