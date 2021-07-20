@@ -3,7 +3,7 @@
 </p>
 
 # 7542_TpFinal
- 
+
 **Trabajo Practico Final**
  
 **7542 Taller de Programación I**
@@ -16,6 +16,8 @@
 | Cai, Ana Maria                         | 102150 |
 | Giampieri Mutti, Leonardo              | 102358 |
 | Vazquez Fernandez, Francisco Manuel    | 104128 |
+
+## Manual de usuario
 
 **Tabla de contenidos**
  

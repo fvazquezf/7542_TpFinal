@@ -30,7 +30,7 @@ void Stencil::createStencilTexture(int16_t playerAngle) {
     if (!stencilOn) {
         return;
     }
-    
+
     float dirX = sin(playerAngle * 3.1415 / 180); // direccion en X de la mira del jugador
     float dirY = -cos(playerAngle * 3.1415 / 180); // direccion en Y de la mira del jugador
     float xBase = (window.getWidth() / 2) + height * dirX; // base del triangulo en X
