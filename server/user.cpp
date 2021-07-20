@@ -10,7 +10,7 @@ User::User(Socket socket,
   sender(this->socket, protocol, updateQueue),
   receiver(this->socket, protocol, eventQueue, id, earlyStartCb),
   playing(false),
-  id(id){
+  id(id) {
 }
 
 User::~User() {
@@ -23,7 +23,7 @@ void User::start() {
 }
 
 void User::join() {
-    if (playing){
+    if (playing) {
         this->receiver.stop();
         this->receiver.join();
         this->sender.stop();
@@ -45,7 +45,7 @@ User::User(User &&other)
   sender(std::move(other.sender)),
   receiver(std::move(other.receiver)),
   playing(other.playing),
-  id(other.id){
+  id(other.id) {
 }
 
 User &User::operator=(User &&other)  {

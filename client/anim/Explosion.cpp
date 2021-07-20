@@ -10,17 +10,17 @@ Explosion::Explosion(SdlWindow& window, YAML::Node& config)
   dstX(0),
   dstY(0),
   maxMiniExplosions(100),
-  currentExplosions(0){
+  currentExplosions(0) {
 }
 
-Explosion::~Explosion(){
+Explosion::~Explosion() {
 }
 
-void Explosion::render(Camera& cam, size_t iteration){
+void Explosion::render(Camera& cam, size_t iteration) {
 	if (!shouldBlow) {
 	    return;
     }
-    if (currentExplosions != maxMiniExplosions){
+    if (currentExplosions != maxMiniExplosions) {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dis(0.0, 3.0); // offset random desde el centro de la explosion
@@ -30,7 +30,7 @@ void Explosion::render(Camera& cam, size_t iteration){
         miniExplosions.emplace_back(std::move(explosionPair));
         ++currentExplosions;
     }
-    for (auto& explosion : miniExplosions){
+    for (auto& explosion : miniExplosions) {
         if (!explosion.first.isDone()) {
             explosion.first.render(cam, explosion.second.x, explosion.second.y, 0, iteration);
         }

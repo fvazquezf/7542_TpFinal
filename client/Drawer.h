@@ -8,13 +8,9 @@
 class Drawer : public Thread{
 private:
     WorldView& world;
-    std::atomic_bool running;
-
     void run() override;
 public:
     explicit Drawer(WorldView& world);
-
-    void stop();
 };
 
 

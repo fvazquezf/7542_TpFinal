@@ -20,14 +20,14 @@ private:
     std::condition_variable cv;
 public:
     BlockingQueue()
-    : closed(false){
+    : closed(false) {
     }
 
     BlockingQueue(const BlockingQueue& other) = delete;
     BlockingQueue& operator=(const BlockingQueue& other) = delete;
 
     BlockingQueue(BlockingQueue &&other)
-    : closed(other.closed), q(std::move(other.q)){
+    : closed(other.closed), q(std::move(other.q)) {
     }
 
     BlockingQueue &operator=(BlockingQueue &&other)   {
@@ -39,21 +39,21 @@ public:
         return *this;
     }
 
-    bool isNotClosedOrNotEmpty(){
+    bool isNotClosedOrNotEmpty() {
         std::unique_lock<std::mutex> lock1(queueMutex);
         return (!closed || !q.empty());
     }
 
-    void signalClosed(){
+    void signalClosed() {
         std::lock_guard<std::mutex> lock(queueMutex);
         closed = true;
         cv.notify_all();
     }
 
-    T pop(){
+    T pop() {
         std::unique_lock<std::mutex> lock1(queueMutex);
-        while (q.empty()){
-            if (closed){
+        while (q.empty()) {
+            if (closed) {
                 throw Exception("Queue is closed.\n");
             }
             cv.wait(lock1);
@@ -63,7 +63,7 @@ public:
         return elem;
     }
 
-    void push(T queueElement){
+    void push(T queueElement) {
         std::unique_lock<std::mutex> lock1(queueMutex);
         q.push(std::move(queueElement));
         cv.notify_all();

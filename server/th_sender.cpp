@@ -5,7 +5,7 @@ ThSender::ThSender(Socket &socket, Protocol &protocol, BlockingQueue<std::shared
 : is_running(true),
   peer(socket),
   protocol(protocol),
-  updateQueue(updates){
+  updateQueue(updates) {
 }
 
 ThSender::~ThSender() {
@@ -18,7 +18,7 @@ void ThSender::run() {
         try {
             std::shared_ptr<Update> update = updateQueue.pop();
             update->serialize(cb);
-        } catch (const std::exception& e){
+        } catch (const std::exception& e) {
             break;
         }
     }
@@ -26,7 +26,7 @@ void ThSender::run() {
 }
 
 void ThSender::stop() {
-    if (is_running){
+    if (is_running) {
         this->is_running = false;
         this->peer.close();
     }
@@ -36,14 +36,14 @@ ThSender::ThSender(ThSender &&other)
 : is_running(other.is_running.operator bool()),
   peer(other.peer),
   protocol(other.protocol),
-  updateQueue(other.updateQueue){
+  updateQueue(other.updateQueue) {
     // no hay que hacerle stop
     // si a other le hacemos stop matamos al peer (el rd)
     other.is_running = false;
 }
 
 ThSender &ThSender::operator=(ThSender &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -55,7 +55,7 @@ ThSender &ThSender::operator=(ThSender &&other)  {
 void ThSender::send(std::vector<unsigned char> msg) {
     try {
         peer.send(reinterpret_cast<const char *>(msg.data()), msg.size());
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         is_running = false;
     }
 }

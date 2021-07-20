@@ -9,8 +9,8 @@
 #include "MapView.h"
 #define CLIENT_CONFIG "/var/cs2d/config/client_config.yaml"
 
-int main(int argc, const char *argv[]){
-    if (argc != 1){
+int main(int argc, const char *argv[]) {
+    if (argc != 1) {
         std::cout << "Uso: cs2d\n";
         return -1;
     }
@@ -19,7 +19,7 @@ int main(int argc, const char *argv[]){
 
     try {
         clientConfig = YAML::LoadFile(CLIENT_CONFIG);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         std::cout << e.what();
         return -1;
     }
@@ -29,7 +29,7 @@ int main(int argc, const char *argv[]){
 
     try {
         w.show();
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
         return -1;
     }
@@ -42,15 +42,20 @@ int main(int argc, const char *argv[]){
     */
     try {
         a.exec();
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
+        return -1;
+    }
+
+    if (info.failed) {
+        std::cout << "Failed login in\n";
         return -1;
     }
 
     try {
         Client clientHandler(info, clientConfig);
         clientHandler.launch();
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
         return -1;
     }

@@ -16,7 +16,6 @@ class ThSender : public Thread {
 public:
     ThSender(Socket& socket, Protocol& protocol, BlockingQueue<std::shared_ptr<Update>>& updates);
     ~ThSender() override;
-    void run() override;
     void stop();
 
     ThSender(const ThSender&) = delete;
@@ -31,6 +30,7 @@ private:
     Protocol& protocol;
     BlockingQueue<std::shared_ptr<Update>>& updateQueue;
 
+    void run() override;
     void send(std::vector<unsigned char> msg);
 };
 

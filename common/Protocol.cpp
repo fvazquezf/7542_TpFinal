@@ -237,7 +237,7 @@ void Protocol::updatePositions(const std::map<uint8_t, std::pair<float, float>> 
     uint16_t msgSize = positions.size() * 9; // 1 uint8 (1 byte), 2 float (8 bytes)
     msgSize = htons(msgSize);
     serializeMsgLenShort(msg, msgSize);
-    for (auto& pair : positions){
+    for (auto& pair : positions) {
         msg.push_back(pair.first);
         serializePosition(msg, std::get<0>(pair.second));
         serializePosition(msg, std::get<1>(pair.second));
@@ -249,7 +249,7 @@ void Protocol::serializePosition(std::vector<unsigned char> &msg, float position
     int protocolPosition = position * PRECISION;
     protocolPosition = htonl(protocolPosition);
     auto* hostOrder = reinterpret_cast<char*>(&protocolPosition);
-    for (int i = 3; i >= 0; --i){
+    for (int i = 3; i >= 0; --i) {
         msg.push_back(hostOrder[i]);
     }
 }
@@ -263,16 +263,16 @@ float Protocol::deserializePosition(std::vector<unsigned char> &msg) const {
 }
 
 std::vector<unsigned char>
-Protocol::handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &sendCallback) {
-    std::vector<unsigned char> msg = sendCallback(2);
+Protocol::handleUpdatePosition(std::function<std::vector<unsigned char>(size_t)> &recvCallback) {
+    std::vector<unsigned char> msg = recvCallback(2);
     uint16_t size = deserializeMsgLenShort(msg);
-    msg = sendCallback(size);
+    msg = recvCallback(size);
     return msg;
 }
 
 std::map<uint8_t, std::pair<float, float>> Protocol::deserializePositions(std::vector<unsigned char> &msg) {
     std::map<uint8_t, std::pair<float, float>> positionMap;
-    for (size_t i = 0; i < msg.size(); i += 9){
+    for (size_t i = 0; i < msg.size(); i += 9) {
         std::vector<unsigned char> positionX = {msg.begin() + i + 1,
                                                 msg.begin() + i + 5};
         std::vector<unsigned char> positionY = {msg.begin() + i + 5,
@@ -291,7 +291,7 @@ Protocol::loginResponse(uint8_t status,
     std::vector<unsigned char> msg;
     msg.push_back(LOGIN_RESPONSE);
     msg.push_back(status == LOGIN_OK ? LOGIN_OK : LOGIN_BAD);
-    if (status == LOGIN_OK){
+    if (status == LOGIN_OK) {
         msg.push_back(id);
     }
     callback(msg);
@@ -300,11 +300,12 @@ Protocol::loginResponse(uint8_t status,
 std::vector<unsigned char>
 Protocol::handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback) {
     std::vector<unsigned char> status = callback(1);
-    if (status.at(0) == LOGIN_OK){
-        // devuelvo el id
-        return callback(1);
+    if (status.at(0) == LOGIN_OK) {
+        auto id = callback(1);
+        status.push_back(id.at(0)); // LOGIN_OK | ID
+        return status;
     } else {
-        // login bad
+        // LOGIN_BAD
         return status;
     }
 }
@@ -319,7 +320,7 @@ void Protocol::rotate(int16_t angle, std::function<void(std::vector<unsigned cha
 
 void Protocol::serializeMsgLenShort(std::vector<unsigned char> &angleMsg, uint16_t data) const {
     int i = 0;
-    while (i != 2){
+    while (i != 2) {
         angleMsg.push_back(data >> (8 - i * 8) & 0xff);
         ++i;
     }
@@ -336,7 +337,7 @@ void Protocol::updateAngles(const std::map<uint8_t, int16_t> &angles,
     uint16_t msgSize = angles.size() * 3; // 1 uint8_t (1 byte), 1 int16_t (2 bytes)
     msgSize = htons(msgSize);
     serializeMsgLenShort(msg, msgSize);
-    for (auto& it : angles){
+    for (auto& it : angles) {
         msg.push_back(it.first);
         int16_t angle = htons(it.second);
         serializeMsgLenShort(msg, angle);
@@ -352,7 +353,7 @@ std::vector<unsigned char> Protocol::handleAngleUpdate(std::function<std::vector
 
 std::map<uint8_t, int16_t> Protocol::deserializeAngles(std::vector<unsigned char> &msg) {
     std::map<uint8_t, int16_t> angleMap;
-    for (size_t i = 0; i < msg.size(); i += 3){
+    for (size_t i = 0; i < msg.size(); i += 3) {
         std::vector<unsigned char> angle = {msg.data()[i+1],
                                             msg.data()[i+2]};
         angleMap.emplace(msg.at(i), static_cast<int16_t>(deserializeMsgLenShort(angle)));
@@ -419,7 +420,7 @@ void Protocol::handleByte(uint8_t byte, std::function<void(std::vector<unsigned 
 std::vector<unsigned char> Protocol::
 handleDropUpdate(std::function<std::vector<unsigned char>(size_t)> &callback) {
     std::vector<unsigned char> msg = callback(1); // es drop o es pickup?
-    if (msg.at(0) == DROP_UPDATE){
+    if (msg.at(0) == DROP_UPDATE) {
         auto vec = callback(9);
         vec.push_back(msg.at(0));
         return vec;
@@ -442,7 +443,7 @@ void Protocol::updateDrop(bool dropped, size_t dropIdentifier,
     droppedMsg.push_back(dropIdentifier >> 16 & 0xff);
     droppedMsg.push_back(dropIdentifier >> 8 & 0xff);
     droppedMsg.push_back(dropIdentifier & 0xff);
-    if (dropped){
+    if (dropped) {
         int pX = posX * PRECISION;
         int pY = posY * PRECISION;
         int16_t posXmm = htons(pX);
@@ -464,7 +465,7 @@ std::tuple<uint8_t, size_t, int16_t, int16_t> Protocol::deserializeDrop(std::vec
         dropIdentifier |= msg.at(i) << (24 - 8*(i - 1));
     }
     dropIdentifier = ntohl(dropIdentifier);
-    if (dropType == DROP_UPDATE){
+    if (dropType == DROP_UPDATE) {
         posX = ntohs(msg.at(5) << 8 | msg.at(6));
         posY = ntohs(msg.at(7) << 8 | msg.at(8));
     }
@@ -486,7 +487,7 @@ Protocol::updateTeams(const std::map<uint8_t, bool> &teamMap,
     teamsMsg.push_back(TEAM_UPDATE);
     uint16_t msgSize = htons(teamMap.size() * 2);
     serializeMsgLenShort(teamsMsg, msgSize);
-    for (auto& it : teamMap){
+    for (auto& it : teamMap) {
         teamsMsg.push_back(it.first);
         teamsMsg.push_back(it.second ? 1 : 0); // isCt = true -> 1 else 0
     }
@@ -500,7 +501,7 @@ std::vector<unsigned char> Protocol::handleTeamUpdate(std::function<std::vector<
 
 std::map<uint8_t, bool> Protocol::deserializeTeams(std::vector<unsigned char> &msg) {
     std::map<uint8_t, bool> teamsById;
-    for (size_t i = 0; i < msg.size(); i += 2){
+    for (size_t i = 0; i < msg.size(); i += 2) {
         teamsById.emplace(msg.at(i), msg.at(i + 1));
     }
     return teamsById;
@@ -509,12 +510,12 @@ std::map<uint8_t, bool> Protocol::deserializeTeams(std::vector<unsigned char> &m
 std::pair<std::string, std::string> Protocol::deserializeCreateGame(const std::vector<unsigned char> &msg) {
     uint16_t gameNameSize = msg.at(0) << 8 | msg.at(1);
     std::string gameName;
-    for (uint16_t i = 2; i < 2 + gameNameSize; ++i){
+    for (uint16_t i = 2; i < 2 + gameNameSize; ++i) {
         gameName.push_back(msg.at(i));
     }
     uint16_t mapNameSize = msg.at(2 + gameNameSize) << 8 | msg.at(3 + gameNameSize);
     std::string mapName;
-    for (uint16_t i = gameNameSize + 4; i < gameNameSize + 4 + mapNameSize; ++i){
+    for (uint16_t i = gameNameSize + 4; i < gameNameSize + 4 + mapNameSize; ++i) {
         mapName.push_back(msg.at(i));
     }
     return std::make_pair(gameName, mapName);
@@ -551,8 +552,8 @@ std::vector<std::string> Protocol::deserializeLoginListMessage(std::vector<unsig
     auto charEnd = msg.begin();
     std::vector<std::string> games;
     std::string aGame;
-    while (charEnd != msg.end()){
-        if (*charEnd == '\n'){
+    while (charEnd != msg.end()) {
+        if (*charEnd == '\n') {
             aGame.insert(aGame.begin(), charStart, charEnd);
             charStart = charEnd;
             ++charStart;
@@ -570,7 +571,7 @@ void Protocol::updateScore(const std::vector<std::tuple<uint8_t, uint8_t, uint8_
     scoresSerialized.push_back(SCORE_UPDATE);
     uint16_t sizeMsg = scores.size() * 6; // 4 uint8_t y 1 uint16_t -> 6 bytes
     serializeMsgLenShort(scoresSerialized, htons(sizeMsg));
-    for (auto& userScore : scores){
+    for (auto& userScore : scores) {
         scoresSerialized.push_back(std::get<0>(userScore));
         scoresSerialized.push_back(std::get<1>(userScore));
         scoresSerialized.push_back(std::get<2>(userScore));
@@ -584,7 +585,7 @@ std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>>
 Protocol::deserializeScores(std::vector<unsigned char> &msg) {
     size_t users = msg.size();
     std::vector<std::tuple<uint8_t, uint8_t, uint8_t, uint16_t, bool>> usersScores;
-    for (size_t i = 0; i < users; i += 6){
+    for (size_t i = 0; i < users; i += 6) {
         uint16_t userMoney = ntohs(msg.at(i + 3) << 8 | msg.at(i + 4));
         usersScores.emplace_back(msg.at(i), msg.at(i + 1), msg.at(i + 2), userMoney, msg.at(i + 5));
     }

@@ -1,7 +1,7 @@
 #include "AttackUpdate.h"
 
 AttackUpdate::AttackUpdate(int id)
-: attackerId(id){
+: attackerId(id) {
 }
 
 void AttackUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

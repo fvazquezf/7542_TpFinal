@@ -4,7 +4,7 @@ Receiver::Receiver(WorldView &world, Socket& peer, Protocol& protocol)
 : world(world),
   peer(peer),
   prot(protocol),
-  running(true){
+  running(true) {
 }
 
 Receiver::~Receiver() {
@@ -13,11 +13,13 @@ Receiver::~Receiver() {
 void Receiver::run() {
     std::function<std::vector<unsigned char>(size_t)> cb =
             std::bind(&Receiver::receive, this, std::placeholders::_1);
-    while (running){
+    while (running) {
         char update;
         try {
-            peer.recv(&update, 1);
-        } catch (const std::exception& e){
+            if (!peer.recv(&update, 1)) {
+                break;
+            }
+        } catch (const std::exception& e) {
             break;
         }
         std::vector<unsigned char> msg = prot.dispatchReceived(update, cb);
@@ -34,8 +36,11 @@ void Receiver::stop() {
 std::vector<unsigned char> Receiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
     try {
-        peer.recv(reinterpret_cast<char *>(msg.data()), size);
-    } catch (const std::exception& e){
+        if (!peer.recv(reinterpret_cast<char *>(msg.data()), size)) {
+            running = false;
+            return msg;
+        }
+    } catch (const std::exception& e) {
         running = false;
     }
     return msg;
@@ -44,10 +49,11 @@ std::vector<unsigned char> Receiver::receive(size_t size) {
 void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
     switch (code) {
         case LOGIN_RESPONSE:{
-            if (msg.at(0) != 255){
-                world.assignPlayer(msg.at(0));
+            if (msg.at(0) == LOGIN_OK) {
+                world.assignPlayer(msg.at(1));
             } else {
-                // bad response
+                // LOGIN_BAD
+                std::cout << "Bad login, try again\n";
                 world.signalDone();
                 running = false;
             }
@@ -86,7 +92,7 @@ void Receiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
         }
         case WEAPON_DROP_UPDATE: {
             auto tuple = prot.deserializeDrop(msg, msg.back());
-            if (msg.back() == DROP_UPDATE){
+            if (msg.back() == DROP_UPDATE) {
                 world.dropWeapon(tuple);
             } else {
                 world.pickupWeapon(tuple);

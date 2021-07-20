@@ -8,6 +8,7 @@ class LogInInfo
 {
 
 public:
+    bool failed = false;
     std::string map;
     Socket socket;
     LogInInfo();

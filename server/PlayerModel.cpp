@@ -12,7 +12,7 @@ maxHp(matchConfig.at(PLAYER_HP)),
 hp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
 totalMoney(matchConfig.at(STARTING_MONEY)),
-armory(bomb, dropped, matchConfig){
+armory(bomb, dropped, matchConfig) {
     this->netForce.SetZero();
     dirAmount = 0;
     isCt = false;
@@ -28,12 +28,12 @@ PlayerModel::PlayerModel(PlayerModel &&other)
   hp(other.hp),
   maxHp(other.maxHp),
   money(other.money),
-  armory(std::move(other.armory)){
+  armory(std::move(other.armory)) {
     other.model = nullptr;
 }
 
 PlayerModel &PlayerModel::operator=(PlayerModel &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -49,7 +49,7 @@ PlayerModel &PlayerModel::operator=(PlayerModel &&other)  {
     return *this;
 }
 
-void PlayerModel::startMove(int dir){
+void PlayerModel::startMove(int dir) {
     if (isFrozen) return;
     dirAmount++;
     switch (dir) {
@@ -65,7 +65,7 @@ void PlayerModel::startMove(int dir){
     }
 }
 
-void PlayerModel::stopMove(int dir){
+void PlayerModel::stopMove(int dir) {
     if (dirAmount == 0 || isFrozen) return;
     dirAmount--;
     switch (dir) {
@@ -83,25 +83,25 @@ void PlayerModel::stopMove(int dir){
     }
 }
 
-void PlayerModel::step(){
+void PlayerModel::step() {
     float vel = this->model->GetLinearVelocity().Length();
-    if (vel < 11){
+    if (vel < 11) {
         this->model->ApplyForceToCenter(this->netForce, true);
     }
 }
 
-void PlayerModel::startAttack(){
+void PlayerModel::startAttack() {
     isAttacking = true;
 }
 
-void PlayerModel::stopAttack(){
+void PlayerModel::stopAttack() {
     isAttacking = false;
     armory.resetCooldown();
 }
 
-void PlayerModel::reposition(MapLayout& mapLayout){
+void PlayerModel::reposition(MapLayout& mapLayout) {
     b2Vec2 newPos;
-    if(isCt){
+    if(isCt) {
         newPos = mapLayout.placeCt();
     } else {
         newPos = mapLayout.placeTt();
@@ -121,56 +121,52 @@ const int16_t PlayerModel::getAngle() const {
     return angle;
 }
 
-bool PlayerModel::attack(const b2Vec2& position){
+bool PlayerModel::attack(const b2Vec2& position) {
     if (isFrozen) return false;
     return armory.attack(model->GetPosition(), angle, position);
 }
 
-void PlayerModel::reload(){
+void PlayerModel::reload() {
     armory.reload();
 }
 
-std::shared_ptr<Weapon> PlayerModel::hit(){
+std::shared_ptr<Weapon> PlayerModel::hit() {
     return armory.hit();
 }
 
-bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon){
+bool PlayerModel::gotHitAndDied(std::shared_ptr<Weapon> weapon) {
     hp -= weapon->hit();
-    if (hp <= 0){
-        hp = 0;
-        freeze();
-        armory.dropWeapons(model->GetPosition());
-        model->SetEnabled(false);
+    if (hp <= 0) {
         return true;
     } else {
         return false;
     }
 }
 
-bool PlayerModel::canShoot(){
+bool PlayerModel::canShoot() {
     if (isFrozen) return false;
     armory.tickCooldown();
     return armory.canShoot(isAttacking);
 }
 
-void PlayerModel::giveBomb(){
+void PlayerModel::giveBomb() {
     // chequeo inecesario pero por si acaso
-    if (!isCt){
+    if (!isCt) {
         armory.giveBomb();
     }
 }
 
-bool PlayerModel::startBombHandling(MapLayout& mapLayout, int id){
+bool PlayerModel::startBombHandling(MapLayout& mapLayout, int id) {
     if (!mapLayout.isInSite(model->GetPosition())) return false;
     freeze();
     if (isCt) {
         return armory.startDefusing();
     } else {
-        return armory.startPlanting(id);
+        return armory.startPlanting(id, model->GetPosition());
     }
 }
 
-bool PlayerModel::stopBombHandling(){
+bool PlayerModel::stopBombHandling() {
     unfreeze();
     if (isCt) {
         return armory.stopDefusing();;
@@ -179,7 +175,7 @@ bool PlayerModel::stopBombHandling(){
     }
 }
 
-int PlayerModel::equipWeapon(int weaponType){
+int PlayerModel::equipWeapon(int weaponType) {
     return armory.equipWeapon(weaponType);
 }
 
@@ -188,13 +184,20 @@ bool PlayerModel::buyWeapon(uint8_t weaponCode) {
     return armory.tryBuying(weaponCode, money, model->GetPosition());
 }
 
-int PlayerModel::pickUpWeapon(){
+int PlayerModel::pickUpWeapon() {
     return armory.pickUpWeapon(model->GetPosition(), isCt);
 }
 
 void PlayerModel::kill() {
     money += armory.bounty();
     totalMoney += armory.bounty();
+}
+
+void PlayerModel::die() {
+    hp = 0;
+    freeze();
+    armory.dropWeapons(model->GetPosition());
+    model->SetEnabled(false);
 }
 
 void PlayerModel::revive() {
@@ -204,7 +207,7 @@ void PlayerModel::revive() {
 }
 
 
-void PlayerModel::changeSide(){
+void PlayerModel::changeSide() {
     isCt = !isCt;
 }
 
@@ -228,12 +231,12 @@ int PlayerModel::getClip() const {
     return armory.getClip();
 }
 
-void PlayerModel::freeze(){
+void PlayerModel::freeze() {
     isFrozen = true;
     netForce.SetZero();
     dirAmount = 0;
 }
 
-void PlayerModel::unfreeze(){
+void PlayerModel::unfreeze() {
     isFrozen = false;
 }

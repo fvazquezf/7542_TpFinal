@@ -23,7 +23,7 @@ ThReceiver::ThReceiver(Socket &peer,
   protocol(protocol),
   eventQueue(eventQueue),
   userId(userId),
-  earlyStartCallback(earlyStartCallback){
+  earlyStartCallback(earlyStartCallback) {
 }
 
 void ThReceiver::run() {
@@ -32,11 +32,13 @@ void ThReceiver::run() {
                              this,
                                  std::placeholders::_1);
     std::vector<unsigned char> msg;
-    while (is_running){
+    while (is_running) {
         char comm;
         try {
-            peer.recv(&comm, 1);
-        } catch (const std::exception& e){
+            if (!peer.recv(&comm, 1)) {
+                break;
+            }
+        } catch (const std::exception& e) {
             break;
         }
         msg = protocol.dispatchReceived(comm, receiverCallback);
@@ -52,8 +54,11 @@ ThReceiver::~ThReceiver() {
 std::vector<unsigned char> ThReceiver::receive(size_t size) {
     std::vector<unsigned char> msg(size);
     try {
-        peer.recv(reinterpret_cast<char *>(msg.data()), size);
-    } catch (const std::exception& e){
+        if (!peer.recv(reinterpret_cast<char *>(msg.data()), size)) {
+            is_running = false;
+            return msg;
+        }
+    } catch (const std::exception& e) {
         is_running = false;
     }
     return msg;
@@ -66,7 +71,7 @@ std::vector<unsigned char> ThReceiver::receive(size_t size) {
 // resta matar la q del sender
 // desde el broadcaster
 void ThReceiver::stop() {
-    if (is_running){
+    if (is_running) {
         peer.shutdown(SHUT_RD);
         is_running = false;
     }
@@ -78,14 +83,14 @@ ThReceiver::ThReceiver(ThReceiver &&other)
   protocol(other.protocol),
   eventQueue(other.eventQueue),
   userId(other.userId),
-  earlyStartCallback(other.earlyStartCallback){
+  earlyStartCallback(other.earlyStartCallback) {
     // no hay que hacerle stop
     // si a other le hacemos stop matamos al peer (el rd)
     other.is_running = false;
 }
 
 ThReceiver &ThReceiver::operator=(ThReceiver &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -97,7 +102,7 @@ ThReceiver &ThReceiver::operator=(ThReceiver &&other)  {
 }
 
 void ThReceiver::handleReceived(uint8_t code, std::vector<unsigned char> &msg) {
-    switch (code){
+    switch (code) {
         case MOVE:
             eventQueue.push(std::unique_ptr<ClientEvent>(new StartMoveEvent(userId, msg.at(0))));
             break;

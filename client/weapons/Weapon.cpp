@@ -5,14 +5,14 @@
 
 Weapon::Weapon(std::map<uint8_t, SdlTexture> &weaponTextureMap)
 : weaponTextureMap(weaponTextureMap),
-  currentWeapon(KNIFE){
+  currentWeapon(KNIFE) {
 }
 
 Weapon::~Weapon() {
 }
 
 bool Weapon::changeWeapon(uint8_t id) {
-    if (!weaponTextureMap.count(id)){
+    if (!weaponTextureMap.count(id)) {
         return false;
     }
     this->currentWeapon = id;
@@ -28,11 +28,11 @@ void Weapon::draw(float x, float y, float angle, Camera &cam) {
 
 Weapon::Weapon(Weapon &&other)
 : weaponTextureMap(other.weaponTextureMap),
-  currentWeapon(other.currentWeapon){
+  currentWeapon(other.currentWeapon) {
 }
 
 Weapon &Weapon::operator=(Weapon &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -41,9 +41,9 @@ Weapon &Weapon::operator=(Weapon &&other)  {
 }
 
 void Weapon::animate(Character &character, float distanceToCenter, float angle) {
-    if (currentWeapon == KNIFE){
+    if (currentWeapon == KNIFE) {
         // i controla el numero de frames
-        for (int i = 0; i <= 10; ++i){
+        for (int i = 0; i <= 10; ++i) {
             int16_t angle = parabolicMotion(i);
             auto offset = std::make_tuple(0, 0, angle);
             character.pushPositionOffset(std::move(offset));
@@ -64,15 +64,15 @@ float Weapon::parabolicMotion(int nFrame) {
 }
 
 void Weapon::manageSound(float distanceToCenter) const {
-    if (currentWeapon == KNIFE){
+    if (currentWeapon == KNIFE) {
         SoundManager::playSound(SoundManager::KNF_S, distanceToCenter);
-    } else if (currentWeapon == PISTOL){
+    } else if (currentWeapon == PISTOL) {
         SoundManager::playSound(SoundManager::GLOCK_S, distanceToCenter);
-    } else if (currentWeapon == M3){
+    } else if (currentWeapon == M3) {
         SoundManager::playSound(SoundManager::M3_S, distanceToCenter);
     } else if (currentWeapon == AWP) {
         SoundManager::playSound(SoundManager::AWP_S, distanceToCenter);
-    } else if (currentWeapon == AK47){
+    } else if (currentWeapon == AK47) {
         SoundManager::playSound(SoundManager::AK47_S, distanceToCenter);
     }
 }

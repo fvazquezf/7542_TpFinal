@@ -1,7 +1,7 @@
 #include "DeadUpdate.h"
 
 DeadUpdate::DeadUpdate(int id)
-: deadId(id){
+: deadId(id) {
 }
 
 void DeadUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

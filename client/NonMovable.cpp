@@ -7,7 +7,7 @@ NonMovable::NonMovable(SdlTexture &texture,
            int sizeH,
            float posX,
            float posY)
-: Renderizable(texture, sizeW, sizeH, posX, posY){
+: Renderizable(texture, sizeW, sizeH, posX, posY) {
     rescaling = 1;
 }
 
@@ -22,11 +22,11 @@ NonMovable::~NonMovable() {
 
 NonMovable::NonMovable(NonMovable &&other)
 : Renderizable(std::move(other)),
-  rescaling(other.rescaling){
+  rescaling(other.rescaling) {
 }
 
 NonMovable &NonMovable::operator=(NonMovable &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
     sizeW = other.sizeW;
@@ -39,5 +39,5 @@ NonMovable &NonMovable::operator=(NonMovable &&other)  {
 
 NonMovable::NonMovable(SdlTexture &texture, int sizeW, int sizeH, float posX, float posY, int rescaling)
 : Renderizable(texture, sizeW, sizeH, posX, posY),
-  rescaling(rescaling){
+  rescaling(rescaling) {
 }

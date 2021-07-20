@@ -28,7 +28,7 @@ WorldView::WorldView(SdlWindow& aWindow, YAML::Node& clientConfig)
   hudButton(clientConfig["hud_button"].as<std::string>(), window),
   lobby(window, hudButton, clientConfig),
   menu(window, hudButton, clientConfig),
-  skins(window, clientConfig, hudButton, true, characterManager){
+  skins(window, clientConfig, hudButton, true, characterManager) {
     dropTextures.emplace(std::piecewise_construct,
                   std::forward_as_tuple(0),
                   std::forward_as_tuple(SdlTexture(clientConfig["ak47_drop"].as<std::string>(), window)));
@@ -54,7 +54,7 @@ WorldView::~WorldView() {
 void WorldView::render(size_t iteration) {
     std::lock_guard<std::mutex> lock(worldMutex);
     window.fill(0, 0, 0, 0);
-    if (lobbyTime){
+    if (lobbyTime) {
         lobby.draw();
         cursor.draw();
         window.render();
@@ -62,11 +62,11 @@ void WorldView::render(size_t iteration) {
     }
     map.render(camera);
 
-    for (auto& weapon : droppedWeapons){
+    for (auto& weapon : droppedWeapons) {
         weapon.draw(camera);
     }
 
-    for (auto& b : bomb){
+    for (auto& b : bomb) {
         b.draw(camera);
     }
 
@@ -75,7 +75,7 @@ void WorldView::render(size_t iteration) {
 
     bombExplosion.render(camera, iteration);
 
-    if (menuTime){
+    if (menuTime) {
         menu.showMenu();
     }
     score.show();
@@ -118,12 +118,14 @@ void WorldView::attack(uint8_t id) {
 void WorldView::changeWeapon(uint8_t weaponCode, uint8_t characterId) {
     std::lock_guard<std::mutex> lock(worldMutex);
     characterManager.changeWeapon(weaponCode, characterId);
-    hud.updateCurrentWeapon(weaponCode);
+    if (characterId == playerId) {
+        hud.updateCurrentWeapon(weaponCode);
+    }
 }
 
 bool WorldView::menuButtonPressed(int mouseX, int mouseY) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    if (!menuTime){
+    if (!menuTime) {
         return false;
     }
     return menu.isButtonPressed(mouseX, mouseY);
@@ -137,7 +139,7 @@ uint8_t WorldView::getPressedButtonCode() {
 void WorldView::setMenu(bool isIt) {
     std::lock_guard<std::mutex> lock(worldMutex);
     menuTime = isIt;
-    if (!isIt){
+    if (!isIt) {
         // si el jugador no selecciono un skin
         // asignamos skins random
         skins.setRandomSkinsIfNotSelected();
@@ -171,7 +173,7 @@ void WorldView::pickupWeapon(std::tuple<uint8_t, size_t, int16_t, int16_t>& weap
     size_t uniqueIdentifier = std::get<1>(weaponId);
     std::pair<float, float> pos;
     auto weapon = droppedWeapons.begin();
-    while (weapon != droppedWeapons.end()){
+    while (weapon != droppedWeapons.end()) {
         if (weapon->isWeaponTypeAndId(weaponType, uniqueIdentifier)) {
             weapon->doNotShow();
         }
@@ -185,7 +187,10 @@ void WorldView::buildTeams(std::map<uint8_t, bool> teamMap) {
     std::lock_guard<std::mutex> lock(worldMutex);
     skinTime = true;
     skins.setPlayerTeam(teamMap.at(playerId));
-    characterManager.assignTeams(std::move(teamMap));
+    if (characterManager.assignTeams(std::move(teamMap))) {
+        droppedWeapons.clear();
+        bomb.clear();
+    }
     // swappea el puntaje de los tts y cts
     hud.swapTeamScores();
 }
@@ -232,14 +237,14 @@ void WorldView::buildMap(const std::string &mapString) {
     std::lock_guard<std::mutex> lock(worldMutex);
     try {
         map.loadMap(mapString);
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         shutdown();
     }
 }
 
 void WorldView::stopLobby() {
     std::lock_guard<std::mutex> lock(worldMutex);
-    if (lobbyTime){
+    if (lobbyTime) {
         lobbyTime = false;
         lobby.stopPlayingLobbyMusic();
     }
@@ -247,7 +252,7 @@ void WorldView::stopLobby() {
 
 bool WorldView::lobbyButtonPressed(int mouseX, int mouseY) {
     std::lock_guard<std::mutex> lock(worldMutex);
-    if (!lobbyTime){
+    if (!lobbyTime) {
         return false;
     }
     return lobby.isButtonPressed(mouseX, mouseY);
@@ -267,8 +272,8 @@ void WorldView::blowBomb() {
     std::lock_guard<std::mutex> lock(worldMutex);
     std::pair<float, float> pos;
     auto dropped = bomb.begin();
-    while (dropped != bomb.end()){
-        if (dropped->isWeaponTypeAndId(BOMB, 0)){
+    while (dropped != bomb.end()) {
+        if (dropped->isWeaponTypeAndId(BOMB, 0)) {
             pos = dropped->getPosition();
             bomb.clear();
             break;
@@ -294,7 +299,7 @@ void WorldView::selectSkin() {
     try {
         skins.assignTexturesFromButtonPressed();
         skinTime = false;
-    } catch (std::exception& e){
+    } catch (std::exception& e) {
     }
 }
 

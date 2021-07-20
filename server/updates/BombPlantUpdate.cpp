@@ -1,7 +1,7 @@
 #include "BombPlantUpdate.h"
 
 BombPlantUpdate::BombPlantUpdate(int id)
-: planterId(id){
+: planterId(id) {
 }
 
 void BombPlantUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

@@ -70,7 +70,7 @@ void MapCreationWindow::setUpTitle() {
 
 }
 
-void MapCreationWindow::setUpAll(){
+void MapCreationWindow::setUpAll() {
     this->setUpTitle();
     this->setUpMapNameField();
     this->setUpSizeField();

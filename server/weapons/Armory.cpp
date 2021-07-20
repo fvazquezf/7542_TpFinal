@@ -5,7 +5,7 @@
 
 Armory::Armory(std::shared_ptr<Bomb> bomb, DroppedWeapons& droppedWeapons, const std::map<int, int>& matchConfig)
 : dropped(droppedWeapons),
-  bomb(bomb){
+  bomb(bomb) {
     arsenal.emplace(std::piecewise_construct,
                     std::forward_as_tuple(SECONDARY),
                     std::forward_as_tuple(new Pistol(matchConfig.at(PISTOL_AMMO),
@@ -52,69 +52,69 @@ Armory::Armory(std::shared_ptr<Bomb> bomb, DroppedWeapons& droppedWeapons, const
 }
 
 
-bool Armory::attack(const b2Vec2 &player, int16_t angle, const b2Vec2 &enemy){
+bool Armory::attack(const b2Vec2 &player, int16_t angle, const b2Vec2 &enemy) {
     return arsenal[currentWeapon]->attack(player, angle, enemy);
 }
 
-void Armory::reload(){
+void Armory::reload() {
     arsenal.at(currentWeapon)->reload();
 }
 
-int Armory::bounty(){
+int Armory::bounty() {
     return arsenal.at(currentWeapon)->getBounty();
 }
 
 
-std::shared_ptr<Weapon> Armory::hit(){
+std::shared_ptr<Weapon> Armory::hit() {
     return arsenal[currentWeapon];
 }
 
-bool Armory::canShoot(bool isAttacking){
+bool Armory::canShoot(bool isAttacking) {
     return arsenal[currentWeapon]->canShoot(isAttacking);
 }
 
-void Armory::tickCooldown(){
+void Armory::tickCooldown() {
     arsenal[currentWeapon]->tickCooldown();
 }
 
-void Armory::resetCooldown(){
+void Armory::resetCooldown() {
     arsenal[currentWeapon]->resetCooldown();
 }
 
-void Armory::giveBomb(){
+void Armory::giveBomb() {
     selectWeapon(BOMB);
 }
 
-bool Armory::startPlanting(int id){
+bool Armory::startPlanting(int id, const b2Vec2& pos) {
     if (arsenal.count(EXPLOSIVE) == 0) return false;
     currentWeapon = EXPLOSIVE;
-    bomb->startPlanting(id);
+    bomb->startPlanting(id, pos);
     return true;
 }
 
-bool Armory::startDefusing(){
+bool Armory::startDefusing() {
     bomb->startDefusing();
     return false;
 }
 
-bool Armory::stopPlanting(){
+bool Armory::stopPlanting() {
     if (arsenal.count(EXPLOSIVE) == 0) return false;
     if (bomb->getState() == ACTIVE) {
         arsenal.erase(EXPLOSIVE);
         currentWeapon = MELEE;
     } 
-    if (bomb->getState() == PLANTING){
+    if (bomb->getState() == PLANTING) {
         bomb->stopPlanting();
     }
     return true;
 }
 
-bool Armory::stopDefusing(){
+bool Armory::stopDefusing() {
     bomb->stopDefusing();
     return false;
 }
 
-int Armory::equipWeapon(int weaponType){
+int Armory::equipWeapon(int weaponType) {
     // aca tiene que haber un chequeo para ver si es valida esa weapon
     // si no compro una primary, deberia devolver falso, o el codigo que sea
     if (arsenal.count(weaponType) != 0)
@@ -127,9 +127,9 @@ int Armory::equipWeapon(int weaponType){
 
 bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playerPosition) {
     int weaponPrice = prices.at(weaponCode);
-    if (playerMoney >= weaponPrice){
+    if (playerMoney >= weaponPrice) {
         playerMoney -= weaponPrice;
-        if (arsenal.count(PRIMARY) > 0){
+        if (arsenal.count(PRIMARY) > 0) {
             dropped.dropWeapon(arsenal.at(PRIMARY)->getWeaponCode(), playerPosition);
         }
         selectWeapon(weaponCode);
@@ -138,15 +138,15 @@ bool Armory::tryBuying(uint8_t weaponCode, int& playerMoney, const b2Vec2& playe
     return false;
 }
 
-int Armory::pickUpWeapon(const b2Vec2& position, bool isCt){
+int Armory::pickUpWeapon(const b2Vec2& position, bool isCt) {
     int8_t pickedWeapon = dropped.pickUpAnyIfClose(position);
-    if (pickedWeapon == -1){
+    if (pickedWeapon == -1) {
         return pickedWeapon;
     } else {
-        if (pickedWeapon == BOMB && isCt){
+        if (pickedWeapon == BOMB && isCt) {
             dropped.dropWeapon(pickedWeapon, position);
         }
-        if (arsenal.count(PRIMARY) > 0 && pickedWeapon != BOMB){
+        if (arsenal.count(PRIMARY) > 0 && pickedWeapon != BOMB) {
             dropped.dropWeapon(arsenal.at(PRIMARY)->getWeaponCode(), position);
         }
        selectWeapon(pickedWeapon);
@@ -154,12 +154,12 @@ int Armory::pickUpWeapon(const b2Vec2& position, bool isCt){
     }
 }
 
-void Armory::dropWeapons(const b2Vec2& playerPosition){
-    if (arsenal.count(PRIMARY) > 0){
+void Armory::dropWeapons(const b2Vec2& playerPosition) {
+    if (arsenal.count(PRIMARY) > 0) {
         dropped.dropWeapon(arsenal.at(PRIMARY)->getWeaponCode(), playerPosition);
         arsenal.erase(PRIMARY);
     }
-    if (arsenal.count(EXPLOSIVE) > 0){
+    if (arsenal.count(EXPLOSIVE) > 0) {
         dropped.dropWeapon(arsenal.at(EXPLOSIVE)->getWeaponCode(), playerPosition);
         arsenal.erase(EXPLOSIVE);
     }
@@ -175,11 +175,11 @@ Armory::Armory(Armory &&other)
 : arsenal(std::move(other.arsenal)),
   prices(std::move(other.prices)),
   dropped(other.dropped),
-  currentWeapon(MELEE){
+  currentWeapon(MELEE) {
 }
 
 Armory &Armory::operator=(Armory &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
     arsenal = std::move(other.arsenal);
@@ -188,7 +188,7 @@ Armory &Armory::operator=(Armory &&other)  {
     return *this;
 }
 
-void Armory::selectWeapon(uint8_t weaponCode){
+void Armory::selectWeapon(uint8_t weaponCode) {
     switch (weaponCode) {
         case RIFLE:
             arsenal[PRIMARY] = rifle;

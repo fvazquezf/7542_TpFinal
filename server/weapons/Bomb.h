@@ -25,6 +25,8 @@ class Bomb: public Weapon {
         int remainingTime;
 
         int planter;
+        b2Vec2 position;
+        int explosionRange;
 
         int firerate;
         int spread;
@@ -39,11 +41,13 @@ class Bomb: public Weapon {
         int hit() override;
         int getClip() override;
 
-        void startPlanting(int id);
+        void startPlanting(int id, const b2Vec2& pos);
         void stopPlanting();
         void startDefusing();  
         void stopDefusing();  
         int tic(); 
+
+        bool explosionDamage(const b2Vec2& victim);
 
         int getState();    
 

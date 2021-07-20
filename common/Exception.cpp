@@ -19,7 +19,7 @@ Exception::~Exception() noexcept {
 }
 
 Exception::Exception(Exception &&other) {
-    for (size_t i = 0; i < ERR_LEN; ++i){
+    for (size_t i = 0; i < ERR_LEN; ++i) {
         error[i] = other.error[i];
     }
 }
@@ -29,7 +29,7 @@ Exception &Exception::operator=(Exception &&other) {
         return *this;
     }
 
-    for (size_t i = 0; i < ERR_LEN; ++i){
+    for (size_t i = 0; i < ERR_LEN; ++i) {
         error[i] = other.error[i];
     }
 

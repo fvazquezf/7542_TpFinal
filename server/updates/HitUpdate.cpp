@@ -1,7 +1,7 @@
 #include "HitUpdate.h"
 
 HitUpdate::HitUpdate(int id)
-: hittedId(id){
+: hittedId(id) {
 }
 
 void HitUpdate::serialize(std::function<void(std::vector<unsigned char>)>& callback) {

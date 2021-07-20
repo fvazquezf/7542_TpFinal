@@ -60,9 +60,9 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
         throw std::exception();
     }
 
-    while ((entry = readdir(dp))){
+    while ((entry = readdir(dp))) {
         std::string mapName(entry->d_name);
-        if (mapName == ".." || mapName == "."){
+        if (mapName == ".." || mapName == ".") {
             continue;
         }
         mapNames.insert(mapName);
@@ -73,11 +73,11 @@ GamesMonitor::GamesMonitor(YAML::Node& config) {
 
 GamesMonitor::GamesMonitor(GamesMonitor &&other)
 : matches(std::move(other.matches)),
-  matchesConfig(std::move(other.matchesConfig)){
+  matchesConfig(std::move(other.matchesConfig)) {
 }
 
-GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other)  {
-    if (this == &other){
+GamesMonitor &GamesMonitor::operator=(GamesMonitor &&other) {
+    if (this == &other) {
         return *this;
     }
 
@@ -96,13 +96,13 @@ bool GamesMonitor::createMatch(std::string gameName,
 
     // si el mapa no existe
     // me voy
-    if (!mapNames.count(mapName + MAP_EXTENSION)){
+    if (!mapNames.count(mapName + MAP_EXTENSION)) {
         response(-1);
         return false;
     }
 
     // si hay un juego con ese nombre, no puedo crear partida
-    if (matches.count(gameName)){
+    if (matches.count(gameName)) {
         response(-1);
         return false;
     }
@@ -112,7 +112,7 @@ bool GamesMonitor::createMatch(std::string gameName,
         matches.emplace(std::piecewise_construct,
                         std::forward_as_tuple(gameName),
                         std::forward_as_tuple(matchesConfig, mapPath));
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         response(-1); // agregar al callback un codigo de tipo de error, bad file, game exists etc etc
         return false;
     }
@@ -125,13 +125,13 @@ bool GamesMonitor::joinMatch(const std::string &gameName,
                              const std::function<void(int8_t)> &response) {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     // si no hay un juego con ese nombre, no puedo unirme
-    if (!matches.count(gameName)){
+    if (!matches.count(gameName)) {
         response(-1);
         return false;
     }
 
     // si el juego ya comenzo, bye bye
-    if (matches.at(gameName).isGameStarted()){
+    if (matches.at(gameName).isGameStarted()) {
         response(-1);
         return false;
     }
@@ -146,7 +146,7 @@ GamesMonitor::~GamesMonitor() {
 
 void GamesMonitor::stopGames() {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
-    for (auto& m : matches){
+    for (auto& m : matches) {
         m.second.stop();
     }
 }
@@ -161,7 +161,7 @@ std::string GamesMonitor::listGames() {
     std::string games;
     // simil muy simil tp3
     auto match = matches.begin();
-    while (match != matches.end()){
+    while (match != matches.end()) {
         games += (*match).first + "\n";
         ++match;
     }
@@ -172,7 +172,7 @@ std::string GamesMonitor::listMaps() {
     std::lock_guard<std::mutex> lock(gamesMonitorLock);
     std::string maps;
     auto mapIt = mapNames.begin();
-    while (mapIt != mapNames.end()){
+    while (mapIt != mapNames.end()) {
         auto mapName = mapIt->substr(0, mapIt->size() - 4); // resto el tamaño de la extension para no enviarla
         maps += (mapName + "\n");
         ++mapIt;

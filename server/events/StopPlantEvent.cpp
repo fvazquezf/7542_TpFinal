@@ -2,7 +2,7 @@
 #include "../WorldModel.h"
 
 StopPlantEvent::StopPlantEvent(uint8_t id)
-: ClientEvent(id){
+: ClientEvent(id) {
 }
 
 void StopPlantEvent::updatePlayer(WorldModel &world) {

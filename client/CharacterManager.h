@@ -24,7 +24,7 @@ public:
     CharacterManager(SdlWindow& window, YAML::Node& config);
 
     void setPlayerId(uint8_t id);
-    void assignTeams(std::map<uint8_t, bool> teamMap);
+    bool assignTeams(std::map<uint8_t, bool> teamMap);
     void createCharacters(SdlTexture& terroristTexture, SdlTexture& counterTexture);
 
     void updatePositions(std::map<uint8_t, std::pair<float, float>> &positionMap, Camera& camera);

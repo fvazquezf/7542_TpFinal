@@ -7,11 +7,11 @@ Match::Match(const std::map<int, int>& matchConfig, const std::string& mapName)
 : matchConfig(matchConfig),
   maxUsers(matchConfig.at(ConfigVariables::MAX_PLAYERS)),
   world(updates, matchConfig),
-  gameStarted(false){
+  gameStarted(false) {
     try {
         mapInfo = YAML::LoadFile(mapName);
         world.loadMap(mapInfo);
-    } catch(const std::exception& e){
+    } catch(const std::exception& e) {
         throw;
     }
     startEarlyCallback = std::bind(&Match::start, this);
@@ -26,7 +26,7 @@ Match::Match(Match &&other)
   maxUsers(other.maxUsers),
   updates(std::move(other.updates)),
   world(std::move(other.world)),
-  gameStarted(false){
+  gameStarted(false) {
     startEarlyCallback = std::bind(&Match::start, this);
 }
 
@@ -51,7 +51,7 @@ void Match::stop() {
         u.second.stop();
         u.second.join();
     }
-    if (!world.isDead()){
+    if (!world.isDead()) {
         world.stop();
         world.join();
     }
@@ -65,7 +65,7 @@ void Match::start() {
     // entonces no tengo que hacer nada
     // en el caso de sacar esta condicion podria darse ese caso
     // y romper el servidor por tratar de iniciar al world 2 veces
-    if (gameStarted || users.size() <= 1){
+    if (gameStarted || users.size() <= 1) {
         return;
     }
     world.start();
@@ -80,7 +80,7 @@ bool Match::isGameStarted() {
 bool Match::tryAddingUserAndStartIfShould(const std::function<Socket(void)> &socketHandIn,
                                           const std::function<void(int8_t)> &loginResponse) {
     std::lock_guard<std::mutex> lock(matchMutex);
-    if (gameStarted){
+    if (gameStarted) {
         loginResponse(-1);
         return false; // si el juego comenzo, chau
     }

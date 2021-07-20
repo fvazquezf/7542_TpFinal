@@ -6,22 +6,22 @@
 
 MapLayout::MapLayout(): ctSpawn ({{0, 1}, {0, 1}}),
                         ttSpawn ({{0, 1}, {0, 1}}),
-                        bombSite ({{0, 1}, {0, 1}}){
+                        bombSite ({{0, 1}, {0, 1}}) {
                                 
 }
 
-void MapLayout::loadMap(b2World& world, YAML::Node& mapInfo){
+void MapLayout::loadMap(b2World& world, YAML::Node& mapInfo) {
     std::vector<std::pair<int, int>> temp;
     std::vector<std::string> categories{"wall_1", "wall_2", "wall_3", "wall_4", "wall_5", "wall_6", "wall_7", "wall_8"};
-    for (auto category: categories){
-        if (mapInfo[category]){
+    for (auto category: categories) {
+        if (mapInfo[category]) {
             temp = mapInfo[category].as<std::vector<std::pair<int, int>>>();
             walls.insert(temp.begin(), temp.end());
         }
     }
     b2BodyDef boxDef;
     boxDef.type = b2_staticBody;
-    for (auto& pos: walls){
+    for (auto& pos: walls) {
         boxDef.position.Set(pos.first, pos.second);
         createBox(world, boxDef);
     }
@@ -39,7 +39,7 @@ void MapLayout::loadMap(b2World& world, YAML::Node& mapInfo){
     createMapBorder(world, xSize, ySize);
 }
 
-void MapLayout::createBox(b2World& world, b2BodyDef& boxDef){
+void MapLayout::createBox(b2World& world, b2BodyDef& boxDef) {
 	b2Body* box = world.CreateBody(&boxDef);
     b2PolygonShape bodyBox;
 	bodyBox.SetAsBox(.75f, 0.75f);
@@ -49,14 +49,14 @@ void MapLayout::createBox(b2World& world, b2BodyDef& boxDef){
 }
 
 
-void MapLayout::createMapBorder(b2World& world, int xSide, int ySide){
+void MapLayout::createMapBorder(b2World& world, int xSide, int ySide) {
 	float x = 0;
 	float y = -0.95;
 
     b2BodyDef boxDef;
     boxDef.type = b2_staticBody;
 
-	for (int i = 0; i < xSide ; i++){
+	for (int i = 0; i < xSide ; i++) {
 		boxDef.position.Set(x, y);
 		createBox(world, boxDef);
 		boxDef.position.Set(x, y+ySide+1.15);
@@ -65,7 +65,7 @@ void MapLayout::createMapBorder(b2World& world, int xSide, int ySide){
 	}
     x = -0.95;
 	y = 0;
-	for (int i = 0; i < ySide ; i++){
+	for (int i = 0; i < ySide ; i++) {
 		boxDef.position.Set(x, y);
 		createBox(world, boxDef);
 		boxDef.position.Set(x+xSide+1.15, y);
@@ -87,20 +87,20 @@ std::pair<std::pair<int, int>, std::pair<int, int>> MapLayout::getPointsFromRect
 
 // b-a = lado x del rectangulo
 // d-c = lado y del rectangulo 
-void MapLayout::setCtSpawn(std::vector<std::pair<int, int>> positions){ 
+void MapLayout::setCtSpawn(std::vector<std::pair<int, int>> positions) {
     ctSpawn = std::move(getPointsFromRectangle(positions));
 }
 
-void MapLayout::setTtSpawn(std::vector<std::pair<int, int>> positions){ 
+void MapLayout::setTtSpawn(std::vector<std::pair<int, int>> positions) {
     ttSpawn = std::move(getPointsFromRectangle(positions));
 }
 
-void MapLayout::setBombSite(std::vector<std::pair<int, int>> positions){ 
+void MapLayout::setBombSite(std::vector<std::pair<int, int>> positions) {
     bombSite = std::move(getPointsFromRectangle(positions));
 }
 
 
-bool MapLayout::checkTunneling(const b2Vec2& attacker, const b2Vec2& victim){
+bool MapLayout::checkTunneling(const b2Vec2& attacker, const b2Vec2& victim) {
     int x0 = static_cast<int>(round(attacker.x));
     int y0 = static_cast<int>(round(attacker.y));
     int x1 = static_cast<int>(round(victim.x));
@@ -134,22 +134,22 @@ bool MapLayout::plotLine(int x0, int y0, int x1, int y1) {
 }
 
 
-bool MapLayout::isInSite(const b2Vec2& position){
-    if ((bombSite.first.first < position.x) && (position.x < bombSite.first.second)){
-        if ((bombSite.second.first < position.y) && (position.y < bombSite.second.second)){
+bool MapLayout::isInSite(const b2Vec2& position) {
+    if ((bombSite.first.first < position.x) && (position.x < bombSite.first.second)) {
+        if ((bombSite.second.first < position.y) && (position.y < bombSite.second.second)) {
             return true;
         }
     }
     return false;
 }
 
-b2Vec2 MapLayout::placeCt(){
+b2Vec2 MapLayout::placeCt() {
     float x = randomIntBetween(ctSpawn.first.first, ctSpawn.first.second);
     float y = randomIntBetween(ctSpawn.second.first, ctSpawn.second.second);
     return b2Vec2(x, y);
 }
 
-b2Vec2 MapLayout::placeTt(){
+b2Vec2 MapLayout::placeTt() {
     float x = randomIntBetween(ttSpawn.first.first, ttSpawn.first.second);
     float y = randomIntBetween(ttSpawn.second.first, ttSpawn.second.second);
     return b2Vec2(x, y);

@@ -7,7 +7,7 @@ void CreateGame::serialize(std::function<void(std::vector<unsigned char>)> &call
 
 CreateGame::CreateGame(std::string gameName, std::string mapName)
 : gameName(std::move(gameName)),
-  mapName(std::move(mapName)){
+  mapName(std::move(mapName)) {
 }
 
 CreateGame::~CreateGame() {

@@ -12,7 +12,7 @@ LobbyScreen::LobbyScreen(SdlWindow &window, SdlTexture& hudButton, YAML::Node& c
                    hudButton,
                    buttonBackgroundTexture,
                    SDL_Rect{0, 0, 48, 20},
-                   0){
+                   0) {
     //SoundManager::playMusic();
     waitingTextScreen.setText("Espera a otros jugadores o toca el boton para jugar");
 }
@@ -36,7 +36,7 @@ LobbyScreen::~LobbyScreen() {
 void LobbyScreen::stopPlayingLobbyMusic() {
     try {
         SoundManager::stopMusic();
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         SoundManager::haltMusic();
     }
 }

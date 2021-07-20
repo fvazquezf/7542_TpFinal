@@ -7,7 +7,7 @@ Cursor::Cursor(uint8_t cursorType, SdlWindow &window, const std::string& cursorS
                    (this->cursorType / 2) * 46,
                    46,
                    46),
-  cursorSize(cursorSize){
+  cursorSize(cursorSize) {
     // el area no es magia, la imagen tiene 4 frames en un cuadrado
     // por lo tanto si elijo el cursor "2" (indexo en 0), quiero moverme
     // uno en la altura (2/2 * 46 = 46) y ninguno a lo ancho (2%2 * 46 = 0)

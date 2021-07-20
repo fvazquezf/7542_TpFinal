@@ -12,7 +12,7 @@ void Server::operator()(char *port) {
     YAML::Node config;
     try {
         config = YAML::LoadFile(SERV_CONFIG_PATH);
-    } catch (const std::exception& e){
+    } catch (const std::exception& e) {
         throw;
     }
     GamesMonitor games(config);

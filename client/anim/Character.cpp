@@ -23,7 +23,7 @@ Character::Character(SdlTexture &texture,
   movementAnimation(texture, 6, 2, 3, 32, 32),
   bloodAnimation(blood, 16, 4, 32),
   legAnimation(legs, 6, 3, 2, 32, 32),
-  currentMovingUpdates(0){
+  currentMovingUpdates(0) {
     movementAnimation.renderFromFrame(0);
     bloodAnimation.renderFromFrame(8);
     weaponCharacterFrameMap = {
@@ -39,19 +39,19 @@ Character::Character(SdlTexture &texture,
 }
 
 void Character::render(Camera &cam, size_t iteration) {
-    if (player){
+    if (player) {
         cam.setLogicalCenter(posX, posY);
     }
 
-    if (dead){
+    if (dead) {
         return;
     }
 
-    if (moving){
+    if (moving) {
         legAnimation.renderFor(cam, posX, posY + 0.2, 0, iteration);
     }
 
-    if (bleeding){
+    if (bleeding) {
         bleeding = bloodAnimation.renderOld(cam, 255);
     }
 
@@ -60,7 +60,7 @@ void Character::render(Camera &cam, size_t iteration) {
             posY + std::get<1>(offset),
             angle + std::get<2>(offset),
                     cam);
-    if (wasHit){
+    if (wasHit) {
         bloodAnimation.renderOneAndKeep(cam, posX + std::get<0>(offset), posY + std::get<0>(offset));
         bloodAnimation.advanceFrame();
         wasHit = false;
@@ -79,7 +79,7 @@ Character::Character(Character &&other)
   bloodAnimation(std::move(other.bloodAnimation)),
   legAnimation(std::move(other.legAnimation)),
   weaponCharacterFrameMap(std::move(other.weaponCharacterFrameMap)),
-  currentMovingUpdates(other.currentMovingUpdates){
+  currentMovingUpdates(other.currentMovingUpdates) {
     other.player = false;
 }
 
@@ -120,7 +120,7 @@ void Character::pushPositionOffset(std::tuple<float, float, int> positionOffset)
 }
 
 void Character::changeWeapon(uint8_t weaponCode) {
-    if (weapon.changeWeapon(weaponCode)){
+    if (weapon.changeWeapon(weaponCode)) {
         movementAnimation.setCurrentFrame(weaponCharacterFrameMap.at(weaponCode));
     }
 }
@@ -128,14 +128,14 @@ void Character::changeWeapon(uint8_t weaponCode) {
 void Character::updatePosition(float x, float y) {
     float diffX = abs(posX - x);
     float diffY = abs(posY - y);
-    if (!moving && ((diffX > 0.005) || (diffY > 0.005))){
+    if (!moving && ((diffX > 0.005) || (diffY > 0.005))) {
         moving = true;
         legAnimation.setStartingIteration(lastIter + 1);
-    } else if (moving && ((diffX < 0.005) && (diffY < 0.005))){
+    } else if (moving && ((diffX < 0.005) && (diffY < 0.005))) {
         moving = false;
         currentMovingUpdates = 0;
     }
-    if (moving){
+    if (moving) {
         ++currentMovingUpdates;
     }
     Renderizable::updatePosition(x, y);
@@ -146,7 +146,7 @@ std::pair<float, float> Character::getPosition() {
 }
 
 void Character::move(float distanceToCenter) const {
-    if (moving && (currentMovingUpdates % 25) == 0){
+    if (moving && (currentMovingUpdates % 25) == 0) {
         SoundManager::playSound(SoundManager::STEP1, distanceToCenter);
     }
 }

@@ -12,16 +12,11 @@ private:
     BlockingQueue<std::unique_ptr<Command>>& commQ;
     Socket& peer;
     const Protocol& prot;
-public:
-    // recibe una referencia a un socket tambien
-    // solo que por el momento no mergeamos
-    Sender(BlockingQueue<std::unique_ptr<Command>>& q, Socket& peer, const Protocol& protocol);
-
     void run() override;
-
     // nuestro callback
     void send(std::vector<unsigned char> msg);
-
+public:
+    Sender(BlockingQueue<std::unique_ptr<Command>>& q, Socket& peer, const Protocol& protocol);
     ~Sender() override;
 };
 

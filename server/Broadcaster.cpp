@@ -3,7 +3,7 @@
 #include <map>
 #include <utility>
 
-void Broadcaster::pushAll(const std::shared_ptr<Update>& update){
+void Broadcaster::pushAll(const std::shared_ptr<Update>& update) {
     std::lock_guard<std::mutex> lock(broadcasterMutex);
     for (auto& queuePair : clientsQueues) {
         queuePair.second.push(update);
@@ -24,11 +24,11 @@ void Broadcaster::push(uint8_t id, std::shared_ptr<Update> update) {
 }
 
 Broadcaster::Broadcaster(Broadcaster &&other)
-: clientsQueues(std::move(other.clientsQueues)){
+: clientsQueues(std::move(other.clientsQueues)) {
 }
 
 Broadcaster &Broadcaster::operator=(Broadcaster &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 
@@ -50,7 +50,7 @@ void Broadcaster::closePlayerQueue(uint8_t id) {
 
 void Broadcaster::closeAllQueues() {
     std::lock_guard<std::mutex> lock(broadcasterMutex);
-    for (auto& q : clientsQueues){
+    for (auto& q : clientsQueues) {
         q.second.signalClosed();
     }
 }

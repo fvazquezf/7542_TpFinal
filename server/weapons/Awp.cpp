@@ -8,18 +8,18 @@ Awp::Awp(int ammo, int range, int accuracy, int damage, int firerate, int bounty
 }
 
 
-Awp::~Awp(){
+Awp::~Awp() {
 
 }
 
-bool Awp::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
+bool Awp::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy) {
     b2Vec2 bulletPosition(player);
     b2Vec2 bulletDirection(sin(angle * 3.14f/180.0f), -cos(angle * 3.14f/180.0f));
     double oldDist = INFINITY;
     double currDist;
     double bulletTravelledDistance = 0;
 
-    while (bulletTravelledDistance < range){
+    while (bulletTravelledDistance < range) {
         bulletTravelledDistance+= bulletDirection.Length();
         bulletPosition.operator+=(bulletDirection);
 
@@ -31,11 +31,11 @@ bool Awp::attack(const b2Vec2& player, int16_t angle, const b2Vec2& enemy){
     return false;
 }
 
-int Awp::hit(){
+int Awp::hit() {
     return damage;
 }
 
-bool Awp::canShoot(bool isAttacking){
+bool Awp::canShoot(bool isAttacking) {
     if (cooldown == 0 && clip != 0 && isAttacking) {
         clip--;
         cooldown = firerate;
@@ -45,7 +45,7 @@ bool Awp::canShoot(bool isAttacking){
     }
 }
 
-void Awp::resetCooldown(){
+void Awp::resetCooldown() {
     // no hace nada porque solo se puede volver a disparar cuando pasa el cooldown
     // no es como la pistola que dispara cada vez que haces click
 }

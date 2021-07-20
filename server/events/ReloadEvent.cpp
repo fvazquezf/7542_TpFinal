@@ -3,7 +3,7 @@
 #include "../WorldModel.h"
 
 ReloadEvent::ReloadEvent(uint8_t id)
-: ClientEvent(id){
+: ClientEvent(id) {
 }
 
 void ReloadEvent::updatePlayer(WorldModel &world) {

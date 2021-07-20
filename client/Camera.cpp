@@ -26,7 +26,7 @@ void Camera::renderInSight(SdlTexture& texture,
                            Area& src,
                            float posX,
                            float posY,
-                           float angle){
+                           float angle) {
     if (!isVisible(posX, posY)) {
         return;
     }
@@ -40,33 +40,33 @@ void Camera::renderInSight(SdlTexture& texture,
     texture.render(src, dst, angle, SDL_FLIP_NONE);
 }
 
-bool Camera::isVisibleInX(float x){
+bool Camera::isVisibleInX(float x) {
     auto pixelX = abs(logicalCenterX - x) / M_TO_P;
     return (pixelX >= 0 && pixelX <= width);
 }
 
-bool Camera::isVisibleInY(float y){
+bool Camera::isVisibleInY(float y) {
     auto pixelY = abs(logicalCenterY - y) / M_TO_P;
     return (pixelY >= 0 && pixelY <= height);
 }
 
-bool Camera::isVisible(float x, float y){
+bool Camera::isVisible(float x, float y) {
     return isVisibleInX(x) && isVisibleInY(y);
 }
 
-void Camera::setLogicalCenter(float x, float y){
+void Camera::setLogicalCenter(float x, float y) {
     logicalCenterX = x;
     logicalCenterY = y;
 }
 
-Camera::~Camera(){
+Camera::~Camera() {
 }
 
 int16_t Camera::angleFromMouse() {
     int x, y = 0;
     SDL_GetMouseState(&x, &y);
     float angle = SDL_atan2(y - centerPix.y, x - centerPix.x) * (180.000f / PI) + 90;
-    if (angle < 0){
+    if (angle < 0) {
         angle = 360 + angle;
     }
     return angle;
@@ -79,7 +79,7 @@ Camera::renderWeapon(float playerX,
                      int sizeX,
                      int sizeY,
                      SdlTexture &texture) {
-    if (isVisibleInX(playerX) && isVisibleInY(playerY)){
+    if (isVisibleInX(playerX) && isVisibleInY(playerY)) {
         Area src(0, 0, sizeX, sizeY);
         int newX = centerPix.x - (logicalCenterX - playerX) * M_TO_P;
         int newY = centerPix.y - (logicalCenterY - playerY) * M_TO_P;

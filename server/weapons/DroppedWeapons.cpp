@@ -4,7 +4,7 @@
 
 DroppedWeapons::DroppedWeapons(Broadcaster &updates)
 : uniquifier(0),
-  broadcaster(updates){
+  broadcaster(updates) {
 }
 
 void DroppedWeapons::dropWeapon(uint8_t weaponCode, const b2Vec2 &position) {
@@ -17,8 +17,8 @@ void DroppedWeapons::dropWeapon(uint8_t weaponCode, const b2Vec2 &position) {
 int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
     int8_t code = -1;
     auto weapon = droppedWeapons.begin();
-    while (weapon != droppedWeapons.end()){
-        if ((std::get<2>(*weapon) - playerPosition).LengthSquared() < 1){
+    while (weapon != droppedWeapons.end()) {
+        if ((std::get<2>(*weapon) - playerPosition).LengthSquared() < 1) {
             broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(std::get<0>(*weapon),
                                                                              std::get<1>(*weapon),
                                                                              std::get<2>(*weapon).x,
@@ -34,9 +34,9 @@ int8_t DroppedWeapons::pickUpAnyIfClose(const b2Vec2 &playerPosition) {
     return code;
 }
 
-void DroppedWeapons::removeBomb(){
+void DroppedWeapons::removeBomb() {
     auto weapon = droppedWeapons.begin();
-    while (weapon != droppedWeapons.end()){
+    while (weapon != droppedWeapons.end()) {
         if (std::get<0>(*weapon) == BOMB) {
             broadcaster.pushAll(std::shared_ptr<Update>(new WeaponDropUpdate(std::get<0>(*weapon),
                                                                              std::get<1>(*weapon),
@@ -50,17 +50,22 @@ void DroppedWeapons::removeBomb(){
     }
 }
 
+void DroppedWeapons::clear() {
+    droppedWeapons.clear();
+}
+
+
 DroppedWeapons::~DroppedWeapons() {
 }
 
 DroppedWeapons::DroppedWeapons(DroppedWeapons &&other)
 : uniquifier(other.uniquifier),
   broadcaster(other.broadcaster),
-  droppedWeapons(std::move(other.droppedWeapons)){
+  droppedWeapons(std::move(other.droppedWeapons)) {
 }
 
 DroppedWeapons &DroppedWeapons::operator=(DroppedWeapons &&other)  {
-    if (this == &other){
+    if (this == &other) {
         return *this;
     }
 

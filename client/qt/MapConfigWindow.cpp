@@ -9,11 +9,11 @@ MapConfigWindow::MapConfigWindow(QWidget *parent, int width, int height, LogInIn
       height(height),
       info(info),
       createWindow(create),
-      usernameLineEdit(nullptr){
+      usernameLineEdit(nullptr) {
     styler.setCounterStrikeFont(this, 14);
     this->setWindowTitle("Counter Strike 2D - Configuration");
     setMainLayout();
-    if (create){
+    if (create) {
         this->setEditLinesLayout();
     }
 }
