@@ -301,10 +301,11 @@ std::vector<unsigned char>
 Protocol::handleLoginResponse(std::function<std::vector<unsigned char>(size_t)> &callback) {
     std::vector<unsigned char> status = callback(1);
     if (status.at(0) == LOGIN_OK) {
-        // devuelvo el id
-        return callback(1);
+        auto id = callback(1);
+        status.push_back(id.at(0)); // LOGIN_OK | ID
+        return status;
     } else {
-        // login bad
+        // LOGIN_BAD
         return status;
     }
 }
