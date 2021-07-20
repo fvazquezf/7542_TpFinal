@@ -8,8 +8,8 @@
 PlayerModel::PlayerModel(b2Body* body, std::shared_ptr<Bomb> bomb, DroppedWeapons& dropped, const std::map<int, int>& matchConfig):
 model(body),
 angle(0),
-maxHp(matchConfig.at(PLAYER_HP)),
 hp(matchConfig.at(PLAYER_HP)),
+maxHp(matchConfig.at(PLAYER_HP)),
 money(matchConfig.at(STARTING_MONEY)),
 totalMoney(matchConfig.at(STARTING_MONEY)),
 armory(bomb, dropped, matchConfig) {

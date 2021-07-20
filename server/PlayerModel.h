@@ -17,8 +17,8 @@ class PlayerModel{
     bool isFrozen;
     bool isAttacking;
 
-    int maxHp;
     int hp;
+    int maxHp;
     int money;
     int totalMoney;
 

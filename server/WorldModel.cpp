@@ -53,16 +53,16 @@ WorldModel::WorldModel(WorldModel &&other)
   anchor(nullptr),
   matchConfig(other.matchConfig),
   playerModels(std::move(other.playerModels)),
+  bomb(other.bomb),
+  tally(other.tally),
   usersEvents(std::move(other.usersEvents)),
   updates(other.updates),
+  updatesM(other.updatesM),
   droppedWeapons(std::move(other.droppedWeapons)),
   timeStep(other.timeStep),
   velocityIterations(other.velocityIterations),
   positionIterations(other.positionIterations),
-  bomb(other.bomb),
-  tally(other.tally),
-  is_running(other.is_running),
-  updatesM(other.updatesM) {
+  is_running(other.is_running) {
     // tengo que crearlo asi pq
     // en box2d el world
     // no tiene construccion por movimiento
