@@ -76,7 +76,7 @@ SdlText &SdlText::operator=(SdlText &&other) {
     this->textFont = other.textFont;
     other.textFont = nullptr;
 
-    if ((texture != nullptr) && texture != other.texture)) {
+    if ((texture != nullptr) && (texture != other.texture)) {
         SDL_DestroyTexture(this->texture);
     }
 
