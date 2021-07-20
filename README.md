@@ -71,6 +71,7 @@ El listado de bibliotecas necesitadas para instalar el programa que instala el i
 - libsdl2-mixer-dev 
 - libsdl2-ttf-dev
 
+Las versiones las podemos encontrar en la documentacion tecnica.
  
 ### Proceso de Instalación
 
