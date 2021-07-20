@@ -243,6 +243,8 @@ Luego de la fase preparación, viene la fase final. La fase final finaliza cuand
 - PickUp de arma con `E`
 - Atacar con el click izquierdo del mouse
 
+![Alt Text](readme_img/HUDExplained.jpg)
+
 ### Armas
 
 - Bomba: Arma exclusiva de los terroristas. Solo hay una por partida y la recibe al empezar el juego
