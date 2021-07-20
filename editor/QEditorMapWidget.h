@@ -46,8 +46,6 @@ private:
 
     void setTilesBackGround();
     void updateBackGround();
-    void setTilesFromOldFile();
-    void setTilesFromNewFile();
 
     void loadNewFile(int rows, int columns);
     void loadOldFile();

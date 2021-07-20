@@ -45,10 +45,7 @@ private:
     QEditorMapWidget* qMapEditorWidget;
 
     //Others
-    CounterStrikeStyle styler;
-    std::string selectedItem = "wall_1";
     std::string map_name = "map";
-    YAML::Node map_config;
 
     // Methods
     void setupWidgets();

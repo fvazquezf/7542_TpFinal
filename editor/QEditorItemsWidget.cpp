@@ -9,6 +9,7 @@ QEditorItemsWidget::QEditorItemsWidget(QWidget* parent):
 }
 
 void QEditorItemsWidget::setMapItems() {
+    MapQPixmapGenerator pixmaps;    
     std::vector<std::string> types = pixmaps.getTypes();
     for(unsigned long i = 0; i < types.size(); i++) {
         QTreeWidgetItem* root = new QTreeWidgetItem();

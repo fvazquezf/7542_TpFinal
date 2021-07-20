@@ -13,11 +13,7 @@ class QEditorItemsWidget : public QTreeWidget {
 public:
     QEditorItemsWidget(QWidget* parent);
 private:
-    MapQPixmapGenerator pixmaps;
     void setMapItems();
-    std::string selectedItem;
-    std::vector<std::string> types;
-    void handleClickedLabel();
 
 };
 
