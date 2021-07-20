@@ -6,11 +6,13 @@ Stencil::Stencil(SdlWindow &window,
                  uint16_t coneAngle,
                  float circleRadius,
                  uint8_t opacity,
-                 uint8_t triangleBrightness)
+                 uint8_t triangleBrightness,
+                 bool stencilOn)
 : window(window),
   circleRadius(circleRadius),
   stencilOpacity(opacity),
-  triangleBrightness(triangleBrightness) {
+  triangleBrightness(triangleBrightness),
+  stencilOn(stencilOn) {
     height = std::sqrt(std::pow(window.getHeight(), 2) + std::pow(window.getWidth(), 2));
     base = 2 * height * tan((coneAngle * 3.1415 / 180) / 2);
 }
@@ -25,6 +27,10 @@ Stencil::~Stencil() {
 // (la diagonal de la pantalla/2, siempre queda afuera de la vista)
 // el punto principal siempre esta en la mitad (w/2, h/2)
 void Stencil::createStencilTexture(int16_t playerAngle) {
+    if (!stencilOn) {
+        return;
+    }
+    
     float dirX = sin(playerAngle * 3.1415 / 180); // direccion en X de la mira del jugador
     float dirY = -cos(playerAngle * 3.1415 / 180); // direccion en Y de la mira del jugador
     float xBase = (window.getWidth() / 2) + height * dirX; // base del triangulo en X
