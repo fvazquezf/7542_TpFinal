@@ -131,6 +131,7 @@ El primer ejecutable, es el servidor del juego. Este requiere como parametro el 
 ```console
 cs2d_server <puerto>
 ``` 
+![Alt Text](readme_img/server_startup.gif)
 El archivo de configuracion del server lo podemos localizar en la ruta `/var/cs2d/config/` bajo el nombre `server_config.yaml`.
 En este archivo podemos encontrar configuraciones del juego en si (vida de los jugadores, plata inicial, velocidad de disparo de armas...).
 
@@ -139,6 +140,8 @@ El segundo ejecutable es el cliente. No requiere ningun parámetro adicional.
 ```console
 cs2d
 ``` 
+Nos encontraremos con la siguiente pantalla, en donde podremos ingresar la ip y el puerto correspondientes al servidor.
+![Alt Text](readme_img/login.gif)
 
 Podemos localizar el archivo de configuracion del cliente en `/var/cs2d/config` con el nombre `client_config.yaml`.
 En el, podremos seleccionar la resolucion del juego, si es fullscreen o no, podremos desactivar el sonido, configurar el stencil y muchas cosas mas.
@@ -151,9 +154,12 @@ cs2d_editor
 
 ### Ciclo del juego
 
-Una vez que se levanta el servidor, se pueden correr clientes. Estos se levantan con el comando indicado. Esto abre una ventana donde se debe introducir el puerto y el ip. Luego se puede elegir entre crear o unirse a una partida.
+Una vez que se levanta el servidor, se pueden correr clientes. Se puede elegir entre crear o unirse a una partida.
+
+![Alt Text](readme_img/client_create_join_window.gif)
 
 Si se elige crear una partida, indicar el mapa a utilizar y el nombre de la misma. Después de esto se debe esperar a que se conecte al menos un jugador.
+![Alt Text](readme_img/client_create.gif)
 Si se elige unirse a una partida, selecciona la partida a la que quieras unirte. En cualquier caso, podes tocar el boton de empezar la partida para que inicie con menos jugadores de los que hay. 
 
 El juego consiste en una R cantidad configurable de rondas. Un equipo juega la mitad de rondas en un bando como terrorista y la otra mitad anti-terroristas y viceversa.
