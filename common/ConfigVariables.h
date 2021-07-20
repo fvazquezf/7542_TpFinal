@@ -5,6 +5,8 @@
 enum ConfigVariables {
     PLAYER_HP,
     STARTING_MONEY,
+    MONEY_ROUND_WON,
+    MONEY_ROUND_LOST,
     MAX_PLAYERS,
     PISTOL_AMMO,
     PISTOL_RANGE,
@@ -36,8 +38,6 @@ enum ConfigVariables {
     KNIFE_DAMAGE,
     KNIFE_FIRERATE,
     KNIFE_BOUNTY,
-    MONEY_ROUND_WON,
-    MONEY_ROUND_LOST,
     BOMB_RANGE,
     BOMB_ACCURACY,
     BOMB_DAMAGE,

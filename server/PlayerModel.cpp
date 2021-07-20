@@ -211,6 +211,13 @@ void PlayerModel::changeSide() {
     isCt = !isCt;
 }
 
+void PlayerModel::gibRoundMoney(bool side, int amount){
+    if (isCt == side) {
+        money += amount;
+        totalMoney += amount;
+    }
+}
+
 bool PlayerModel::getSide() const {
     return isCt;
 }

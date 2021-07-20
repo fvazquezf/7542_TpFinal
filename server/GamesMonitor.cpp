@@ -7,6 +7,8 @@
 GamesMonitor::GamesMonitor(YAML::Node& config) {
     matchesConfig.emplace(ConfigVariables::PLAYER_HP, config["player_hp"].as<int>());
     matchesConfig.emplace(ConfigVariables::STARTING_MONEY, config["starting_money"].as<int>());
+    matchesConfig.emplace(ConfigVariables::MONEY_ROUND_LOST, config["money_round_lost"].as<int>());
+    matchesConfig.emplace(ConfigVariables::MONEY_ROUND_WON, config["money_round_won"].as<int>());
     matchesConfig.emplace(ConfigVariables::MAX_PLAYERS, config["match_max_players"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_AMMO, config["pistol_ammo"].as<int>());
     matchesConfig.emplace(ConfigVariables::PISTOL_RANGE, config["pistol_range"].as<int>());

@@ -70,6 +70,8 @@ class PlayerModel{
 
         void changeSide();
 
+        void gibRoundMoney(bool side, int amount);
+
         bool getSide() const;
         int getHp() const;
         int getMoney() const;

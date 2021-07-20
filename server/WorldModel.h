@@ -42,6 +42,8 @@ class WorldModel: public Thread {
 
     bool purchaseFase;
     bool is_running;
+    int roundMoneyWon;
+    int roundMoneyLost;
     
     void roundPurchase();
     void roundCommon();

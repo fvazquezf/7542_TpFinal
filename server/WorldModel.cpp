@@ -40,6 +40,8 @@ WorldModel::WorldModel(Broadcaster& updates, const std::map<int, int>& matchConf
 
 	is_running = false;
 	purchaseFase = true;
+    roundMoneyLost = matchConfig.at(MONEY_ROUND_LOST);
+    roundMoneyWon = matchConfig.at(MONEY_ROUND_WON);
 }
 
 WorldModel::~WorldModel() {
@@ -182,8 +184,20 @@ void WorldModel::roundPlay() {
 
     if (tally.isRoundOver() == 1) {
         updatesM.updateCtWinRound();
+        // ciclo agregado a ultimo momento
+        for (auto& player: this->playerModels) {
+            player.second.gibRoundMoney(true, roundMoneyWon);
+            player.second.gibRoundMoney(false, roundMoneyLost);
+            updatesM.updateMoney(player.first);
+        }
     } else if (tally.isRoundOver() == -1) {
         updatesM.updateTtWinRound();
+        // ciclo agregado a ultimo momento
+        for (auto& player: this->playerModels) {
+            player.second.gibRoundMoney(false, roundMoneyWon);
+            player.second.gibRoundMoney(true, roundMoneyLost);
+            updatesM.updateMoney(player.first);
+        }
     }
     usleep(FRAMERATE * 120);
 }
