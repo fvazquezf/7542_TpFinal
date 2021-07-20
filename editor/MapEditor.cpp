@@ -3,6 +3,7 @@
 MapEditor::MapEditor(QWidget *parent, const std::string &name) :
     QDialog(parent)
 {
+    CounterStrikeStyle styler;
     this->setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     styler.setCounterStrikeFont(this, 16);
     this->map_name = name;
@@ -15,6 +16,7 @@ MapEditor::MapEditor(QWidget *parent, const std::string &name) :
 MapEditor::MapEditor(QWidget *parent, const std::string &name, int row, int column) :
     QDialog(parent)
 {
+    CounterStrikeStyle styler;
     this->setFixedSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     styler.setCounterStrikeFont(this, 12);
     this->map_name = name;

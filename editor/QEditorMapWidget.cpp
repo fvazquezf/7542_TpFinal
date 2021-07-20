@@ -82,7 +82,7 @@ void QEditorMapWidget::addQTile(std::string &element, int row, int column) {
 void QEditorMapWidget::loadNewFile(int rows, int columns) {
     size[LABEL_COLUMNS] = columns;
     size[LABEL_ROWS] = rows;
-    this->setTilesFromNewFile();
+    this->setTilesBackGround();
 
 }
 
@@ -116,15 +116,7 @@ void QEditorMapWidget::setTilesBackGround() {
     }
 }
 
-void QEditorMapWidget::setTilesFromNewFile() {
-    this->setTilesBackGround();
-}
-
 void QEditorMapWidget::loadOldFile() {
-    this->setTilesFromOldFile();
-}
-
-void QEditorMapWidget::setTilesFromOldFile() {
 
     std::string path = PATH_TO_MAPS + map_name + ".yml";
     YAML::Node map_config = YAML::LoadFile(path);
