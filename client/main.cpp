@@ -47,6 +47,11 @@ int main(int argc, const char *argv[]) {
         return -1;
     }
 
+    if (info.failed) {
+        std::cout << "Failed login in\n";
+        return -1;
+    }
+
     try {
         Client clientHandler(info, clientConfig);
         clientHandler.launch();

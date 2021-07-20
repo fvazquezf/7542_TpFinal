@@ -23,6 +23,9 @@ std::vector<std::string> LogInInfo::receiveGameInformation() {
     Protocol prot;
     char comm;
     this->socket.recv(&comm, 1);
+    if (comm != LOGIN_LIST_GAMES && comm != LOGIN_LIST_MAPS) {
+        throw Exception("Bad login code");
+    }
     std::function<std::vector<unsigned char>(size_t)> receiver =
             std::bind(&LogInInfo::receive, this, std::placeholders::_1);
     auto listSerialized = prot.handleStringMsg(receiver);

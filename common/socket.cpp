@@ -20,8 +20,8 @@ Socket& Socket::operator=(Socket&& other) {
           return *this;
      }
 
-     if (this->sfd != -1) {
-         ::close(this->sfd);
+     if ((this->sfd != -1) && this->sfd != other.sfd) {
+         this->close();
      }
 
      this->sfd = other.sfd;
